@@ -99,39 +99,6 @@ export default function Login() {
           50%     { opacity: 1; }
         }
 
-        /* ── Hero image ─────────────────────────────────────────── */
-        .athena-hero-img {
-          position: absolute;
-          top: 0; left: 0;
-          width: 100%; height: 100%;
-          object-fit: cover;
-          object-position: top center;
-        }
-
-        /* ── PWA standalone: size by width to match browser composition ── */
-        @media (display-mode: standalone) {
-          .athena-hero-img {
-            left: -10%;
-            width: 120%;
-            height: auto;
-            object-fit: initial;
-            object-position: initial;
-          }
-          .athena-steam {
-            height: 55% !important;
-          }
-          .athena-grad {
-            height: 62% !important;
-            background: linear-gradient(to top,
-              rgba(4,3,3,1) 0%,
-              rgba(4,3,3,1) 16%,
-              rgba(4,3,3,0.92) 30%,
-              rgba(4,3,3,0.6) 46%,
-              rgba(4,3,3,0.15) 66%,
-              transparent 100%
-            ) !important;
-          }
-        }
       `}</style>
 
       <div
@@ -153,7 +120,7 @@ export default function Login() {
           <img
             src={heroImg}
             alt="Athena"
-            className="athena-hero-img"
+            className="w-full h-full object-cover object-top"
             style={{ filter: 'contrast(1.38) brightness(1.07) saturate(1.22)' }}
             fetchpriority="high"
             decoding="async"
@@ -277,7 +244,7 @@ export default function Login() {
         </div>
 
         {/* ── 10. Ground steam / mist ───────────────────────────── */}
-        <div className="athena-steam absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
+        <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
           <div style={{
             position: 'absolute', bottom: '15%', left: '-5%',
             width: '75%', height: '45%',
@@ -320,7 +287,7 @@ export default function Login() {
 
         {/* ── 12. Bottom dark gradient ──────────────────────────── */}
         <div
-          className="athena-grad absolute inset-x-0 bottom-0 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 pointer-events-none"
           style={{
             height: '30%',
             background: 'linear-gradient(to top, rgba(4,3,3,0.9) 0%, rgba(4,3,3,0.6) 40%, transparent 100%)',
