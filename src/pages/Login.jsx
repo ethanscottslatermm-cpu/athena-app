@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import heroImg from '../assets/athena-hero.png'
+import heroImg from '../assets/athena-hero.webp'
 
 const PARTICLES = Array.from({ length: 40 }, (_, i) => ({
   id: i,
