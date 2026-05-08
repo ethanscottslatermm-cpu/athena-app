@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import heroImg from '../assets/athena-hero.png'
+import heroImg from '../assets/athena-hero.webp'
 
 const PARTICLES = Array.from({ length: 40 }, (_, i) => ({
   id: i,
@@ -102,6 +102,8 @@ export default function Login() {
             alt="Athena"
             className="w-full h-full object-cover object-top"
             style={{ filter: 'contrast(1.05) brightness(1.08) saturate(1.1)' }}
+            fetchpriority="high"
+            decoding="async"
             draggable={false}
           />
         </div>
