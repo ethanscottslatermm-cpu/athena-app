@@ -4,7 +4,6 @@ import { supabase } from '../lib/supabase'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [mode, setMode] = useState('login') // 'login' | 'signup'
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -13,12 +12,8 @@ export default function Login() {
     setLoading(true)
     setError(null)
 
-    const fn = mode === 'login'
-      ? supabase.auth.signInWithPassword({ email, password })
-      : supabase.auth.signUp({ email, password })
-
-    const { error: authError } = await fn
-    if (authError) setError(authError.message)
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    if (authError) setError('Invalid email or password.')
     setLoading(false)
   }
 
@@ -57,16 +52,9 @@ export default function Login() {
             disabled={loading}
             className="w-full bg-gold/90 hover:bg-gold text-[#060404] font-cinzel tracking-widest py-3 rounded-xl transition-colors disabled:opacity-50"
           >
-            {loading ? '...' : mode === 'login' ? 'ENTER' : 'CREATE ACCOUNT'}
+            {loading ? '...' : 'ENTER'}
           </button>
         </form>
-
-        <button
-          onClick={() => setMode(m => m === 'login' ? 'signup' : 'login')}
-          className="w-full mt-4 text-ivory/40 hover:text-ivory/70 font-garamond text-sm text-center transition-colors"
-        >
-          {mode === 'login' ? 'New here? Create an account' : 'Already have an account? Sign in'}
-        </button>
       </div>
     </div>
   )
