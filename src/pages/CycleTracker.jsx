@@ -12,7 +12,7 @@ export default function CycleTracker() {
   }
 
   return (
-    <div className="min-h-screen bg-[#060404] pb-20 px-4 pt-8 max-w-md mx-auto">
+    <div className="min-h-screen bg-[#060404] pb-nav px-4 pt-8 max-w-md mx-auto">
       <h2 className="font-cinzel text-2xl text-ivory tracking-widest mb-6">Cycle Tracker</h2>
 
       {phase ? (

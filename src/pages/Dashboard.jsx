@@ -8,7 +8,7 @@ export default function Dashboard() {
   const { profile } = useProfile()
 
   return (
-    <div className="min-h-screen bg-[#060404] pb-20">
+    <div className="min-h-screen bg-[#060404] pb-nav">
       <PhaseBar />
       <div className="px-4 pt-8 space-y-4 max-w-md mx-auto">
         <h2 className="font-cinzel text-2xl text-ivory tracking-widest">

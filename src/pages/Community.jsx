@@ -12,7 +12,7 @@ const circles = [
 
 export default function Community() {
   return (
-    <div className="min-h-screen bg-[#060404] pb-20 px-4 pt-8 max-w-md mx-auto">
+    <div className="min-h-screen bg-[#060404] pb-nav px-4 pt-8 max-w-md mx-auto">
       <h2 className="font-cinzel text-2xl text-ivory tracking-widest mb-6">Community</h2>
       <div className="space-y-3">
         {circles.map(c => (
