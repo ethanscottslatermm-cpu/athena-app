@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/athena-hero.webp'
 
-const PARTICLES = Array.from({ length: 40 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 68 }, (_, i) => ({
   id: i,
   x: (i * 37 + 13) % 100,
-  y: (i * 53 + 7) % 100,
-  size: 1 + (i % 3) * 0.7,
-  duration: 4 + (i % 6),
-  delay: (i * 0.35) % 5,
-  opacity: 0.3 + (i % 4) * 0.1,
+  y: i < 40
+    ? (i * 53 + 7) % 100
+    : 56 + ((i * 31 + 17) % 38),
+  size: 0.8 + (i % 3) * 0.65,
+  duration: 3 + (i % 7),
+  delay: (i * 0.28) % 6,
+  opacity: 0.18 + (i % 5) * 0.1,
 }))
 
 export default function Login() {
@@ -73,14 +75,6 @@ export default function Login() {
           0%,100% { opacity: 0.35; transform: translateX(-50%) scale(1); }
           50%     { opacity: 0.65; transform: translateX(-50%) scale(1.08); }
         }
-        @keyframes shimmer {
-          0%   { background-position: -200% center; }
-          100% { background-position:  200% center; }
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes steamDriftA {
           0%   { transform: translateX(-8%) translateY(0%) scaleX(1); opacity: 0.5; }
           50%  { transform: translateX(8%) translateY(-5%) scaleX(1.15); opacity: 1; }
@@ -97,8 +91,12 @@ export default function Login() {
           100% { transform: translateX(-5%) scaleX(1); opacity: 0.6; }
         }
         @keyframes borderGlow {
-          0%,100% { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,108,0.1), inset 0 1px 0 rgba(201,168,108,0.12); }
-          50%     { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 40px rgba(201,168,108,0.22), inset 0 1px 0 rgba(201,168,108,0.22); }
+          0%,100% { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 20px rgba(255,252,245,0.08), inset 0 1px 0 rgba(255,252,245,0.1); }
+          50%     { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 40px rgba(255,252,245,0.18), inset 0 1px 0 rgba(255,252,245,0.18); }
+        }
+        @keyframes haloBreath {
+          0%,100% { opacity: 0.75; }
+          50%     { opacity: 1; }
         }
       `}</style>
 
@@ -122,7 +120,7 @@ export default function Login() {
             src={heroImg}
             alt="Athena"
             className="w-full h-full object-cover object-top"
-            style={{ filter: 'contrast(1.22) brightness(1.05) saturate(1.18)' }}
+            style={{ filter: 'contrast(1.38) brightness(1.07) saturate(1.22)' }}
             fetchpriority="high"
             decoding="async"
             draggable={false}
@@ -130,8 +128,8 @@ export default function Login() {
         </div>
 
         {/* ── 2. Base vignette ──────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/35 via-transparent via-40% to-black/35" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/15 via-transparent to-black/15" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/40 via-transparent via-40% to-black/20" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/18 via-transparent to-black/18" />
 
         {/* ── 3. Cloud A — parallax outer, animation inner ─────── */}
         <div
@@ -210,7 +208,32 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 8. Dust particles ─────────────────────────────────── */}
+        {/* ── 8. Cinematic backlighting — head / helmet / cape ─── */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ mixBlendMode: 'screen' }}
+        >
+          {/* Primary halo — diffuse crown light */}
+          <div style={{
+            position: 'absolute', top: '-6%', left: '50%',
+            transform: 'translateX(-50%)',
+            width: '90%', height: '62%',
+            background: 'radial-gradient(ellipse 52% 48% at 50% 26%, rgba(255,252,244,0.14) 0%, rgba(235,225,210,0.07) 42%, transparent 68%)',
+            animation: 'haloBreath 6s ease-in-out infinite',
+            filter: 'blur(24px)',
+          }} />
+          {/* Secondary halo — tighter rim on helmet/hair */}
+          <div style={{
+            position: 'absolute', top: '2%', left: '50%',
+            transform: 'translateX(-50%)',
+            width: '55%', height: '38%',
+            background: 'radial-gradient(ellipse 55% 55% at 50% 22%, rgba(255,250,240,0.1) 0%, transparent 65%)',
+            animation: 'haloBreath 8s ease-in-out infinite 1.5s',
+            filter: 'blur(14px)',
+          }} />
+        </div>
+
+        {/* ── 9. Dust particles ─────────────────────────────────── */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {PARTICLES.map(p => (
             <div key={p.id} style={{
@@ -218,15 +241,14 @@ export default function Login() {
               left: `${p.x}%`, top: `${p.y}%`,
               width: `${p.size}px`, height: `${p.size}px`,
               borderRadius: '50%',
-              backgroundColor: `rgba(201,168,108,${p.opacity})`,
+              backgroundColor: `rgba(244,239,230,${p.opacity})`,
               animation: `dust ${p.duration}s ease-in-out infinite ${p.delay}s`,
             }} />
           ))}
         </div>
 
-        {/* ── 9. Ground steam / mist ────────────────────────────── */}
+        {/* ── 10. Ground steam / mist ───────────────────────────── */}
         <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
-          {/* Steam wisp A */}
           <div style={{
             position: 'absolute', bottom: '15%', left: '-5%',
             width: '75%', height: '45%',
@@ -234,7 +256,6 @@ export default function Login() {
             animation: 'steamDriftA 12s ease-in-out infinite',
             filter: 'blur(14px)',
           }} />
-          {/* Steam wisp B */}
           <div style={{
             position: 'absolute', bottom: '8%', right: '-5%',
             width: '65%', height: '40%',
@@ -242,7 +263,6 @@ export default function Login() {
             animation: 'steamDriftB 16s ease-in-out infinite 2s',
             filter: 'blur(18px)',
           }} />
-          {/* Steam wisp C — wide center */}
           <div style={{
             position: 'absolute', bottom: '5%', left: '5%',
             width: '90%', height: '35%',
@@ -250,7 +270,6 @@ export default function Login() {
             animation: 'steamDriftC 20s ease-in-out infinite 5s',
             filter: 'blur(20px)',
           }} />
-          {/* Permanent ground haze */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             height: '25%',
@@ -259,33 +278,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 10. Athena wordmark ───────────────────────────────── */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '52%',
-            left: 0,
-            right: 0,
-            transform: 'translateY(-50%)',
-            textAlign: 'center',
-            animation: 'fadeUp 1.6s ease-out 0.5s both',
-            padding: '0 16px',
-          }}
-        >
-          <span style={{
-            fontFamily: "'Great Vibes', cursive",
-            fontSize: 'clamp(64px, 18vw, 120px)',
-            color: 'rgba(244,239,230,0.55)',
-            display: 'block',
-            lineHeight: 1.1,
-            letterSpacing: '0.02em',
-            filter: 'drop-shadow(0 2px 20px rgba(201,168,108,0.35)) drop-shadow(0 1px 4px rgba(0,0,0,0.5))',
-          }}>
-            Athena
-          </span>
-        </div>
-
-        {/* ── 11. Warrior glow ──────────────────────────────────── */}
+        {/* ── 11. Warrior ground glow ───────────────────────────── */}
         <div style={{
           position: 'absolute',
           bottom: '20%', left: '50%',
@@ -296,6 +289,59 @@ export default function Login() {
           pointerEvents: 'none',
         }} />
 
+        {/* ── 12. Bottom dark gradient — wordmark stage ─────────── */}
+        <div
+          className="absolute inset-x-0 bottom-0 pointer-events-none"
+          style={{
+            height: '30%',
+            background: 'linear-gradient(to top, rgba(4,3,3,0.9) 0%, rgba(4,3,3,0.6) 40%, transparent 100%)',
+          }}
+        />
+
+        {/* ── 13. Athena wordmark — bottom, Cinzel, instant ─────── */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            bottom: 'calc(env(safe-area-inset-bottom) + 26px)',
+            left: 0,
+            right: 0,
+            textAlign: 'center',
+            padding: '0 24px',
+          }}
+        >
+          {/* Thin gold rule */}
+          <div style={{
+            width: '44px', height: '1px',
+            background: 'linear-gradient(to right, transparent, rgba(201,168,108,0.6), transparent)',
+            margin: '0 auto 13px',
+          }} />
+
+          <span style={{
+            fontFamily: "'Cinzel', serif",
+            fontSize: 'clamp(28px, 8vw, 50px)',
+            fontWeight: 400,
+            color: 'rgba(244,239,230,0.97)',
+            display: 'block',
+            letterSpacing: '0.34em',
+            textShadow: '0 0 22px rgba(255,255,255,0.26), 0 0 44px rgba(255,255,255,0.1), 0 1px 5px rgba(0,0,0,0.8)',
+            lineHeight: 1,
+          }}>
+            ATHENA
+          </span>
+
+          <span style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(11px, 3vw, 15px)',
+            fontStyle: 'italic',
+            fontWeight: 300,
+            color: 'rgba(201,168,108,0.68)',
+            display: 'block',
+            letterSpacing: '0.2em',
+            marginTop: '10px',
+          }}>
+            Your story.
+          </span>
+        </div>
 
       </div>
     </>
