@@ -101,13 +101,13 @@ export default function Login() {
             src={heroImg}
             alt="Athena"
             className="w-full h-full object-cover object-top"
-            style={{ filter: 'contrast(1.1) brightness(0.88) saturate(1.12)' }}
+            style={{ filter: 'contrast(1.05) brightness(1.08) saturate(1.1)' }}
             draggable={false}
           />
         </div>
 
         {/* ── 2. Base vignette ──────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent via-40% to-black/90" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent via-40% to-black/50" />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
         {/* ── 3. Cloud A — parallax outer, animation inner ─────── */}
