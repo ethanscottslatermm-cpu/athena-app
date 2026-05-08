@@ -279,14 +279,6 @@ export default function Login() {
           pointerEvents: 'none',
         }} />
 
-        {/* ── 12. Bottom dark gradient ──────────────────────────── */}
-        <div
-          className="absolute inset-x-0 bottom-0 pointer-events-none"
-          style={{
-            height: '30%',
-            background: 'linear-gradient(to top, rgba(4,3,3,0.9) 0%, rgba(4,3,3,0.6) 40%, transparent 100%)',
-          }}
-        />
 
         {/* ── 13. Athena wordmark — bottom pinned ───────────────── */}
         <div
@@ -310,22 +302,10 @@ export default function Login() {
             color: 'rgba(244,239,230,0.97)',
             display: 'block',
             letterSpacing: '0.34em',
-            textShadow: '0 0 22px rgba(255,255,255,0.26), 0 0 44px rgba(255,255,255,0.1), 0 1px 5px rgba(0,0,0,0.8)',
+            textShadow: '0 0 8px rgba(255,255,255,1), 0 0 20px rgba(255,255,255,0.85), 0 0 45px rgba(255,255,255,0.45), 0 0 80px rgba(255,255,255,0.18)',
             lineHeight: 1,
           }}>
             ATHENA
-          </span>
-          <span style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 'clamp(11px, 3vw, 15px)',
-            fontStyle: 'italic',
-            fontWeight: 300,
-            color: 'rgba(201,168,108,0.68)',
-            display: 'block',
-            letterSpacing: '0.2em',
-            marginTop: '10px',
-          }}>
-            Your story.
           </span>
         </div>
 
