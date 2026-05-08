@@ -102,7 +102,13 @@ export default function Login() {
         }
       `}</style>
 
-      <div className="relative flex-1 min-h-dvh bg-[#060404] overflow-hidden">
+      <div
+        className="relative flex-1 bg-[#060404] overflow-hidden"
+        style={{
+          marginTop: 'calc(-1 * env(safe-area-inset-top))',
+          minHeight: 'calc(100dvh + env(safe-area-inset-top))',
+        }}
+      >
 
         {/* ── 1. Hero image — parallax wrapper ─────────────────── */}
         <div
