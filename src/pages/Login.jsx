@@ -116,7 +116,7 @@ export default function Login() {
             src={heroImg}
             alt="Athena"
             className="w-full h-full object-cover object-top"
-            style={{ filter: 'contrast(1.05) brightness(1.08) saturate(1.1)' }}
+            style={{ filter: 'contrast(1.22) brightness(1.05) saturate(1.18)' }}
             fetchpriority="high"
             decoding="async"
             draggable={false}
@@ -124,8 +124,8 @@ export default function Login() {
         </div>
 
         {/* ── 2. Base vignette ──────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent via-40% to-black/50" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/35 via-transparent via-40% to-black/35" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/15 via-transparent to-black/15" />
 
         {/* ── 3. Cloud A — parallax outer, animation inner ─────── */}
         <div
@@ -137,7 +137,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(201,168,108,0.28) 0%, rgba(201,168,108,0.1) 40%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(201,168,108,0.14) 0%, rgba(201,168,108,0.05) 40%, transparent 70%)',
             animation: 'cloudA 16s ease-in-out infinite',
             filter: 'blur(18px)',
           }} />
@@ -153,7 +153,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(244,239,230,0.2) 0%, rgba(244,239,230,0.06) 50%, transparent 70%)',
+            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(244,239,230,0.1) 0%, rgba(244,239,230,0.03) 50%, transparent 70%)',
             animation: 'cloudB 22s ease-in-out infinite 2s',
             filter: 'blur(25px)',
           }} />
