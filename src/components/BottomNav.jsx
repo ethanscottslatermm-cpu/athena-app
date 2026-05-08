@@ -1,0 +1,34 @@
+import { NavLink } from 'react-router-dom'
+import { LayoutDashboard, Dumbbell, Users, Moon, Heart } from 'lucide-react'
+
+const navItems = [
+  { to: '/',          icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/pilates',   icon: Dumbbell,        label: 'Pilates'   },
+  { to: '/community', icon: Users,           label: 'Community' },
+  { to: '/cycle',     icon: Moon,            label: 'Cycle'     },
+  { to: '/mood',      icon: Heart,           label: 'Mood'      },
+]
+
+export default function BottomNav() {
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t border-white/10 z-50">
+      <div className="flex items-center justify-around h-16 max-w-md mx-auto px-2">
+        {navItems.map(({ to, icon: Icon, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/'}
+            className={({ isActive }) =>
+              `flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
+                isActive ? 'text-gold' : 'text-white/40 hover:text-white/70'
+              }`
+            }
+          >
+            <Icon size={20} strokeWidth={1.5} />
+            <span className="text-[10px] font-garamond tracking-wide">{label}</span>
+          </NavLink>
+        ))}
+      </div>
+    </nav>
+  )
+}
