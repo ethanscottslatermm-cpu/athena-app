@@ -100,10 +100,6 @@ export default function Login() {
           0%,100% { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,108,0.1), inset 0 1px 0 rgba(201,168,108,0.12); }
           50%     { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 40px rgba(201,168,108,0.22), inset 0 1px 0 rgba(201,168,108,0.22); }
         }
-        @keyframes pillGlow {
-          0%,100% { box-shadow: 0 4px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(201,168,108,0.1), 0 0 18px rgba(201,168,108,0.12), 0 0 40px rgba(201,168,108,0.06); }
-          50%     { box-shadow: 0 4px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(201,168,108,0.18), 0 0 28px rgba(201,168,108,0.28), 0 0 60px rgba(201,168,108,0.12); }
-        }
       `}</style>
 
       <div
@@ -267,36 +263,26 @@ export default function Login() {
         <div
           className="absolute pointer-events-none"
           style={{
-            bottom: 'calc(env(safe-area-inset-bottom) + 28px)',
+            top: '52%',
             left: 0,
             right: 0,
-            display: 'flex',
-            justifyContent: 'center',
+            transform: 'translateY(-50%)',
+            textAlign: 'center',
             animation: 'fadeUp 1.6s ease-out 0.5s both',
-            padding: '0 32px',
+            padding: '0 16px',
           }}
         >
-          <div style={{
-            background: 'rgba(6,4,4,0.38)',
-            backdropFilter: 'blur(22px)',
-            WebkitBackdropFilter: 'blur(22px)',
-            border: '1px solid rgba(201,168,108,0.18)',
-            borderRadius: '100px',
-            padding: '8px 36px 10px',
-            animation: 'pillGlow 4s ease-in-out infinite',
+          <span style={{
+            fontFamily: "'Great Vibes', cursive",
+            fontSize: 'clamp(64px, 18vw, 120px)',
+            color: 'rgba(244,239,230,0.55)',
+            display: 'block',
+            lineHeight: 1.1,
+            letterSpacing: '0.02em',
+            filter: 'drop-shadow(0 2px 20px rgba(201,168,108,0.35)) drop-shadow(0 1px 4px rgba(0,0,0,0.5))',
           }}>
-            <span style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: 'clamp(48px, 14vw, 88px)',
-              color: 'rgba(244,239,230,0.88)',
-              display: 'block',
-              lineHeight: 1.15,
-              letterSpacing: '0.02em',
-              filter: 'drop-shadow(0 1px 12px rgba(201,168,108,0.4))',
-            }}>
-              Athena
-            </span>
-          </div>
+            Athena
+          </span>
         </div>
 
         {/* ── 11. Warrior glow ──────────────────────────────────── */}
