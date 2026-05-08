@@ -109,14 +109,8 @@ export default function Login() {
         }}
       >
 
-        {/* ── 1. Hero image — parallax wrapper ─────────────────── */}
-        <div
-          className="absolute inset-0"
-          style={{
-            transform: `translate(${mouse.x * -8}px, ${mouse.y * -8}px)`,
-            transition: '0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          }}
-        >
+        {/* ── 1. Hero image — fixed, slight scale for edge coverage ── */}
+        <div className="absolute inset-0" style={{ transform: 'scale(1.04)', transformOrigin: 'top center' }}>
           <img
             src={heroImg}
             alt="Athena"
@@ -136,8 +130,8 @@ export default function Login() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            transform: `translate(${mouse.x * 16}px, ${mouse.y * 10}px)`,
-            transition: '1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transform: `translate(${mouse.x * 4}px, ${mouse.y * 3}px)`,
+            transition: '2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
           <div style={{
@@ -152,8 +146,8 @@ export default function Login() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            transform: `translate(${mouse.x * -8}px, ${mouse.y * -6}px)`,
-            transition: '1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transform: `translate(${mouse.x * -2}px, ${mouse.y * -2}px)`,
+            transition: '2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
           <div style={{
@@ -168,8 +162,8 @@ export default function Login() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            transform: `translate(${mouse.x * 6}px, ${mouse.y * 4}px)`,
-            transition: '2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transform: `translate(${mouse.x * 2}px, ${mouse.y * 1}px)`,
+            transition: '2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
           <div style={{
