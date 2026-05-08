@@ -114,7 +114,7 @@ export default function Login() {
         <div
           className="absolute inset-0"
           style={{
-            transform: `scale(1.1) translate(${mouse.x * -10}px, ${mouse.y * -10}px)`,
+            transform: `translate(${mouse.x * -8}px, ${mouse.y * -8}px)`,
             transition: '0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
