@@ -98,6 +98,40 @@ export default function Login() {
           0%,100% { opacity: 0.75; }
           50%     { opacity: 1; }
         }
+
+        /* ── Hero image ─────────────────────────────────────────── */
+        .athena-hero-img {
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          object-fit: cover;
+          object-position: top center;
+        }
+
+        /* ── PWA standalone: size by width to match browser composition ── */
+        @media (display-mode: standalone) {
+          .athena-hero-img {
+            left: -10%;
+            width: 120%;
+            height: auto;
+            object-fit: initial;
+            object-position: initial;
+          }
+          .athena-steam {
+            height: 55% !important;
+          }
+          .athena-grad {
+            height: 62% !important;
+            background: linear-gradient(to top,
+              rgba(4,3,3,1) 0%,
+              rgba(4,3,3,1) 16%,
+              rgba(4,3,3,0.92) 30%,
+              rgba(4,3,3,0.6) 46%,
+              rgba(4,3,3,0.15) 66%,
+              transparent 100%
+            ) !important;
+          }
+        }
       `}</style>
 
       <div
@@ -119,15 +153,8 @@ export default function Login() {
           <img
             src={heroImg}
             alt="Athena"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: '-3%',
-              width: '106%',
-              height: 'auto',
-              display: 'block',
-              filter: 'contrast(1.38) brightness(1.07) saturate(1.22)',
-            }}
+            className="athena-hero-img"
+            style={{ filter: 'contrast(1.38) brightness(1.07) saturate(1.22)' }}
             fetchpriority="high"
             decoding="async"
             draggable={false}
@@ -138,7 +165,7 @@ export default function Login() {
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/40 via-transparent via-40% to-black/20" />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/18 via-transparent to-black/18" />
 
-        {/* ── 3. Cloud A — parallax outer, animation inner ─────── */}
+        {/* ── 3. Cloud A ────────────────────────────────────────── */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -170,7 +197,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 5. Cloud C — lower drift ──────────────────────────── */}
+        {/* ── 5. Cloud C ────────────────────────────────────────── */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -215,21 +242,16 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 8. Cinematic backlighting — head / helmet / cape ─── */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ mixBlendMode: 'screen' }}
-        >
-          {/* Primary halo — diffuse crown light */}
+        {/* ── 8. Cinematic backlighting — head / cape ───────────── */}
+        <div className="absolute inset-0 pointer-events-none" style={{ mixBlendMode: 'screen' }}>
           <div style={{
             position: 'absolute', top: '-6%', left: '50%',
             transform: 'translateX(-50%)',
             width: '90%', height: '62%',
-            background: 'radial-gradient(ellipse 52% 48% at 50% 26%, rgba(255,252,244,0.14) 0%, rgba(235,225,210,0.07) 42%, transparent 68%)',
+            background: 'radial-gradient(ellipse 52% 48% at 50% 26%, rgba(255,252,244,0.13) 0%, rgba(230,220,200,0.06) 45%, transparent 70%)',
             animation: 'haloBreath 6s ease-in-out infinite',
-            filter: 'blur(24px)',
+            filter: 'blur(22px)',
           }} />
-          {/* Secondary halo — tighter rim on helmet/hair */}
           <div style={{
             position: 'absolute', top: '2%', left: '50%',
             transform: 'translateX(-50%)',
@@ -255,7 +277,7 @@ export default function Login() {
         </div>
 
         {/* ── 10. Ground steam / mist ───────────────────────────── */}
-        <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
+        <div className="athena-steam absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
           <div style={{
             position: 'absolute', bottom: '15%', left: '-5%',
             width: '75%', height: '45%',
@@ -296,33 +318,30 @@ export default function Login() {
           pointerEvents: 'none',
         }} />
 
-        {/* ── 12. Bottom dark gradient — wordmark stage ─────────── */}
+        {/* ── 12. Bottom dark gradient ──────────────────────────── */}
         <div
-          className="absolute inset-x-0 bottom-0 pointer-events-none"
+          className="athena-grad absolute inset-x-0 bottom-0 pointer-events-none"
           style={{
             height: '30%',
             background: 'linear-gradient(to top, rgba(4,3,3,0.9) 0%, rgba(4,3,3,0.6) 40%, transparent 100%)',
           }}
         />
 
-        {/* ── 13. Athena wordmark — bottom, Cinzel, instant ─────── */}
+        {/* ── 13. Athena wordmark — bottom pinned ───────────────── */}
         <div
           className="absolute pointer-events-none"
           style={{
             bottom: 'calc(env(safe-area-inset-bottom) + 26px)',
-            left: 0,
-            right: 0,
+            left: 0, right: 0,
             textAlign: 'center',
             padding: '0 24px',
           }}
         >
-          {/* Thin gold rule */}
           <div style={{
             width: '44px', height: '1px',
             background: 'linear-gradient(to right, transparent, rgba(201,168,108,0.6), transparent)',
             margin: '0 auto 13px',
           }} />
-
           <span style={{
             fontFamily: "'Cinzel', serif",
             fontSize: 'clamp(28px, 8vw, 50px)',
@@ -335,7 +354,6 @@ export default function Login() {
           }}>
             ATHENA
           </span>
-
           <span style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: 'clamp(11px, 3vw, 15px)',
