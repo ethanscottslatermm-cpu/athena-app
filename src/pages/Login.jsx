@@ -119,8 +119,15 @@ export default function Login() {
           <img
             src={heroImg}
             alt="Athena"
-            className="w-full h-full object-cover object-top"
-            style={{ filter: 'contrast(1.38) brightness(1.07) saturate(1.22)' }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: '-3%',
+              width: '106%',
+              height: 'auto',
+              display: 'block',
+              filter: 'contrast(1.38) brightness(1.07) saturate(1.22)',
+            }}
             fetchpriority="high"
             decoding="async"
             draggable={false}
