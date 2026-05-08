@@ -212,50 +212,6 @@ export default function Login() {
           pointerEvents: 'none',
         }} />
 
-        {/* ── 10. Glass UI ──────────────────────────────────────── */}
-        <div
-          className="absolute bottom-0 left-0 right-0 flex flex-col items-center"
-          style={{
-            paddingBottom: 'calc(3.5rem + env(safe-area-inset-bottom))',
-            animation: 'fadeUp 1.4s ease-out 0.3s both',
-          }}
-        >
-          <div style={{
-            background: 'rgba(6,4,4,0.4)',
-            backdropFilter: 'blur(28px)',
-            WebkitBackdropFilter: 'blur(28px)',
-            border: '1px solid rgba(201,168,108,0.25)',
-            borderRadius: '22px',
-            padding: '26px 48px',
-            animation: 'borderGlow 5s ease-in-out infinite',
-            textAlign: 'center',
-            minWidth: '270px',
-          }}>
-            <h1
-              className="font-cinzel text-5xl tracking-[0.32em]"
-              style={{
-                background: 'linear-gradient(135deg, #F4EFE6 0%, #C9A86C 35%, #F4EFE6 55%, #C9A86C 80%, #F4EFE6 100%)',
-                backgroundSize: '250% auto',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                animation: 'shimmer 6s linear infinite',
-                filter: 'drop-shadow(0 0 20px rgba(201,168,108,0.5))',
-              }}
-            >
-              ATHENA
-            </h1>
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              color: 'rgba(244,239,230,0.6)',
-              letterSpacing: '0.2em',
-              fontSize: '0.78rem',
-              marginTop: '8px',
-            }}>
-              Your strength. Your cycle. Your story.
-            </p>
-          </div>
-        </div>
 
       </div>
     </>
