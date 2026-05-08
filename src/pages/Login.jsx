@@ -81,6 +81,27 @@ export default function Login() {
           from { opacity: 0; transform: translateY(28px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        @keyframes steamDriftA {
+          0%   { transform: translateX(-12%) translateY(0%) scaleX(1); opacity: 0; }
+          10%  { opacity: 1; }
+          50%  { transform: translateX(8%) translateY(-6%) scaleX(1.15); opacity: 0.7; }
+          90%  { opacity: 1; }
+          100% { transform: translateX(20%) translateY(-10%) scaleX(0.9); opacity: 0; }
+        }
+        @keyframes steamDriftB {
+          0%   { transform: translateX(10%) translateY(0%) scaleX(1); opacity: 0; }
+          10%  { opacity: 1; }
+          50%  { transform: translateX(-8%) translateY(-5%) scaleX(1.2); opacity: 0.6; }
+          90%  { opacity: 1; }
+          100% { transform: translateX(-18%) translateY(-8%) scaleX(0.85); opacity: 0; }
+        }
+        @keyframes steamDriftC {
+          0%   { transform: translateX(-5%) scaleX(1); opacity: 0; }
+          15%  { opacity: 0.8; }
+          50%  { transform: translateX(10%) scaleX(1.3); opacity: 0.5; }
+          85%  { opacity: 0.8; }
+          100% { transform: translateX(22%) scaleX(1); opacity: 0; }
+        }
         @keyframes borderGlow {
           0%,100% { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,108,0.1), inset 0 1px 0 rgba(201,168,108,0.12); }
           50%     { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 40px rgba(201,168,108,0.22), inset 0 1px 0 rgba(201,168,108,0.22); }
@@ -203,7 +224,42 @@ export default function Login() {
           ))}
         </div>
 
-        {/* ── 9. Warrior glow ───────────────────────────────────── */}
+        {/* ── 9. Ground steam / mist ────────────────────────────── */}
+        <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
+          {/* Steam wisp A */}
+          <div style={{
+            position: 'absolute', bottom: '10%', left: '-10%',
+            width: '70%', height: '40%',
+            background: 'radial-gradient(ellipse 100% 60% at 50% 80%, rgba(220,215,205,0.18) 0%, rgba(220,215,205,0.06) 50%, transparent 75%)',
+            animation: 'steamDriftA 14s ease-in-out infinite',
+            filter: 'blur(22px)',
+          }} />
+          {/* Steam wisp B */}
+          <div style={{
+            position: 'absolute', bottom: '5%', right: '-5%',
+            width: '60%', height: '35%',
+            background: 'radial-gradient(ellipse 100% 55% at 50% 85%, rgba(220,215,205,0.14) 0%, rgba(220,215,205,0.04) 55%, transparent 75%)',
+            animation: 'steamDriftB 18s ease-in-out infinite 3s',
+            filter: 'blur(28px)',
+          }} />
+          {/* Steam wisp C — center slow roll */}
+          <div style={{
+            position: 'absolute', bottom: '0%', left: '10%',
+            width: '80%', height: '30%',
+            background: 'radial-gradient(ellipse 100% 50% at 50% 90%, rgba(200,195,185,0.12) 0%, transparent 70%)',
+            animation: 'steamDriftC 22s ease-in-out infinite 6s',
+            filter: 'blur(35px)',
+          }} />
+          {/* Thin ground haze always present */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            height: '20%',
+            background: 'linear-gradient(to top, rgba(180,175,165,0.12) 0%, transparent 100%)',
+            filter: 'blur(12px)',
+          }} />
+        </div>
+
+        {/* ── 10. Warrior glow ──────────────────────────────────── */}
         <div style={{
           position: 'absolute',
           bottom: '20%', left: '50%',
