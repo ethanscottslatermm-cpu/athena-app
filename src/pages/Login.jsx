@@ -259,7 +259,33 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 10. Warrior glow ──────────────────────────────────── */}
+        {/* ── 10. Athena wordmark ───────────────────────────────── */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: '52%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '92%',
+            textAlign: 'center',
+            animation: 'fadeUp 1.6s ease-out 0.5s both',
+          }}
+        >
+          <span style={{
+            fontFamily: "'Great Vibes', cursive",
+            fontSize: 'clamp(72px, 22vw, 130px)',
+            color: 'rgba(244,239,230,0.82)',
+            display: 'block',
+            lineHeight: 1,
+            letterSpacing: '0.04em',
+            filter: 'drop-shadow(0 2px 24px rgba(201,168,108,0.45)) drop-shadow(0 1px 4px rgba(0,0,0,0.6))',
+            whiteSpace: 'nowrap',
+          }}>
+            Athena
+          </span>
+        </div>
+
+        {/* ── 11. Warrior glow ──────────────────────────────────── */}
         <div style={{
           position: 'absolute',
           bottom: '20%', left: '50%',
