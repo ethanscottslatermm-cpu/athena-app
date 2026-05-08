@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/athena-hero.png'
 
-// Deterministic particles — fixed so they don't regenerate on re-render
-const PARTICLES = Array.from({ length: 45 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 40 }, (_, i) => ({
   id: i,
   x: (i * 37 + 13) % 100,
   y: (i * 53 + 7) % 100,
-  size: 0.8 + (i % 3) * 0.6,
-  duration: 5 + (i % 7),
-  delay: (i * 0.4) % 6,
-  opacity: 0.15 + (i % 5) * 0.07,
+  size: 1 + (i % 3) * 0.7,
+  duration: 4 + (i % 6),
+  delay: (i * 0.35) % 5,
+  opacity: 0.3 + (i % 4) * 0.1,
 }))
 
 export default function Login() {
@@ -34,126 +33,161 @@ export default function Login() {
     }
   }, [])
 
-  const ease = '0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-
   return (
     <>
       <style>{`
         @keyframes cloudA {
-          0%,100% { transform: translateX(-4%) scale(1); }
-          50%      { transform: translateX(4%) scale(1.04); }
+          0%   { transform: translateX(-6%); }
+          50%  { transform: translateX(6%); }
+          100% { transform: translateX(-6%); }
         }
         @keyframes cloudB {
-          0%,100% { transform: translateX(6%) translateY(2%); }
-          55%     { transform: translateX(-4%) translateY(-1%); }
+          0%   { transform: translateX(8%) translateY(-3%); }
+          50%  { transform: translateX(-6%) translateY(3%); }
+          100% { transform: translateX(8%) translateY(-3%); }
+        }
+        @keyframes cloudC {
+          0%   { transform: translateX(-10%) translateY(2%); }
+          50%  { transform: translateX(4%) translateY(-2%); }
+          100% { transform: translateX(-10%) translateY(2%); }
         }
         @keyframes hazePulse {
-          0%,100% { opacity: 0.12; }
-          50%     { opacity: 0.26; }
+          0%,100% { opacity: 0.35; }
+          50%     { opacity: 0.65; }
         }
-        @keyframes rayA {
-          0%,100% { opacity: 0.05; transform: skewX(-14deg) translateX(-8%); }
-          50%     { opacity: 0.14; transform: skewX(-14deg) translateX(2%); }
+        @keyframes rayPulse {
+          0%,100% { opacity: 0.08; }
+          50%     { opacity: 0.22; }
         }
-        @keyframes rayB {
-          0%,100% { opacity: 0.02; transform: skewX(18deg) translateX(6%); }
-          50%     { opacity: 0.09; transform: skewX(18deg) translateX(-4%); }
+        @keyframes rayPulse2 {
+          0%,100% { opacity: 0.04; }
+          50%     { opacity: 0.15; }
         }
         @keyframes dust {
-          0%   { transform: translateY(0);    opacity: 0; }
+          0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
           15%  { opacity: 1; }
           85%  { opacity: 1; }
-          100% { transform: translateY(-50px); opacity: 0; }
+          100% { transform: translateY(-60px) translateX(10px); opacity: 0; }
         }
         @keyframes breathe {
-          0%,100% { opacity: 0.25; transform: scale(1); }
-          50%     { opacity: 0.55; transform: scale(1.06); }
+          0%,100% { opacity: 0.35; transform: translateX(-50%) scale(1); }
+          50%     { opacity: 0.65; transform: translateX(-50%) scale(1.08); }
         }
         @keyframes shimmer {
           0%   { background-position: -200% center; }
           100% { background-position:  200% center; }
         }
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(24px); }
+          from { opacity: 0; transform: translateY(28px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes borderGlow {
+          0%,100% { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,108,0.1), inset 0 1px 0 rgba(201,168,108,0.12); }
+          50%     { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 40px rgba(201,168,108,0.22), inset 0 1px 0 rgba(201,168,108,0.22); }
         }
       `}</style>
 
       <div className="relative flex-1 min-h-dvh bg-[#060404] overflow-hidden">
 
-        {/* ── 1. Hero image — parallax ──────────────────────────── */}
+        {/* ── 1. Hero image — parallax wrapper ─────────────────── */}
         <div
           className="absolute inset-0"
           style={{
             transform: `scale(1.1) translate(${mouse.x * -10}px, ${mouse.y * -10}px)`,
-            transition: ease,
+            transition: '0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
         >
           <img
             src={heroImg}
             alt="Athena"
             className="w-full h-full object-cover object-top"
-            style={{ filter: 'contrast(1.1) brightness(0.9) saturate(1.12)' }}
+            style={{ filter: 'contrast(1.1) brightness(0.88) saturate(1.12)' }}
             draggable={false}
           />
         </div>
 
         {/* ── 2. Base vignette ──────────────────────────────────── */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent via-40% to-black/88 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent via-40% to-black/90" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
-        {/* ── 3. Cloud drift A — gold tinted ───────────────────── */}
+        {/* ── 3. Cloud A — parallax outer, animation inner ─────── */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 85% 45% at 28% 18%, rgba(201,168,108,0.07) 0%, transparent 70%)',
-            animation: 'cloudA 20s ease-in-out infinite',
-            filter: 'blur(45px)',
-            transform: `translate(${mouse.x * 14}px, ${mouse.y * 9}px)`,
-            transition: '1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transform: `translate(${mouse.x * 16}px, ${mouse.y * 10}px)`,
+            transition: '1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
           }}
-        />
-
-        {/* ── 4. Cloud drift B — ivory tinted ──────────────────── */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse 65% 50% at 72% 25%, rgba(244,239,230,0.05) 0%, transparent 65%)',
-            animation: 'cloudB 28s ease-in-out infinite 3s',
-            filter: 'blur(65px)',
-            transform: `translate(${mouse.x * -7}px, ${mouse.y * -5}px)`,
-            transition: '1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          }}
-        />
-
-        {/* ── 5. Atmospheric haze top ───────────────────────────── */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse 110% 55% at 50% 0%, rgba(201,168,108,0.09) 0%, transparent 70%)',
-            animation: 'hazePulse 9s ease-in-out infinite',
-          }}
-        />
-
-        {/* ── 6. Light rays ─────────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ mixBlendMode: 'screen' }}>
+        >
           <div style={{
-            position: 'absolute', top: '-15%', left: '8%',
-            width: '28%', height: '115%',
-            background: 'linear-gradient(to bottom, rgba(201,168,108,0.14), transparent 80%)',
-            animation: 'rayA 14s ease-in-out infinite',
-            filter: 'blur(22px)',
-          }} />
-          <div style={{
-            position: 'absolute', top: '-15%', right: '12%',
-            width: '18%', height: '100%',
-            background: 'linear-gradient(to bottom, rgba(244,239,230,0.07), transparent 70%)',
-            animation: 'rayB 19s ease-in-out infinite 5s',
-            filter: 'blur(32px)',
+            position: 'absolute', inset: 0,
+            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(201,168,108,0.28) 0%, rgba(201,168,108,0.1) 40%, transparent 70%)',
+            animation: 'cloudA 16s ease-in-out infinite',
+            filter: 'blur(18px)',
           }} />
         </div>
 
-        {/* ── 7. Dust particles ─────────────────────────────────── */}
+        {/* ── 4. Cloud B ────────────────────────────────────────── */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `translate(${mouse.x * -8}px, ${mouse.y * -6}px)`,
+            transition: '1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}
+        >
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(244,239,230,0.2) 0%, rgba(244,239,230,0.06) 50%, transparent 70%)',
+            animation: 'cloudB 22s ease-in-out infinite 2s',
+            filter: 'blur(25px)',
+          }} />
+        </div>
+
+        {/* ── 5. Cloud C — lower drift ──────────────────────────── */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `translate(${mouse.x * 6}px, ${mouse.y * 4}px)`,
+            transition: '2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}
+        >
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'radial-gradient(ellipse 80% 30% at 50% 35%, rgba(201,168,108,0.14) 0%, transparent 65%)',
+            animation: 'cloudC 30s ease-in-out infinite 5s',
+            filter: 'blur(30px)',
+          }} />
+        </div>
+
+        {/* ── 6. Haze pulse ─────────────────────────────────────── */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(201,168,108,0.15) 0%, transparent 65%)',
+            animation: 'hazePulse 8s ease-in-out infinite',
+          }}
+        />
+
+        {/* ── 7. Light rays ─────────────────────────────────────── */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ mixBlendMode: 'screen' }}>
+          <div style={{
+            position: 'absolute', top: '-10%', left: '12%',
+            width: '25%', height: '110%',
+            background: 'linear-gradient(175deg, rgba(201,168,108,0.35) 0%, transparent 60%)',
+            animation: 'rayPulse 11s ease-in-out infinite',
+            filter: 'blur(16px)',
+            transform: 'skewX(-12deg)',
+          }} />
+          <div style={{
+            position: 'absolute', top: '-10%', right: '18%',
+            width: '16%', height: '90%',
+            background: 'linear-gradient(175deg, rgba(244,239,230,0.25) 0%, transparent 60%)',
+            animation: 'rayPulse2 17s ease-in-out infinite 4s',
+            filter: 'blur(24px)',
+            transform: 'skewX(14deg)',
+          }} />
+        </div>
+
+        {/* ── 8. Dust particles ─────────────────────────────────── */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {PARTICLES.map(p => (
             <div key={p.id} style={{
@@ -167,40 +201,35 @@ export default function Login() {
           ))}
         </div>
 
-        {/* ── 8. Warrior ambient glow ───────────────────────────── */}
+        {/* ── 9. Warrior glow ───────────────────────────────────── */}
         <div style={{
           position: 'absolute',
-          bottom: '18%', left: '50%',
-          transform: 'translateX(-50%)',
-          width: '55%', height: '28%',
-          background: 'radial-gradient(ellipse, rgba(201,168,108,0.14) 0%, transparent 70%)',
-          animation: 'breathe 6s ease-in-out infinite',
-          filter: 'blur(22px)',
+          bottom: '20%', left: '50%',
+          width: '60%', height: '30%',
+          background: 'radial-gradient(ellipse, rgba(201,168,108,0.2) 0%, transparent 70%)',
+          animation: 'breathe 5s ease-in-out infinite',
+          filter: 'blur(18px)',
           pointerEvents: 'none',
         }} />
 
-        {/* ── 9. Glass UI panel ─────────────────────────────────── */}
+        {/* ── 10. Glass UI ──────────────────────────────────────── */}
         <div
           className="absolute bottom-0 left-0 right-0 flex flex-col items-center"
           style={{
             paddingBottom: 'calc(3.5rem + env(safe-area-inset-bottom))',
-            animation: 'fadeUp 1.4s ease-out 0.4s both',
+            animation: 'fadeUp 1.4s ease-out 0.3s both',
           }}
         >
           <div style={{
-            background: 'rgba(6,4,4,0.38)',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
-            border: '1px solid rgba(201,168,108,0.22)',
+            background: 'rgba(6,4,4,0.4)',
+            backdropFilter: 'blur(28px)',
+            WebkitBackdropFilter: 'blur(28px)',
+            border: '1px solid rgba(201,168,108,0.25)',
             borderRadius: '22px',
-            padding: '26px 44px',
-            boxShadow: [
-              '0 8px 48px rgba(0,0,0,0.5)',
-              '0 1px 0 rgba(201,168,108,0.12) inset',
-              '0 -1px 0 rgba(0,0,0,0.3) inset',
-            ].join(', '),
+            padding: '26px 48px',
+            animation: 'borderGlow 5s ease-in-out infinite',
             textAlign: 'center',
-            minWidth: '260px',
+            minWidth: '270px',
           }}>
             <h1
               className="font-cinzel text-5xl tracking-[0.32em]"
@@ -210,16 +239,16 @@ export default function Login() {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                animation: 'shimmer 7s linear infinite',
-                filter: 'drop-shadow(0 0 18px rgba(201,168,108,0.45))',
+                animation: 'shimmer 6s linear infinite',
+                filter: 'drop-shadow(0 0 20px rgba(201,168,108,0.5))',
               }}
             >
               ATHENA
             </h1>
             <p style={{
               fontFamily: "'Cormorant Garamond', serif",
-              color: 'rgba(244,239,230,0.58)',
-              letterSpacing: '0.22em',
+              color: 'rgba(244,239,230,0.6)',
+              letterSpacing: '0.2em',
               fontSize: '0.78rem',
               marginTop: '8px',
             }}>
