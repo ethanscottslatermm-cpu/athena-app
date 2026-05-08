@@ -2,7 +2,7 @@ import heroImg from '../assets/athena-hero.png'
 
 export default function Login() {
   return (
-    <div className="fixed inset-0 bg-[#060404]">
+    <div className="relative flex-1 min-h-dvh bg-[#060404] overflow-hidden">
       {/* Full-bleed hero image */}
       <img
         src={heroImg}
@@ -11,10 +11,10 @@ export default function Login() {
         draggable={false}
       />
 
-      {/* Gradient overlay — fades top and bottom for text legibility */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" />
 
-      {/* Title pinned to bottom above home bar */}
+      {/* Title pinned to bottom */}
       <div
         className="absolute bottom-0 left-0 right-0 flex flex-col items-center"
         style={{ paddingBottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}
