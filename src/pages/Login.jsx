@@ -76,9 +76,8 @@ export default function Login() {
     setPhase('form')
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    if (!email || !password) return
+  async function doAuth() {
+    if (!email.trim() || !password.trim() || loading || authed) return
     setLoading(true)
     setError('')
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
@@ -89,6 +88,11 @@ export default function Login() {
       setAuthed(true)
       setLoading(false)
     }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    doAuth()
   }
 
   return (
@@ -579,6 +583,7 @@ export default function Login() {
                     autoCapitalize="none"
                     autoCorrect="off"
                     spellCheck={false}
+                    enterKeyHint="next"
                     disabled={loading}
                   />
                 </div>
@@ -593,6 +598,8 @@ export default function Login() {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     autoComplete="current-password"
+                    enterKeyHint="go"
+                    onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
                     disabled={loading}
                   />
                 </div>
