@@ -40,6 +40,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [authed, setAuthed] = useState(false)
   const navigate = useNavigate()
 
   const formReady = email.trim().length > 0 && password.trim().length > 0
@@ -87,7 +88,9 @@ export default function Login() {
       setError(authError.message)
       setLoading(false)
     } else {
-      navigate('/')
+      setAuthed(true)
+      // 400ms fade + 800ms hold + 1000ms pulse = 2200ms
+      setTimeout(() => navigate('/'), 2200)
     }
   }
 
@@ -168,6 +171,21 @@ export default function Login() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
+        @keyframes inputFocusPulse {
+          0%   { filter: drop-shadow(0 0 0px rgba(201,168,108,0)); }
+          50%  { filter: drop-shadow(0 0 14px rgba(201,168,108,0.45)); }
+          100% { filter: drop-shadow(0 2px 8px rgba(201,168,108,0.18)); }
+        }
+        @keyframes checkboxGlow {
+          0%   { box-shadow: 0 0 0px rgba(201,168,108,0); }
+          50%  { box-shadow: 0 0 14px rgba(201,168,108,0.55); }
+          100% { box-shadow: 0 0 4px rgba(201,168,108,0.2); }
+        }
+        @keyframes goldSuccessPulse {
+          0%   { box-shadow: 0 0 0px rgba(201,168,108,0); border-color: rgba(201,168,108,0.52); }
+          40%  { box-shadow: 0 0 28px rgba(201,168,108,0.65), 0 0 60px rgba(201,168,108,0.28); border-color: rgba(201,168,108,0.95); }
+          100% { box-shadow: 0 0 8px rgba(201,168,108,0.18); border-color: rgba(201,168,108,0.52); }
+        }
 
         .athena-input {
           background: transparent;
@@ -191,7 +209,7 @@ export default function Login() {
         }
         .athena-input:focus {
           border-bottom-color: rgba(201,168,108,1);
-          filter: drop-shadow(0 2px 10px rgba(201,168,108,0.18));
+          animation: inputFocusPulse 0.5s ease forwards;
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
@@ -488,6 +506,7 @@ export default function Login() {
                     flexShrink: 0, marginTop: '2px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.2s',
+                    animation: termsChecked ? 'checkboxGlow 0.6s ease' : 'none',
                   }}>
                     {termsChecked && (
                       <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
@@ -530,88 +549,129 @@ export default function Login() {
 
         {/* ── Login form ── */}
         {phase === 'form' && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 'calc(env(safe-area-inset-bottom) + 108px)',
-              left: 0, right: 0,
-              padding: '0 38px',
-              animation: 'formIn 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
-              zIndex: 10,
-            }}
-          >
-            <form onSubmit={handleSubmit} noValidate>
-              {/* Email row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
-                <LockIcon />
-                <input
-                  className="athena-input"
-                  type="email"
-                  placeholder="EMAIL"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  autoComplete="email"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck={false}
-                />
-              </div>
+          <>
+            {/* Inputs + inline ACCESS — fades out on auth success */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 'calc(env(safe-area-inset-bottom) + 108px)',
+                left: 0, right: 0,
+                padding: '0 38px',
+                animation: 'formIn 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+                zIndex: 10,
+                opacity: authed ? 0 : 1,
+                transition: 'opacity 0.4s ease',
+                pointerEvents: authed ? 'none' : 'auto',
+              }}
+            >
+              <form onSubmit={handleSubmit} noValidate>
+                {/* Email row — maxWidth shortens the underline */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '230px' }}>
+                  <LockIcon />
+                  <input
+                    className="athena-input"
+                    type="email"
+                    placeholder="EMAIL"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
+                  />
+                </div>
 
-              {/* Password row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px' }}>
-                <LockIcon />
-                <input
-                  className="athena-input"
-                  type="password"
-                  placeholder="PASSWORD"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                />
-              </div>
+                {/* Password row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px', maxWidth: '230px' }}>
+                  <LockIcon />
+                  <input
+                    className="athena-input"
+                    type="password"
+                    placeholder="PASSWORD"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                  />
+                </div>
 
-              {/* Inline error */}
-              {error && (
-                <p style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontStyle: 'italic',
-                  fontSize: '13px',
-                  color: 'rgba(190,80,80,0.85)',
-                  marginBottom: '14px',
-                  letterSpacing: '0.03em',
-                  lineHeight: 1.4,
+                {/* Inline error */}
+                {error && (
+                  <p style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontStyle: 'italic',
+                    fontSize: '13px',
+                    color: 'rgba(190,80,80,0.85)',
+                    marginBottom: '14px',
+                    letterSpacing: '0.03em',
+                    lineHeight: 1.4,
+                  }}>
+                    {error}
+                  </p>
+                )}
+
+                {/* ACCESS — reveals once both fields have content */}
+                <div style={{
+                  overflow: 'hidden',
+                  maxHeight: formReady ? '60px' : '0',
+                  opacity: formReady ? 1 : 0,
+                  transform: formReady ? 'translateY(0)' : 'translateY(8px)',
+                  transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
                 }}>
-                  {error}
-                </p>
-              )}
+                  <button type="submit" disabled={loading} className="access-btn">
+                    <span style={{
+                      fontFamily: "'Cinzel', serif",
+                      fontSize: '11px',
+                      letterSpacing: '0.38em',
+                      backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+                      backgroundSize: '200% 100%',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      animation: 'shimmer 5s linear infinite',
+                      display: 'inline-block',
+                    }}>
+                      {loading ? '···' : 'ACCESS'}
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </div>
 
-              {/* ACCESS — only appears once both fields have content */}
+            {/* Centered ACCESS shown after successful auth */}
+            {authed && (
               <div style={{
-                overflow: 'hidden',
-                maxHeight: formReady ? '60px' : '0',
-                opacity: formReady ? 1 : 0,
-                transform: formReady ? 'translateY(0)' : 'translateY(8px)',
-                transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
+                position: 'absolute', inset: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                zIndex: 11,
+                pointerEvents: 'none',
+                animation: 'formIn 0.3s ease',
               }}>
-              <button type="submit" disabled={loading} className="access-btn">
-                <span style={{
-                  fontFamily: "'Cinzel', serif",
-                  fontSize: '11px',
-                  letterSpacing: '0.38em',
-                  backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
-                  backgroundSize: '200% 100%',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  animation: 'shimmer 5s linear infinite',
-                  display: 'inline-block',
+                <div style={{
+                  padding: '13px 28px',
+                  border: '1px solid rgba(201,168,108,0.52)',
+                  borderRadius: '2px',
+                  textAlign: 'center',
+                  minWidth: '160px',
+                  animation: 'goldSuccessPulse 1s ease 0.8s both',
                 }}>
-                  {loading ? '···' : 'ACCESS'}
-                </span>
-              </button>
+                  <span style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: '11px',
+                    letterSpacing: '0.38em',
+                    backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+                    backgroundSize: '200% 100%',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    animation: 'shimmer 5s linear infinite',
+                    display: 'inline-block',
+                  }}>
+                    ACCESS
+                  </span>
+                </div>
               </div>
-            </form>
-          </div>
+            )}
+          </>
         )}
 
         {/* ── ATHENA wordmark ── */}
