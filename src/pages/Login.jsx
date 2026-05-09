@@ -168,6 +168,10 @@ export default function Login() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
+        @keyframes loadingDot {
+          0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+          40%            { opacity: 1;   transform: scale(1.15); }
+        }
         @keyframes inputFocusPulse {
           0%   { filter: drop-shadow(0 0 0px rgba(201,168,108,0)); }
           50%  { filter: drop-shadow(0 0 14px rgba(201,168,108,0.45)); }
@@ -575,11 +579,12 @@ export default function Login() {
                     autoCapitalize="none"
                     autoCorrect="off"
                     spellCheck={false}
+                    disabled={loading}
                   />
                 </div>
 
                 {/* Password row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px', maxWidth: '285px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
@@ -588,8 +593,23 @@ export default function Login() {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     autoComplete="current-password"
+                    disabled={loading}
                   />
                 </div>
+
+                {/* Loading dots — immediate feedback while Supabase auth runs */}
+                {loading && (
+                  <div style={{ display: 'flex', gap: '7px', paddingLeft: '24px', marginBottom: '6px', animation: 'formIn 0.2s ease' }}>
+                    {[0, 1, 2].map(i => (
+                      <div key={i} style={{
+                        width: '5px', height: '5px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(201,168,108,0.75)',
+                        animation: `loadingDot 1.1s ease-in-out infinite ${i * 0.18}s`,
+                      }} />
+                    ))}
+                  </div>
+                )}
 
                 {/* Inline error */}
                 {error && (
