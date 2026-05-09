@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/athena-hero.webp'
 
-const PARTICLES = Array.from({ length: 82 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 96 }, (_, i) => ({
   id: i,
   x: (i * 37 + 13) % 100,
   y: i < 40
@@ -9,10 +9,10 @@ const PARTICLES = Array.from({ length: 82 }, (_, i) => ({
     : i < 68
     ? 56 + ((i * 31 + 17) % 38)   // lower area (steam/ground)
     : 4 + ((i * 43 + 11) % 38),   // upper area (cape/hair/sky behind Athena)
-  size: i >= 68 ? 0.5 + (i % 2) * 0.5 : 0.8 + (i % 3) * 0.65,
+  size: i >= 68 ? 0.4 + (i % 3) * 0.4 : 0.8 + (i % 3) * 0.65,
   duration: 3 + (i % 7),
   delay: (i * 0.28) % 6,
-  opacity: i >= 68 ? 0.14 + (i % 4) * 0.07 : 0.18 + (i % 5) * 0.1,
+  opacity: i >= 68 ? 0.12 + (i % 5) * 0.06 : 0.18 + (i % 5) * 0.1,
 }))
 
 export default function Login() {
@@ -101,11 +101,11 @@ export default function Login() {
           50%     { opacity: 1; }
         }
         @keyframes shimmer {
-          0%   { background-position: 200% center; }
-          100% { background-position: -100% center; }
+          0%   { background-position: 0% center; }
+          100% { background-position: 200% center; }
         }
         @keyframes wordmarkPulse {
-          0%,100% { opacity: 0.88; }
+          0%,100% { opacity: 0.72; }
           50%     { opacity: 1; }
         }
 
@@ -307,16 +307,17 @@ export default function Login() {
             fontSize: 'clamp(28px, 8vw, 50px)',
             fontWeight: 400,
             display: 'block',
-            letterSpacing: '0.34em',
+            letterSpacing: '0.26em',
             lineHeight: 1,
-            backgroundImage: 'linear-gradient(90deg, rgba(244,239,230,0.97) 0%, rgba(244,239,230,0.97) 35%, rgba(255,255,255,1) 50%, rgba(244,239,230,0.97) 65%, rgba(244,239,230,0.97) 100%)',
+            transform: 'scaleX(0.84)',
+            backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(248,246,242,0.95) 44%, rgba(255,255,255,1) 50%, rgba(248,246,242,0.95) 56%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
             backgroundSize: '200% 100%',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             textShadow: 'none',
-            filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 18px rgba(255,255,255,0.7)) drop-shadow(0 0 40px rgba(255,255,255,0.35))',
-            animation: 'shimmer 4s linear infinite',
+            filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.5)) drop-shadow(0 0 10px rgba(255,255,255,0.35)) drop-shadow(0 0 22px rgba(255,255,255,0.18))',
+            animation: 'shimmer 5s linear infinite',
           }}>
             ATHENA
           </span>
