@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import heroImg from '../assets/athena-hero.webp'
 import { supabase } from '../lib/supabase'
@@ -41,6 +41,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authed, setAuthed] = useState(false)
+  const [videoReady, setVideoReady] = useState(false)
+  const navDest = useRef('/')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -80,13 +82,19 @@ export default function Login() {
     if (!email.trim() || !password.trim() || loading || authed) return
     setLoading(true)
     setError('')
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: { user: authUser }, error: authError } = await supabase.auth.signInWithPassword({ email, password })
     if (authError) {
       setError(authError.message)
       setLoading(false)
     } else {
-      setAuthed(true)
+      const { data: prof } = await supabase
+        .from('profiles')
+        .select('onboarding_done')
+        .eq('id', authUser.id)
+        .single()
+      navDest.current = prof?.onboarding_done ? '/' : '/onboarding'
       setLoading(false)
+      setAuthed(true)
     }
   }
 
@@ -567,125 +575,115 @@ export default function Login() {
 
         {/* ── Login form ── */}
         {phase === 'form' && (
-          <>
-            {/* Inputs + inline ACCESS — fades out on auth success */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 'calc(env(safe-area-inset-bottom) + 108px)',
-                left: 0, right: 0,
-                padding: '0 38px',
-                animation: 'formIn 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
-                zIndex: 10,
-                opacity: authed ? 0 : 1,
-                transition: 'opacity 0.4s ease',
-                pointerEvents: authed ? 'none' : 'auto',
-              }}
-            >
-              <form onSubmit={handleSubmit} noValidate>
-                {/* Email row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
-                  <LockIcon />
-                  <input
-                    className="athena-input"
-                    type="email"
-                    placeholder="EMAIL"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    autoComplete="email"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    spellCheck={false}
-                    enterKeyHint="next"
-                    disabled={loading}
-                  />
-                </div>
-
-                {/* Password row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
-                  <LockIcon />
-                  <input
-                    className="athena-input"
-                    type="password"
-                    placeholder="PASSWORD"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    enterKeyHint="go"
-                    onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
-                    disabled={loading}
-                  />
-                </div>
-
-                {/* Loading dots — immediate feedback while Supabase auth runs */}
-                {loading && (
-                  <div style={{ display: 'flex', gap: '7px', paddingLeft: '24px', marginBottom: '6px', animation: 'formIn 0.2s ease' }}>
-                    {[0, 1, 2].map(i => (
-                      <div key={i} style={{
-                        width: '5px', height: '5px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgba(201,168,108,0.75)',
-                        animation: `loadingDot 1.1s ease-in-out infinite ${i * 0.18}s`,
-                      }} />
-                    ))}
-                  </div>
-                )}
-
-                {/* Inline error */}
-                {error && (
-                  <p style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontStyle: 'italic',
-                    fontSize: '13px',
-                    color: 'rgba(190,80,80,0.85)',
-                    marginBottom: '14px',
-                    letterSpacing: '0.03em',
-                    lineHeight: 1.4,
-                  }}>
-                    {error}
-                  </p>
-                )}
-
-                {/* Hidden submit — allows Enter key to submit */}
-                <button type="submit" style={{ display: 'none' }} aria-hidden="true" />
-              </form>
-            </div>
-
-            {/* Centered ACCESS — appears only after Supabase confirms auth */}
-            {authed && (
-              <div style={{
-                position: 'absolute', inset: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                zIndex: 11,
-                animation: 'formIn 0.4s ease',
-              }}>
-                <button
-                  onClick={() => navigate('/')}
-                  className="access-btn"
-                  style={{
-                    minWidth: '160px',
-                    animation: 'goldSuccessPulse 1s ease 0.4s both',
-                  }}
-                >
-                  <span style={{
-                    fontFamily: "'Cinzel', serif",
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    letterSpacing: '0.38em',
-                    backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
-                    backgroundSize: '200% 100%',
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    animation: 'shimmer 5s linear infinite, accessWordPulse 2.5s ease-in-out infinite',
-                    display: 'inline-block',
-                  }}>
-                    ACCESS
-                  </span>
-                </button>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 'calc(env(safe-area-inset-bottom) + 108px)',
+              left: 0, right: 0,
+              padding: '0 38px',
+              animation: 'formIn 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+              zIndex: 10,
+              opacity: authed ? 0 : 1,
+              transition: 'opacity 0.4s ease',
+              pointerEvents: authed ? 'none' : 'auto',
+            }}
+          >
+            <form onSubmit={handleSubmit} noValidate>
+              {/* Email row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
+                <LockIcon />
+                <input
+                  className="athena-input"
+                  type="email"
+                  placeholder="EMAIL"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  enterKeyHint="next"
+                  disabled={loading}
+                />
               </div>
-            )}
-          </>
+
+              {/* Password row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
+                <LockIcon />
+                <input
+                  className="athena-input"
+                  type="password"
+                  placeholder="PASSWORD"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  enterKeyHint="go"
+                  onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
+                  disabled={loading}
+                />
+              </div>
+
+              {/* Loading dots */}
+              {loading && (
+                <div style={{ display: 'flex', gap: '7px', paddingLeft: '24px', marginBottom: '6px', animation: 'formIn 0.2s ease' }}>
+                  {[0, 1, 2].map(i => (
+                    <div key={i} style={{
+                      width: '5px', height: '5px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(201,168,108,0.75)',
+                      animation: `loadingDot 1.1s ease-in-out infinite ${i * 0.18}s`,
+                    }} />
+                  ))}
+                </div>
+              )}
+
+              {/* Inline error */}
+              {error && (
+                <p style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontStyle: 'italic',
+                  fontSize: '13px',
+                  color: 'rgba(190,80,80,0.85)',
+                  marginBottom: '14px',
+                  letterSpacing: '0.03em',
+                  lineHeight: 1.4,
+                }}>
+                  {error}
+                </p>
+              )}
+
+              <button type="submit" style={{ display: 'none' }} aria-hidden="true" />
+            </form>
+          </div>
+        )}
+
+        {/* ── Auth loading video — full screen, auto-navigates on end ── */}
+        {authed && (
+          <div
+            style={{
+              position: 'fixed', inset: 0,
+              zIndex: 100,
+              backgroundColor: '#060404',
+              opacity: videoReady ? 1 : 0,
+              transition: 'opacity 0.5s ease',
+            }}
+          >
+            <video
+              src="/athena-loading.mp4"
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              onCanPlay={() => setVideoReady(true)}
+              onEnded={() => navigate(navDest.current, { replace: true })}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          </div>
         )}
 
         {/* ── ATHENA wordmark ── */}
