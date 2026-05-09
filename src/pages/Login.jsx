@@ -380,9 +380,9 @@ export default function Login() {
             style={{
               position: 'absolute', inset: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'rgba(6,4,4,0.72)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
+              background: 'rgba(6,4,4,0.4)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
               animation: 'overlayIn 0.35s ease',
               zIndex: 30,
               padding: '28px 20px',
@@ -392,10 +392,10 @@ export default function Login() {
               width: '100%',
               maxWidth: '360px',
               maxHeight: '80vh',
-              background: 'rgba(10,7,7,0.78)',
-              backdropFilter: 'blur(28px)',
-              WebkitBackdropFilter: 'blur(28px)',
-              border: '1px solid rgba(201,168,108,0.18)',
+              background: 'rgba(6,4,4,0.38)',
+              backdropFilter: 'blur(32px)',
+              WebkitBackdropFilter: 'blur(32px)',
+              border: '1px solid rgba(201,168,108,0.22)',
               borderRadius: '10px',
               display: 'flex',
               flexDirection: 'column',
@@ -425,7 +425,7 @@ export default function Login() {
                 <div style={{
                   fontFamily: "'The Seasons', 'Cormorant Garamond', serif",
                   fontSize: '13px', lineHeight: 1.8,
-                  color: 'rgba(244,239,230,0.62)',
+                  color: 'rgba(244,239,230,0.82)',
                   letterSpacing: '0.02em',
                 }}>
                   <p style={{ marginBottom: '14px' }}>
