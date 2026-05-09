@@ -192,16 +192,16 @@ export default function Login() {
           100% { box-shadow: 0 0 8px rgba(201,168,108,0.18); border-color: rgba(201,168,108,0.52); }
         }
         @keyframes inputIdlePulse {
-          0%, 100% { filter: drop-shadow(0 1px 3px rgba(201,168,108,0.1)); border-bottom-color: rgba(201,168,108,0.65); }
-          50%      { filter: drop-shadow(0 1px 10px rgba(201,168,108,0.38)); border-bottom-color: rgba(201,168,108,0.95); }
+          0%, 100% { filter: drop-shadow(0 0 3px rgba(201,168,108,0.3)); }
+          50%      { filter: drop-shadow(0 0 12px rgba(201,168,108,0.78)) drop-shadow(0 0 24px rgba(201,168,108,0.35)); }
         }
         @keyframes inputRowShimmer {
           0%   { background-position: 200% center; }
           100% { background-position: -200% center; }
         }
         @keyframes accessIdlePulse {
-          0%, 100% { box-shadow: 0 0 8px rgba(201,168,108,0.15); border-color: rgba(201,168,108,0.52); }
-          50%      { box-shadow: 0 0 24px rgba(201,168,108,0.5), 0 0 48px rgba(201,168,108,0.2); border-color: rgba(201,168,108,0.85); }
+          0%, 100% { box-shadow: 0 0 10px rgba(201,168,108,0.25), inset 0 0 8px rgba(201,168,108,0.06); }
+          50%      { box-shadow: 0 0 28px rgba(201,168,108,0.68), 0 0 55px rgba(201,168,108,0.28), inset 0 0 12px rgba(201,168,108,0.1); }
         }
 
         .athena-input {
@@ -230,9 +230,9 @@ export default function Login() {
           animation: inputFocusPulse 0.5s ease forwards;
         }
         .athena-input-row {
-          background: linear-gradient(90deg, transparent 0%, rgba(201,168,108,0.04) 50%, transparent 100%);
+          background: linear-gradient(90deg, transparent 0%, rgba(201,168,108,0.14) 50%, transparent 100%);
           background-size: 200% 100%;
-          animation: inputRowShimmer 5s linear infinite;
+          animation: inputRowShimmer 4s linear infinite;
           padding: 3px 6px 3px 0;
           border-radius: 2px;
         }
