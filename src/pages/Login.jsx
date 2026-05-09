@@ -10,7 +10,7 @@ const PARTICLES = Array.from({ length: 96 }, (_, i) => ({
     ? 56 + ((i * 31 + 17) % 38)   // lower area (steam/ground)
     : 4 + ((i * 43 + 11) % 38),   // upper area (cape/hair/sky behind Athena)
   size: i >= 68 ? 0.4 + (i % 3) * 0.4 : 0.8 + (i % 3) * 0.65,
-  duration: 3 + (i % 7),
+  duration: 1.8 + (i % 4),
   delay: (i * 0.28) % 6,
   opacity: i >= 68 ? 0.12 + (i % 5) * 0.06 : 0.18 + (i % 5) * 0.1,
 }))
