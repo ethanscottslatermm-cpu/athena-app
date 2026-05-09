@@ -1,12 +1,15 @@
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useProfile } from '../hooks/useProfile'
 import GlassCard from '../components/GlassCard'
 
 export default function Settings() {
   const { profile } = useProfile()
+  const navigate = useNavigate()
 
   async function signOut() {
     await supabase.auth.signOut()
+    navigate('/login', { replace: true })
   }
 
   return (
