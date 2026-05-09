@@ -709,8 +709,22 @@ export default function Login() {
               preload="auto"
               onEnded={() => navigate(navDest.current, { replace: true })}
               onError={() => navigate(navDest.current, { replace: true })}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover', display: 'block',
+                filter: 'contrast(1.38) brightness(1.08) saturate(1.32)',
+              }}
             />
+            {/* Cinematic vignette */}
+            <div style={{
+              position: 'absolute', inset: 0, pointerEvents: 'none',
+              background: 'radial-gradient(ellipse 85% 85% at 50% 50%, transparent 40%, rgba(0,0,0,0.72) 100%)',
+            }} />
+            {/* Top + bottom letterbox shadow */}
+            <div style={{
+              position: 'absolute', inset: 0, pointerEvents: 'none',
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.38) 100%)',
+            }} />
           </div>
         )}
 
