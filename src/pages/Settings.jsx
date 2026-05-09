@@ -4,12 +4,17 @@ import { useProfile } from '../hooks/useProfile'
 import GlassCard from '../components/GlassCard'
 
 export default function Settings() {
-  const { profile } = useProfile()
+  const { profile, updateProfile } = useProfile()
   const navigate = useNavigate()
 
   async function signOut() {
     await supabase.auth.signOut()
     navigate('/login', { replace: true })
+  }
+
+  async function retakeQuestionnaire() {
+    await updateProfile({ onboarding_done: false })
+    navigate('/onboarding', { replace: true })
   }
 
   return (
@@ -20,6 +25,13 @@ export default function Settings() {
         <p className="font-garamond text-ivory/40 text-xs uppercase tracking-widest mb-1">Account</p>
         <p className="font-garamond text-ivory">{profile?.email}</p>
       </GlassCard>
+
+      <button
+        onClick={retakeQuestionnaire}
+        className="w-full border border-white/10 text-ivory/60 font-cinzel tracking-widest py-3 rounded-xl hover:bg-white/5 transition-colors mb-3"
+      >
+        RETAKE QUESTIONNAIRE
+      </button>
 
       <button
         onClick={signOut}
