@@ -36,7 +36,7 @@ export default function Login() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
   const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
   const [termsChecked, setTermsChecked] = useState(false)
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('Ethan.scott.slatermm@gmail.com')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -563,7 +563,7 @@ export default function Login() {
             >
               <form onSubmit={handleSubmit} noValidate>
                 {/* Email row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '230px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
@@ -579,7 +579,7 @@ export default function Login() {
                 </div>
 
                 {/* Password row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px', maxWidth: '230px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
