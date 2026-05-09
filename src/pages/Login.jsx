@@ -191,30 +191,50 @@ export default function Login() {
           40%  { box-shadow: 0 0 28px rgba(201,168,108,0.65), 0 0 60px rgba(201,168,108,0.28); border-color: rgba(201,168,108,0.95); }
           100% { box-shadow: 0 0 8px rgba(201,168,108,0.18); border-color: rgba(201,168,108,0.52); }
         }
+        @keyframes inputIdlePulse {
+          0%, 100% { filter: drop-shadow(0 1px 3px rgba(201,168,108,0.1)); border-bottom-color: rgba(201,168,108,0.65); }
+          50%      { filter: drop-shadow(0 1px 10px rgba(201,168,108,0.38)); border-bottom-color: rgba(201,168,108,0.95); }
+        }
+        @keyframes inputRowShimmer {
+          0%   { background-position: 200% center; }
+          100% { background-position: -200% center; }
+        }
+        @keyframes accessIdlePulse {
+          0%, 100% { box-shadow: 0 0 8px rgba(201,168,108,0.15); border-color: rgba(201,168,108,0.52); }
+          50%      { box-shadow: 0 0 24px rgba(201,168,108,0.5), 0 0 48px rgba(201,168,108,0.2); border-color: rgba(201,168,108,0.85); }
+        }
 
         .athena-input {
           background: transparent;
           border: none;
           border-bottom: 1px solid rgba(201,168,108,0.72);
           outline: none;
-          color: rgba(244,239,230,0.92);
+          color: rgba(244,239,230,0.95);
           font-family: 'Cormorant Garamond', serif;
           font-size: 12px;
           letter-spacing: 0.22em;
           padding: 7px 0 7px 6px;
           width: 100%;
-          transition: border-color 0.3s, filter 0.3s;
+          transition: border-color 0.3s;
           caret-color: rgba(201,168,108,0.8);
           -webkit-appearance: none;
+          animation: inputIdlePulse 3s ease-in-out infinite;
         }
         .athena-input::placeholder {
-          color: rgba(244,239,230,0.52);
+          color: rgba(244,239,230,0.68);
           font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.24em;
         }
         .athena-input:focus {
           border-bottom-color: rgba(201,168,108,1);
           animation: inputFocusPulse 0.5s ease forwards;
+        }
+        .athena-input-row {
+          background: linear-gradient(90deg, transparent 0%, rgba(201,168,108,0.04) 50%, transparent 100%);
+          background-size: 200% 100%;
+          animation: inputRowShimmer 5s linear infinite;
+          padding: 3px 6px 3px 0;
+          border-radius: 2px;
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
@@ -571,7 +591,7 @@ export default function Login() {
             >
               <form onSubmit={handleSubmit} noValidate>
                 {/* Email row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
+                <div className="athena-input-row" style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
@@ -589,7 +609,7 @@ export default function Login() {
                 </div>
 
                 {/* Password row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
+                <div className="athena-input-row" style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
@@ -651,7 +671,7 @@ export default function Login() {
                   className="access-btn"
                   style={{
                     minWidth: '160px',
-                    animation: 'goldSuccessPulse 1s ease 0.4s both',
+                    animation: 'goldSuccessPulse 1s ease 0.4s both, accessIdlePulse 2.5s ease-in-out 1.5s infinite',
                   }}
                 >
                   <span style={{
