@@ -1,22 +1,46 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import heroImg from '../assets/athena-hero.webp'
+import { supabase } from '../lib/supabase'
 
 const PARTICLES = Array.from({ length: 96 }, (_, i) => ({
   id: i,
   x: (i * 37 + 13) % 100,
   y: i < 40
-    ? (i * 53 + 7) % 100          // uniform spread
+    ? (i * 53 + 7) % 100
     : i < 68
-    ? 56 + ((i * 31 + 17) % 38)   // lower area (steam/ground)
-    : 4 + ((i * 43 + 11) % 38),   // upper area (cape/hair/sky behind Athena)
+    ? 56 + ((i * 31 + 17) % 38)
+    : 4 + ((i * 43 + 11) % 38),
   size: i >= 68 ? 0.4 + (i % 3) * 0.4 : 0.8 + (i % 3) * 0.65,
   duration: 1.8 + (i % 4),
   delay: (i * 0.28) % 6,
   opacity: i >= 68 ? 0.12 + (i % 5) * 0.06 : 0.18 + (i % 5) * 0.1,
 }))
 
+function LockIcon() {
+  return (
+    <svg
+      width="13" height="16" viewBox="0 0 13 16"
+      fill="none" xmlns="http://www.w3.org/2000/svg"
+      style={{ flexShrink: 0, marginBottom: '1px' }}
+    >
+      <rect x="0.8" y="7" width="11.4" height="8.2" rx="1.4"
+        stroke="rgba(201,168,108,0.6)" strokeWidth="1.1" />
+      <path d="M3.2 7V4.8a3.3 3.3 0 0 1 6.6 0V7"
+        stroke="rgba(201,168,108,0.6)" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export default function Login() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
+  const [termsChecked, setTermsChecked] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onMouse = (e) => setMouse({
@@ -37,9 +61,39 @@ export default function Login() {
     }
   }, [])
 
+  function handleWordmarkTap() {
+    if (phase !== 'idle') return
+    if (localStorage.getItem('athena_terms_accepted')) {
+      setPhase('form')
+    } else {
+      setPhase('terms')
+    }
+  }
+
+  function handleAcceptTerms() {
+    localStorage.setItem('athena_terms_accepted', '1')
+    setPhase('form')
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!email || !password) return
+    setLoading(true)
+    setError('')
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+    } else {
+      navigate('/')
+    }
+  }
+
   return (
     <>
       <style>{`
+        @import url('https://fonts.cdnfonts.com/css/the-seasons');
+
         @keyframes cloudA {
           0%   { transform: translateX(-6%); }
           50%  { transform: translateX(6%); }
@@ -92,10 +146,6 @@ export default function Login() {
           50%  { transform: translateX(8%) scaleX(1.25); opacity: 1; }
           100% { transform: translateX(-5%) scaleX(1); opacity: 0.6; }
         }
-        @keyframes borderGlow {
-          0%,100% { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 20px rgba(255,252,245,0.08), inset 0 1px 0 rgba(255,252,245,0.1); }
-          50%     { box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 40px rgba(255,252,245,0.18), inset 0 1px 0 rgba(255,252,245,0.18); }
-        }
         @keyframes haloBreath {
           0%,100% { opacity: 0.75; }
           50%     { opacity: 1; }
@@ -108,14 +158,62 @@ export default function Login() {
           0%,100% { opacity: 0.72; }
           50%     { opacity: 1; }
         }
+        @keyframes formIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes overlayIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
 
+        .athena-input {
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid rgba(201,168,108,0.22);
+          outline: none;
+          color: rgba(244,239,230,0.88);
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 12px;
+          letter-spacing: 0.22em;
+          padding: 7px 0 7px 6px;
+          width: 100%;
+          transition: border-color 0.3s, filter 0.3s;
+          caret-color: rgba(201,168,108,0.8);
+          -webkit-appearance: none;
+        }
+        .athena-input::placeholder {
+          color: rgba(244,239,230,0.32);
+          font-family: 'Cormorant Garamond', serif;
+          letter-spacing: 0.24em;
+        }
+        .athena-input:focus {
+          border-bottom-color: rgba(201,168,108,0.55);
+          filter: drop-shadow(0 2px 10px rgba(201,168,108,0.12));
+        }
+
+        .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(201,168,108,0.25) transparent; }
+        .terms-scroll::-webkit-scrollbar { width: 3px; }
+        .terms-scroll::-webkit-scrollbar-track { background: transparent; }
+        .terms-scroll::-webkit-scrollbar-thumb { background: rgba(201,168,108,0.25); border-radius: 2px; }
+
+        .access-btn {
+          width: 100%;
+          padding: 13px;
+          background: transparent;
+          border: 1px solid rgba(201,168,108,0.32);
+          border-radius: 2px;
+          cursor: pointer;
+          transition: border-color 0.3s;
+          -webkit-appearance: none;
+        }
+        .access-btn:active { border-color: rgba(201,168,108,0.6); }
+        .access-btn:disabled { cursor: wait; opacity: 0.6; }
       `}</style>
 
-      <div
-        className="fixed inset-0 bg-[#060404] overflow-hidden md:absolute"
-      >
+      <div className="fixed inset-0 bg-[#060404] overflow-hidden md:absolute">
 
-        {/* ── 1. Hero image — fixed, slight scale for edge coverage ── */}
+        {/* ── 1. Hero image ── */}
         <div className="absolute inset-0" style={{ transform: 'scale(1.04)', transformOrigin: 'top center' }}>
           <img
             src={heroImg}
@@ -128,17 +226,14 @@ export default function Login() {
           />
         </div>
 
-        {/* ── 2. Base vignette ──────────────────────────────────── */}
+        {/* ── 2. Base vignette ── */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/40 via-transparent via-40% to-black/20" />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/18 via-transparent to-black/18" />
 
-        {/* ── 3. Cloud A ────────────────────────────────────────── */}
+        {/* ── 3. Cloud A ── */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            transform: `translate(${mouse.x * 4}px, ${mouse.y * 3}px)`,
-            transition: '2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          }}
+          style={{ transform: `translate(${mouse.x * 4}px, ${mouse.y * 3}px)`, transition: '2s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
         >
           <div style={{
             position: 'absolute', inset: 0,
@@ -148,13 +243,10 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 4. Cloud B ────────────────────────────────────────── */}
+        {/* ── 4. Cloud B ── */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            transform: `translate(${mouse.x * -2}px, ${mouse.y * -2}px)`,
-            transition: '2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          }}
+          style={{ transform: `translate(${mouse.x * -2}px, ${mouse.y * -2}px)`, transition: '2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
         >
           <div style={{
             position: 'absolute', inset: 0,
@@ -164,13 +256,10 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 5. Cloud C ────────────────────────────────────────── */}
+        {/* ── 5. Cloud C ── */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            transform: `translate(${mouse.x * 2}px, ${mouse.y * 1}px)`,
-            transition: '2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          }}
+          style={{ transform: `translate(${mouse.x * 2}px, ${mouse.y * 1}px)`, transition: '2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
         >
           <div style={{
             position: 'absolute', inset: 0,
@@ -180,7 +269,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 6. Haze pulse ─────────────────────────────────────── */}
+        {/* ── 6. Haze pulse ── */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -189,7 +278,7 @@ export default function Login() {
           }}
         />
 
-        {/* ── 7. Light rays ─────────────────────────────────────── */}
+        {/* ── 7. Light rays ── */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ mixBlendMode: 'screen' }}>
           <div style={{
             position: 'absolute', top: '-10%', left: '12%',
@@ -209,7 +298,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 8. Cinematic backlighting — head / cape ───────────── */}
+        {/* ── 8. Cinematic backlighting ── */}
         <div className="absolute inset-0 pointer-events-none" style={{ mixBlendMode: 'screen' }}>
           <div style={{
             position: 'absolute', top: '-6%', left: '50%',
@@ -229,7 +318,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 9. Dust particles ─────────────────────────────────── */}
+        {/* ── 9. Dust particles ── */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {PARTICLES.map(p => (
             <div key={p.id} style={{
@@ -243,7 +332,7 @@ export default function Login() {
           ))}
         </div>
 
-        {/* ── 10. Ground steam / mist ───────────────────────────── */}
+        {/* ── 10. Ground steam / mist ── */}
         <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
           <div style={{
             position: 'absolute', bottom: '15%', left: '-5%',
@@ -274,7 +363,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 11. Warrior ground glow ───────────────────────────── */}
+        {/* ── 11. Warrior ground glow ── */}
         <div style={{
           position: 'absolute',
           bottom: '20%', left: '50%',
@@ -285,16 +374,238 @@ export default function Login() {
           pointerEvents: 'none',
         }} />
 
+        {/* ── T&C Overlay ── */}
+        {phase === 'terms' && (
+          <div
+            style={{
+              position: 'absolute', inset: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: 'rgba(6,4,4,0.72)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              animation: 'overlayIn 0.35s ease',
+              zIndex: 30,
+              padding: '28px 20px',
+            }}
+          >
+            <div style={{
+              width: '100%',
+              maxWidth: '360px',
+              maxHeight: '80vh',
+              background: 'rgba(10,7,7,0.78)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              border: '1px solid rgba(201,168,108,0.18)',
+              borderRadius: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
+            }}>
 
-        {/* ── 13. Athena wordmark — bottom pinned ───────────────── */}
+              {/* Modal header */}
+              <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(201,168,108,0.1)', flexShrink: 0 }}>
+                <p style={{
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: '9px', letterSpacing: '0.3em',
+                  color: 'rgba(201,168,108,0.6)',
+                  marginBottom: '7px',
+                }}>ATHENA</p>
+                <h2 style={{
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: '16px', fontWeight: 400,
+                  color: 'rgba(244,239,230,0.92)',
+                  letterSpacing: '0.1em',
+                  margin: 0,
+                }}>Terms & Conditions</h2>
+              </div>
+
+              {/* Scrollable body */}
+              <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
+                <div style={{
+                  fontFamily: "'The Seasons', 'Cormorant Garamond', serif",
+                  fontSize: '13px', lineHeight: 1.8,
+                  color: 'rgba(244,239,230,0.62)',
+                  letterSpacing: '0.02em',
+                }}>
+                  <p style={{ marginBottom: '14px' }}>
+                    Welcome to Athena. By accessing or using our platform, you agree to be bound by these Terms &amp; Conditions and our Privacy Policy. Please read them carefully before proceeding.
+                  </p>
+
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(201,168,108,0.6)', marginBottom: '6px', marginTop: '18px' }}>1. ACCEPTANCE OF TERMS</p>
+                  <p style={{ marginBottom: '14px' }}>
+                    By creating an account or using the Athena application, you acknowledge that you have read, understood, and agree to these terms. If you do not agree, please do not use our services.
+                  </p>
+
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(201,168,108,0.6)', marginBottom: '6px', marginTop: '18px' }}>2. HEALTH INFORMATION</p>
+                  <p style={{ marginBottom: '14px' }}>
+                    Athena provides wellness guidance for informational purposes only. The content within this application is not intended as medical advice. Always consult a qualified healthcare professional before making changes to your health regimen.
+                  </p>
+
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(201,168,108,0.6)', marginBottom: '6px', marginTop: '18px' }}>3. PRIVACY &amp; DATA</p>
+                  <p style={{ marginBottom: '14px' }}>
+                    We take your privacy seriously. Your personal health data is encrypted and stored securely. We will never sell your personal information to third parties. Your cycle data, mood logs, and wellness entries remain private to you.
+                  </p>
+
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(201,168,108,0.6)', marginBottom: '6px', marginTop: '18px' }}>4. USER RESPONSIBILITIES</p>
+                  <p style={{ marginBottom: '14px' }}>
+                    You are responsible for maintaining the confidentiality of your account credentials. You agree to provide accurate information and to notify us immediately of any unauthorized use of your account.
+                  </p>
+
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(201,168,108,0.6)', marginBottom: '6px', marginTop: '18px' }}>5. MODIFICATIONS</p>
+                  <p style={{ marginBottom: '4px' }}>
+                    Athena reserves the right to modify these terms at any time. Continued use of the platform after changes constitutes your acceptance of the updated terms.
+                  </p>
+                </div>
+              </div>
+
+              {/* Modal footer */}
+              <div style={{ padding: '14px 22px 22px', borderTop: '1px solid rgba(201,168,108,0.1)', flexShrink: 0 }}>
+                <label
+                  style={{ display: 'flex', alignItems: 'flex-start', gap: '11px', cursor: 'pointer', marginBottom: '16px' }}
+                  onClick={() => setTermsChecked(v => !v)}
+                >
+                  {/* Custom checkbox */}
+                  <div style={{
+                    width: '15px', height: '15px',
+                    border: `1px solid ${termsChecked ? 'rgba(201,168,108,0.75)' : 'rgba(201,168,108,0.3)'}`,
+                    borderRadius: '2px',
+                    background: termsChecked ? 'rgba(201,168,108,0.12)' : 'transparent',
+                    flexShrink: 0, marginTop: '2px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'all 0.2s',
+                  }}>
+                    {termsChecked && (
+                      <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
+                        <path d="M1 3.5l2 2L8 1" stroke="rgba(201,168,108,0.9)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                  <span style={{
+                    fontFamily: "'The Seasons', 'Cormorant Garamond', serif",
+                    fontSize: '12px', lineHeight: 1.55,
+                    color: 'rgba(244,239,230,0.58)',
+                    letterSpacing: '0.02em',
+                    userSelect: 'none',
+                  }}>
+                    I agree to the Terms &amp; Conditions and Privacy Policy
+                  </span>
+                </label>
+
+                <button
+                  onClick={handleAcceptTerms}
+                  disabled={!termsChecked}
+                  style={{
+                    width: '100%', padding: '12px',
+                    background: 'transparent',
+                    border: `1px solid ${termsChecked ? 'rgba(201,168,108,0.45)' : 'rgba(201,168,108,0.15)'}`,
+                    borderRadius: '3px',
+                    color: termsChecked ? 'rgba(244,239,230,0.85)' : 'rgba(244,239,230,0.28)',
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: '10px', letterSpacing: '0.32em',
+                    cursor: termsChecked ? 'pointer' : 'not-allowed',
+                    transition: 'all 0.25s',
+                  }}
+                >
+                  CONTINUE
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Login form ── */}
+        {phase === 'form' && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 'calc(env(safe-area-inset-bottom) + 108px)',
+              left: 0, right: 0,
+              padding: '0 38px',
+              animation: 'formIn 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+              zIndex: 10,
+            }}
+          >
+            <form onSubmit={handleSubmit} noValidate>
+              {/* Email row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
+                <LockIcon />
+                <input
+                  className="athena-input"
+                  type="email"
+                  placeholder="EMAIL"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+              </div>
+
+              {/* Password row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px' }}>
+                <LockIcon />
+                <input
+                  className="athena-input"
+                  type="password"
+                  placeholder="PASSWORD"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                />
+              </div>
+
+              {/* Inline error */}
+              {error && (
+                <p style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontStyle: 'italic',
+                  fontSize: '13px',
+                  color: 'rgba(190,80,80,0.85)',
+                  marginBottom: '14px',
+                  letterSpacing: '0.03em',
+                  lineHeight: 1.4,
+                }}>
+                  {error}
+                </p>
+              )}
+
+              {/* ACCESS button */}
+              <button type="submit" disabled={loading} className="access-btn">
+                <span style={{
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: '11px',
+                  letterSpacing: '0.38em',
+                  backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+                  backgroundSize: '200% 100%',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  animation: 'shimmer 5s linear infinite',
+                  display: 'inline-block',
+                }}>
+                  {loading ? '···' : 'ACCESS'}
+                </span>
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* ── ATHENA wordmark ── */}
         <div
-          className="absolute pointer-events-none"
+          onClick={handleWordmarkTap}
           style={{
+            position: 'absolute',
             bottom: 'calc(env(safe-area-inset-bottom) + 26px)',
             left: 0, right: 0,
             textAlign: 'center',
             padding: '0 24px',
             animation: 'wordmarkPulse 3s ease-in-out infinite',
+            cursor: phase === 'idle' ? 'pointer' : 'default',
+            zIndex: 10,
+            transition: 'opacity 0.5s ease',
+            opacity: phase === 'form' ? 0.4 : 1,
           }}
         >
           <div style={{
