@@ -41,19 +41,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authed, setAuthed] = useState(false)
-  const [showVideo, setShowVideo] = useState(false)
   const navDest = useRef('/')
-  const videoRef = useRef(null)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (showVideo && videoRef.current) {
-      videoRef.current.muted = true
-      videoRef.current.play().catch(() => {
-        navigate(navDest.current, { replace: true })
-      })
-    }
-  }, [showVideo])
 
   useEffect(() => {
     const onMouse = (e) => setMouse({
@@ -667,8 +656,8 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── ACCESS button — appears after auth, tap triggers video ── */}
-        {authed && !showVideo && (
+        {/* ── ACCESS button — appears after auth, navigates on tap ── */}
+        {authed && (
           <div style={{
             position: 'absolute', inset: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -676,7 +665,7 @@ export default function Login() {
             animation: 'formIn 0.4s ease',
           }}>
             <button
-              onClick={() => setShowVideo(true)}
+              onClick={() => navigate(navDest.current, { replace: true })}
               className="access-btn"
               style={{ minWidth: '160px', animation: 'goldSuccessPulse 1s ease 0.4s both' }}
             >
@@ -699,20 +688,6 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── Auth loading video — full screen, auto-navigates on end ── */}
-        {showVideo && (
-          <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#060404' }}>
-            <video
-              ref={videoRef}
-              src="/athena-loading.mp4"
-              playsInline
-              preload="auto"
-              onEnded={() => navigate(navDest.current, { replace: true })}
-              onError={() => navigate(navDest.current, { replace: true })}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
-          </div>
-        )}
 
         {/* ── ATHENA wordmark ── */}
         <div
