@@ -43,8 +43,6 @@ export default function Login() {
   const [authed, setAuthed] = useState(false)
   const navigate = useNavigate()
 
-  const formReady = email.trim().length > 0 && password.trim().length > 0
-
   useEffect(() => {
     const onMouse = (e) => setMouse({
       x: (e.clientX / window.innerWidth  - 0.5) * 2,
@@ -89,8 +87,7 @@ export default function Login() {
       setLoading(false)
     } else {
       setAuthed(true)
-      // 400ms fade + 800ms hold + 1000ms pulse = 2200ms
-      setTimeout(() => navigate('/'), 2200)
+      setLoading(false)
     }
   }
 
@@ -565,7 +562,7 @@ export default function Login() {
               }}
             >
               <form onSubmit={handleSubmit} noValidate>
-                {/* Email row — maxWidth shortens the underline */}
+                {/* Email row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '230px' }}>
                   <LockIcon />
                   <input
@@ -609,51 +606,27 @@ export default function Login() {
                   </p>
                 )}
 
-                {/* ACCESS — reveals once both fields have content */}
-                <div style={{
-                  overflow: 'hidden',
-                  maxHeight: formReady ? '60px' : '0',
-                  opacity: formReady ? 1 : 0,
-                  transform: formReady ? 'translateY(0)' : 'translateY(8px)',
-                  transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
-                }}>
-                  <button type="submit" disabled={loading} className="access-btn">
-                    <span style={{
-                      fontFamily: "'Cinzel', serif",
-                      fontSize: '11px',
-                      letterSpacing: '0.38em',
-                      backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
-                      backgroundSize: '200% 100%',
-                      WebkitBackgroundClip: 'text',
-                      backgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      animation: 'shimmer 5s linear infinite',
-                      display: 'inline-block',
-                    }}>
-                      {loading ? '···' : 'ACCESS'}
-                    </span>
-                  </button>
-                </div>
+                {/* Hidden submit — allows Enter key to submit */}
+                <button type="submit" style={{ display: 'none' }} aria-hidden="true" />
               </form>
             </div>
 
-            {/* Centered ACCESS shown after successful auth */}
+            {/* Centered ACCESS — appears only after Supabase confirms auth */}
             {authed && (
               <div style={{
                 position: 'absolute', inset: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 zIndex: 11,
-                pointerEvents: 'none',
-                animation: 'formIn 0.3s ease',
+                animation: 'formIn 0.4s ease',
               }}>
-                <div style={{
-                  padding: '13px 28px',
-                  border: '1px solid rgba(201,168,108,0.52)',
-                  borderRadius: '2px',
-                  textAlign: 'center',
-                  minWidth: '160px',
-                  animation: 'goldSuccessPulse 1s ease 0.8s both',
-                }}>
+                <button
+                  onClick={() => navigate('/')}
+                  className="access-btn"
+                  style={{
+                    minWidth: '160px',
+                    animation: 'goldSuccessPulse 1s ease 0.4s both',
+                  }}
+                >
                   <span style={{
                     fontFamily: "'Cinzel', serif",
                     fontSize: '11px',
@@ -668,7 +641,7 @@ export default function Login() {
                   }}>
                     ACCESS
                   </span>
-                </div>
+                </button>
               </div>
             )}
           </>
