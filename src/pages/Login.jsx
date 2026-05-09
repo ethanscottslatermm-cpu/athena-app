@@ -191,17 +191,13 @@ export default function Login() {
           40%  { box-shadow: 0 0 28px rgba(201,168,108,0.65), 0 0 60px rgba(201,168,108,0.28); border-color: rgba(201,168,108,0.95); }
           100% { box-shadow: 0 0 8px rgba(201,168,108,0.18); border-color: rgba(201,168,108,0.52); }
         }
-        @keyframes inputIdlePulse {
-          0%, 100% { filter: drop-shadow(0 0 3px rgba(201,168,108,0.3)); }
-          50%      { filter: drop-shadow(0 0 12px rgba(201,168,108,0.78)) drop-shadow(0 0 24px rgba(201,168,108,0.35)); }
+        @keyframes placeholderPulse {
+          0%, 100% { color: rgba(244,239,230,0.45); text-shadow: none; }
+          50%      { color: rgba(244,239,230,0.92); text-shadow: 0 0 10px rgba(244,239,230,0.55); }
         }
-        @keyframes inputRowShimmer {
-          0%   { background-position: 200% center; }
-          100% { background-position: -200% center; }
-        }
-        @keyframes accessIdlePulse {
-          0%, 100% { box-shadow: 0 0 10px rgba(201,168,108,0.25), inset 0 0 8px rgba(201,168,108,0.06); }
-          50%      { box-shadow: 0 0 28px rgba(201,168,108,0.68), 0 0 55px rgba(201,168,108,0.28), inset 0 0 12px rgba(201,168,108,0.1); }
+        @keyframes accessWordPulse {
+          0%, 100% { opacity: 0.72; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
+          50%      { opacity: 1;    filter: drop-shadow(0 0 10px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
         }
 
         .athena-input {
@@ -218,23 +214,15 @@ export default function Login() {
           transition: border-color 0.3s;
           caret-color: rgba(201,168,108,0.8);
           -webkit-appearance: none;
-          animation: inputIdlePulse 3s ease-in-out infinite;
         }
         .athena-input::placeholder {
-          color: rgba(244,239,230,0.68);
           font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.24em;
+          animation: placeholderPulse 2.5s ease-in-out infinite;
         }
         .athena-input:focus {
           border-bottom-color: rgba(201,168,108,1);
           animation: inputFocusPulse 0.5s ease forwards;
-        }
-        .athena-input-row {
-          background: linear-gradient(90deg, transparent 0%, rgba(201,168,108,0.14) 50%, transparent 100%);
-          background-size: 200% 100%;
-          animation: inputRowShimmer 4s linear infinite;
-          padding: 3px 6px 3px 0;
-          border-radius: 2px;
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
@@ -591,7 +579,7 @@ export default function Login() {
             >
               <form onSubmit={handleSubmit} noValidate>
                 {/* Email row */}
-                <div className="athena-input-row" style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
@@ -609,7 +597,7 @@ export default function Login() {
                 </div>
 
                 {/* Password row */}
-                <div className="athena-input-row" style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
                   <LockIcon />
                   <input
                     className="athena-input"
@@ -671,7 +659,7 @@ export default function Login() {
                   className="access-btn"
                   style={{
                     minWidth: '160px',
-                    animation: 'goldSuccessPulse 1s ease 0.4s both, accessIdlePulse 2.5s ease-in-out 1.5s infinite',
+                    animation: 'goldSuccessPulse 1s ease 0.4s both',
                   }}
                 >
                   <span style={{
@@ -683,7 +671,7 @@ export default function Login() {
                     WebkitBackgroundClip: 'text',
                     backgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    animation: 'shimmer 5s linear infinite',
+                    animation: 'shimmer 5s linear infinite, accessWordPulse 2.5s ease-in-out infinite',
                     display: 'inline-block',
                   }}>
                     ACCESS
