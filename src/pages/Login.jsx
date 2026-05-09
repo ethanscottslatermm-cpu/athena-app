@@ -36,7 +36,7 @@ export default function Login() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
   const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
   const [termsChecked, setTermsChecked] = useState(false)
-  const [email, setEmail] = useState('Ethan.scott.slatermm@gmail.com')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
