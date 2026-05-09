@@ -41,18 +41,19 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authed, setAuthed] = useState(false)
+  const [showVideo, setShowVideo] = useState(false)
   const navDest = useRef('/')
   const videoRef = useRef(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (authed && videoRef.current) {
+    if (showVideo && videoRef.current) {
       videoRef.current.muted = true
       videoRef.current.play().catch(() => {
         navigate(navDest.current, { replace: true })
       })
     }
-  }, [authed])
+  }, [showVideo])
 
   useEffect(() => {
     const onMouse = (e) => setMouse({
@@ -666,8 +667,40 @@ export default function Login() {
           </div>
         )}
 
+        {/* ── ACCESS button — appears after auth, tap triggers video ── */}
+        {authed && !showVideo && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 11,
+            animation: 'formIn 0.4s ease',
+          }}>
+            <button
+              onClick={() => setShowVideo(true)}
+              className="access-btn"
+              style={{ minWidth: '160px', animation: 'goldSuccessPulse 1s ease 0.4s both' }}
+            >
+              <span style={{
+                fontFamily: "'Cinzel', serif",
+                fontSize: '12px',
+                fontWeight: 500,
+                letterSpacing: '0.38em',
+                backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+                backgroundSize: '200% 100%',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                animation: 'shimmer 5s linear infinite, accessWordPulse 2.5s ease-in-out infinite',
+                display: 'inline-block',
+              }}>
+                ACCESS
+              </span>
+            </button>
+          </div>
+        )}
+
         {/* ── Auth loading video — full screen, auto-navigates on end ── */}
-        {authed && (
+        {showVideo && (
           <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#060404' }}>
             <video
               ref={videoRef}
