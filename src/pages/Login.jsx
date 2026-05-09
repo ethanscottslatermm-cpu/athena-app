@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/athena-hero.webp'
 
-const PARTICLES = Array.from({ length: 68 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 82 }, (_, i) => ({
   id: i,
   x: (i * 37 + 13) % 100,
   y: i < 40
-    ? (i * 53 + 7) % 100
-    : 56 + ((i * 31 + 17) % 38),
-  size: 0.8 + (i % 3) * 0.65,
+    ? (i * 53 + 7) % 100          // uniform spread
+    : i < 68
+    ? 56 + ((i * 31 + 17) % 38)   // lower area (steam/ground)
+    : 4 + ((i * 43 + 11) % 38),   // upper area (cape/hair/sky behind Athena)
+  size: i >= 68 ? 0.5 + (i % 2) * 0.5 : 0.8 + (i % 3) * 0.65,
   duration: 3 + (i % 7),
   delay: (i * 0.28) % 6,
-  opacity: 0.18 + (i % 5) * 0.1,
+  opacity: i >= 68 ? 0.14 + (i % 4) * 0.07 : 0.18 + (i % 5) * 0.1,
 }))
 
 export default function Login() {
@@ -98,15 +100,19 @@ export default function Login() {
           0%,100% { opacity: 0.75; }
           50%     { opacity: 1; }
         }
+        @keyframes shimmer {
+          0%   { background-position: 200% center; }
+          100% { background-position: -100% center; }
+        }
+        @keyframes wordmarkPulse {
+          0%,100% { opacity: 0.88; }
+          50%     { opacity: 1; }
+        }
 
       `}</style>
 
       <div
-        className="relative flex-1 bg-[#060404] overflow-hidden"
-        style={{
-          marginTop: 'calc(-1 * env(safe-area-inset-top))',
-          minHeight: 'calc(100svh + env(safe-area-inset-top))',
-        }}
+        className="fixed inset-0 bg-[#060404] overflow-hidden md:absolute"
       >
 
         {/* ── 1. Hero image — fixed, slight scale for edge coverage ── */}
@@ -288,6 +294,7 @@ export default function Login() {
             left: 0, right: 0,
             textAlign: 'center',
             padding: '0 24px',
+            animation: 'wordmarkPulse 3s ease-in-out infinite',
           }}
         >
           <div style={{
@@ -299,11 +306,17 @@ export default function Login() {
             fontFamily: "'Cinzel', serif",
             fontSize: 'clamp(28px, 8vw, 50px)',
             fontWeight: 400,
-            color: 'rgba(244,239,230,0.97)',
             display: 'block',
             letterSpacing: '0.34em',
-            textShadow: '0 0 8px rgba(255,255,255,1), 0 0 20px rgba(255,255,255,0.85), 0 0 45px rgba(255,255,255,0.45), 0 0 80px rgba(255,255,255,0.18)',
             lineHeight: 1,
+            backgroundImage: 'linear-gradient(90deg, rgba(244,239,230,0.97) 0%, rgba(244,239,230,0.97) 35%, rgba(255,255,255,1) 50%, rgba(244,239,230,0.97) 65%, rgba(244,239,230,0.97) 100%)',
+            backgroundSize: '200% 100%',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: 'none',
+            filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 18px rgba(255,255,255,0.7)) drop-shadow(0 0 40px rgba(255,255,255,0.35))',
+            animation: 'shimmer 4s linear infinite',
           }}>
             ATHENA
           </span>

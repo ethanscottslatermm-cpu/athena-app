@@ -31,7 +31,7 @@
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
     overscroll-behavior: none;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   #root {
