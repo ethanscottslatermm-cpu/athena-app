@@ -22,7 +22,7 @@ function LockIcon() {
     <svg
       width="13" height="16" viewBox="0 0 13 16"
       fill="none" xmlns="http://www.w3.org/2000/svg"
-      style={{ flexShrink: 0, marginBottom: '1px' }}
+      style={{ flexShrink: 0, marginBottom: '1px', animation: 'lockPulse 2.5s ease-in-out infinite' }}
     >
       <rect x="0.8" y="7" width="11.4" height="8.2" rx="1.4"
         stroke="rgba(201,168,108,0.6)" strokeWidth="1.1" />
@@ -192,12 +192,16 @@ export default function Login() {
           100% { box-shadow: 0 0 8px rgba(201,168,108,0.18); border-color: rgba(201,168,108,0.52); }
         }
         @keyframes placeholderPulse {
-          0%, 100% { color: rgba(244,239,230,0.45); text-shadow: none; }
-          50%      { color: rgba(244,239,230,0.92); text-shadow: 0 0 10px rgba(244,239,230,0.55); }
+          0%, 100% { color: rgba(244,239,230,0.5); text-shadow: none; }
+          50%      { color: rgba(244,239,230,1); text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 22px rgba(255,255,255,0.5); }
         }
         @keyframes accessWordPulse {
-          0%, 100% { opacity: 0.72; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
-          50%      { opacity: 1;    filter: drop-shadow(0 0 10px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
+          0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
+          50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
+        }
+        @keyframes lockPulse {
+          0%, 100% { filter: drop-shadow(0 0 1px rgba(201,168,108,0.3)); opacity: 0.6; }
+          50%      { filter: drop-shadow(0 0 8px rgba(201,168,108,0.95)) drop-shadow(0 0 18px rgba(201,168,108,0.5)); opacity: 1; }
         }
 
         .athena-input {
@@ -217,6 +221,7 @@ export default function Login() {
         }
         .athena-input::placeholder {
           font-family: 'Cormorant Garamond', serif;
+          font-weight: 500;
           letter-spacing: 0.24em;
           animation: placeholderPulse 2.5s ease-in-out infinite;
         }
@@ -664,7 +669,8 @@ export default function Login() {
                 >
                   <span style={{
                     fontFamily: "'Cinzel', serif",
-                    fontSize: '11px',
+                    fontSize: '12px',
+                    fontWeight: 500,
                     letterSpacing: '0.38em',
                     backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
                     backgroundSize: '200% 100%',
