@@ -1,5 +1,6 @@
-import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Dumbbell, Users, Moon, Heart } from 'lucide-react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { LayoutDashboard, Dumbbell, Users, Moon, Heart, LogOut } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 const navItems = [
   { to: '/',          icon: LayoutDashboard, label: 'Dashboard' },
@@ -10,6 +11,13 @@ const navItems = [
 ]
 
 export default function BottomNav() {
+  const navigate = useNavigate()
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t border-white/10 z-50"
@@ -31,6 +39,14 @@ export default function BottomNav() {
             <span className="text-[10px] font-garamond tracking-wide">{label}</span>
           </NavLink>
         ))}
+
+        <button
+          onClick={handleSignOut}
+          className="flex flex-col items-center gap-1 px-3 py-2 text-white/40 hover:text-white/70 transition-colors"
+        >
+          <LogOut size={20} strokeWidth={1.5} />
+          <span className="text-[10px] font-garamond tracking-wide">Exit</span>
+        </button>
       </div>
     </nav>
   )

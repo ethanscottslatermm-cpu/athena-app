@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
+import { supabase } from '../lib/supabase'
 
 const steps = ['Name', 'Cycle', 'Goals', 'Done']
 
@@ -24,9 +25,23 @@ export default function Onboarding() {
     navigate('/')
   }
 
+  async function handleExit() {
+    await supabase.auth.signOut()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <div className="min-h-screen bg-[#060404] flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
+
+        {/* Exit button */}
+        <button
+          onClick={handleExit}
+          className="absolute top-6 right-6 text-white/30 hover:text-white/60 font-cinzel text-xs tracking-widest transition-colors"
+        >
+          EXIT
+        </button>
+
         <div className="flex gap-2 mb-8">
           {steps.map((s, i) => (
             <div
