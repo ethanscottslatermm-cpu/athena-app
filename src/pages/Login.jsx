@@ -105,7 +105,7 @@ export default function Login() {
         className="relative flex-1 bg-[#060404] overflow-hidden"
         style={{
           marginTop: 'calc(-1 * env(safe-area-inset-top))',
-          minHeight: 'calc(100dvh + env(safe-area-inset-top))',
+          minHeight: 'calc(100svh + env(safe-area-inset-top))',
         }}
       >
 
