@@ -702,7 +702,6 @@ export default function Login() {
         {/* ── Auth loading video — full screen, auto-navigates on end ── */}
         {showVideo && (
           <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#060404' }}>
-            {/* Video at elevated quality */}
             <video
               ref={videoRef}
               src="/athena-loading.mp4"
@@ -710,43 +709,8 @@ export default function Login() {
               preload="auto"
               onEnded={() => navigate(navDest.current, { replace: true })}
               onError={() => navigate(navDest.current, { replace: true })}
-              style={{
-                width: '100%', height: '100%',
-                objectFit: 'cover', display: 'block',
-                filter: 'contrast(1.22) brightness(1.14) saturate(1.18)',
-              }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
-            {/* Gold haze — top glow matching login */}
-            <div style={{
-              position: 'absolute', inset: 0, pointerEvents: 'none',
-              background: 'radial-gradient(ellipse 100% 45% at 50% 0%, rgba(201,168,108,0.13) 0%, transparent 70%)',
-              filter: 'blur(12px)',
-            }} />
-            {/* Warm ivory backlight — lifts the mid-tones */}
-            <div style={{
-              position: 'absolute', inset: 0, pointerEvents: 'none',
-              background: 'radial-gradient(ellipse 70% 55% at 50% 30%, rgba(255,252,244,0.1) 0%, rgba(230,220,200,0.04) 50%, transparent 75%)',
-              filter: 'blur(18px)',
-            }} />
-            {/* Subtle light ray */}
-            <div style={{
-              position: 'absolute', inset: 0, pointerEvents: 'none',
-              mixBlendMode: 'screen',
-              overflow: 'hidden',
-            }}>
-              <div style={{
-                position: 'absolute', top: '-10%', left: '14%',
-                width: '22%', height: '100%',
-                background: 'linear-gradient(175deg, rgba(201,168,108,0.22) 0%, transparent 55%)',
-                filter: 'blur(18px)',
-                transform: 'skewX(-10deg)',
-              }} />
-            </div>
-            {/* Light edge vignette — just enough to frame, not darken */}
-            <div style={{
-              position: 'absolute', inset: 0, pointerEvents: 'none',
-              background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 55%, rgba(0,0,0,0.38) 100%)',
-            }} />
           </div>
         )}
 
