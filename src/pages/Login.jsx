@@ -89,6 +89,8 @@ export default function Login() {
     }
   }
 
+  const formReady = email.trim().length > 0 && password.trim().length > 0
+
   return (
     <>
       <style>{`
@@ -170,9 +172,9 @@ export default function Login() {
         .athena-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(201,168,108,0.22);
+          border-bottom: 1px solid rgba(201,168,108,0.45);
           outline: none;
-          color: rgba(244,239,230,0.88);
+          color: rgba(244,239,230,0.92);
           font-family: 'Cormorant Garamond', serif;
           font-size: 12px;
           letter-spacing: 0.22em;
@@ -183,13 +185,21 @@ export default function Login() {
           -webkit-appearance: none;
         }
         .athena-input::placeholder {
-          color: rgba(244,239,230,0.32);
+          color: rgba(244,239,230,0.52);
           font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.24em;
         }
         .athena-input:focus {
-          border-bottom-color: rgba(201,168,108,0.55);
-          filter: drop-shadow(0 2px 10px rgba(201,168,108,0.12));
+          border-bottom-color: rgba(201,168,108,0.75);
+          filter: drop-shadow(0 2px 10px rgba(201,168,108,0.18));
+        }
+        .athena-input:-webkit-autofill,
+        .athena-input:-webkit-autofill:hover,
+        .athena-input:-webkit-autofill:focus {
+          -webkit-text-fill-color: rgba(244,239,230,0.92);
+          -webkit-box-shadow: 0 0 0 1000px transparent inset;
+          box-shadow: 0 0 0 1000px transparent inset;
+          transition: background-color 5000s ease-in-out 0s, border-color 0.3s, filter 0.3s;
         }
 
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(201,168,108,0.25) transparent; }
@@ -201,14 +211,18 @@ export default function Login() {
           width: 100%;
           padding: 13px;
           background: transparent;
-          border: 1px solid rgba(201,168,108,0.32);
+          border: 1px solid rgba(201,168,108,0.52);
           border-radius: 2px;
           cursor: pointer;
-          transition: border-color 0.3s;
+          transition: border-color 0.3s, box-shadow 0.3s;
           -webkit-appearance: none;
         }
-        .access-btn:active { border-color: rgba(201,168,108,0.6); }
+        .access-btn:active { border-color: rgba(201,168,108,0.8); box-shadow: 0 0 16px rgba(201,168,108,0.12); }
         .access-btn:disabled { cursor: wait; opacity: 0.6; }
+        @keyframes inputsOut {
+          from { opacity: 1; transform: translateY(0); max-height: 120px; }
+          to   { opacity: 0; transform: translateY(-10px); max-height: 0; }
+        }
       `}</style>
 
       <div className="fixed inset-0 bg-[#060404] overflow-hidden md:absolute">
@@ -527,33 +541,43 @@ export default function Login() {
             }}
           >
             <form onSubmit={handleSubmit} noValidate>
-              {/* Email row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
-                <LockIcon />
-                <input
-                  className="athena-input"
-                  type="email"
-                  placeholder="EMAIL"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  autoComplete="email"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck={false}
-                />
-              </div>
+              {/* Inputs — collapse once both fields are filled */}
+              <div style={{
+                overflow: 'hidden',
+                maxHeight: formReady ? '0' : '160px',
+                opacity: formReady ? 0 : 1,
+                transform: formReady ? 'translateY(-8px)' : 'translateY(0)',
+                transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
+                pointerEvents: formReady ? 'none' : 'auto',
+              }}>
+                {/* Email row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
+                  <LockIcon />
+                  <input
+                    className="athena-input"
+                    type="email"
+                    placeholder="EMAIL"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
+                  />
+                </div>
 
-              {/* Password row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px' }}>
-                <LockIcon />
-                <input
-                  className="athena-input"
-                  type="password"
-                  placeholder="PASSWORD"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                />
+                {/* Password row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px' }}>
+                  <LockIcon />
+                  <input
+                    className="athena-input"
+                    type="password"
+                    placeholder="PASSWORD"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                  />
+                </div>
               </div>
 
               {/* Inline error */}
