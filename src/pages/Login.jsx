@@ -41,9 +41,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authed, setAuthed] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
   const navDest = useRef('/')
+  const videoRef = useRef(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (authed && videoRef.current) {
+      videoRef.current.muted = true
+      videoRef.current.play().catch(() => {
+        navigate(navDest.current, { replace: true })
+      })
+    }
+  }, [authed])
 
   useEffect(() => {
     const onMouse = (e) => setMouse({
@@ -659,29 +668,15 @@ export default function Login() {
 
         {/* ── Auth loading video — full screen, auto-navigates on end ── */}
         {authed && (
-          <div
-            style={{
-              position: 'fixed', inset: 0,
-              zIndex: 100,
-              backgroundColor: '#060404',
-              opacity: videoReady ? 1 : 0,
-              transition: 'opacity 0.5s ease',
-            }}
-          >
+          <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#060404' }}>
             <video
+              ref={videoRef}
               src="/athena-loading.mp4"
-              autoPlay
-              muted
               playsInline
               preload="auto"
-              onCanPlay={() => setVideoReady(true)}
               onEnded={() => navigate(navDest.current, { replace: true })}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
+              onError={() => navigate(navDest.current, { replace: true })}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           </div>
         )}
