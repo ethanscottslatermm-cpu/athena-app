@@ -42,6 +42,8 @@ export default function Login() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
+  const formReady = email.trim().length > 0 && password.trim().length > 0
+
   useEffect(() => {
     const onMouse = (e) => setMouse({
       x: (e.clientX / window.innerWidth  - 0.5) * 2,
@@ -170,7 +172,7 @@ export default function Login() {
         .athena-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(201,168,108,0.45);
+          border-bottom: 1px solid rgba(201,168,108,0.72);
           outline: none;
           color: rgba(244,239,230,0.92);
           font-family: 'Cormorant Garamond', serif;
@@ -188,7 +190,7 @@ export default function Login() {
           letter-spacing: 0.24em;
         }
         .athena-input:focus {
-          border-bottom-color: rgba(201,168,108,0.75);
+          border-bottom-color: rgba(201,168,108,1);
           filter: drop-shadow(0 2px 10px rgba(201,168,108,0.18));
         }
         .athena-input:-webkit-autofill,
@@ -539,43 +541,33 @@ export default function Login() {
             }}
           >
             <form onSubmit={handleSubmit} noValidate>
-              {/* Inputs — collapse after submit, reveal again only on error */}
-              <div style={{
-                overflow: 'hidden',
-                maxHeight: loading ? '0' : '160px',
-                opacity: loading ? 0 : 1,
-                transform: loading ? 'translateY(-8px)' : 'translateY(0)',
-                transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
-                pointerEvents: loading ? 'none' : 'auto',
-              }}>
-                {/* Email row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
-                  <LockIcon />
-                  <input
-                    className="athena-input"
-                    type="email"
-                    placeholder="EMAIL"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    autoComplete="email"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    spellCheck={false}
-                  />
-                </div>
+              {/* Email row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
+                <LockIcon />
+                <input
+                  className="athena-input"
+                  type="email"
+                  placeholder="EMAIL"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+              </div>
 
-                {/* Password row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px' }}>
-                  <LockIcon />
-                  <input
-                    className="athena-input"
-                    type="password"
-                    placeholder="PASSWORD"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                  />
-                </div>
+              {/* Password row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '26px' }}>
+                <LockIcon />
+                <input
+                  className="athena-input"
+                  type="password"
+                  placeholder="PASSWORD"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                />
               </div>
 
               {/* Inline error */}
@@ -593,7 +585,14 @@ export default function Login() {
                 </p>
               )}
 
-              {/* ACCESS button */}
+              {/* ACCESS — only appears once both fields have content */}
+              <div style={{
+                overflow: 'hidden',
+                maxHeight: formReady ? '60px' : '0',
+                opacity: formReady ? 1 : 0,
+                transform: formReady ? 'translateY(0)' : 'translateY(8px)',
+                transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
+              }}>
               <button type="submit" disabled={loading} className="access-btn">
                 <span style={{
                   fontFamily: "'Cinzel', serif",
@@ -610,6 +609,7 @@ export default function Login() {
                   {loading ? '···' : 'ACCESS'}
                 </span>
               </button>
+              </div>
             </form>
           </div>
         )}
