@@ -89,8 +89,6 @@ export default function Login() {
     }
   }
 
-  const formReady = email.trim().length > 0 && password.trim().length > 0
-
   return (
     <>
       <style>{`
@@ -541,14 +539,14 @@ export default function Login() {
             }}
           >
             <form onSubmit={handleSubmit} noValidate>
-              {/* Inputs — collapse once both fields are filled */}
+              {/* Inputs — collapse after submit, reveal again only on error */}
               <div style={{
                 overflow: 'hidden',
-                maxHeight: formReady ? '0' : '160px',
-                opacity: formReady ? 0 : 1,
-                transform: formReady ? 'translateY(-8px)' : 'translateY(0)',
+                maxHeight: loading ? '0' : '160px',
+                opacity: loading ? 0 : 1,
+                transform: loading ? 'translateY(-8px)' : 'translateY(0)',
                 transition: 'max-height 0.4s ease, opacity 0.35s ease, transform 0.35s ease',
-                pointerEvents: formReady ? 'none' : 'auto',
+                pointerEvents: loading ? 'none' : 'auto',
               }}>
                 {/* Email row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px' }}>
