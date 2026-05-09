@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import heroImg from '../assets/athena-hero.webp'
 
 const PARTICLES = Array.from({ length: 68 }, (_, i) => ({
@@ -14,6 +14,26 @@ const PARTICLES = Array.from({ length: 68 }, (_, i) => ({
 }))
 
 export default function Login() {
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const onMouse = (e) => setMouse({
+      x: (e.clientX / window.innerWidth  - 0.5) * 2,
+      y: (e.clientY / window.innerHeight - 0.5) * 2,
+    })
+    const onTilt = (e) => {
+      if (e.gamma != null) setMouse({
+        x: Math.max(-1, Math.min(1, e.gamma / 20)),
+        y: Math.max(-1, Math.min(1, (e.beta - 45) / 25)),
+      })
+    }
+    window.addEventListener('mousemove', onMouse)
+    window.addEventListener('deviceorientation', onTilt)
+    return () => {
+      window.removeEventListener('mousemove', onMouse)
+      window.removeEventListener('deviceorientation', onTilt)
+    }
+  }, [])
 
   return (
     <>
@@ -89,7 +109,7 @@ export default function Login() {
         }}
       >
 
-        {/* ── 1. Hero image ─────────────────────────────────────── */}
+        {/* ── 1. Hero image — fixed, slight scale for edge coverage ── */}
         <div className="absolute inset-0" style={{ transform: 'scale(1.04)', transformOrigin: 'top center' }}>
           <img
             src={heroImg}
@@ -107,7 +127,13 @@ export default function Login() {
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/18 via-transparent to-black/18" />
 
         {/* ── 3. Cloud A ────────────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `translate(${mouse.x * 4}px, ${mouse.y * 3}px)`,
+            transition: '2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}
+        >
           <div style={{
             position: 'absolute', inset: 0,
             background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(201,168,108,0.14) 0%, rgba(201,168,108,0.05) 40%, transparent 70%)',
@@ -117,7 +143,13 @@ export default function Login() {
         </div>
 
         {/* ── 4. Cloud B ────────────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `translate(${mouse.x * -2}px, ${mouse.y * -2}px)`,
+            transition: '2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}
+        >
           <div style={{
             position: 'absolute', inset: 0,
             background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(244,239,230,0.1) 0%, rgba(244,239,230,0.03) 50%, transparent 70%)',
@@ -127,7 +159,13 @@ export default function Login() {
         </div>
 
         {/* ── 5. Cloud C ────────────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `translate(${mouse.x * 2}px, ${mouse.y * 1}px)`,
+            transition: '2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}
+        >
           <div style={{
             position: 'absolute', inset: 0,
             background: 'radial-gradient(ellipse 80% 30% at 50% 35%, rgba(201,168,108,0.14) 0%, transparent 65%)',
