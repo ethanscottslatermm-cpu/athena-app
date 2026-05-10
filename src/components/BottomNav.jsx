@@ -15,14 +15,21 @@ export default function BottomNav() {
   const [exiting, setExiting] = useState(false)
   const videoRef = useRef(null)
   const navigate = useNavigate()
+  const doneRef = useRef(false)
+
+  function doSignOut() {
+    if (doneRef.current) return
+    doneRef.current = true
+    supabase.auth.signOut().then(() => navigate('/login', { replace: true }))
+  }
 
   useEffect(() => {
-    if (exiting && videoRef.current) {
-      videoRef.current.muted = true
-      videoRef.current.play().catch(() => {
-        supabase.auth.signOut().then(() => navigate('/login', { replace: true }))
-      })
-    }
+    if (!exiting || !videoRef.current) return
+    videoRef.current.muted = true
+    videoRef.current.play().catch(() => doSignOut())
+    // Fallback: if video stalls or desktop blocks playback, sign out after 5s
+    const timer = setTimeout(doSignOut, 5000)
+    return () => clearTimeout(timer)
   }, [exiting])
 
   async function handleSignOut() {
@@ -30,8 +37,7 @@ export default function BottomNav() {
   }
 
   async function handleVideoEnd() {
-    await supabase.auth.signOut()
-    navigate('/login', { replace: true })
+    doSignOut()
   }
 
   return (
