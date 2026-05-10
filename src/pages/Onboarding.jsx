@@ -454,7 +454,9 @@ export default function Onboarding() {
 
         {/* ── Top bar ── */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0,
+          position: 'absolute', top: 0, left: '50%', right: 'auto',
+          transform: 'translateX(-50%)',
+          width: '100%', maxWidth: '430px',
           padding: 'calc(env(safe-area-inset-top) + 16px) 20px 16px',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
         }}>
@@ -534,7 +536,9 @@ export default function Onboarding() {
           <div
             key={step}
             style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
+              position: 'absolute', bottom: 0, left: '50%',
+              transform: 'translateX(-50%)',
+              width: '100%', maxWidth: '430px',
               maxHeight: '84vh',
               display: 'flex', flexDirection: 'column',
               background: 'rgba(6,4,4,0.78)',
