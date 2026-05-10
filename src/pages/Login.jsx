@@ -288,7 +288,7 @@ export default function Login() {
         }
       `}</style>
 
-      <div className="fixed inset-0 bg-[#060404] overflow-hidden md:absolute">
+      <div className="fixed inset-0 bg-[#060404] overflow-hidden">
 
         {/* ── 1. Hero image ── */}
         <div className="absolute inset-0" style={{ transform: 'scale(1.04)', transformOrigin: 'top center' }}>
