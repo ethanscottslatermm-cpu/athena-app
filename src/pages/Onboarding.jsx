@@ -476,8 +476,8 @@ export default function Onboarding() {
         }} />
         {/* Top vignette */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,4,4,0.62) 0%, transparent 40%)', pointerEvents: 'none' }} />
-        {/* Bottom vignette */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(6,4,4,0.95) 0%, rgba(6,4,4,0.55) 55%, transparent 100%)', pointerEvents: 'none' }} />
+        {/* Bottom vignette — kept light so hero bleeds through the transparent card */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(6,4,4,0.45) 0%, rgba(6,4,4,0.22) 55%, transparent 100%)', pointerEvents: 'none' }} />
 
         {/* Corner brackets */}
         <CornerBrackets />
@@ -569,9 +569,9 @@ export default function Onboarding() {
               width: '100%', maxWidth: '430px',
               maxHeight: '84svh',
               display: 'flex', flexDirection: 'column',
-              background: 'rgba(6,4,4,0.18)',
-              backdropFilter: 'blur(40px)',
-              WebkitBackdropFilter: 'blur(40px)',
+              background: 'rgba(6,4,4,0.12)',
+              backdropFilter: 'blur(22px)',
+              WebkitBackdropFilter: 'blur(22px)',
               borderTop: '1px solid rgba(201,168,108,0.32)',
               borderRadius: '28px 28px 0 0',
               animation: 'cardIn 0.35s ease both',
