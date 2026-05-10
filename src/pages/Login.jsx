@@ -256,6 +256,11 @@ export default function Login() {
           transition: background-color 5000s ease-in-out 0s, border-color 0.3s, filter 0.3s;
         }
 
+        .athena-hero-img { filter: contrast(1.38) brightness(1.07) saturate(1.22); }
+        @media (min-width: 769px) {
+          .athena-hero-img { filter: contrast(1.06) brightness(1.02) saturate(1.06); }
+        }
+
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(201,168,108,0.25) transparent; }
         .terms-scroll::-webkit-scrollbar { width: 3px; }
         .terms-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -290,8 +295,7 @@ export default function Login() {
           <img
             src={heroImg}
             alt="Athena"
-            className="w-full h-full object-cover object-top"
-            style={{ filter: 'contrast(1.38) brightness(1.07) saturate(1.22)' }}
+            className="athena-hero-img w-full h-full object-cover object-top"
             fetchpriority="high"
             decoding="async"
             draggable={false}

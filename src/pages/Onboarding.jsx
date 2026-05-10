@@ -432,14 +432,17 @@ export default function Onboarding() {
         }
         .ob-scroll::-webkit-scrollbar { display: none; }
         .ob-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .athena-hero-img { filter: contrast(1.32) brightness(1.05) saturate(1.18); }
+        @media (min-width: 769px) {
+          .athena-hero-img { filter: contrast(1.06) brightness(1.02) saturate(1.06); }
+        }
       `}</style>
 
       {/* ── Full-screen background ── */}
       <div style={{ position: 'fixed', inset: 0, background: '#060404', overflow: 'hidden' }}>
-        <img src={heroImg} alt="" style={{
+        <img src={heroImg} alt="" className="athena-hero-img" style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', objectPosition: 'top',
-          filter: 'contrast(1.32) brightness(1.05) saturate(1.18)',
         }} />
         {/* Top vignette */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,4,4,0.62) 0%, transparent 40%)', pointerEvents: 'none' }} />
