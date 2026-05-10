@@ -393,11 +393,17 @@ export default function Onboarding() {
   async function finish() {
     if (saving) return
     setSaving(true)
+    // Everything stored in preferences JSONB — only id + preferences + updated_at
+    // are required columns, avoiding assumptions about the schema.
     const prefs = {
+      full_name: answers.full_name || null,
       date_of_birth: answers.date_of_birth,
+      last_period_date: answers.last_period_date || null,
+      cycle_length: answers.cycle_length,
       period_duration: answers.period_duration,
       last_period_phase: answers.last_period_phase,
       life_stage: answers.life_stage,
+      goals: answers.goals,
       symptoms: answers.symptoms,
       pilates_level: answers.pilates_level,
       movement_goals: answers.movement_goals,
@@ -418,10 +424,6 @@ export default function Onboarding() {
     setSaveError(null)
     const { error } = await supabase.from('profiles').upsert({
       id: user.id,
-      full_name: answers.full_name || null,
-      last_period_date: answers.last_period_date || null,
-      cycle_length: answers.cycle_length,
-      goals: answers.goals,
       preferences: prefs,
       updated_at: new Date().toISOString(),
     })
