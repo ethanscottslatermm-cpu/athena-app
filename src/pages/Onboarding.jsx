@@ -413,6 +413,7 @@ export default function Onboarding() {
       notification_time: answers.notification_time,
       theme: answers.theme,
       intention: answers.intention,
+      onboarding_done: true,
     }
     setSaveError(null)
     const { error } = await supabase.from('profiles').upsert({
@@ -422,7 +423,6 @@ export default function Onboarding() {
       cycle_length: answers.cycle_length,
       goals: answers.goals,
       preferences: prefs,
-      onboarding_done: true,
       updated_at: new Date().toISOString(),
     })
     if (error) {

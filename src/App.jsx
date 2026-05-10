@@ -30,7 +30,7 @@ function AuthGuard({ children }) {
 function OnboardingGuard({ children }) {
   const { profile, loading } = useProfile()
   if (loading) return <Splash />
-  if (profile && !profile.onboarding_done) return <Navigate to="/onboarding" replace />
+  if (profile && !profile.preferences?.onboarding_done) return <Navigate to="/onboarding" replace />
   return children
 }
 

@@ -99,10 +99,10 @@ export default function Login() {
     } else {
       const { data: prof } = await supabase
         .from('profiles')
-        .select('onboarding_done')
+        .select('preferences')
         .eq('id', authUser.id)
         .single()
-      navDest.current = prof?.onboarding_done ? '/' : '/onboarding'
+      navDest.current = prof?.preferences?.onboarding_done ? '/' : '/onboarding'
       setLoading(false)
       setAuthed(true)
     }
