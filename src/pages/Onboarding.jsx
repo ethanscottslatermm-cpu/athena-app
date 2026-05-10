@@ -393,6 +393,9 @@ export default function Onboarding() {
   async function finish() {
     if (saving) return
     setSaving(true)
+    const { data: { user: authUser } } = await supabase.auth.getUser()
+    const uid   = authUser?.id   ?? user?.id
+    const email = authUser?.email ?? user?.email
     // Everything stored in preferences JSONB — only id + preferences + updated_at
     // are required columns, avoiding assumptions about the schema.
     const prefs = {
@@ -423,8 +426,8 @@ export default function Onboarding() {
     }
     setSaveError(null)
     const { error } = await supabase.from('profiles').upsert({
-      id: user.id,
-      email: user.email,
+      id: uid,
+      email,
       preferences: prefs,
       updated_at: new Date().toISOString(),
     })
