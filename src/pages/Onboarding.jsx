@@ -1,135 +1,180 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
+import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabase'
-import { ChevronLeft, X } from 'lucide-react'
+import heroImg from '../assets/athena-hero.webp'
 
-// ─── Step definitions ─────────────────────────────────────────────────────────
-
-const STEPS = [
-  'name', 'goal', 'cycle', 'symptoms',
-  'pilates', 'nourish', 'sleep', 'skin', 'mood', 'done',
-]
+// ─── Static data ──────────────────────────────────────────────────────────────
 
 const GOAL_OPTIONS = [
-  { key: 'cycle',     label: 'Track my cycle',        emoji: '🌙' },
-  { key: 'fitness',   label: 'Build strength',         emoji: '💪' },
-  { key: 'nutrition', label: 'Eat better',             emoji: '🌿' },
-  { key: 'sleep',     label: 'Sleep better',           emoji: '✨' },
-  { key: 'skin',      label: 'Glow up my skin',        emoji: '🪷' },
-  { key: 'mind',      label: 'Manage stress & mood',   emoji: '🧘' },
-  { key: 'all',       label: 'All of the above',       emoji: '👑' },
+  { key: 'pilates',   emoji: '🎯', label: 'Pilates & movement'          },
+  { key: 'cycle',     emoji: '◯',  label: 'Cycle & hormone awareness'   },
+  { key: 'mood',      emoji: '☽',  label: 'Mood & mental wellness'      },
+  { key: 'nutrition', emoji: '🌿', label: 'Nutrition & nourishment'     },
+  { key: 'sleep',     emoji: '✦',  label: 'Sleep optimization'          },
+  { key: 'skin',      emoji: '✿',  label: 'Skin & glow'                 },
+  { key: 'community', emoji: '👥', label: 'Community & accountability'  },
+  { key: 'wellness',  emoji: '✦',  label: 'Overall wellness & balance'  },
+]
+
+const LIFE_STAGE_OPTIONS = [
+  'Regular cycles',
+  'Trying to conceive (TTC)',
+  'Postpartum / new mom',
+  'Perimenopause / irregular cycles',
+  'On hormonal birth control',
+  'Prefer not to say',
+]
+
+const PHASE_OPTIONS = [
+  { key: 'menstrual',  label: 'Menstrual',  sub: 'Days 1–5'  },
+  { key: 'follicular', label: 'Follicular', sub: 'Days 6–13' },
+  { key: 'ovulation',  label: 'Ovulation',  sub: 'Days 14–16' },
+  { key: 'luteal',     label: 'Luteal',     sub: 'Days 17–28' },
 ]
 
 const SYMPTOM_OPTIONS = [
-  'Cramps', 'Bloating', 'Mood swings', 'Fatigue',
-  'Headaches', 'Acne breakouts', 'Back pain', 'Food cravings',
-  'Breast tenderness', 'Insomnia', 'Anxiety', 'Low energy',
-  'Heavy flow', 'Irregular cycle', 'Spotting',
+  'Cramps', 'Bloating', 'Headaches', 'Fatigue',
+  'Mood swings', 'Breast tenderness', 'Acne & skin changes',
+  'Anxiety', 'Insomnia', 'Food cravings', 'Brain fog', 'Back pain',
 ]
 
-const FITNESS_LEVELS = [
-  { key: 'beginner',     label: 'Beginner',     sub: 'New to pilates & structured workouts' },
-  { key: 'intermediate', label: 'Intermediate', sub: 'Some experience, building consistency' },
-  { key: 'advanced',     label: 'Advanced',     sub: 'Regular training, ready to push' },
+const PILATES_LEVELS = [
+  { key: 'beginner',     label: 'Complete beginner',  sub: "I'm brand new to Pilates" },
+  { key: 'some',         label: 'Some experience',    sub: "I've done a few classes"  },
+  { key: 'intermediate', label: 'Intermediate',       sub: 'I practice regularly'     },
+  { key: 'advanced',     label: 'Advanced',           sub: 'Pilates is part of my lifestyle' },
 ]
 
-const FITNESS_GOALS = [
-  'Core strength', 'Flexibility', 'Posture', 'Weight management',
-  'Endurance', 'Stress relief', 'Post-natal recovery', 'Injury rehab',
+const MOVEMENT_GOALS = [
+  'Core strength', 'Glute sculpting', 'Full body tone', 'Flexibility & mobility',
+  'Posture improvement', 'Stress relief & recovery', 'Weight management', 'Rehabilitation & recovery',
 ]
 
-const FREQUENCY_OPTIONS = [
-  { key: '1-2', label: '1–2×  week', sub: 'Light & steady' },
-  { key: '3-4', label: '3–4×  week', sub: 'Building habits' },
-  { key: '5+',  label: '5+×  week',  sub: 'Committed & consistent' },
+const SESSION_DURATIONS = ['15 min', '30 min', '45 min', 'Mix it up']
+
+const EQUIPMENT_OPTIONS = [
+  'Just my mat', 'Pilates ring', 'Exercise ball', 'Resistance bands', 'Light dumbbells',
 ]
 
-const DIET_OPTIONS = [
-  { key: 'none',        label: 'No restrictions' },
-  { key: 'vegetarian',  label: 'Vegetarian' },
-  { key: 'vegan',       label: 'Vegan' },
-  { key: 'gluten_free', label: 'Gluten-free' },
-  { key: 'dairy_free',  label: 'Dairy-free' },
-  { key: 'paleo',       label: 'Paleo' },
-  { key: 'other',       label: 'Other' },
+const MOOD_BASELINES = [
+  { key: 'stable',    label: 'Generally stable and positive'                },
+  { key: 'cyclical',  label: 'Some ups and downs through my cycle'          },
+  { key: 'noticeable',label: 'Noticeable mood shifts — affects my daily life'},
+  { key: 'struggling',label: 'Struggling — I need real support'             },
+  { key: 'unsure',    label: "I'm not sure yet"                             },
 ]
 
-const NUTRITION_GOALS = [
-  'Hormone balance', 'More energy', 'Gut health',
-  'Reduce inflammation', 'Weight management', 'Nutrient-dense eating',
+const MOOD_TRIGGERS = [
+  'My cycle & hormones', 'Sleep quality', 'Stress & work',
+  'Food & nutrition', 'Exercise', 'Relationships', 'Seasonal changes',
 ]
 
-const SLEEP_OPTIONS = [
-  { key: 'under5', label: 'Under 5 hrs' },
-  { key: '5-6',    label: '5–6 hrs'     },
-  { key: '6-7',    label: '6–7 hrs'     },
-  { key: '7-8',    label: '7–8 hrs'     },
-  { key: '8plus',  label: '8+ hrs'      },
+const SLEEP_BASELINES = [
+  { key: 'great',    label: 'I sleep well consistently'                  },
+  { key: 'mixed',    label: 'Hit or miss — good nights and bad'          },
+  { key: 'struggle', label: 'I struggle to fall or stay asleep'          },
+  { key: 'cyclical', label: 'My sleep shifts a lot with my cycle'        },
+  { key: 'exhausted',label: 'I wake exhausted most days'                 },
 ]
 
-const SLEEP_GOALS = [
-  'Fall asleep faster', 'Stay asleep longer', 'Wake refreshed',
-  'Reduce screen time', 'Build a wind-down ritual', 'Track patterns',
+const NUTRITION_OPTIONS = [
+  { key: 'balanced',     label: 'Balanced and intentional'                          },
+  { key: 'mostly',       label: 'Fairly healthy but could be better'                },
+  { key: 'inconsistent', label: 'Inconsistent — good and bad periods'               },
+  { key: 'complicated',  label: 'I have a complicated relationship with food'       },
+  { key: 'specific',     label: 'I follow a specific diet or approach'              },
 ]
 
-const SKIN_TYPES = [
-  { key: 'dry',         label: 'Dry',         sub: 'Tight, flaky, or dull' },
-  { key: 'oily',        label: 'Oily',         sub: 'Shine-prone, enlarged pores' },
-  { key: 'combination', label: 'Combination',  sub: 'Oily T-zone, dry elsewhere' },
-  { key: 'sensitive',   label: 'Sensitive',    sub: 'Reactive, redness-prone' },
-  { key: 'normal',      label: 'Normal',       sub: 'Balanced, generally clear' },
+const SKIN_OPTIONS = [
+  'Generally clear', 'Oily or combination', 'Dry or sensitive',
+  'Breakout-prone pre-period', 'Changes with my cycle', 'Glowing most of the time',
 ]
 
-const SKIN_CONCERNS = [
-  'Acne & breakouts', 'Dryness', 'Anti-aging', 'Redness',
-  'Dark spots', 'Dullness', 'Large pores', 'Sensitivity',
-  'Hormonal breakouts', 'Uneven texture',
+const THEMES = [
+  { key: 'obsidian', name: 'Obsidian', swatch: ['#060404', '#1A1614', '#C9A86C'] },
+  { key: 'ash',      name: 'Ash',      swatch: ['#1C1C1E', '#2C2C2E', '#8E9AAF'] },
+  { key: 'sepia',    name: 'Sepia',    swatch: ['#1A1209', '#2C1F0F', '#C4956A'] },
+  { key: 'crimson',  name: 'Crimson',  swatch: ['#0D0507', '#1A0810', '#B5472A'] },
 ]
 
-const STRESS_LEVELS = [
-  { key: 'low',    label: 'Low',      sub: 'Generally calm & balanced'       },
-  { key: 'medium', label: 'Moderate', sub: 'Some daily stress to manage'     },
-  { key: 'high',   label: 'High',     sub: 'Often overwhelmed or anxious'    },
+const AFFIRMATIONS = [
+  null, // placeholder — replaced with "Welcome, [Name]. This is your space."
+  'Your cycle is your superpower. We\'ve got you.',
+  'Your studio is ready.',
+  'Athena knows you now.',
 ]
 
-const MINDFULNESS_OPTIONS = [
-  'Meditation', 'Journaling', 'Breathwork', 'Affirmations',
-  'Movement therapy', 'Nature walks', 'Digital detox', 'Therapy / coaching',
+const STEP_TITLES = [
+  'Let\'s meet you',
+  'Your rhythm',
+  'Your studio',
+  'Your whole self',
+  null, // "Almost there, [Name]" — built dynamically
 ]
 
-// ─── Component helpers ────────────────────────────────────────────────────────
+// ─── Small helpers ────────────────────────────────────────────────────────────
 
-function Chip({ label, selected, onClick, sub }) {
+const GOLD = '#C9A86C'
+const IVORY = 'rgba(244,239,230,0.85)'
+const DIM = 'rgba(244,239,230,0.38)'
+
+function toggleArr(arr, val, limit) {
+  if (arr.includes(val)) return arr.filter(v => v !== val)
+  if (limit && arr.length >= limit) return arr
+  return [...arr, val]
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function CornerBrackets() {
+  const b = '1px solid rgba(201,168,108,0.28)'
+  const size = 18
+  const shared = { position: 'absolute', width: size, height: size, pointerEvents: 'none' }
   return (
-    <button
-      onClick={onClick}
-      className="w-full text-left px-4 py-3 rounded-2xl border transition-all duration-200 active:scale-[0.98]"
-      style={{
-        background: selected ? 'rgba(201,168,108,0.15)' : 'rgba(255,255,255,0.04)',
-        borderColor: selected ? 'rgba(201,168,108,0.7)' : 'rgba(255,255,255,0.1)',
-      }}
-    >
-      <span className="font-garamond text-sm" style={{ color: selected ? 'rgba(201,168,108,0.95)' : 'rgba(244,239,230,0.7)' }}>
-        {label}
-      </span>
-      {sub && (
-        <p className="font-garamond text-xs mt-0.5" style={{ color: 'rgba(244,239,230,0.35)' }}>{sub}</p>
-      )}
-    </button>
+    <>
+      <div style={{ ...shared, top: 14, left: 14, borderTop: b, borderLeft: b }} />
+      <div style={{ ...shared, top: 14, right: 14, borderTop: b, borderRight: b }} />
+      <div style={{ ...shared, bottom: 14, left: 14, borderBottom: b, borderLeft: b }} />
+      <div style={{ ...shared, bottom: 14, right: 14, borderBottom: b, borderRight: b }} />
+    </>
   )
 }
 
-function Tag({ label, selected, onClick }) {
+function ProgressDots({ step, total }) {
+  return (
+    <div style={{ display: 'flex', gap: '7px', justifyContent: 'center', alignItems: 'center' }}>
+      {Array.from({ length: total }, (_, i) => (
+        <div key={i} style={{
+          width: i === step ? '18px' : '6px',
+          height: '6px',
+          borderRadius: '3px',
+          background: i <= step ? GOLD : 'rgba(244,239,230,0.15)',
+          transition: 'all 0.4s ease',
+        }} />
+      ))}
+    </div>
+  )
+}
+
+function ChipTag({ label, selected, onClick, disabled }) {
   return (
     <button
-      onClick={onClick}
-      className="px-3 py-2 rounded-full border text-xs font-garamond transition-all duration-200 active:scale-95"
+      onClick={disabled ? undefined : onClick}
       style={{
-        background: selected ? 'rgba(201,168,108,0.18)' : 'rgba(255,255,255,0.04)',
-        borderColor: selected ? 'rgba(201,168,108,0.65)' : 'rgba(255,255,255,0.1)',
-        color: selected ? 'rgba(201,168,108,0.95)' : 'rgba(244,239,230,0.55)',
+        padding: '8px 14px',
+        borderRadius: '100px',
+        border: `1px solid ${selected ? GOLD : 'rgba(244,239,230,0.2)'}`,
+        background: selected ? 'rgba(201,168,108,0.14)' : 'rgba(255,255,255,0.03)',
+        color: selected ? GOLD : DIM,
+        fontFamily: 'Cormorant Garamond, serif',
+        fontSize: '13px',
         letterSpacing: '0.04em',
+        cursor: disabled && !selected ? 'not-allowed' : 'pointer',
+        opacity: disabled && !selected ? 0.45 : 1,
+        transition: 'all 0.2s',
+        whiteSpace: 'nowrap',
       }}
     >
       {label}
@@ -137,22 +182,112 @@ function Tag({ label, selected, onClick }) {
   )
 }
 
-function EmojiCard({ emoji, label, selected, onClick }) {
+function CardOption({ label, sub, selected, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center gap-2 py-4 rounded-2xl border transition-all duration-200 active:scale-95"
       style={{
-        background: selected ? 'rgba(201,168,108,0.15)' : 'rgba(255,255,255,0.04)',
-        borderColor: selected ? 'rgba(201,168,108,0.65)' : 'rgba(255,255,255,0.1)',
+        width: '100%',
+        textAlign: 'left',
+        padding: '14px 16px',
+        borderRadius: '14px',
+        border: `1px solid ${selected ? GOLD : 'rgba(244,239,230,0.12)'}`,
+        background: selected ? 'rgba(201,168,108,0.08)' : 'rgba(255,255,255,0.03)',
+        marginBottom: '8px',
+        transition: 'all 0.2s',
+        boxShadow: selected ? `0 0 12px rgba(201,168,108,0.15)` : 'none',
       }}
     >
-      <span style={{ fontSize: '24px' }}>{emoji}</span>
-      <span className="font-garamond text-xs text-center px-2 leading-tight"
-        style={{ color: selected ? 'rgba(201,168,108,0.9)' : 'rgba(244,239,230,0.6)' }}>
+      <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '14px', color: selected ? IVORY : DIM, margin: 0 }}>
+        {label}
+      </p>
+      {sub && (
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '12px', color: 'rgba(244,239,230,0.3)', margin: '2px 0 0' }}>
+          {sub}
+        </p>
+      )}
+    </button>
+  )
+}
+
+function EmojiGoalCard({ emoji, label, selected, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: '14px 10px',
+        borderRadius: '16px',
+        border: `1px solid ${selected ? GOLD : 'rgba(244,239,230,0.12)'}`,
+        background: selected ? 'rgba(201,168,108,0.1)' : 'rgba(255,255,255,0.03)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+        transition: 'all 0.2s',
+        boxShadow: selected ? `0 0 14px rgba(201,168,108,0.18)` : 'none',
+      }}
+    >
+      <span style={{ fontSize: '20px' }}>{emoji}</span>
+      <span style={{
+        fontFamily: 'Cormorant Garamond, serif',
+        fontSize: '11px',
+        textAlign: 'center',
+        color: selected ? GOLD : DIM,
+        lineHeight: 1.3,
+        letterSpacing: '0.02em',
+      }}>
         {label}
       </span>
     </button>
+  )
+}
+
+function GoldSlider({ min, max, value, onChange, label }) {
+  return (
+    <div style={{ marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+        <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase' }}>
+          {label}
+        </p>
+        <p style={{ fontFamily: 'Cinzel, serif', fontSize: '13px', color: GOLD, fontWeight: 400 }}>
+          {value} <span style={{ fontSize: '9px', color: DIM }}>days</span>
+        </p>
+      </div>
+      <input
+        type="range" min={min} max={max} value={value}
+        onChange={e => onChange(Number(e.target.value))}
+        style={{ width: '100%', accentColor: GOLD }}
+      />
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
+        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '11px', color: 'rgba(244,239,230,0.22)' }}>{min}</span>
+        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '11px', color: 'rgba(244,239,230,0.22)' }}>{max}</span>
+      </div>
+    </div>
+  )
+}
+
+function Stepper({ value, min, max, onChange }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '12px 0' }}>
+      <button
+        onClick={() => onChange(Math.max(min, value - 1))}
+        style={{
+          width: 44, height: 44, borderRadius: '50%',
+          border: `1px solid rgba(201,168,108,0.3)`,
+          background: 'transparent', color: GOLD, fontSize: '22px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >−</button>
+      <span style={{ fontFamily: 'Cinzel, serif', fontSize: '40px', color: GOLD, minWidth: 48, textAlign: 'center' }}>
+        {value}
+      </span>
+      <button
+        onClick={() => onChange(Math.min(max, value + 1))}
+        style={{
+          width: 44, height: 44, borderRadius: '50%',
+          border: `1px solid rgba(201,168,108,0.3)`,
+          background: 'transparent', color: GOLD, fontSize: '22px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >+</button>
+    </div>
   )
 }
 
@@ -160,66 +295,107 @@ function EmojiCard({ emoji, label, selected, onClick }) {
 
 export default function Onboarding() {
   const [step, setStep] = useState(0)
-  const [dir, setDir] = useState(1) // 1 = forward, -1 = back
-  const [data, setData] = useState({
+  const [affirmation, setAffirmation] = useState(null) // null | string
+  const [showEntrance, setShowEntrance] = useState(false)
+  const [periodUnknown, setPeriodUnknown] = useState(false)
+  const [saving, setSaving] = useState(false)
+
+  const [answers, setAnswers] = useState({
     full_name: '',
-    primary_goal: [],
+    date_of_birth: '',
+    goals: [],
     last_period_date: '',
+    last_period_phase: '',
     cycle_length: 28,
     period_duration: 5,
+    life_stage: '',
     symptoms: [],
-    fitness_level: '',
-    fitness_goals: [],
-    workout_frequency: '',
-    diet_type: '',
-    nutrition_goals: [],
-    sleep_hours: '',
-    sleep_goals: [],
-    skin_type: '',
-    skin_concerns: [],
-    stress_level: '',
-    mindfulness_interests: [],
+    pilates_level: '',
+    movement_goals: [],
+    session_duration: '',
+    equipment: [],
+    weekly_sessions: 3,
+    mood_baseline: '',
+    mood_triggers: [],
+    sleep_baseline: '',
+    nutrition_approach: '',
+    skin_baseline: [],
+    notifications_on: false,
+    notification_time: '08:00',
+    theme: 'obsidian',
+    intention: '',
   })
 
   const { updateProfile } = useProfile()
+  const { user } = useAuth()
   const navigate = useNavigate()
-  const totalSteps = STEPS.length - 1 // exclude 'done'
-
-  function toggle(field, value) {
-    setData(d => ({
-      ...d,
-      [field]: d[field].includes(value)
-        ? d[field].filter(v => v !== value)
-        : [...d[field], value],
-    }))
-  }
+  const contentRef = useRef(null)
 
   function set(field, value) {
-    setData(d => ({ ...d, [field]: value }))
+    setAnswers(a => ({ ...a, [field]: value }))
   }
 
-  function next() {
-    setDir(1)
-    setStep(s => s + 1)
+  function tog(field, value, limit) {
+    setAnswers(a => ({ ...a, [field]: toggleArr(a[field], value, limit) }))
   }
 
-  function back() {
-    if (step === 0) return
-    setDir(-1)
-    setStep(s => s - 1)
+  function scrollTop() {
+    if (contentRef.current) contentRef.current.scrollTop = 0
+  }
+
+  function advance() {
+    scrollTop()
+    if (step < 4) {
+      // show affirmation then advance
+      const text = step === 0
+        ? `Welcome${answers.full_name ? `, ${answers.full_name.split(' ')[0]}` : ''}. This is your space.`
+        : AFFIRMATIONS[step]
+      setAffirmation(text)
+      setTimeout(() => {
+        setAffirmation(null)
+        setStep(s => s + 1)
+      }, 1700)
+    }
+  }
+
+  function goBack() {
+    if (step > 0) { scrollTop(); setStep(s => s - 1) }
   }
 
   async function finish() {
-    const { full_name, last_period_date, cycle_length, primary_goal, ...rest } = data
-    await updateProfile({
-      full_name,
-      last_period_date: last_period_date || null,
-      cycle_length,
-      goals: primary_goal,
-      preferences: rest,
+    if (saving) return
+    setSaving(true)
+    const prefs = {
+      date_of_birth: answers.date_of_birth,
+      period_duration: answers.period_duration,
+      last_period_phase: answers.last_period_phase,
+      life_stage: answers.life_stage,
+      symptoms: answers.symptoms,
+      pilates_level: answers.pilates_level,
+      movement_goals: answers.movement_goals,
+      session_duration: answers.session_duration,
+      equipment: answers.equipment,
+      weekly_sessions: answers.weekly_sessions,
+      mood_baseline: answers.mood_baseline,
+      mood_triggers: answers.mood_triggers,
+      sleep_baseline: answers.sleep_baseline,
+      nutrition_approach: answers.nutrition_approach,
+      skin_baseline: answers.skin_baseline,
+      notifications_on: answers.notifications_on,
+      notification_time: answers.notification_time,
+      theme: answers.theme,
+      intention: answers.intention,
+    }
+    await supabase.from('profiles').update({
+      full_name: answers.full_name || null,
+      last_period_date: answers.last_period_date || null,
+      cycle_length: answers.cycle_length,
+      goals: answers.goals,
+      preferences: prefs,
       onboarding_done: true,
-    })
-    navigate('/', { replace: true })
+    }).eq('id', user.id)
+    setShowEntrance(true)
+    setTimeout(() => navigate('/', { replace: true }), 1600)
   }
 
   async function handleExit() {
@@ -227,372 +403,626 @@ export default function Onboarding() {
     navigate('/login', { replace: true })
   }
 
-  const current = STEPS[step]
-  const progress = step / totalSteps
+  const stepTitle = step === 4
+    ? `Almost there${answers.full_name ? `, ${answers.full_name.split(' ')[0]}` : ''}`
+    : STEP_TITLES[step]
 
   return (
-    <div className="min-h-screen bg-[#060404] flex flex-col">
+    <>
       <style>{`
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateX(${dir > 0 ? '28px' : '-28px'}); }
-          to   { opacity: 1; transform: translateX(0); }
+        @keyframes shimmer {
+          0%   { background-position: 0% center; }
+          100% { background-position: 200% center; }
         }
-        .step-in { animation: slideIn 0.3s ease both; }
+        @keyframes affirmIn {
+          0%   { opacity: 0; transform: translateY(8px); }
+          18%  { opacity: 1; transform: translateY(0); }
+          82%  { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-6px); }
+        }
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes entranceIn {
+          0%   { opacity: 0; }
+          30%  { opacity: 1; }
+          80%  { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        .ob-scroll::-webkit-scrollbar { display: none; }
+        .ob-scroll { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ── Top bar ── */}
-      <div className="flex items-center justify-between px-5 pt-safe-top pt-6 pb-4 flex-shrink-0">
-        {step > 0 && current !== 'done' ? (
-          <button onClick={back} className="p-1 -ml-1">
-            <ChevronLeft size={22} strokeWidth={1.4} style={{ color: 'rgba(244,239,230,0.45)' }} />
-          </button>
-        ) : (
-          <div style={{ width: 30 }} />
-        )}
+      {/* ── Full-screen background ── */}
+      <div style={{ position: 'fixed', inset: 0, background: '#060404', overflow: 'hidden' }}>
+        <img src={heroImg} alt="" style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'top',
+          filter: 'contrast(1.32) brightness(1.05) saturate(1.18)',
+        }} />
+        {/* Top vignette */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,4,4,0.62) 0%, transparent 40%)', pointerEvents: 'none' }} />
+        {/* Bottom vignette */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(6,4,4,0.95) 0%, rgba(6,4,4,0.55) 55%, transparent 100%)', pointerEvents: 'none' }} />
 
-        {current !== 'done' && (
-          <span className="font-garamond text-xs tracking-widest" style={{ color: 'rgba(244,239,230,0.3)' }}>
-            {step + 1} of {totalSteps}
-          </span>
-        )}
+        {/* Corner brackets */}
+        <CornerBrackets />
 
-        <button onClick={handleExit} className="p-1 -mr-1">
-          <X size={18} strokeWidth={1.4} style={{ color: 'rgba(244,239,230,0.3)' }} />
-        </button>
-      </div>
-
-      {/* ── Progress bar ── */}
-      {current !== 'done' && (
-        <div className="px-5 mb-6 flex-shrink-0">
-          <div className="h-[2px] rounded-full bg-white/8 overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${progress * 100}%`, background: 'rgba(201,168,108,0.75)' }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* ── Step content ── */}
-      <div key={step} className="step-in flex-1 overflow-y-auto px-5 pb-32 max-w-md mx-auto w-full">
-
-        {/* STEP 0 — Name */}
-        {current === 'name' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Welcome to Athena</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">What should we call you?</h2>
-            </div>
-            <input
-              type="text"
-              placeholder="Your name"
-              value={data.full_name}
-              onChange={e => set('full_name', e.target.value)}
-              autoFocus
-              className="w-full bg-transparent border-b py-3 text-ivory font-garamond text-base placeholder-white/25 focus:outline-none transition-colors"
-              style={{ borderColor: data.full_name ? 'rgba(201,168,108,0.7)' : 'rgba(255,255,255,0.15)', caretColor: '#C9A86C' }}
-            />
-          </div>
-        )}
-
-        {/* STEP 1 — Primary goal */}
-        {current === 'goal' && (
-          <div className="space-y-5">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Your goals</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">What brings you to Athena?</h2>
-              <p className="font-garamond text-sm mt-2" style={{ color: 'rgba(244,239,230,0.4)' }}>Select all that apply</p>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {GOAL_OPTIONS.map(g => (
-                <EmojiCard
-                  key={g.key}
-                  emoji={g.emoji}
-                  label={g.label}
-                  selected={data.primary_goal.includes(g.key)}
-                  onClick={() => toggle('primary_goal', g.key)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 2 — Cycle */}
-        {current === 'cycle' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Your cycle</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">Tell us about your cycle</h2>
-              <p className="font-garamond text-sm mt-2" style={{ color: 'rgba(244,239,230,0.4)' }}>This powers everything phase-aware in Athena</p>
-            </div>
-
-            <div className="space-y-5">
-              <div>
-                <label className="font-cinzel text-[10px] tracking-widest uppercase mb-2 block" style={{ color: 'rgba(244,239,230,0.4)' }}>
-                  First day of last period
-                </label>
-                <input
-                  type="date"
-                  value={data.last_period_date}
-                  onChange={e => set('last_period_date', e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-ivory font-garamond focus:outline-none focus:border-gold/60"
-                  style={{ colorScheme: 'dark' }}
-                />
-              </div>
-
-              <div>
-                <label className="font-cinzel text-[10px] tracking-widest uppercase mb-3 block" style={{ color: 'rgba(244,239,230,0.4)' }}>
-                  Cycle length — {data.cycle_length} days
-                </label>
-                <input type="range" min="21" max="40" value={data.cycle_length}
-                  onChange={e => set('cycle_length', Number(e.target.value))}
-                  className="w-full accent-gold" />
-                <div className="flex justify-between mt-1">
-                  <span className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.25)' }}>21 days</span>
-                  <span className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.25)' }}>40 days</span>
-                </div>
-              </div>
-
-              <div>
-                <label className="font-cinzel text-[10px] tracking-widest uppercase mb-3 block" style={{ color: 'rgba(244,239,230,0.4)' }}>
-                  Period duration — {data.period_duration} days
-                </label>
-                <input type="range" min="2" max="10" value={data.period_duration}
-                  onChange={e => set('period_duration', Number(e.target.value))}
-                  className="w-full accent-gold" />
-                <div className="flex justify-between mt-1">
-                  <span className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.25)' }}>2 days</span>
-                  <span className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.25)' }}>10 days</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3 — Symptoms */}
-        {current === 'symptoms' && (
-          <div className="space-y-5">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Cycle symptoms</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">What do you typically experience?</h2>
-              <p className="font-garamond text-sm mt-2" style={{ color: 'rgba(244,239,230,0.4)' }}>Select all that apply — we'll use this to personalise your guidance</p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {SYMPTOM_OPTIONS.map(s => (
-                <Tag key={s} label={s} selected={data.symptoms.includes(s)} onClick={() => toggle('symptoms', s)} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 4 — Pilates */}
-        {current === 'pilates' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Movement & pilates</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">Your fitness profile</h2>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Experience level</p>
-              <div className="space-y-2">
-                {FITNESS_LEVELS.map(l => (
-                  <Chip key={l.key} label={l.label} sub={l.sub}
-                    selected={data.fitness_level === l.key}
-                    onClick={() => set('fitness_level', l.key)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Your goals</p>
-              <div className="flex flex-wrap gap-2">
-                {FITNESS_GOALS.map(g => (
-                  <Tag key={g} label={g} selected={data.fitness_goals.includes(g)} onClick={() => toggle('fitness_goals', g)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Ideal frequency</p>
-              <div className="space-y-2">
-                {FREQUENCY_OPTIONS.map(f => (
-                  <Chip key={f.key} label={f.label} sub={f.sub}
-                    selected={data.workout_frequency === f.key}
-                    onClick={() => set('workout_frequency', f.key)} />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5 — Nourish */}
-        {current === 'nourish' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Nourishment</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">Your relationship with food</h2>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Dietary preference</p>
-              <div className="grid grid-cols-2 gap-2">
-                {DIET_OPTIONS.map(d => (
-                  <Chip key={d.key} label={d.label}
-                    selected={data.diet_type === d.key}
-                    onClick={() => set('diet_type', d.key)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Nutrition goals</p>
-              <div className="flex flex-wrap gap-2">
-                {NUTRITION_GOALS.map(g => (
-                  <Tag key={g} label={g} selected={data.nutrition_goals.includes(g)} onClick={() => toggle('nutrition_goals', g)} />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 6 — Sleep */}
-        {current === 'sleep' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Rest & recovery</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">How's your sleep?</h2>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Average nightly sleep</p>
-              <div className="grid grid-cols-2 gap-2">
-                {SLEEP_OPTIONS.map(o => (
-                  <Chip key={o.key} label={o.label}
-                    selected={data.sleep_hours === o.key}
-                    onClick={() => set('sleep_hours', o.key)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Sleep goals</p>
-              <div className="flex flex-wrap gap-2">
-                {SLEEP_GOALS.map(g => (
-                  <Tag key={g} label={g} selected={data.sleep_goals.includes(g)} onClick={() => toggle('sleep_goals', g)} />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 7 — Skin */}
-        {current === 'skin' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Skin & glow</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">Your skin profile</h2>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Skin type</p>
-              <div className="space-y-2">
-                {SKIN_TYPES.map(t => (
-                  <Chip key={t.key} label={t.label} sub={t.sub}
-                    selected={data.skin_type === t.key}
-                    onClick={() => set('skin_type', t.key)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Skin concerns</p>
-              <div className="flex flex-wrap gap-2">
-                {SKIN_CONCERNS.map(c => (
-                  <Tag key={c} label={c} selected={data.skin_concerns.includes(c)} onClick={() => toggle('skin_concerns', c)} />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 8 — Mood */}
-        {current === 'mood' && (
-          <div className="space-y-6">
-            <div>
-              <p className="font-garamond italic text-xs tracking-widest mb-2" style={{ color: 'rgba(201,168,108,0.6)' }}>Mind & mood</p>
-              <h2 className="font-cinzel text-2xl text-ivory leading-snug">Your mental wellness</h2>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>Current stress level</p>
-              <div className="space-y-2">
-                {STRESS_LEVELS.map(l => (
-                  <Chip key={l.key} label={l.label} sub={l.sub}
-                    selected={data.stress_level === l.key}
-                    onClick={() => set('stress_level', l.key)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(244,239,230,0.38)' }}>What resonates with you?</p>
-              <div className="flex flex-wrap gap-2">
-                {MINDFULNESS_OPTIONS.map(o => (
-                  <Tag key={o} label={o} selected={data.mindfulness_interests.includes(o)} onClick={() => toggle('mindfulness_interests', o)} />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 9 — Done */}
-        {current === 'done' && (
-          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-5 px-4">
-            <div style={{
-              width: '80px', height: '80px', borderRadius: '50%',
-              background: 'rgba(201,168,108,0.12)',
-              border: '1px solid rgba(201,168,108,0.3)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '32px',
-            }}>
-              👑
-            </div>
-            <div>
-              <h2 className="font-cinzel text-3xl text-gold mb-3">
-                {data.full_name ? `You're ready, ${data.full_name.split(' ')[0]}.` : 'You\'re ready.'}
-              </h2>
-              <p className="font-garamond text-ivory/50 text-base leading-relaxed">
-                Athena will guide you through every phase — movement, nourishment, skin, sleep, and mind.
-              </p>
-            </div>
-          </div>
-        )}
-
-      </div>
-
-      {/* ── Bottom nav ── */}
-      <div className="fixed bottom-0 left-0 right-0 px-5 pb-8 pt-4 max-w-md mx-auto"
-        style={{ background: 'linear-gradient(to top, #060404 70%, transparent)' }}>
-        <div className="flex gap-3">
-          {step > 0 && current !== 'done' && (
+        {/* ── Top bar ── */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0,
+          padding: 'calc(env(safe-area-inset-top) + 16px) 20px 16px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
+        }}>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
             <button
-              onClick={back}
-              className="flex-1 border border-white/10 font-cinzel text-[11px] tracking-widest uppercase py-4 rounded-2xl transition-colors"
-              style={{ color: 'rgba(244,239,230,0.4)' }}
+              onClick={handleExit}
+              style={{
+                fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.3em',
+                color: 'rgba(244,239,230,0.28)', background: 'none', border: 'none', cursor: 'pointer',
+              }}
             >
-              Back
+              EXIT
             </button>
-          )}
-          <button
-            onClick={current === 'done' ? finish : next}
-            className="flex-1 font-cinzel text-[11px] tracking-widest uppercase py-4 rounded-2xl transition-all active:scale-[0.98]"
-            style={{ background: 'rgba(201,168,108,0.9)', color: '#060404' }}
-          >
-            {current === 'done' ? 'Enter Athena' : step === 0 && !data.full_name ? 'Skip' : 'Continue'}
-          </button>
+          </div>
+          <ProgressDots step={step} total={5} />
         </div>
+
+        {/* ── Affirmation overlay ── */}
+        {affirmation && (
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 50,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(6,4,4,0.78)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            animation: 'affirmIn 1.7s ease forwards',
+          }}>
+            <p style={{
+              fontFamily: 'Cormorant Garamond, serif',
+              fontStyle: 'italic',
+              fontSize: '20px',
+              color: 'rgba(244,239,230,0.9)',
+              textAlign: 'center',
+              letterSpacing: '0.04em',
+              lineHeight: 1.65,
+              maxWidth: '270px',
+              padding: '0 24px',
+            }}>
+              {affirmation}
+            </p>
+          </div>
+        )}
+
+        {/* ── Enter Athena screen ── */}
+        {showEntrance && (
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 60,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            background: '#060404',
+            animation: 'entranceIn 1.6s ease forwards',
+          }}>
+            <div style={{
+              width: '44px', height: '1px',
+              background: 'linear-gradient(to right, transparent, rgba(201,168,108,0.6), transparent)',
+              marginBottom: '16px',
+            }} />
+            <span style={{
+              fontFamily: 'Cinzel, serif',
+              fontSize: 'clamp(28px, 8vw, 50px)',
+              letterSpacing: '0.26em',
+              transform: 'scaleX(0.84)',
+              display: 'block',
+              backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+              backgroundSize: '200% 100%',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              animation: 'shimmer 3s linear infinite',
+            }}>
+              ATHENA
+            </span>
+          </div>
+        )}
+
+        {/* ── Glass card ── */}
+        {!affirmation && !showEntrance && (
+          <div
+            key={step}
+            style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0,
+              maxHeight: '68vh',
+              display: 'flex', flexDirection: 'column',
+              background: 'rgba(6,4,4,0.78)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              borderTop: '1px solid rgba(201,168,108,0.14)',
+              borderRadius: '28px 28px 0 0',
+              animation: 'cardIn 0.35s ease both',
+            }}
+          >
+            {/* Step header */}
+            <div style={{ padding: '22px 22px 0', flexShrink: 0 }}>
+              <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.28em', color: 'rgba(201,168,108,0.55)', textTransform: 'uppercase', marginBottom: '4px' }}>
+                Step {step + 1} of 5
+              </p>
+              <h2 style={{ fontFamily: 'Cinzel, serif', fontSize: '18px', color: 'rgba(244,239,230,0.92)', letterSpacing: '0.06em', margin: 0 }}>
+                {stepTitle}
+              </h2>
+            </div>
+
+            {/* Scrollable questions */}
+            <div ref={contentRef} className="ob-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 22px 8px' }}>
+
+              {/* ── STEP 0 ── */}
+              {step === 0 && (
+                <div>
+                  {/* Q1 Name */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '8px' }}>
+                      What's your name?
+                    </p>
+                    <input
+                      type="text"
+                      placeholder="Your name"
+                      value={answers.full_name}
+                      onChange={e => set('full_name', e.target.value)}
+                      style={{
+                        width: '100%', background: 'transparent',
+                        border: 'none', borderBottom: `1px solid ${answers.full_name ? 'rgba(201,168,108,0.65)' : 'rgba(255,255,255,0.15)'}`,
+                        padding: '8px 0', color: 'rgba(244,239,230,0.9)',
+                        fontFamily: 'Cormorant Garamond, serif', fontSize: '15px',
+                        outline: 'none', caretColor: GOLD,
+                        transition: 'border-color 0.3s',
+                      }}
+                    />
+                  </div>
+
+                  {/* Q2 DOB */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '8px' }}>
+                      Date of birth
+                    </p>
+                    <input
+                      type="date"
+                      value={answers.date_of_birth}
+                      onChange={e => set('date_of_birth', e.target.value)}
+                      style={{
+                        width: '100%', background: 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${answers.date_of_birth ? 'rgba(201,168,108,0.5)' : 'rgba(255,255,255,0.12)'}`,
+                        borderRadius: '12px', padding: '11px 14px',
+                        color: 'rgba(244,239,230,0.85)',
+                        fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
+                        outline: 'none', colorScheme: 'dark',
+                      }}
+                    />
+                  </div>
+
+                  {/* Q3 Goals */}
+                  <div>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      What brings you to Athena? <span style={{ color: 'rgba(201,168,108,0.4)' }}>(select all that apply)</span>
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                      {GOAL_OPTIONS.map(g => (
+                        <EmojiGoalCard
+                          key={g.key} emoji={g.emoji} label={g.label}
+                          selected={answers.goals.includes(g.key)}
+                          onClick={() => tog('goals', g.key)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 1 ── */}
+              {step === 1 && (
+                <div>
+                  {/* Q4 Last period */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
+                      When did your last period start?
+                    </p>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(201,168,108,0.45)', marginBottom: '10px' }}>
+                      Required — used to calculate your current phase
+                    </p>
+                    {!periodUnknown ? (
+                      <>
+                        <input
+                          type="date"
+                          value={answers.last_period_date}
+                          onChange={e => set('last_period_date', e.target.value)}
+                          style={{
+                            width: '100%', background: 'rgba(255,255,255,0.04)',
+                            border: `1px solid ${answers.last_period_date ? 'rgba(201,168,108,0.5)' : 'rgba(255,255,255,0.12)'}`,
+                            borderRadius: '12px', padding: '11px 14px',
+                            color: 'rgba(244,239,230,0.85)',
+                            fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
+                            outline: 'none', colorScheme: 'dark',
+                          }}
+                        />
+                        <button
+                          onClick={() => setPeriodUnknown(true)}
+                          style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '12px', color: 'rgba(244,239,230,0.3)', background: 'none', border: 'none', cursor: 'pointer', marginTop: '8px', padding: 0 }}
+                        >
+                          I'm not sure — let me pick my phase instead
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '12px', color: DIM, marginBottom: '8px' }}>
+                          Which phase are you likely in right now?
+                        </p>
+                        {PHASE_OPTIONS.map(p => (
+                          <CardOption key={p.key} label={p.label} sub={p.sub}
+                            selected={answers.last_period_phase === p.key}
+                            onClick={() => set('last_period_phase', p.key)} />
+                        ))}
+                        <button
+                          onClick={() => setPeriodUnknown(false)}
+                          style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '12px', color: 'rgba(244,239,230,0.3)', background: 'none', border: 'none', cursor: 'pointer', marginTop: '4px', padding: 0 }}
+                        >
+                          ← I know my last period date
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Q5 Cycle length */}
+                  <GoldSlider min={21} max={35} value={answers.cycle_length}
+                    onChange={v => set('cycle_length', v)} label="Typical cycle length" />
+
+                  {/* Q6 Period duration */}
+                  <GoldSlider min={2} max={8} value={answers.period_duration}
+                    onChange={v => set('period_duration', v)} label="Period duration" />
+
+                  {/* Q7 Life stage */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Current life stage
+                    </p>
+                    {LIFE_STAGE_OPTIONS.map(l => (
+                      <CardOption key={l} label={l}
+                        selected={answers.life_stage === l}
+                        onClick={() => set('life_stage', l)} />
+                    ))}
+                  </div>
+
+                  {/* Q8 Symptoms */}
+                  <div>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
+                      Symptoms that affect you most
+                    </p>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(201,168,108,0.4)', marginBottom: '10px' }}>
+                      Select up to 5
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {SYMPTOM_OPTIONS.map(s => (
+                        <ChipTag key={s} label={s}
+                          selected={answers.symptoms.includes(s)}
+                          disabled={answers.symptoms.length >= 5 && !answers.symptoms.includes(s)}
+                          onClick={() => tog('symptoms', s, 5)} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 2 ── */}
+              {step === 2 && (
+                <div>
+                  {/* Q9 Pilates level */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Pilates experience level
+                    </p>
+                    {PILATES_LEVELS.map(l => (
+                      <CardOption key={l.key} label={l.label} sub={l.sub}
+                        selected={answers.pilates_level === l.key}
+                        onClick={() => set('pilates_level', l.key)} />
+                    ))}
+                  </div>
+
+                  {/* Q10 Movement goals */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
+                      Main movement goals
+                    </p>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(201,168,108,0.4)', marginBottom: '10px' }}>
+                      Select up to 3
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                      {MOVEMENT_GOALS.map(g => (
+                        <ChipTag key={g} label={g}
+                          selected={answers.movement_goals.includes(g)}
+                          disabled={answers.movement_goals.length >= 3 && !answers.movement_goals.includes(g)}
+                          onClick={() => tog('movement_goals', g, 3)} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Q11 Session duration */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Time per session
+                    </p>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {SESSION_DURATIONS.map(d => (
+                        <ChipTag key={d} label={d}
+                          selected={answers.session_duration === d}
+                          onClick={() => set('session_duration', d)} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Q12 Equipment */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Equipment you have
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {EQUIPMENT_OPTIONS.map(e => (
+                        <ChipTag key={e} label={e}
+                          selected={answers.equipment.includes(e)}
+                          onClick={() => tog('equipment', e)} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Q13 Weekly sessions */}
+                  <div>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
+                      Days per week to move
+                    </p>
+                    <Stepper value={answers.weekly_sessions} min={1} max={7}
+                      onChange={v => set('weekly_sessions', v)} />
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 3 ── */}
+              {step === 3 && (
+                <div>
+                  {/* Q14 Mood baseline */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Typical mood patterns
+                    </p>
+                    {MOOD_BASELINES.map(m => (
+                      <CardOption key={m.key} label={m.label}
+                        selected={answers.mood_baseline === m.key}
+                        onClick={() => set('mood_baseline', m.key)} />
+                    ))}
+                  </div>
+
+                  {/* Q15 Mood triggers */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
+                      What affects your mood most?
+                    </p>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(201,168,108,0.4)', marginBottom: '10px' }}>
+                      Select up to 3
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                      {MOOD_TRIGGERS.map(t => (
+                        <ChipTag key={t} label={t}
+                          selected={answers.mood_triggers.includes(t)}
+                          disabled={answers.mood_triggers.length >= 3 && !answers.mood_triggers.includes(t)}
+                          onClick={() => tog('mood_triggers', t, 3)} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Q16 Sleep */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      How is your sleep right now?
+                    </p>
+                    {SLEEP_BASELINES.map(s => (
+                      <CardOption key={s.key} label={s.label}
+                        selected={answers.sleep_baseline === s.key}
+                        onClick={() => set('sleep_baseline', s.key)} />
+                    ))}
+                  </div>
+
+                  {/* Q17 Nutrition */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      Your eating habits
+                    </p>
+                    {NUTRITION_OPTIONS.map(n => (
+                      <CardOption key={n.key} label={n.label}
+                        selected={answers.nutrition_approach === n.key}
+                        onClick={() => set('nutrition_approach', n.key)} />
+                    ))}
+                  </div>
+
+                  {/* Q18 Skin */}
+                  <div>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
+                      How is your skin generally?
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {SKIN_OPTIONS.map(s => (
+                        <ChipTag key={s} label={s}
+                          selected={answers.skin_baseline.includes(s)}
+                          onClick={() => tog('skin_baseline', s)} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 4 ── */}
+              {step === 4 && (
+                <div>
+                  {/* Q19 Notifications */}
+                  <div style={{ marginBottom: '22px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '12px' }}>
+                      Daily check-in reminder
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                      <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '14px', color: IVORY }}>
+                        Enable reminders
+                      </span>
+                      {/* Toggle */}
+                      <button
+                        onClick={() => set('notifications_on', !answers.notifications_on)}
+                        style={{
+                          width: '44px', height: '24px', borderRadius: '12px',
+                          background: answers.notifications_on ? 'rgba(201,168,108,0.7)' : 'rgba(255,255,255,0.1)',
+                          border: 'none', cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
+                        }}
+                      >
+                        <div style={{
+                          position: 'absolute', top: '3px',
+                          left: answers.notifications_on ? '23px' : '3px',
+                          width: '18px', height: '18px', borderRadius: '50%',
+                          background: 'rgba(244,239,230,0.9)',
+                          transition: 'left 0.3s', boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
+                        }} />
+                      </button>
+                    </div>
+                    {answers.notifications_on && (
+                      <div>
+                        <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.2em', color: DIM, textTransform: 'uppercase', marginBottom: '8px' }}>
+                          Reminder time
+                        </p>
+                        <input
+                          type="time"
+                          value={answers.notification_time}
+                          onChange={e => set('notification_time', e.target.value)}
+                          style={{
+                            background: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(201,168,108,0.35)',
+                            borderRadius: '12px', padding: '10px 14px',
+                            color: GOLD, fontFamily: 'Cinzel, serif', fontSize: '16px',
+                            outline: 'none', colorScheme: 'dark',
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Q20 Theme */}
+                  <div style={{ marginBottom: '22px' }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '12px' }}>
+                      Choose your Athena theme
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '4px' }}>
+                      {THEMES.map(t => (
+                        <button
+                          key={t.key}
+                          onClick={() => set('theme', t.key)}
+                          style={{
+                            flexShrink: 0, width: '80px',
+                            border: `1px solid ${answers.theme === t.key ? GOLD : 'rgba(255,255,255,0.12)'}`,
+                            borderRadius: '14px', overflow: 'hidden', background: 'none',
+                            boxShadow: answers.theme === t.key ? `0 0 16px rgba(201,168,108,0.3)` : 'none',
+                            cursor: 'pointer', transition: 'all 0.25s',
+                          }}
+                        >
+                          {/* Swatch */}
+                          <div style={{ height: '48px', display: 'flex' }}>
+                            {t.swatch.map((c, i) => (
+                              <div key={i} style={{ flex: 1, background: c }} />
+                            ))}
+                          </div>
+                          <div style={{ padding: '6px 4px', background: 'rgba(6,4,4,0.7)' }}>
+                            <p style={{ fontFamily: 'Cinzel, serif', fontSize: '8px', letterSpacing: '0.18em', color: answers.theme === t.key ? GOLD : DIM, textAlign: 'center' }}>
+                              {t.name.toUpperCase()}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Q21 Intention */}
+                  <div>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
+                      What's one thing you want to feel in 30 days?
+                    </p>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(201,168,108,0.4)', marginBottom: '10px' }}>
+                      Optional — but powerful
+                    </p>
+                    <input
+                      type="text"
+                      placeholder="e.g. stronger, calmer, more in tune with my body..."
+                      value={answers.intention}
+                      onChange={e => set('intention', e.target.value)}
+                      style={{
+                        width: '100%', background: 'transparent',
+                        border: 'none', borderBottom: `1px solid ${answers.intention ? 'rgba(201,168,108,0.5)' : 'rgba(255,255,255,0.15)'}`,
+                        padding: '8px 0', color: 'rgba(244,239,230,0.85)',
+                        fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
+                        outline: 'none', caretColor: GOLD, transition: 'border-color 0.3s',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* ── Bottom actions ── */}
+            <div style={{
+              padding: '14px 22px',
+              paddingBottom: 'calc(env(safe-area-inset-bottom) + 14px)',
+              flexShrink: 0,
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+            }}>
+              {/* CTA button — shimmer ACCESS style */}
+              <button
+                onClick={step === 4 ? finish : advance}
+                disabled={saving}
+                style={{
+                  width: '100%', padding: '14px',
+                  background: 'transparent',
+                  border: '1px solid rgba(201,168,108,0.52)',
+                  borderRadius: '2px', cursor: 'pointer',
+                  marginBottom: '10px',
+                  opacity: saving ? 0.6 : 1,
+                }}
+              >
+                <span style={{
+                  fontFamily: 'Cinzel, serif',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.38em',
+                  backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+                  backgroundSize: '200% 100%',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  animation: 'shimmer 5s linear infinite',
+                  display: 'inline-block',
+                }}>
+                  {saving ? 'SAVING...' : step === 4 ? 'ENTER ATHENA' : 'CONTINUE'}
+                </span>
+              </button>
+
+              {/* Skip — not shown on step 1 (Q4 required) */}
+              {step !== 1 && (
+                <button
+                  onClick={step === 4 ? finish : advance}
+                  style={{
+                    width: '100%', background: 'none', border: 'none',
+                    fontFamily: 'Cormorant Garamond, serif',
+                    fontStyle: 'italic', fontSize: '13px',
+                    color: 'rgba(244,239,230,0.28)', cursor: 'pointer',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  Skip
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   )
 }
