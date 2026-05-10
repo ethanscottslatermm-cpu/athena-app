@@ -258,7 +258,10 @@ export default function Login() {
 
         .athena-hero-img { filter: contrast(1.38) brightness(1.07) saturate(1.22); }
         @media (min-width: 769px) {
-          .athena-hero-img { filter: contrast(1.06) brightness(1.02) saturate(1.06); }
+          .athena-hero-img {
+            filter: contrast(1.06) brightness(1.02) saturate(1.06);
+            object-position: center 20%;
+          }
         }
 
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(201,168,108,0.25) transparent; }
