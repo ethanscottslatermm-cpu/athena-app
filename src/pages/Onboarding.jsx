@@ -1070,7 +1070,7 @@ export default function Onboarding() {
         {/* ── Exit fade overlay ── */}
         {showExiting && (
           <div style={{
-            position: 'absolute', inset: 0, zIndex: 200,
+            position: 'fixed', inset: 0, zIndex: 200,
             background: '#060404',
             animation: 'exitFade 0.9s ease forwards',
             pointerEvents: 'none',
