@@ -331,6 +331,16 @@ export default function Onboarding() {
   const navigate = useNavigate()
   const contentRef = useRef(null)
 
+  // Lock background scroll on iOS — only allow touch-scroll inside the content area
+  useEffect(() => {
+    const prevent = (e) => {
+      if (contentRef.current && contentRef.current.contains(e.target)) return
+      e.preventDefault()
+    }
+    document.addEventListener('touchmove', prevent, { passive: false })
+    return () => document.removeEventListener('touchmove', prevent)
+  }, [])
+
   function set(field, value) {
     setAnswers(a => ({ ...a, [field]: value }))
   }
@@ -422,6 +432,10 @@ export default function Onboarding() {
         }
         @keyframes cardIn {
           from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes stepIn {
+          from { opacity: 0; transform: translateY(6px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes entranceIn {
@@ -533,11 +547,11 @@ export default function Onboarding() {
 
         {/* ── Glass card ── */}
         {!affirmation && !showEntrance && (
-          <div key={step} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
           <div
             style={{
               width: '100%', maxWidth: '430px',
-              maxHeight: '84vh',
+              maxHeight: '84svh',
               display: 'flex', flexDirection: 'column',
               background: 'rgba(6,4,4,0.78)',
               backdropFilter: 'blur(28px)',
@@ -558,7 +572,7 @@ export default function Onboarding() {
             </div>
 
             {/* Scrollable questions */}
-            <div ref={contentRef} className="ob-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 22px 20px' }}>
+            <div key={step} ref={contentRef} className="ob-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 22px 20px', animation: 'stepIn 0.28s ease both' }}>
 
               {/* ── STEP 0 ── */}
               {step === 0 && (
