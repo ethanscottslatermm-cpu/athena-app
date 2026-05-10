@@ -532,7 +532,7 @@ export default function Onboarding() {
             key={step}
             style={{
               position: 'absolute', bottom: 0, left: 0, right: 0,
-              maxHeight: '68vh',
+              maxHeight: '84vh',
               display: 'flex', flexDirection: 'column',
               background: 'rgba(6,4,4,0.78)',
               backdropFilter: 'blur(28px)',
@@ -553,7 +553,7 @@ export default function Onboarding() {
             </div>
 
             {/* Scrollable questions */}
-            <div ref={contentRef} className="ob-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 22px 8px' }}>
+            <div ref={contentRef} className="ob-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 22px 20px' }}>
 
               {/* ── STEP 0 ── */}
               {step === 0 && (
