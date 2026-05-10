@@ -35,11 +35,7 @@ function OnboardingGuard({ children }) {
 }
 
 function Splash() {
-  return (
-    <div className="min-h-[100svh] bg-[#060404] flex items-center justify-center">
-      <p className="font-cinzel text-gold tracking-widest text-lg">ATHENA</p>
-    </div>
-  )
+  return <div className="min-h-[100svh] bg-[#060404]" />
 }
 
 function AppShell({ children }) {
