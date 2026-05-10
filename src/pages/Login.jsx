@@ -259,12 +259,6 @@ export default function Login() {
         .athena-hero-img { filter: contrast(1.38) brightness(1.07) saturate(1.22); }
         @media (min-width: 769px) {
           .athena-hero-img { filter: contrast(1.06) brightness(1.02) saturate(1.06); }
-          .login-form-panel {
-            left: 50% !important;
-            right: auto !important;
-            transform: translateX(-50%);
-            width: 375px;
-          }
         }
 
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(201,168,108,0.25) transparent; }
@@ -294,7 +288,7 @@ export default function Login() {
         }
       `}</style>
 
-      <div className="fixed inset-0 bg-[#060404] overflow-hidden">
+      <div className="fixed inset-0 bg-[#060404] overflow-hidden md:absolute">
 
         {/* ── 1. Hero image ── */}
         <div className="absolute inset-0" style={{ transform: 'scale(1.04)', transformOrigin: 'top center' }}>
@@ -600,7 +594,6 @@ export default function Login() {
         {/* ── Login form ── */}
         {phase === 'form' && (
           <div
-            className="login-form-panel"
             style={{
               position: 'absolute',
               bottom: 'calc(env(safe-area-inset-bottom) + 108px)',

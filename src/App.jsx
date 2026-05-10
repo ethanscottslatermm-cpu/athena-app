@@ -52,12 +52,12 @@ function AppShell({ children }) {
 }
 
 /* ─── Phone frame wrapper ───────────────────────────────────────────────────
-   On mobile  → full screen, no visible frame
-   On desktop → centered phone-width column, dark surround               */
+   On mobile  → full screen
+   On desktop → centered phone-width column, pure-black surround, no chrome */
 function PhoneFrame({ children }) {
   return (
-    <div className="min-h-[100svh] bg-zinc-950 flex items-start justify-center md:py-8">
-      <div className="relative w-full md:max-w-sm md:min-h-[812px] md:rounded-[2.5rem] md:overflow-hidden md:shadow-2xl bg-[#060404] min-h-[100svh] flex flex-col">
+    <div className="min-h-[100svh] bg-[#060404] flex items-stretch justify-center">
+      <div className="relative w-full md:max-w-sm md:overflow-hidden bg-[#060404] min-h-[100svh] flex flex-col">
         {children}
       </div>
     </div>
