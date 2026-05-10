@@ -299,6 +299,7 @@ export default function Onboarding() {
   const [showEntrance, setShowEntrance] = useState(false)
   const [showExiting, setShowExiting] = useState(false)
   const [periodUnknown, setPeriodUnknown] = useState(false)
+  const [saveError, setSaveError] = useState(null)
   const [saving, setSaving] = useState(false)
 
   const [answers, setAnswers] = useState({
@@ -413,7 +414,8 @@ export default function Onboarding() {
       theme: answers.theme,
       intention: answers.intention,
     }
-    const { data: saved, error } = await supabase.from('profiles').upsert({
+    setSaveError(null)
+    const { error } = await supabase.from('profiles').upsert({
       id: user.id,
       full_name: answers.full_name || null,
       last_period_date: answers.last_period_date || null,
@@ -422,9 +424,9 @@ export default function Onboarding() {
       preferences: prefs,
       onboarding_done: true,
       updated_at: new Date().toISOString(),
-    }).select('onboarding_done').single()
-    if (error || !saved?.onboarding_done) {
-      console.error('Onboarding save failed:', error, saved)
+    })
+    if (error) {
+      setSaveError(error.message)
       setSaving(false)
       return
     }
@@ -1024,6 +1026,17 @@ export default function Onboarding() {
               flexShrink: 0,
               borderTop: '1px solid rgba(255,255,255,0.05)',
             }}>
+              {/* Save error */}
+              {saveError && (
+                <p style={{
+                  fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+                  fontSize: '12px', color: 'rgba(190,80,80,0.9)',
+                  textAlign: 'center', marginBottom: '10px', letterSpacing: '0.02em',
+                }}>
+                  {saveError}
+                </p>
+              )}
+
               {/* CTA button — shimmer ACCESS style */}
               <button
                 onClick={step === 4 ? finish : advance}
