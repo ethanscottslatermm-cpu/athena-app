@@ -473,12 +473,11 @@ export default function Onboarding() {
         .athena-hero-img { filter: contrast(1.32) brightness(1.05) saturate(1.18); }
         @media (min-width: 769px) {
           .athena-hero-img { filter: contrast(1.06) brightness(1.02) saturate(1.06); }
-          .ob-bg { position: absolute !important; }
         }
       `}</style>
 
       {/* ── Full-screen background ── */}
-      <div className="ob-bg" style={{ position: 'fixed', inset: 0, background: '#060404', overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', inset: 0, background: '#060404', overflow: 'hidden' }}>
         <img src={heroImg} alt="" className="athena-hero-img" style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', objectPosition: 'top',
