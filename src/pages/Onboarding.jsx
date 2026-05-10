@@ -297,6 +297,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(0)
   const [affirmation, setAffirmation] = useState(null) // null | string
   const [showEntrance, setShowEntrance] = useState(false)
+  const [showExiting, setShowExiting] = useState(false)
   const [periodUnknown, setPeriodUnknown] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -424,9 +425,12 @@ export default function Onboarding() {
     setTimeout(() => navigate('/', { replace: true }), 1600)
   }
 
-  async function handleExit() {
-    await supabase.auth.signOut()
-    navigate('/login', { replace: true })
+  function handleExit() {
+    setShowExiting(true)
+    setTimeout(async () => {
+      await supabase.auth.signOut()
+      navigate('/login', { replace: true })
+    }, 900)
   }
 
   const stepTitle = step === 4
@@ -459,6 +463,10 @@ export default function Onboarding() {
           30%  { opacity: 1; }
           80%  { opacity: 1; }
           100% { opacity: 0; }
+        }
+        @keyframes exitFade {
+          from { opacity: 0; }
+          to   { opacity: 1; }
         }
         .ob-scroll::-webkit-scrollbar { display: none; }
         .ob-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -1057,6 +1065,16 @@ export default function Onboarding() {
             </div>
           </div>
           </div>
+        )}
+
+        {/* ── Exit fade overlay ── */}
+        {showExiting && (
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 200,
+            background: '#060404',
+            animation: 'exitFade 0.9s ease forwards',
+            pointerEvents: 'none',
+          }} />
         )}
       </div>
     </>
