@@ -424,6 +424,7 @@ export default function Onboarding() {
     setSaveError(null)
     const { error } = await supabase.from('profiles').upsert({
       id: user.id,
+      email: user.email,
       preferences: prefs,
       updated_at: new Date().toISOString(),
     })
