@@ -118,7 +118,7 @@ const STEP_TITLES = [
 
 const GOLD = '#C9A86C'
 const IVORY = 'rgba(244,239,230,0.85)'
-const DIM = 'rgba(244,239,230,0.38)'
+const DIM = 'rgba(244,239,230,0.62)'
 
 function toggleArr(arr, val, limit) {
   if (arr.includes(val)) return arr.filter(v => v !== val)
@@ -166,7 +166,7 @@ function ChipTag({ label, selected, onClick, disabled }) {
         padding: '8px 14px',
         borderRadius: '100px',
         border: `1px solid ${selected ? GOLD : 'rgba(244,239,230,0.2)'}`,
-        background: selected ? 'rgba(201,168,108,0.14)' : 'rgba(255,255,255,0.03)',
+        background: selected ? 'rgba(201,168,108,0.18)' : 'rgba(255,255,255,0.07)',
         color: selected ? GOLD : DIM,
         fontFamily: 'Cormorant Garamond, serif',
         fontSize: '13px',
@@ -192,7 +192,7 @@ function CardOption({ label, sub, selected, onClick }) {
         padding: '14px 16px',
         borderRadius: '14px',
         border: `1px solid ${selected ? GOLD : 'rgba(244,239,230,0.12)'}`,
-        background: selected ? 'rgba(201,168,108,0.08)' : 'rgba(255,255,255,0.03)',
+        background: selected ? 'rgba(201,168,108,0.14)' : 'rgba(255,255,255,0.07)',
         marginBottom: '8px',
         transition: 'all 0.2s',
         boxShadow: selected ? `0 0 12px rgba(201,168,108,0.15)` : 'none',
@@ -218,7 +218,7 @@ function EmojiGoalCard({ emoji, label, selected, onClick }) {
         padding: '14px 10px',
         borderRadius: '16px',
         border: `1px solid ${selected ? GOLD : 'rgba(244,239,230,0.12)'}`,
-        background: selected ? 'rgba(201,168,108,0.1)' : 'rgba(255,255,255,0.03)',
+        background: selected ? 'rgba(201,168,108,0.15)' : 'rgba(255,255,255,0.07)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
         transition: 'all 0.2s',
         boxShadow: selected ? `0 0 14px rgba(201,168,108,0.18)` : 'none',
@@ -331,14 +331,30 @@ export default function Onboarding() {
   const navigate = useNavigate()
   const contentRef = useRef(null)
 
-  // Lock background scroll on iOS — only allow touch-scroll inside the content area
+  // Lock all movement outside the scroll area; at scroll boundaries, block leak-through
   useEffect(() => {
+    let lastY = 0
+    const onStart = (e) => { lastY = e.touches[0]?.clientY ?? 0 }
     const prevent = (e) => {
-      if (contentRef.current && contentRef.current.contains(e.target)) return
+      const el = contentRef.current
+      if (el && el.contains(e.target)) {
+        const curY = e.touches[0]?.clientY ?? 0
+        const atTop    = el.scrollTop <= 0
+        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1
+        const goingUp  = curY > lastY   // finger moving down = content scrolling up
+        const goingDown = curY < lastY
+        lastY = curY
+        if ((atTop && goingUp) || (atBottom && goingDown)) e.preventDefault()
+        return
+      }
       e.preventDefault()
     }
-    document.addEventListener('touchmove', prevent, { passive: false })
-    return () => document.removeEventListener('touchmove', prevent)
+    document.addEventListener('touchstart', onStart, { passive: true })
+    document.addEventListener('touchmove',  prevent,  { passive: false })
+    return () => {
+      document.removeEventListener('touchstart', onStart)
+      document.removeEventListener('touchmove',  prevent)
+    }
   }, [])
 
   function set(field, value) {
@@ -553,10 +569,10 @@ export default function Onboarding() {
               width: '100%', maxWidth: '430px',
               maxHeight: '84svh',
               display: 'flex', flexDirection: 'column',
-              background: 'rgba(6,4,4,0.78)',
-              backdropFilter: 'blur(28px)',
-              WebkitBackdropFilter: 'blur(28px)',
-              borderTop: '1px solid rgba(201,168,108,0.14)',
+              background: 'rgba(6,4,4,0.18)',
+              backdropFilter: 'blur(40px)',
+              WebkitBackdropFilter: 'blur(40px)',
+              borderTop: '1px solid rgba(201,168,108,0.32)',
               borderRadius: '28px 28px 0 0',
               animation: 'cardIn 0.35s ease both',
             }}
@@ -572,7 +588,7 @@ export default function Onboarding() {
             </div>
 
             {/* Scrollable questions */}
-            <div key={step} ref={contentRef} className="ob-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 22px 20px', animation: 'stepIn 0.28s ease both' }}>
+            <div key={step} ref={contentRef} className="ob-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', overscrollBehavior: 'contain', padding: '16px 22px 20px', animation: 'stepIn 0.28s ease both' }}>
 
               {/* ── STEP 0 ── */}
               {step === 0 && (
