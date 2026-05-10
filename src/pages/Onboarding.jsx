@@ -453,25 +453,25 @@ export default function Onboarding() {
         <CornerBrackets />
 
         {/* ── Top bar ── */}
-        <div style={{
-          position: 'absolute', top: 0, left: '50%', right: 'auto',
-          transform: 'translateX(-50%)',
-          width: '100%', maxWidth: '430px',
-          padding: 'calc(env(safe-area-inset-top) + 16px) 20px 16px',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
-        }}>
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-            <button
-              onClick={handleExit}
-              style={{
-                fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.3em',
-                color: 'rgba(244,239,230,0.28)', background: 'none', border: 'none', cursor: 'pointer',
-              }}
-            >
-              EXIT
-            </button>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+          <div style={{
+            width: '100%', maxWidth: '430px',
+            padding: 'calc(env(safe-area-inset-top) + 16px) 20px 16px',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
+          }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                onClick={handleExit}
+                style={{
+                  fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.3em',
+                  color: 'rgba(244,239,230,0.28)', background: 'none', border: 'none', cursor: 'pointer',
+                }}
+              >
+                EXIT
+              </button>
+            </div>
+            <ProgressDots step={step} total={5} />
           </div>
-          <ProgressDots step={step} total={5} />
         </div>
 
         {/* ── Affirmation overlay ── */}
@@ -533,11 +533,9 @@ export default function Onboarding() {
 
         {/* ── Glass card ── */}
         {!affirmation && !showEntrance && (
+          <div key={step} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
           <div
-            key={step}
             style={{
-              position: 'absolute', bottom: 0, left: '50%',
-              transform: 'translateX(-50%)',
               width: '100%', maxWidth: '430px',
               maxHeight: '84vh',
               display: 'flex', flexDirection: 'column',
@@ -1027,6 +1025,7 @@ export default function Onboarding() {
                 </button>
               )}
             </div>
+          </div>
           </div>
         )}
       </div>
