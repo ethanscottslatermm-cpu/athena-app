@@ -413,14 +413,20 @@ export default function Onboarding() {
       theme: answers.theme,
       intention: answers.intention,
     }
-    await supabase.from('profiles').update({
+    const { error } = await supabase.from('profiles').update({
       full_name: answers.full_name || null,
       last_period_date: answers.last_period_date || null,
       cycle_length: answers.cycle_length,
       goals: answers.goals,
       preferences: prefs,
       onboarding_done: true,
+      updated_at: new Date().toISOString(),
     }).eq('id', user.id)
+    if (error) {
+      console.error('Onboarding save failed:', error)
+      setSaving(false)
+      return
+    }
     setShowEntrance(true)
     setTimeout(() => navigate('/', { replace: true }), 1600)
   }

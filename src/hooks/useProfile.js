@@ -3,11 +3,12 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from './useAuth'
 
 export function useProfile() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (authLoading) return
     if (!user) { setProfile(null); setLoading(false); return }
 
     supabase
@@ -19,7 +20,7 @@ export function useProfile() {
         setProfile(data)
         setLoading(false)
       })
-  }, [user])
+  }, [user, authLoading])
 
   async function updateProfile(updates) {
     const { data, error } = await supabase
