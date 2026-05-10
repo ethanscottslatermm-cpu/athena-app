@@ -413,7 +413,8 @@ export default function Onboarding() {
       theme: answers.theme,
       intention: answers.intention,
     }
-    const { error } = await supabase.from('profiles').update({
+    const { data: saved, error } = await supabase.from('profiles').upsert({
+      id: user.id,
       full_name: answers.full_name || null,
       last_period_date: answers.last_period_date || null,
       cycle_length: answers.cycle_length,
@@ -421,9 +422,9 @@ export default function Onboarding() {
       preferences: prefs,
       onboarding_done: true,
       updated_at: new Date().toISOString(),
-    }).eq('id', user.id)
-    if (error) {
-      console.error('Onboarding save failed:', error)
+    }).select('onboarding_done').single()
+    if (error || !saved?.onboarding_done) {
+      console.error('Onboarding save failed:', error, saved)
       setSaving(false)
       return
     }
