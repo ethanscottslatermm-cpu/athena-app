@@ -7,11 +7,6 @@ import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import communityIcon from '../assets/icons/nav-community.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
 
-const NAV_ICON_FILTER = {
-  inactive: 'invert(1) sepia(1) saturate(2) hue-rotate(2deg) brightness(0.7)',
-  active:   'invert(1) sepia(1) saturate(4) hue-rotate(2deg) brightness(1)',
-}
-
 function PngIcon({ src, isActive }) {
   return (
     <img
@@ -21,9 +16,8 @@ function PngIcon({ src, isActive }) {
         width: '24px',
         height: '24px',
         objectFit: 'contain',
-        filter: isActive ? NAV_ICON_FILTER.active : NAV_ICON_FILTER.inactive,
-        opacity: isActive ? 1 : 0.5,
-        transition: 'opacity 0.3s, filter 0.3s',
+        opacity: isActive ? 1 : 0.4,
+        transition: 'opacity 0.3s',
       }}
     />
   )
