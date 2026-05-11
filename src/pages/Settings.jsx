@@ -469,7 +469,7 @@ export default function Settings() {
   const notifOn     = d.notifications_on ?? true
 
   return (
-    <div className="relative min-h-[100svh] bg-[#060404]">
+    <div className="relative h-[100svh] overflow-y-auto bg-[#060404]">
       <style>{`
         @keyframes sheetUp {
           from { transform: translateY(60px); opacity: 0 }
@@ -516,7 +516,7 @@ export default function Settings() {
       </div>
 
       {/* Scrollable content */}
-      <div className="relative z-10 pt-20 pb-nav px-4 max-w-md mx-auto overflow-y-auto">
+      <div className="relative z-10 pt-20 pb-nav px-4 max-w-md mx-auto">
 
         {/* ── 1. Profile & Account ── */}
         <Section {...sec('profile', 'Profile & Account', <User size={15} />)}>
