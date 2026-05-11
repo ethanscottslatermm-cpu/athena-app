@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { format } from 'date-fns'
 import { supabase } from '../../lib/supabase'
 
+import lowIcon     from '../../assets/icons/low.png'
+import anxiousIcon from '../../assets/icons/anxious.png'
+import neutralIcon from '../../assets/icons/Neutral.png'
+import goodIcon    from '../../assets/icons/Good.png'
+import greatIcon   from '../../assets/icons/Great.png'
+
 const SYMPTOM_CATEGORIES = [
   {
     name: 'Physical Pain',
@@ -24,11 +30,11 @@ const SYMPTOM_CATEGORIES = [
 const FLOW_LABELS = ['Spotting', 'Light', 'Medium', 'Heavy', 'Very Heavy']
 
 const MOODS = [
-  { emoji: '😔', label: 'Low',     value: 1 },
-  { emoji: '😟', label: 'Anxious', value: 2 },
-  { emoji: '😐', label: 'Neutral', value: 3 },
-  { emoji: '🙂', label: 'Good',    value: 4 },
-  { emoji: '😊', label: 'Great',   value: 5 },
+  { icon: lowIcon,     label: 'Low',     value: 1 },
+  { icon: anxiousIcon, label: 'Anxious', value: 2 },
+  { icon: neutralIcon, label: 'Neutral', value: 3 },
+  { icon: goodIcon,    label: 'Good',    value: 4 },
+  { icon: greatIcon,   label: 'Great',   value: 5 },
 ]
 
 function toKey(s) { return s.toLowerCase().replace(/\s+/g, '_') }
@@ -233,13 +239,23 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               className="flex flex-col items-center gap-1"
             >
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all"
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
                 style={{
                   border: mood === m.value ? '2px solid #C9A86C' : '2px solid transparent',
                   background: mood === m.value ? 'rgba(201,168,108,0.12)' : 'transparent',
                 }}
               >
-                {m.emoji}
+                <img
+                  src={m.icon}
+                  alt={m.label}
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    objectFit: 'contain',
+                    opacity: mood === m.value ? 1 : 0.45,
+                    transition: 'opacity 0.2s',
+                  }}
+                />
               </div>
               <span className="font-garamond text-[9px] text-ivory/35">{m.label}</span>
             </button>
