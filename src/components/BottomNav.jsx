@@ -1,14 +1,40 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Dumbbell, Users, Moon, Heart, LogOut } from 'lucide-react'
+import { LayoutDashboard, Moon, LogOut } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
+import pilatesIcon   from '../assets/icons/nav-pilates.png'
+import communityIcon from '../assets/icons/nav-community.png'
+import moodIcon      from '../assets/icons/nav-mood.png'
+
+const NAV_ICON_FILTER = {
+  inactive: 'invert(1) sepia(1) saturate(2) hue-rotate(2deg) brightness(0.7)',
+  active:   'invert(1) sepia(1) saturate(4) hue-rotate(2deg) brightness(1)',
+}
+
+function PngIcon({ src, isActive }) {
+  return (
+    <img
+      src={src}
+      alt=""
+      style={{
+        width: '24px',
+        height: '24px',
+        objectFit: 'contain',
+        filter: isActive ? NAV_ICON_FILTER.active : NAV_ICON_FILTER.inactive,
+        opacity: isActive ? 1 : 0.5,
+        transition: 'opacity 0.3s, filter 0.3s',
+      }}
+    />
+  )
+}
+
 const navItems = [
-  { to: '/',          icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/pilates',   icon: Dumbbell,        label: 'Pilates'   },
-  { to: '/community', icon: Users,           label: 'Community' },
-  { to: '/cycle',     icon: Moon,            label: 'Cycle'     },
-  { to: '/mood',      icon: Heart,           label: 'Mood'      },
+  { to: '/',          label: 'Dashboard', lucide: LayoutDashboard, png: null          },
+  { to: '/pilates',   label: 'Pilates',   lucide: null,            png: pilatesIcon   },
+  { to: '/community', label: 'Community', lucide: null,            png: communityIcon },
+  { to: '/cycle',     label: 'Cycle',     lucide: Moon,            png: null          },
+  { to: '/mood',      label: 'Mood',      lucide: null,            png: moodIcon      },
 ]
 
 export default function BottomNav() {
@@ -32,12 +58,9 @@ export default function BottomNav() {
     return () => clearTimeout(timer)
   }, [exiting])
 
-  function handleSignOut() {
-    setExiting(true)
-  }
+  function handleSignOut() { setExiting(true) }
 
   function handleVideoEnd() {
-    // Fade to black, then navigate — gives a smooth handoff to login
     setFadingOut(true)
     setTimeout(doSignOut, 650)
   }
@@ -46,13 +69,11 @@ export default function BottomNav() {
     <>
       {/* Exit video overlay */}
       {exiting && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 200,
-            backgroundColor: '#060404',
-            animation: 'exitFadeIn 1.4s ease forwards',
-          }}
-        >
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 200,
+          backgroundColor: '#060404',
+          animation: 'exitFadeIn 1.4s ease forwards',
+        }}>
           <style>{`
             @keyframes exitFadeIn  { from { opacity: 0; } to { opacity: 1; } }
             @keyframes exitBlackIn { from { opacity: 0; } to { opacity: 1; } }
@@ -69,16 +90,14 @@ export default function BottomNav() {
         </div>
       )}
 
-      {/* Fade-to-black on video end — sits above the video, bridges to login */}
+      {/* Fade-to-black bridge to login */}
       {fadingOut && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 201,
-            backgroundColor: '#000',
-            animation: 'exitBlackIn 0.65s ease forwards',
-            pointerEvents: 'none',
-          }}
-        />
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 201,
+          backgroundColor: '#000',
+          animation: 'exitBlackIn 0.65s ease forwards',
+          pointerEvents: 'none',
+        }} />
       )}
 
       <nav
@@ -86,7 +105,7 @@ export default function BottomNav() {
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-2">
-          {navItems.map(({ to, icon: Icon, label }) => (
+          {navItems.map(({ to, label, lucide: LucideIcon, png }) => (
             <NavLink
               key={to}
               to={to}
@@ -97,8 +116,15 @@ export default function BottomNav() {
                 }`
               }
             >
-              <Icon size={20} strokeWidth={1.5} />
-              <span className="text-[10px] font-garamond tracking-wide">{label}</span>
+              {({ isActive }) => (
+                <>
+                  {png
+                    ? <PngIcon src={png} isActive={isActive} />
+                    : <LucideIcon size={20} strokeWidth={1.5} />
+                  }
+                  <span className="text-[10px] font-garamond tracking-wide">{label}</span>
+                </>
+              )}
             </NavLink>
           ))}
 
