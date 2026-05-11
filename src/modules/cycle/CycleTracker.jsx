@@ -127,7 +127,7 @@ export default function CycleTracker() {
       <div
         className="absolute bottom-0 left-0 right-0"
         style={{
-          height: '62vh',
+          height: '76vh',
           background: 'rgba(8,5,4,0.44)',
           backdropFilter: 'blur(22px)',
           WebkitBackdropFilter: 'blur(22px)',
