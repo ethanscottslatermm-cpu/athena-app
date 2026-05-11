@@ -7,17 +7,18 @@ import pilatesIcon from '../assets/icons/nav-pilates.png'
 import cycleIcon   from '../assets/icons/nav-cycle.png'
 import moodIcon    from '../assets/icons/nav-mood.png'
 
-function PngIcon({ src, isActive }) {
+function PngIcon({ src }) {
   return (
-    <img
-      src={src}
-      alt=""
+    <span
       style={{
+        display: 'inline-block',
         width: '24px',
         height: '24px',
-        objectFit: 'contain',
-        opacity: isActive ? 1 : 0.4,
-        transition: 'opacity 0.3s',
+        flexShrink: 0,
+        WebkitMask: `url(${src}) no-repeat center / contain`,
+        mask: `url(${src}) no-repeat center / contain`,
+        backgroundColor: 'currentColor',
+        transition: 'color 0.3s',
       }}
     />
   )
@@ -119,7 +120,7 @@ export default function BottomNav() {
               {({ isActive }) => (
                 <>
                   {png
-                    ? <PngIcon src={png} isActive={isActive} />
+                    ? <PngIcon src={png} />
                     : <LucideIcon size={20} strokeWidth={1.5} />
                   }
                   <span className="text-[10px] font-garamond tracking-wide">{label}</span>
