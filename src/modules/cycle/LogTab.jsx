@@ -241,8 +241,8 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
                 style={{
-                  border: mood === m.value ? '2px solid #C9A86C' : '2px solid transparent',
-                  background: mood === m.value ? 'rgba(201,168,108,0.12)' : 'transparent',
+                  border: mood === m.value ? '2px solid #C9A86C' : '2px solid rgba(244,239,230,0.1)',
+                  background: mood === m.value ? 'rgba(201,168,108,0.12)' : 'rgba(244,239,230,0.06)',
                 }}
               >
                 <img
@@ -252,7 +252,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                     width: '28px',
                     height: '28px',
                     objectFit: 'contain',
-                    opacity: mood === m.value ? 1 : 0.45,
+                    opacity: mood === m.value ? 1 : 0.7,
                     transition: 'opacity 0.2s',
                   }}
                 />
