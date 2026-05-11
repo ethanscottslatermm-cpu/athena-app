@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, LogOut } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
-import pilatesIcon from '../assets/icons/nav-pilates.png'
-import cycleIcon   from '../assets/icons/nav-cycle.png'
-import moodIcon    from '../assets/icons/nav-mood.png'
+import dashboardIcon from '../assets/icons/nav-dashboard.png'
+import pilatesIcon   from '../assets/icons/nav-pilates.png'
+import communityIcon from '../assets/icons/nav-community.png'
+import cycleIcon     from '../assets/icons/nav-cycle.png'
+import moodIcon      from '../assets/icons/nav-mood.png'
+import exitIcon      from '../assets/icons/nav-exit.png'
 
 function PngIcon({ src }) {
   return (
@@ -25,11 +27,11 @@ function PngIcon({ src }) {
 }
 
 const navItems = [
-  { to: '/',          label: 'Dashboard', lucide: LayoutDashboard, png: null        },
-  { to: '/pilates',   label: 'Pilates',   lucide: null,            png: pilatesIcon },
-  { to: '/community', label: 'Community', lucide: Users,           png: null        },
-  { to: '/cycle',     label: 'Cycle',     lucide: null,            png: cycleIcon   },
-  { to: '/mood',      label: 'Mood',      lucide: null,            png: moodIcon    },
+  { to: '/',          label: 'Dashboard', png: dashboardIcon },
+  { to: '/pilates',   label: 'Pilates',   png: pilatesIcon   },
+  { to: '/community', label: 'Community', png: communityIcon },
+  { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
+  { to: '/mood',      label: 'Mood',      png: moodIcon      },
 ]
 
 export default function BottomNav() {
@@ -106,7 +108,7 @@ export default function BottomNav() {
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-2">
-          {navItems.map(({ to, label, lucide: LucideIcon, png }) => (
+          {navItems.map(({ to, label, png }) => (
             <NavLink
               key={to}
               to={to}
@@ -117,15 +119,8 @@ export default function BottomNav() {
                 }`
               }
             >
-              {({ isActive }) => (
-                <>
-                  {png
-                    ? <PngIcon src={png} />
-                    : <LucideIcon size={20} strokeWidth={1.5} />
-                  }
-                  <span className="text-[10px] font-garamond tracking-wide">{label}</span>
-                </>
-              )}
+              <PngIcon src={png} />
+              <span className="text-[10px] font-garamond tracking-wide">{label}</span>
             </NavLink>
           ))}
 
@@ -133,7 +128,7 @@ export default function BottomNav() {
             onClick={handleSignOut}
             className="flex flex-col items-center gap-1 px-3 py-2 text-white/40 hover:text-white/70 transition-colors"
           >
-            <LogOut size={20} strokeWidth={1.5} />
+            <PngIcon src={exitIcon} />
             <span className="text-[10px] font-garamond tracking-wide">Exit</span>
           </button>
         </div>
