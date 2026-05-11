@@ -7,10 +7,14 @@ import CalendarTab from './CalendarTab'
 import LogTab      from './LogTab'
 import StatsTab    from './StatsTab'
 
+import calendarIcon from '../../assets/icons/Calendar.png'
+import logIcon      from '../../assets/icons/Log.png'
+import statsIcon    from '../../assets/icons/Stats.png'
+
 const TABS = [
-  { id: 'calendar', label: 'Calendar', icon: '📅' },
-  { id: 'log',      label: 'Log',      icon: '◯'  },
-  { id: 'stats',    label: 'Stats',    icon: '📊' },
+  { id: 'calendar', label: 'Calendar', icon: calendarIcon },
+  { id: 'log',      label: 'Log',      icon: logIcon      },
+  { id: 'stats',    label: 'Stats',    icon: statsIcon    },
 ]
 
 export default function CycleTracker() {
@@ -136,7 +140,17 @@ export default function CycleTracker() {
                   : '2px solid transparent',
               }}
             >
-              <span className="text-base leading-none">{tab.icon}</span>
+              <img
+                src={tab.icon}
+                alt=""
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  objectFit: 'contain',
+                  opacity: activeTab === tab.id ? 1 : 0.4,
+                  transition: 'opacity 0.2s',
+                }}
+              />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
                 style={{ color: activeTab === tab.id ? '#C9A86C' : 'rgba(244,239,230,0.38)' }}
