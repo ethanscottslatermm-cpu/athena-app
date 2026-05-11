@@ -375,8 +375,8 @@ export default function Settings() {
     setSecSaving(s => ({ ...s, [id]: true }))
     const { error } = await supabase
       .from('profiles')
-      .upsert({ id: user.id, ...updates, updated_at: new Date().toISOString() })
-      .select().single()
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', user.id)
     setSecSaving(s => ({ ...s, [id]: false }))
     if (error) { showToast('Something went wrong. Try again.', 'error'); return }
     setProfile(p => ({ ...p, ...updates }))
@@ -389,14 +389,33 @@ export default function Settings() {
     const file = e.target.files?.[0]
     if (!file || !user) return
     setUploading(true)
+
+    // Try Supabase Storage first
     const ext  = file.name.split('.').pop()
     const path = `${user.id}/avatar.${ext}`
-    const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true })
-    if (error) { showToast('Upload failed', 'error'); setUploading(false); return }
-    const { data } = supabase.storage.from('avatars').getPublicUrl(path)
-    await supabase.from('profiles').update({ avatar_url: data.publicUrl }).eq('id', user.id)
-    setAvatar(data.publicUrl)
-    setProfile(p => ({ ...p, avatar_url: data.publicUrl }))
+    const { error: storageError } = await supabase.storage.from('avatars').upload(path, file, { upsert: true })
+
+    let url
+    if (storageError) {
+      // Fall back to base64 stored directly on the profile
+      url = await new Promise(res => {
+        const reader = new FileReader()
+        reader.onload = ev => res(ev.target.result)
+        reader.readAsDataURL(file)
+      })
+    } else {
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+      url = data.publicUrl
+    }
+
+    const { error: dbError } = await supabase
+      .from('profiles')
+      .update({ avatar_url: url })
+      .eq('id', user.id)
+
+    if (dbError) { showToast('Could not save photo', 'error'); setUploading(false); return }
+    setAvatar(url)
+    setProfile(p => ({ ...p, avatar_url: url }))
     setUploading(false)
     showToast('Photo updated')
   }

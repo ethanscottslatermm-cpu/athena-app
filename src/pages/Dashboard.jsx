@@ -255,9 +255,12 @@ export default function Dashboard() {
           </h1>
         </div>
         <button onClick={() => navigate('/settings')}
-          className="mt-1 p-2 rounded-xl transition-colors"
-          style={{ background: 'rgba(255,255,255,0.05)' }}>
-          <Settings size={17} strokeWidth={1.4} style={{ color: 'rgba(244,239,230,0.45)' }} />
+          className="mt-1 p-2 rounded-xl transition-all"
+          style={{
+            background: 'rgba(201,168,108,0.10)',
+            border: '1px solid rgba(201,168,108,0.35)',
+          }}>
+          <Settings size={20} strokeWidth={1.4} style={{ color: '#C9A86C' }} />
         </button>
       </div>
 
