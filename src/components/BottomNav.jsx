@@ -12,10 +12,11 @@ const navItems = [
 ]
 
 export default function BottomNav() {
-  const [exiting, setExiting] = useState(false)
+  const [exiting,   setExiting]   = useState(false)
+  const [fadingOut, setFadingOut] = useState(false)
   const videoRef = useRef(null)
   const navigate = useNavigate()
-  const doneRef = useRef(false)
+  const doneRef  = useRef(false)
 
   function doSignOut() {
     if (doneRef.current) return
@@ -27,33 +28,34 @@ export default function BottomNav() {
     if (!exiting || !videoRef.current) return
     videoRef.current.muted = true
     videoRef.current.play().catch(() => doSignOut())
-    // Fallback: if video stalls or desktop blocks playback, sign out after 5s
     const timer = setTimeout(doSignOut, 5000)
     return () => clearTimeout(timer)
   }, [exiting])
 
-  async function handleSignOut() {
+  function handleSignOut() {
     setExiting(true)
   }
 
-  async function handleVideoEnd() {
-    doSignOut()
+  function handleVideoEnd() {
+    // Fade to black, then navigate — gives a smooth handoff to login
+    setFadingOut(true)
+    setTimeout(doSignOut, 650)
   }
 
   return (
     <>
-      {/* Exit transition video */}
+      {/* Exit video overlay */}
       {exiting && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 200,
-          backgroundColor: '#060404',
-          animation: 'exitFadeIn 1.4s ease forwards',
-        }}>
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 200,
+            backgroundColor: '#060404',
+            animation: 'exitFadeIn 1.4s ease forwards',
+          }}
+        >
           <style>{`
-            @keyframes exitFadeIn {
-              from { opacity: 0; }
-              to   { opacity: 1; }
-            }
+            @keyframes exitFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes exitBlackIn { from { opacity: 0; } to { opacity: 1; } }
           `}</style>
           <video
             ref={videoRef}
@@ -65,6 +67,18 @@ export default function BottomNav() {
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         </div>
+      )}
+
+      {/* Fade-to-black on video end — sits above the video, bridges to login */}
+      {fadingOut && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 201,
+            backgroundColor: '#000',
+            animation: 'exitBlackIn 0.65s ease forwards',
+            pointerEvents: 'none',
+          }}
+        />
       )}
 
       <nav

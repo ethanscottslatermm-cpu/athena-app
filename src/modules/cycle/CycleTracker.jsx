@@ -14,19 +14,19 @@ const TABS = [
 ]
 
 export default function CycleTracker() {
-  const { user }                 = useAuth()
-  const { profile }              = useProfile()
-  const phaseData                = usePhase()
+  const { user }    = useAuth()
+  const { profile } = useProfile()
+  const phaseData   = usePhase()
 
-  const [activeTab, setActiveTab]       = useState('calendar')
-  const [symptoms,  setSymptoms]        = useState([])
-  const [cycles,    setCycles]          = useState([])
-  const [loading,   setLoading]         = useState(true)
-  const [logDate,   setLogDate]         = useState(null)
-  const [banner,    setBanner]          = useState(null)   // 'period' | 'ovulation'
-  const [bannerOn,  setBannerOn]        = useState(false)
+  const [activeTab, setActiveTab] = useState('calendar')
+  const [symptoms,  setSymptoms]  = useState([])
+  const [cycles,    setCycles]    = useState([])
+  const [loading,   setLoading]   = useState(true)
+  const [logDate,   setLogDate]   = useState(null)
+  const [banner,    setBanner]    = useState(null)
+  const [bannerOn,  setBannerOn]  = useState(false)
 
-  // ── Shared data fetch (avoids triple-querying across the 3 tabs) ──────────
+  // ── Shared data fetch ─────────────────────────────────────────────────────
   const refreshData = useCallback(async () => {
     if (!user) return
     setLoading(true)
@@ -41,22 +41,14 @@ export default function CycleTracker() {
 
   useEffect(() => { refreshData() }, [refreshData])
 
-  // ── In-app notification banner ────────────────────────────────────────────
+  // ── Notification banner ───────────────────────────────────────────────────
   useEffect(() => {
     if (!profile?.notifications_on || !phaseData?.dayOfCycle) return
-
-    const cycleLen  = profile.cycle_length ?? 28
-    const ovDay     = cycleLen - 14
+    const ovDay    = (profile.cycle_length ?? 28) - 14
     const periodIn2 = phaseData.daysUntilNextPeriod === 2
-    const fertOpen  = phaseData.dayOfCycle === ovDay - 5   // fertile window first day
-
-    if (periodIn2) {
-      setBanner('period')
-      setBannerOn(true)
-    } else if (fertOpen) {
-      setBanner('ovulation')
-      setBannerOn(true)
-    }
+    const fertOpen  = phaseData.dayOfCycle === ovDay - 5
+    if (periodIn2)  { setBanner('period');   setBannerOn(true) }
+    else if (fertOpen) { setBanner('ovulation'); setBannerOn(true) }
   }, [profile, phaseData?.dayOfCycle])
 
   useEffect(() => {
@@ -65,7 +57,6 @@ export default function CycleTracker() {
     return () => clearTimeout(t)
   }, [bannerOn])
 
-  // ── Quick-log bridge from CalendarTab day-detail sheet ────────────────────
   function handleQuickLog(date) {
     setLogDate(date)
     setActiveTab('log')
@@ -86,20 +77,24 @@ export default function CycleTracker() {
           0%   { background-position: -200% 0; }
           100% { background-position:  200% 0; }
         }
+        @keyframes sheetUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to   { transform: translateY(0);    opacity: 1; }
+        }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ── Warrior goddess background ──────────────────────────────────────── */}
+      {/* ── Background ──────────────────────────────────────────────────────── */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: 'url(/athena-hero.webp)' }}
       />
       <div className="absolute inset-0" style={{
         background: `
-          linear-gradient(to bottom, rgba(6,4,4,0.55) 0%, rgba(6,4,4,0.3) 30%, rgba(6,4,4,0.1) 50%),
+          linear-gradient(to bottom, rgba(6,4,4,0.6) 0%, rgba(6,4,4,0.2) 35%, rgba(6,4,4,0.08) 55%),
           radial-gradient(ellipse at 50% 15%, rgba(139,26,26,0.28) 0%, transparent 60%)
-        `
+        `,
       }} />
 
       {/* ── In-app notification banner ──────────────────────────────────────── */}
@@ -117,34 +112,28 @@ export default function CycleTracker() {
               ? '🩸 Your period is predicted in 2 days.'
               : '✦ Your fertile window opens today.'}
           </span>
-          <button onClick={() => setBannerOn(false)} className="text-ivory/40 hover:text-ivory ml-4 text-xl leading-none">
-            ×
-          </button>
+          <button onClick={() => setBannerOn(false)} className="text-ivory/40 hover:text-ivory ml-4 text-xl leading-none">×</button>
         </div>
       )}
 
-      {/* ── Glass card — bottom 60% ─────────────────────────────────────────── */}
+      {/* ── Tab bar — top of page ────────────────────────────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 right-0"
+        className="absolute top-0 left-0 right-0 z-20"
         style={{
-          height: '76vh',
-          background: 'rgba(8,5,4,0.44)',
-          backdropFilter: 'blur(22px)',
-          WebkitBackdropFilter: 'blur(22px)',
-          borderTop: '1px solid rgba(201,168,108,0.12)',
-          borderTopLeftRadius: '24px',
-          borderTopRightRadius: '24px',
+          paddingTop: 'max(env(safe-area-inset-top, 0px), 36px)',
+          background: 'linear-gradient(to bottom, rgba(6,4,4,0.82) 0%, rgba(6,4,4,0.0) 100%)',
         }}
       >
-        {/* Tab bar */}
-        <div className="flex border-b border-white/10">
+        <div className="flex">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="flex-1 flex flex-col items-center py-3 gap-0.5 transition-all"
+              className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-all"
               style={{
-                borderBottom: activeTab === tab.id ? '2px solid #C9A86C' : '2px solid transparent',
+                borderBottom: activeTab === tab.id
+                  ? '2px solid #C9A86C'
+                  : '2px solid transparent',
               }}
             >
               <span className="text-base leading-none">{tab.icon}</span>
@@ -157,9 +146,22 @@ export default function CycleTracker() {
             </button>
           ))}
         </div>
+      </div>
 
-        {/* Scrollable tab content */}
-        <div className="overflow-y-auto hide-scrollbar h-[calc(100%-52px)] px-4 pt-4 pb-nav">
+      {/* ── Glass card — fills from 24% down ────────────────────────────────── */}
+      <div
+        className="absolute left-0 right-0 bottom-0"
+        style={{
+          top: '24%',
+          background: 'rgba(8,5,4,0.44)',
+          backdropFilter: 'blur(22px)',
+          WebkitBackdropFilter: 'blur(22px)',
+          borderTopLeftRadius: '24px',
+          borderTopRightRadius: '24px',
+          borderTop: '1px solid rgba(201,168,108,0.12)',
+        }}
+      >
+        <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">
           {activeTab === 'calendar' && (
             <CalendarTab
               profile={profile}
