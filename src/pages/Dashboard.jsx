@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
-import { Heart, Moon, Wind, Settings, ChevronRight } from 'lucide-react'
+import { Wind, Settings, ChevronRight } from 'lucide-react'
 
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
@@ -346,7 +346,7 @@ export default function Dashboard() {
           className="text-left rounded-2xl p-4"
           style={{ background: 'rgba(196,154,154,0.1)', border: '1px solid rgba(196,154,154,0.2)' }}
         >
-          <Heart size={18} strokeWidth={1.4} style={{ color: '#C49A9A', marginBottom: '10px' }} />
+          <ModuleIcon src={moodIcon} color="#C49A9A" />
           <p className="font-cinzel text-[10px] tracking-widest uppercase text-ivory/70 mb-1">Mood</p>
           <p className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.38)' }}>
             How are you feeling today?
@@ -359,7 +359,7 @@ export default function Dashboard() {
           className="text-left rounded-2xl p-4"
           style={{ background: 'rgba(107,79,107,0.15)', border: '1px solid rgba(107,79,107,0.25)' }}
         >
-          <Moon size={18} strokeWidth={1.4} style={{ color: '#9B8BB0', marginBottom: '10px' }} />
+          <ModuleIcon src={sleepIcon} color="#9B8BB0" />
           <p className="font-cinzel text-[10px] tracking-widest uppercase text-ivory/70 mb-1">Sleep</p>
           <p className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.38)' }}>
             How did you sleep last night?
