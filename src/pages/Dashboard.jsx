@@ -3,10 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
-import {
-  Dumbbell, Heart, Leaf, Moon, Sparkles, Users,
-  Wind, Settings, CalendarDays, ChevronRight,
-} from 'lucide-react'
+import { Heart, Moon, Wind, Settings, ChevronRight } from 'lucide-react'
+
+import pilatesIcon   from '../assets/icons/nav-pilates.png'
+import cycleIcon     from '../assets/icons/nav-cycle.png'
+import moodIcon      from '../assets/icons/nav-mood.png'
+import nourishIcon   from '../assets/icons/nav-nourish.png'
+import sleepIcon     from '../assets/icons/nav-sleep.png'
+import skinIcon      from '../assets/icons/nav-skin.png'
+import communityIcon from '../assets/icons/nav-community.png'
+
+function ModuleIcon({ src, color }) {
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        width: '22px',
+        height: '22px',
+        flexShrink: 0,
+        WebkitMask: `url(${src}) no-repeat center / contain`,
+        mask: `url(${src}) no-repeat center / contain`,
+        backgroundColor: color,
+      }}
+    />
+  )
+}
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -65,13 +86,13 @@ const PHASE_CONTENT = {
 }
 
 const MODULE_NAV = [
-  { key: 'pilates',   label: 'Pilates',     Icon: Dumbbell,     to: '/pilates'   },
-  { key: 'cycle',     label: 'Cycle',       Icon: CalendarDays, to: '/cycle'     },
-  { key: 'mood',      label: 'Mood',        Icon: Heart,        to: '/mood'      },
-  { key: 'nourish',   label: 'Nourish',     Icon: Leaf,         to: '/nourish'   },
-  { key: 'sleep',     label: 'Sleep',       Icon: Moon,         to: '/sleep'     },
-  { key: 'skin',      label: 'Skin',        Icon: Sparkles,     to: '/skin'      },
-  { key: 'community', label: 'Community',   Icon: Users,        to: '/community' },
+  { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
+  { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
+  { key: 'mood',      label: 'Mood',      icon: moodIcon,      to: '/mood'      },
+  { key: 'nourish',   label: 'Nourish',   icon: nourishIcon,   to: '/nourish'   },
+  { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     to: '/sleep'     },
+  { key: 'skin',      label: 'Skin',      icon: skinIcon,      to: '/skin'      },
+  { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },
 ]
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -289,7 +310,7 @@ export default function Dashboard() {
       <SectionHeader title="My Modules" delay={0.12} />
       <div className="module-scroll overflow-x-auto mb-6" style={anim(0.15)}>
         <div className="flex gap-4 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-          {MODULE_NAV.map(({ key, label, Icon, to }) => (
+          {MODULE_NAV.map(({ key, label, icon, to }) => (
             <button
               key={key}
               onClick={() => navigate(to)}
@@ -305,7 +326,7 @@ export default function Dashboard() {
                   transition: 'background 0.2s',
                 }}
               >
-                <Icon size={22} strokeWidth={1.3} style={{ color: activeColor }} />
+                <ModuleIcon src={icon} color={activeColor} />
               </div>
               <span className="font-garamond text-[10px] tracking-wide"
                 style={{ color: 'rgba(244,239,230,0.45)' }}>
