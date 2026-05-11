@@ -3,9 +3,9 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Users, LogOut } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
-import pilatesIcon from '../assets/icons/nav-pilates.png.png'
-import cycleIcon   from '../assets/icons/nav-cycle.png.png'
-import moodIcon    from '../assets/icons/nav-mood.png.png'
+import pilatesIcon from '../assets/icons/nav-pilates.png'
+import cycleIcon   from '../assets/icons/nav-cycle.png'
+import moodIcon    from '../assets/icons/nav-mood.png'
 
 function PngIcon({ src, isActive }) {
   return (
