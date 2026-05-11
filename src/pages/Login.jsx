@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import heroImg from '../assets/athena-hero.webp'
+import heroImg    from '../assets/athena-hero.webp'
+import knightIcon from '../assets/knight-icon.png'
 import { supabase } from '../lib/supabase'
 
 const PARTICLES = Array.from({ length: 96 }, (_, i) => ({
@@ -17,20 +18,6 @@ const PARTICLES = Array.from({ length: 96 }, (_, i) => ({
   opacity: i >= 68 ? 0.12 + (i % 5) * 0.06 : 0.18 + (i % 5) * 0.1,
 }))
 
-function LockIcon() {
-  return (
-    <svg
-      width="13" height="16" viewBox="0 0 13 16"
-      fill="none" xmlns="http://www.w3.org/2000/svg"
-      style={{ flexShrink: 0, marginBottom: '1px', animation: 'lockPulse 2.5s ease-in-out infinite' }}
-    >
-      <rect x="0.8" y="7" width="11.4" height="8.2" rx="1.4"
-        stroke="rgba(201,168,108,0.6)" strokeWidth="1.1" />
-      <path d="M3.2 7V4.8a3.3 3.3 0 0 1 6.6 0V7"
-        stroke="rgba(201,168,108,0.6)" strokeWidth="1.1" strokeLinecap="round" />
-    </svg>
-  )
-}
 
 export default function Login() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
@@ -217,9 +204,47 @@ export default function Login() {
           0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
-        @keyframes lockPulse {
-          0%, 100% { filter: drop-shadow(0 0 1px rgba(201,168,108,0.3)); opacity: 0.6; }
-          50%      { filter: drop-shadow(0 0 8px rgba(201,168,108,0.95)) drop-shadow(0 0 18px rgba(201,168,108,0.5)); opacity: 1; }
+        @keyframes iconPulse {
+          0%   { opacity: 0.55; filter: invert(1) sepia(1) saturate(3) hue-rotate(2deg) brightness(0.85); }
+          50%  { opacity: 1;    filter: invert(1) sepia(1) saturate(6) hue-rotate(2deg) brightness(1.2); }
+          100% { opacity: 0.9;  filter: invert(1) sepia(1) saturate(4) hue-rotate(2deg) brightness(1); }
+        }
+
+        .iw {
+          position: relative;
+          margin-bottom: 20px;
+          max-width: 285px;
+        }
+        .iw input {
+          padding: 14px 16px 14px 42px;
+        }
+        .input-icon-img {
+          position: absolute;
+          left: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 20px;
+          height: 20px;
+          object-fit: contain;
+          pointer-events: none;
+          opacity: 0.55;
+          filter: invert(1) sepia(1) saturate(3) hue-rotate(2deg) brightness(0.85);
+          transition: opacity 0.3s, filter 0.3s;
+        }
+        .iw:focus-within .input-icon-img {
+          opacity: 0.9;
+          filter: invert(1) sepia(1) saturate(4) hue-rotate(2deg) brightness(1);
+        }
+        .input-icon-img.pulse {
+          animation: iconPulse 0.6s ease forwards;
+        }
+        .iw input:focus {
+          border-color: rgba(201,168,108,0.5);
+          background: rgba(244,239,230,0.06);
+          box-shadow:
+            0 0 0 1px rgba(201,168,108,0.12),
+            0 0 24px rgba(201,168,108,0.08),
+            inset 0 0 16px rgba(201,168,108,0.04);
         }
 
         .athena-input {
@@ -611,8 +636,12 @@ export default function Login() {
           >
             <form onSubmit={handleSubmit} noValidate>
               {/* Email row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
-                <LockIcon />
+              <div className="iw">
+                <img
+                  src={knightIcon}
+                  alt=""
+                  className="input-icon-img"
+                />
                 <input
                   className="athena-input"
                   type="email"
@@ -625,12 +654,23 @@ export default function Login() {
                   spellCheck={false}
                   enterKeyHint="next"
                   disabled={loading}
+                  onFocus={(e) => {
+                    const icon = e.target.closest('.iw').querySelector('.input-icon-img')
+                    icon.classList.remove('pulse')
+                    void icon.offsetWidth
+                    icon.classList.add('pulse')
+                    icon.addEventListener('animationend', () => icon.classList.remove('pulse'), { once: true })
+                  }}
                 />
               </div>
 
               {/* Password row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '20px', maxWidth: '285px' }}>
-                <LockIcon />
+              <div className="iw">
+                <img
+                  src={knightIcon}
+                  alt=""
+                  className="input-icon-img"
+                />
                 <input
                   className="athena-input"
                   type="password"
@@ -641,6 +681,13 @@ export default function Login() {
                   enterKeyHint="go"
                   onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
                   disabled={loading}
+                  onFocus={(e) => {
+                    const icon = e.target.closest('.iw').querySelector('.input-icon-img')
+                    icon.classList.remove('pulse')
+                    void icon.offsetWidth
+                    icon.classList.add('pulse')
+                    icon.addEventListener('animationend', () => icon.classList.remove('pulse'), { once: true })
+                  }}
                 />
               </div>
 
