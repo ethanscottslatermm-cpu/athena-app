@@ -1,14 +1,34 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Dumbbell, Users, Moon, Heart, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, LogOut } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
+import pilatesIcon from '../assets/icons/nav-pilates.png.png'
+import cycleIcon   from '../assets/icons/nav-cycle.png.png'
+import moodIcon    from '../assets/icons/nav-mood.png.png'
+
+function PngIcon({ src, isActive }) {
+  return (
+    <img
+      src={src}
+      alt=""
+      style={{
+        width: '24px',
+        height: '24px',
+        objectFit: 'contain',
+        opacity: isActive ? 1 : 0.4,
+        transition: 'opacity 0.3s',
+      }}
+    />
+  )
+}
+
 const navItems = [
-  { to: '/',          icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/pilates',   icon: Dumbbell,        label: 'Pilates'   },
-  { to: '/community', icon: Users,           label: 'Community' },
-  { to: '/cycle',     icon: Moon,            label: 'Cycle'     },
-  { to: '/mood',      icon: Heart,           label: 'Mood'      },
+  { to: '/',          label: 'Dashboard', lucide: LayoutDashboard, png: null        },
+  { to: '/pilates',   label: 'Pilates',   lucide: null,            png: pilatesIcon },
+  { to: '/community', label: 'Community', lucide: Users,           png: null        },
+  { to: '/cycle',     label: 'Cycle',     lucide: null,            png: cycleIcon   },
+  { to: '/mood',      label: 'Mood',      lucide: null,            png: moodIcon    },
 ]
 
 export default function BottomNav() {
@@ -85,7 +105,7 @@ export default function BottomNav() {
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-2">
-          {navItems.map(({ to, icon: Icon, label }) => (
+          {navItems.map(({ to, label, lucide: LucideIcon, png }) => (
             <NavLink
               key={to}
               to={to}
@@ -96,8 +116,15 @@ export default function BottomNav() {
                 }`
               }
             >
-              <Icon size={20} strokeWidth={1.5} />
-              <span className="text-[10px] font-garamond tracking-wide">{label}</span>
+              {({ isActive }) => (
+                <>
+                  {png
+                    ? <PngIcon src={png} isActive={isActive} />
+                    : <LucideIcon size={20} strokeWidth={1.5} />
+                  }
+                  <span className="text-[10px] font-garamond tracking-wide">{label}</span>
+                </>
+              )}
             </NavLink>
           ))}
 
