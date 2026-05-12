@@ -148,8 +148,11 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
 
       {/* ── Start button (sticky bottom) ─────────────────────────────────── */}
       <div
-        className="shrink-0 px-4 pb-10 pt-5"
-        style={{ background: 'linear-gradient(to top, rgba(6,4,4,1) 55%, transparent)' }}
+        className="shrink-0 px-4 pt-5"
+        style={{
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 100px)',
+          background: 'linear-gradient(to top, rgba(6,4,4,1) 55%, transparent)',
+        }}
       >
         <button
           onClick={() => onStart?.(session, sessionExercises)}
