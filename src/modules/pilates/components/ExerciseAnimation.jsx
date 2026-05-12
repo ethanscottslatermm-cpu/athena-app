@@ -1,38 +1,20 @@
-import { useState, useEffect } from 'react'
-import Lottie from 'lottie-react'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
 const ANIM = {
-  core:        '/animations/core.json',
-  glutes:      '/animations/glutes.json',
-  arms:        '/animations/arms.json',
-  flexibility: '/animations/flexibility.json',
-  recovery:    '/animations/recovery.json',
-  full_body:   '/animations/fullbody.json',
+  core:        '/animations/core.json.json',
+  glutes:      '/animations/glutes.json.lottie',
+  arms:        '/animations/arms.json.lottie',
+  flexibility: '/animations/flexibility.json.lottie',
+  recovery:    '/animations/recovery.json.lottie',
+  full_body:   '/animations/fullbody.json.lottie',
 }
 
 export default function ExerciseAnimation({ focusArea, size = 180, className = '' }) {
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    const url = ANIM[focusArea] ?? ANIM.core
-    fetch(url)
-      .then(r => r.ok ? r.json() : null)
-      .then(d => setData(d))
-      .catch(() => {})
-  }, [focusArea])
-
-  if (!data) return (
-    <div
-      className={`flex items-center justify-center ${className}`}
-      style={{ width: size, height: size }}
-    >
-      <span style={{ color: 'rgba(201,168,108,0.3)', fontSize: size * 0.22 }}>✦</span>
-    </div>
-  )
+  const src = ANIM[focusArea] ?? ANIM.core
 
   return (
-    <Lottie
-      animationData={data}
+    <DotLottieReact
+      src={src}
       loop
       autoplay
       className={className}
