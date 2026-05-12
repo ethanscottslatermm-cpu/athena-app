@@ -189,7 +189,7 @@ export default function ProgressTab({
     }
 
     const totalSessions = completions.length
-    const totalMinutes  = completions.reduce((sum, c) => sum + (c.duration_actual ?? 30), 0)
+    const totalMinutes  = completions.reduce((sum, c) => sum + (c.duration_min ?? 30), 0)
 
     // Favorite focus
     const focusCount = {}
@@ -218,7 +218,7 @@ export default function ProgressTab({
       const dayCompletions = completions.filter(c =>
         format(new Date(c.completed_at), 'yyyy-MM-dd') === dateStr
       )
-      const minutes = dayCompletions.reduce((sum, c) => sum + (c.duration_actual ?? 30), 0)
+      const minutes = dayCompletions.reduce((sum, c) => sum + (c.duration_min ?? 30), 0)
       return { date: d, minutes, label: format(d, 'EEEEE') }
     })
   }, [completions])
@@ -337,7 +337,7 @@ export default function ProgressTab({
                   {s?.title ?? 'Session'}
                 </p>
                 <p className="font-garamond text-ivory/30 text-xs">
-                  {format(new Date(c.completed_at), 'MMM d, yyyy')} · {c.duration_actual ?? 30} min
+                  {format(new Date(c.completed_at), 'MMM d, yyyy')} · {c.duration_min ?? 30} min
                 </p>
               </div>
               {c.rating > 0 && (

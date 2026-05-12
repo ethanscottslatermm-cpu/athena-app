@@ -47,7 +47,7 @@ export default function PilatesStudio() {
       supabase.from('pilates_exercises').select('*').order('order_num'),
       supabase.from('session_completions').select('*').eq('user_id', user.id).order('completed_at', { ascending: false }),
       supabase.from('user_favorites').select('session_id').eq('user_id', user.id),
-      supabase.from('challenges').select('*').order('created_at', { ascending: false }),
+      supabase.from('challenges').select('*').order('name'),
       supabase.from('challenge_entries').select('*').eq('user_id', user.id),
     ])
     setSessions(sRes.data ?? [])
@@ -98,11 +98,10 @@ export default function PilatesStudio() {
     setCompletedData({ session, elapsed })
     if (user) {
       await supabase.from('session_completions').insert({
-        user_id:          user.id,
-        session_id:       session.id,
-        completed_at:     new Date().toISOString(),
-        duration_actual:  Math.round(elapsed / 60),
-        phase_at_time:    phaseData?.phase ?? null,
+        user_id:      user.id,
+        session_id:   session.id,
+        completed_at: new Date().toISOString(),
+        duration_min: Math.round(elapsed / 60),
       })
       fetchData()
     }

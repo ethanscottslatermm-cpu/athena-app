@@ -16,7 +16,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-between px-6 py-safe text-center"
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-between px-6 py-safe text-center"
       style={{
         background: 'rgba(6,4,4,0.98)',
         paddingTop: 'max(env(safe-area-inset-top, 0px), 48px)',
