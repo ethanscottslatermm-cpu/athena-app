@@ -41,7 +41,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
 
   return (
     <div
-      className="fixed inset-0 z-40 flex flex-col"
+      className="fixed inset-0 z-[60] flex flex-col"
       style={{ background: 'rgba(6,4,4,0.98)', animation: 'sheetUp 0.32s ease-out' }}
     >
       {/* ── Header area ──────────────────────────────────────────────────── */}

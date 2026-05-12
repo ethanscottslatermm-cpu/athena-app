@@ -73,7 +73,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col"
+      className="fixed inset-0 z-[60] flex flex-col"
       style={{ background: 'rgba(6,4,4,0.97)' }}
     >
       {/* ── Top progress bar ────────────────────────────────────────────── */}
