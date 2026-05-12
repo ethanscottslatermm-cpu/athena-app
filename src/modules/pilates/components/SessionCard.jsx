@@ -7,14 +7,18 @@ const PHASE_COLORS = {
 }
 
 const SESSION_IMAGES = {
-  'Dynamic Stretch & Tone':   '/images/sessions/Dynamic Stretch & Tone.png',
-  'Glute Awakening':          '/images/sessions/Glute Awakening.png',
-  'Grounding Evening Flow':   '/images/sessions/Grounding Evening Flow.png',
-  'Pelvic Floor Reset':       '/images/sessions/Pelvic Floor Reset.png',
-  'Restorative Mat Session':  '/images/sessions/Restorative Mat Session.png',
-  'Rising Energy Core':       '/images/sessions/Rising Energy Core.png',
-  'Spinal Release & Breathe': '/images/sessions/Spinal Release & Breathe.png',
-  'Supine Surrender Flow':    '/images/sessions/Supine Surrender Flow.png',
+  'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.png',
+  'glute awakening':          '/images/sessions/Glute Awakening.png',
+  'grounding evening flow':   '/images/sessions/Grounding Evening Flow.png',
+  'pelvic floor reset':       '/images/sessions/Pelvic Floor Reset.png',
+  'restorative mat session':  '/images/sessions/Restorative Mat Session.png',
+  'rising energy core':       '/images/sessions/Rising Energy Core.png',
+  'spinal release & breathe': '/images/sessions/Spinal Release & Breathe.png',
+  'supine surrender flow':    '/images/sessions/Supine Surrender Flow.png',
+}
+
+function getSessionImage(title) {
+  return SESSION_IMAGES[title?.trim().toLowerCase()] ?? null
 }
 
 function Heart({ filled, size = 18 }) {
@@ -53,7 +57,7 @@ export default function SessionCard({
 }) {
   if (!session) return null
   const pc  = PHASE_COLORS[session.phase] ?? '#C9A86C'
-  const img = SESSION_IMAGES[session.title]
+  const img = getSessionImage(session.title)
 
   const bgStyle = img
     ? {
