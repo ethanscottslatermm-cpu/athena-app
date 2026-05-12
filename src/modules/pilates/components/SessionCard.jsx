@@ -6,6 +6,17 @@ const PHASE_COLORS = {
   all: '#C9A86C',
 }
 
+const SESSION_IMAGES = {
+  'Dynamic Stretch & Tone':   '/images/sessions/Dynamic Stretch & Tone.png',
+  'Glute Awakening':          '/images/sessions/Glute Awakening.png',
+  'Grounding Evening Flow':   '/images/sessions/Grounding Evening Flow.png',
+  'Pelvic Floor Reset':       '/images/sessions/Pelvic Floor Reset.png',
+  'Restorative Mat Session':  '/images/sessions/Restorative Mat Session.png',
+  'Rising Energy Core':       '/images/sessions/Rising Energy Core.png',
+  'Spinal Release & Breathe': '/images/sessions/Spinal Release & Breathe.png',
+  'Supine Surrender Flow':    '/images/sessions/Supine Surrender Flow.png',
+}
+
 function Heart({ filled, size = 18 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24"
@@ -23,8 +34,8 @@ function Pill({ children }) {
     <span
       className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
       style={{
-        background: 'rgba(201,168,108,0.12)',
-        border: '1px solid rgba(201,168,108,0.35)',
+        background: 'rgba(8,5,4,0.55)',
+        border: '1px solid rgba(201,168,108,0.45)',
         color: '#C9A86C',
       }}
     >
@@ -41,39 +52,72 @@ export default function SessionCard({
   variant = 'grid',
 }) {
   if (!session) return null
-  const pc = PHASE_COLORS[session.phase] ?? '#C9A86C'
+  const pc  = PHASE_COLORS[session.phase] ?? '#C9A86C'
+  const img = SESSION_IMAGES[session.title]
 
-  // ── Featured (full-width, 200px tall) ────────────────────────────────────
+  const bgStyle = img
+    ? {
+        backgroundImage: `url("${img}")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+      }
+    : {
+        background: `linear-gradient(135deg, ${pc}30 0%, rgba(8,5,4,0.88) 100%)`,
+      }
+
+  // Overlay gradient — deeper when there's a photo so text stays readable
+  const overlayStyle = img
+    ? { background: 'linear-gradient(to bottom, rgba(6,4,4,0.08) 0%, rgba(6,4,4,0.55) 45%, rgba(6,4,4,0.94) 100%)' }
+    : { background: `linear-gradient(to bottom, transparent 0%, rgba(8,5,4,0.7) 60%, rgba(8,5,4,0.95) 100%)` }
+
+  // ── Featured (full-width, 220px tall) ────────────────────────────────────
   if (variant === 'featured') {
     return (
       <div
         onClick={onTap}
         className="relative w-full rounded-2xl overflow-hidden cursor-pointer"
-        style={{
-          height: 200,
-          background: `linear-gradient(135deg, ${pc}30 0%, rgba(8,5,4,0.88) 100%)`,
-          border: `1px solid ${pc}35`,
-        }}
+        style={{ height: 220, border: `1px solid ${img ? 'rgba(201,168,108,0.2)' : `${pc}35`}`, ...bgStyle }}
       >
+        {/* Overlay */}
+        <div className="absolute inset-0" style={overlayStyle} />
+
+        {/* Favorite */}
         <button
           onClick={e => { e.stopPropagation(); onFavorite?.(session.id) }}
           className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center z-10"
         >
           <Heart filled={isFavorite} />
         </button>
-        <div className="absolute inset-0 flex flex-col justify-end p-4">
-          <h3 className="font-cinzel text-ivory text-lg leading-tight mb-2">{session.title}</h3>
+
+        {/* Text */}
+        <div className="absolute inset-0 flex flex-col justify-end p-4 z-10">
+          <h3 className="font-cinzel text-ivory text-lg leading-tight mb-1">{session.title}</h3>
+          {session.description && (
+            <p
+              className="font-garamond italic text-ivory/60 text-xs leading-snug mb-2"
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {session.description}
+            </p>
+          )}
           <div className="flex gap-2 flex-wrap">
             <Pill>{session.duration_min} min</Pill>
             <Pill>{(session.focus_area ?? '').replace(/_/g, ' ')}</Pill>
             <Pill>{session.difficulty}</Pill>
           </div>
         </div>
+
+        {/* START chip */}
         <div
           onClick={e => { e.stopPropagation(); onTap?.() }}
-          className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-gold cursor-pointer"
+          className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-gold cursor-pointer z-10"
           style={{
-            background: 'rgba(201,168,108,0.15)',
+            background: 'rgba(8,5,4,0.7)',
             border: '1px solid rgba(201,168,108,0.4)',
           }}
         >
@@ -83,27 +127,38 @@ export default function SessionCard({
     )
   }
 
-  // ── Scroll (160×200) ──────────────────────────────────────────────────────
+  // ── Scroll (160×210) ──────────────────────────────────────────────────────
   if (variant === 'scroll') {
     return (
       <div
         onClick={onTap}
         className="relative shrink-0 rounded-xl overflow-hidden cursor-pointer"
-        style={{
-          width: 160,
-          height: 200,
-          background: `linear-gradient(160deg, ${pc}28 0%, rgba(8,5,4,0.9) 100%)`,
-          border: `1px solid ${pc}28`,
-        }}
+        style={{ width: 160, height: 210, border: `1px solid ${img ? 'rgba(201,168,108,0.18)' : `${pc}28`}`, ...bgStyle }}
       >
+        <div className="absolute inset-0" style={overlayStyle} />
+
         <button
           onClick={e => { e.stopPropagation(); onFavorite?.(session.id) }}
           className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center z-10"
         >
           <Heart filled={isFavorite} size={16} />
         </button>
-        <div className="absolute inset-0 flex flex-col justify-end p-3">
-          <h4 className="font-cinzel text-ivory text-[13px] leading-tight mb-1.5">{session.title}</h4>
+
+        <div className="absolute inset-0 flex flex-col justify-end p-3 z-10">
+          <h4 className="font-cinzel text-ivory text-[13px] leading-tight mb-1">{session.title}</h4>
+          {session.description && (
+            <p
+              className="font-garamond italic text-ivory/50 text-[11px] leading-snug mb-1.5"
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {session.description}
+            </p>
+          )}
           <p className="font-garamond text-ivory/50 text-xs capitalize">
             {session.duration_min} min · {(session.focus_area ?? '').replace(/_/g, ' ')}
           </p>
@@ -123,19 +178,33 @@ export default function SessionCard({
       }}
     >
       <div
-        className="relative h-20 flex items-end p-2"
-        style={{ background: `linear-gradient(160deg, ${pc}28 0%, rgba(8,5,4,0.92) 100%)` }}
+        className="relative h-24 overflow-hidden"
+        style={{ ...bgStyle }}
       >
-        <div className="absolute top-2 left-2 w-2 h-2 rounded-full" style={{ background: pc }} />
+        <div className="absolute inset-0" style={overlayStyle} />
+        <div className="absolute top-2 left-2 w-2 h-2 rounded-full z-10" style={{ background: pc }} />
         <button
           onClick={e => { e.stopPropagation(); onFavorite?.(session.id) }}
-          className="absolute top-1.5 right-1.5 w-7 h-7 flex items-center justify-center"
+          className="absolute top-1.5 right-1.5 w-7 h-7 flex items-center justify-center z-10"
         >
           <Heart filled={isFavorite} size={15} />
         </button>
       </div>
       <div className="p-2.5">
         <h4 className="font-cinzel text-ivory text-[13px] leading-tight mb-1">{session.title}</h4>
+        {session.description && (
+          <p
+            className="font-garamond italic text-ivory/40 text-[11px] leading-snug mb-1"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {session.description}
+          </p>
+        )}
         <p className="font-garamond text-ivory/40 text-xs capitalize">
           {session.duration_min} min · {(session.focus_area ?? '').replace(/_/g, ' ')} · {session.difficulty}
         </p>
