@@ -4,6 +4,26 @@ import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
 
+import homeIcon       from '../../assets/icons/home.png'
+import libraryIcon    from '../../assets/icons/Library.png'
+import progressIcon   from '../../assets/icons/Progress.png'
+import challengesIcon from '../../assets/icons/challenges.png'
+
+function TabIcon({ src, active }) {
+  return (
+    <span style={{
+      display: 'inline-block',
+      width: 22,
+      height: 22,
+      flexShrink: 0,
+      WebkitMask: `url(${src}) no-repeat center / contain`,
+      mask: `url(${src}) no-repeat center / contain`,
+      backgroundColor: active ? '#C9A86C' : 'rgba(244,239,230,0.35)',
+      transition: 'background-color 0.2s',
+    }} />
+  )
+}
+
 import HomeTab        from './HomeTab'
 import LibraryTab     from './LibraryTab'
 import ProgressTab    from './ProgressTab'
@@ -13,10 +33,10 @@ import ActiveSession  from './ActiveSession'
 import SessionComplete from './SessionComplete'
 
 const TABS = [
-  { id: 'home',       label: 'Home',       icon: '🏠' },
-  { id: 'library',    label: 'Library',    icon: '🔍' },
-  { id: 'progress',   label: 'Progress',   icon: '📈' },
-  { id: 'challenges', label: 'Challenges', icon: '🏆' },
+  { id: 'home',       label: 'Home',       icon: homeIcon       },
+  { id: 'library',    label: 'Library',    icon: libraryIcon    },
+  { id: 'progress',   label: 'Progress',   icon: progressIcon   },
+  { id: 'challenges', label: 'Challenges', icon: challengesIcon },
 ]
 
 export default function PilatesStudio() {
@@ -181,9 +201,7 @@ export default function PilatesStudio() {
                   : '2px solid transparent',
               }}
             >
-              <span style={{ fontSize: 18, opacity: activeTab === tab.id ? 1 : 0.4 }}>
-                {tab.icon}
-              </span>
+              <TabIcon src={tab.icon} active={activeTab === tab.id} />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
                 style={{ color: activeTab === tab.id ? '#C9A86C' : 'rgba(244,239,230,0.38)' }}
