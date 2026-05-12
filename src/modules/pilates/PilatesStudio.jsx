@@ -33,8 +33,8 @@ import ActiveSession  from './ActiveSession'
 import SessionComplete from './SessionComplete'
 
 const TABS = [
-  { id: 'home',       label: 'Home',       icon: homeIcon       },
-  { id: 'library',    label: 'Library',    icon: libraryIcon    },
+  { id: 'home',       label: 'Studio',     icon: homeIcon       },
+  { id: 'library',    label: 'Sessions',   icon: libraryIcon    },
   { id: 'progress',   label: 'Progress',   icon: progressIcon   },
   { id: 'challenges', label: 'Challenges', icon: challengesIcon },
 ]
