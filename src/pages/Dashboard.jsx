@@ -85,6 +85,13 @@ const PHASE_CONTENT = {
   },
 }
 
+const MODULE_IMAGES = {
+  Pilates: '/images/sessions/Pilates.png',
+  Nourish: '/images/sessions/Nourish.png',
+  Sleep:   '/images/sessions/Sleep.png',
+  Skin:    '/images/sessions/Skin.png',
+}
+
 const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
@@ -376,32 +383,50 @@ export default function Dashboard() {
           <SectionHeader title="Phase Guidance" delay={0.21} />
           <div className="module-scroll overflow-x-auto mb-6" style={anim(0.23)}>
             <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-              {content.cards.map(({ module, tip, to }) => (
-                <button
-                  key={module}
-                  onClick={() => navigate(to)}
-                  className="text-left rounded-2xl p-4 flex-shrink-0"
-                  style={{
-                    width: '172px',
-                    background: `${activeColor}0e`,
-                    border: `1px solid ${activeColor}22`,
-                  }}
-                >
-                  <p className="font-cinzel text-[10px] tracking-widest uppercase mb-2"
-                    style={{ color: activeColor, opacity: 0.8 }}>
-                    {module}
-                  </p>
-                  <p className="font-garamond text-sm leading-snug"
-                    style={{ color: 'rgba(244,239,230,0.6)' }}>
-                    {tip}
-                  </p>
-                  <div className="flex items-center gap-1 mt-3"
-                    style={{ color: activeColor, opacity: 0.45 }}>
-                    <span className="font-cinzel text-[8px] tracking-widest uppercase">Explore</span>
-                    <ChevronRight size={9} />
-                  </div>
-                </button>
-              ))}
+              {content.cards.map(({ module, tip, to }) => {
+                const img = MODULE_IMAGES[module]
+                return (
+                  <button
+                    key={module}
+                    onClick={() => navigate(to)}
+                    className="relative text-left rounded-2xl flex-shrink-0 overflow-hidden"
+                    style={{
+                      width: '172px',
+                      height: '160px',
+                      border: `1px solid ${activeColor}22`,
+                      ...(img
+                        ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                        : { background: `${activeColor}0e` }
+                      ),
+                    }}
+                  >
+                    {/* Overlay */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background: img
+                          ? 'linear-gradient(to bottom, rgba(6,4,4,0.1) 0%, rgba(6,4,4,0.55) 40%, rgba(6,4,4,0.92) 100%)'
+                          : 'none',
+                      }}
+                    />
+                    <div className="absolute inset-0 flex flex-col justify-end p-4">
+                      <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1.5"
+                        style={{ color: activeColor, opacity: 0.9 }}>
+                        {module}
+                      </p>
+                      <p className="font-garamond text-sm leading-snug"
+                        style={{ color: 'rgba(244,239,230,0.7)' }}>
+                        {tip}
+                      </p>
+                      <div className="flex items-center gap-1 mt-2.5"
+                        style={{ color: activeColor, opacity: 0.5 }}>
+                        <span className="font-cinzel text-[8px] tracking-widest uppercase">Explore</span>
+                        <ChevronRight size={9} />
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </>
