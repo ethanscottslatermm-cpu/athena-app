@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import ExerciseAnimation from './components/ExerciseAnimation'
 
 function formatTime(s) {
   const m = Math.floor(s / 60)
@@ -132,10 +133,10 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
           // Exercise mode
           <>
             <div
-              className="w-32 h-32 rounded-full mb-6 flex items-center justify-center"
-              style={{ background: `${pc}18`, border: `2px solid ${pc}30` }}
+              className="rounded-2xl mb-4 flex items-center justify-center overflow-hidden"
+              style={{ background: `${pc}10`, border: `1px solid ${pc}20`, width: 220, height: 220 }}
             >
-              <span className="font-cinzel text-gold/60 text-4xl">✦</span>
+              <ExerciseAnimation focusArea={current?.focus_area} size={200} />
             </div>
             <h2 className="font-cinzel text-ivory text-2xl leading-tight mb-3">
               {current?.name ?? '—'}
