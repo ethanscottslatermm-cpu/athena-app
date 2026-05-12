@@ -5,6 +5,7 @@ import { useProfile } from './hooks/useProfile'
 import BottomNav from './components/BottomNav'
 
 import Login        from './pages/Login'
+import SeedPage     from './pages/SeedPage'
 import Onboarding   from './pages/Onboarding'
 import Dashboard    from './pages/Dashboard'
 import PilatesStudio from './pages/PilatesStudio'
@@ -67,6 +68,7 @@ export default function App() {
         <Routes>
           {/* Public */}
           <Route path="/login" element={<Login />} />
+          <Route path="/seed"  element={<SeedPage />} />
 
           {/* Onboarding */}
           <Route path="/onboarding" element={
