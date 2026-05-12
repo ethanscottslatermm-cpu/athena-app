@@ -393,22 +393,30 @@ export default function Dashboard() {
                     style={{
                       width: '172px',
                       height: '160px',
+                      padding: 0,
                       border: `1px solid ${activeColor}22`,
-                      ...(img
-                        ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                        : { background: `${activeColor}0e` }
-                      ),
+                      background: img ? 'transparent' : `${activeColor}0e`,
                     }}
                   >
+                    {/* Photo */}
+                    {img && (
+                      <img
+                        src={img}
+                        alt=""
+                        className="absolute inset-0 w-full h-full"
+                        style={{ objectFit: 'cover', objectPosition: 'center' }}
+                      />
+                    )}
+
                     {/* Overlay */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: img
-                          ? 'linear-gradient(to bottom, rgba(6,4,4,0.1) 0%, rgba(6,4,4,0.55) 40%, rgba(6,4,4,0.92) 100%)'
-                          : 'none',
-                      }}
-                    />
+                    {img && (
+                      <div
+                        className="absolute inset-0"
+                        style={{ background: 'linear-gradient(to bottom, rgba(6,4,4,0.05) 0%, rgba(6,4,4,0.5) 40%, rgba(6,4,4,0.93) 100%)' }}
+                      />
+                    )}
+
+                    {/* Text */}
                     <div className="absolute inset-0 flex flex-col justify-end p-4">
                       <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1.5"
                         style={{ color: activeColor, opacity: 0.9 }}>
