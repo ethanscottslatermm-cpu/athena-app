@@ -12,7 +12,7 @@ const SESSION_IMAGES = {
   'arm & shoulder sculpt':    '/images/sessions/Arm & Shoulder Sculpt.png',
   'wind down restoration':    '/images/sessions/Wind Down Restoration.png',
   'mindful core & breathing': '/images/sessions/Mindful Core & Breathing.png',
-  'intuitive movement':       '/images/sessions/Intutive Movement.png',
+  'intuitive movement':       '/images/sessions/Intuitive Movement.png',
 }
 
 const PHASE_COLORS = {
