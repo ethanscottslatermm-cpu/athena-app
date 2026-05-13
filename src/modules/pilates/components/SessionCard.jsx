@@ -21,6 +21,14 @@ const SESSION_IMAGES = {
   'intuitive movement':       '/images/sessions/Intuitive Movement.png',
 }
 
+// These PNGs have embedded padding — scale up to push borders outside the clip boundary
+const PADDED_IMAGES = new Set([
+  'arm & shoulder sculpt',
+  'wind down restoration',
+  'mindful core & breathing',
+  'intuitive movement',
+])
+
 function getSessionImage(title) {
   return SESSION_IMAGES[title?.trim().toLowerCase()] ?? null
 }
@@ -52,6 +60,22 @@ function Pill({ children }) {
   )
 }
 
+function CardImage({ src, padded }) {
+  return (
+    <img
+      src={src}
+      alt=""
+      className="absolute inset-0 w-full h-full"
+      style={{
+        objectFit: 'cover',
+        objectPosition: 'center',
+        transform: padded ? 'scale(1.4)' : 'none',
+        transformOrigin: 'center center',
+      }}
+    />
+  )
+}
+
 export default function SessionCard({
   session,
   onTap,
@@ -60,20 +84,12 @@ export default function SessionCard({
   variant = 'grid',
 }) {
   if (!session) return null
-  const pc  = PHASE_COLORS[session.phase] ?? '#C9A86C'
-  const img = getSessionImage(session.title)
+  const pc      = PHASE_COLORS[session.phase] ?? '#C9A86C'
+  const img     = getSessionImage(session.title)
+  const padded  = PADDED_IMAGES.has(session.title?.trim().toLowerCase())
 
-  const bgStyle = img
-    ? {
-        backgroundImage: `url("${img}")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center top',
-      }
-    : {
-        background: `linear-gradient(135deg, ${pc}30 0%, rgba(8,5,4,0.88) 100%)`,
-      }
+  const fallbackBg = { background: `linear-gradient(135deg, ${pc}30 0%, rgba(8,5,4,0.88) 100%)` }
 
-  // Overlay gradient — deeper when there's a photo so text stays readable
   const overlayStyle = img
     ? { background: 'linear-gradient(to bottom, rgba(6,4,4,0.08) 0%, rgba(6,4,4,0.55) 45%, rgba(6,4,4,0.94) 100%)' }
     : { background: `linear-gradient(to bottom, transparent 0%, rgba(8,5,4,0.7) 60%, rgba(8,5,4,0.95) 100%)` }
@@ -84,12 +100,15 @@ export default function SessionCard({
       <div
         onClick={onTap}
         className="relative w-full rounded-2xl overflow-hidden cursor-pointer"
-        style={{ height: 220, border: `1px solid ${img ? 'rgba(201,168,108,0.2)' : `${pc}35`}`, ...bgStyle }}
+        style={{
+          height: 220,
+          border: `1px solid ${img ? 'rgba(201,168,108,0.2)' : `${pc}35`}`,
+          ...(!img ? fallbackBg : {}),
+        }}
       >
-        {/* Overlay */}
+        {img && <CardImage src={img} padded={padded} />}
         <div className="absolute inset-0" style={overlayStyle} />
 
-        {/* Favorite */}
         <button
           onClick={e => { e.stopPropagation(); onFavorite?.(session.id) }}
           className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center z-10"
@@ -97,7 +116,6 @@ export default function SessionCard({
           <Heart filled={isFavorite} />
         </button>
 
-        {/* Text */}
         <div className="absolute inset-0 flex flex-col justify-end p-4 z-10">
           <h3 className="font-cinzel text-ivory text-lg leading-tight mb-1">{session.title}</h3>
           {session.description && (
@@ -120,7 +138,6 @@ export default function SessionCard({
           </div>
         </div>
 
-        {/* START chip */}
         <div
           onClick={e => { e.stopPropagation(); onTap?.() }}
           className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-gold cursor-pointer z-10"
@@ -141,8 +158,14 @@ export default function SessionCard({
       <div
         onClick={onTap}
         className="relative shrink-0 rounded-xl overflow-hidden cursor-pointer"
-        style={{ width: 160, height: 210, border: `1px solid ${img ? 'rgba(201,168,108,0.18)' : `${pc}28`}`, ...bgStyle }}
+        style={{
+          width: 160,
+          height: 210,
+          border: `1px solid ${img ? 'rgba(201,168,108,0.18)' : `${pc}28`}`,
+          ...(!img ? fallbackBg : {}),
+        }}
       >
+        {img && <CardImage src={img} padded={padded} />}
         <div className="absolute inset-0" style={overlayStyle} />
 
         <button
@@ -187,8 +210,9 @@ export default function SessionCard({
     >
       <div
         className="relative h-24 overflow-hidden"
-        style={{ ...bgStyle }}
+        style={!img ? fallbackBg : {}}
       >
+        {img && <CardImage src={img} padded={padded} />}
         <div className="absolute inset-0" style={overlayStyle} />
         <div className="absolute top-2 left-2 w-2 h-2 rounded-full z-10" style={{ background: pc }} />
         <button

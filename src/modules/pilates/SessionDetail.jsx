@@ -38,8 +38,10 @@ function Heart({ filled }) {
 export default function SessionDetail({ session, exercises = [], isFavorite, onFavoriteToggle, onStart, onClose }) {
   if (!session) return null
 
+  const PADDED = new Set(['arm & shoulder sculpt', 'wind down restoration', 'mindful core & breathing', 'intuitive movement'])
   const pc = PHASE_COLORS[session.phase] ?? '#C9A86C'
   const heroImage = SESSION_IMAGES[(session.title ?? '').toLowerCase()]
+  const heroPadded = PADDED.has((session.title ?? '').toLowerCase())
   const phaseLabel = session.phase && session.phase !== 'all'
     ? session.phase.charAt(0).toUpperCase() + session.phase.slice(1)
     : 'All phases'
@@ -73,7 +75,12 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             src={heroImage}
             alt=""
             className="absolute inset-0 w-full h-full"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+            transform: heroPadded ? 'scale(1.4)' : 'none',
+            transformOrigin: 'center center',
+          }}
           />
         )}
         {heroImage && (
