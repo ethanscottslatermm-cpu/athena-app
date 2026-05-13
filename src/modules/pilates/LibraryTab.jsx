@@ -89,19 +89,16 @@ export default function LibraryTab({
   onSelectSession,
   onFavoriteToggle,
 }) {
-  const [filters, setFilters]   = useState({})
+  const CLEAR = { id: 'all', key: null, val: null }
+  const [activeChip, setActiveChip] = useState(CLEAR)
   const [enrolled, setEnrolled] = useState(() => {
     try {
       return new Set(JSON.parse(localStorage.getItem('athena_enrolled_programs') ?? '[]'))
     } catch { return new Set() }
   })
 
-  function handleFilterChange(key, val) {
-    setFilters(prev => ({ ...prev, [key]: val }))
-  }
-
   function clearFilters() {
-    setFilters({})
+    setActiveChip(CLEAR)
   }
 
   function handleEnroll(programId) {
@@ -114,20 +111,16 @@ export default function LibraryTab({
   }
 
   const filtered = useMemo(() => {
+    if (!activeChip.key) return sessions
     return sessions.filter(s => {
-      if (filters.phase      && filters.phase      !== 'all' && s.phase      !== filters.phase      && s.phase !== 'all') return false
-      if (filters.focus      && filters.focus      !== 'all' && s.focus_area !== filters.focus)      return false
-      if (filters.difficulty && filters.difficulty !== 'all' && s.difficulty !== filters.difficulty) return false
-      if (filters.equipment  && filters.equipment  !== 'all' && s.equipment  !== filters.equipment)  return false
-      if (filters.duration   && filters.duration   !== 'all') {
-        const dur = parseInt(filters.duration, 10)
-        if (Math.abs(s.duration_min - dur) > 5) return false
-      }
+      if (activeChip.key === 'difficulty') return s.difficulty === activeChip.val
+      if (activeChip.key === 'focus')      return s.focus_area === activeChip.val
+      if (activeChip.key === 'duration')   return Math.abs(s.duration_min - parseInt(activeChip.val, 10)) <= 5
       return true
     })
-  }, [sessions, filters])
+  }, [sessions, activeChip])
 
-  const hasFilters = Object.values(filters).some(v => v && v !== 'all')
+  const hasFilters = activeChip.id !== 'all'
 
   return (
     <div className="space-y-4 pb-4">
@@ -136,7 +129,7 @@ export default function LibraryTab({
         className="sticky top-0 z-10 -mx-4 px-4 pb-1"
         style={{ background: 'rgba(8,5,4,0.88)', backdropFilter: 'blur(16px)' }}
       >
-        <PhaseFilter active={filters} onChange={handleFilterChange} />
+        <PhaseFilter activeId={activeChip.id} onChange={setActiveChip} />
       </div>
 
       {/* ── Program strips ───────────────────────────────────────────── */}

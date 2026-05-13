@@ -1,43 +1,39 @@
-const GROUPS = [
-  { key: 'phase',      options: ['all', 'menstrual', 'follicular', 'ovulation', 'luteal'] },
-  { key: 'focus',      options: ['all', 'core', 'glutes', 'arms', 'full_body', 'flexibility', 'recovery'] },
-  { key: 'duration',   options: ['all', '15', '30', '45'] },
-  { key: 'difficulty', options: ['all', 'beginner', 'intermediate', 'advanced'] },
-  { key: 'equipment',  options: ['all', 'mat', 'ring', 'ball', 'bands'] },
+const CHIPS = [
+  { id: 'all',          key: null,         val: null,           label: 'All' },
+  { id: 'beginner',     key: 'difficulty', val: 'beginner',     label: 'Beginner' },
+  { id: 'intermediate', key: 'difficulty', val: 'intermediate', label: 'Intermediate' },
+  { id: 'advanced',     key: 'difficulty', val: 'advanced',     label: 'Advanced' },
+  { id: 'core',         key: 'focus',      val: 'core',         label: 'Core' },
+  { id: 'glutes',       key: 'focus',      val: 'glutes',       label: 'Glutes' },
+  { id: 'full_body',    key: 'focus',      val: 'full_body',    label: 'Full Body' },
+  { id: 'recovery',     key: 'focus',      val: 'recovery',     label: 'Recovery' },
+  { id: '15min',        key: 'duration',   val: '15',           label: '15 min' },
+  { id: '30min',        key: 'duration',   val: '30',           label: '30 min' },
+  { id: '45min',        key: 'duration',   val: '45',           label: '45 min' },
 ]
 
-function chipLabel(key, val) {
-  if (val === 'all') return 'All'
-  if (key === 'duration') return `${val} min`
-  return val.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-}
-
-export default function PhaseFilter({ active = {}, onChange }) {
+export default function PhaseFilter({ activeId = 'all', onChange }) {
   return (
-    <div className="space-y-1.5 py-2">
-      {GROUPS.map(({ key, options }) => (
-        <div key={key} className="flex gap-1.5 overflow-x-auto pb-0.5 hide-scrollbar">
-          {options.map(opt => {
-            const on = (active[key] ?? 'all') === opt
-            return (
-              <button
-                key={opt}
-                onClick={() => onChange(key, on && opt !== 'all' ? 'all' : opt)}
-                className="shrink-0 font-garamond text-xs px-3 rounded-full transition-all"
-                style={{
-                  minHeight: 30,
-                  background: on ? '#C9A86C' : 'rgba(8,5,4,0.6)',
-                  border: on ? '1px solid #C9A86C' : '1px solid rgba(244,239,230,0.18)',
-                  color: on ? '#060404' : 'rgba(244,239,230,0.65)',
-                  fontWeight: on ? 600 : 400,
-                }}
-              >
-                {chipLabel(key, opt)}
-              </button>
-            )
-          })}
-        </div>
-      ))}
+    <div className="flex gap-2 overflow-x-auto py-2.5 hide-scrollbar">
+      {CHIPS.map(chip => {
+        const on = activeId === chip.id
+        return (
+          <button
+            key={chip.id}
+            onClick={() => onChange(chip)}
+            className="shrink-0 font-garamond text-[13px] px-4 rounded-full transition-all"
+            style={{
+              height: 32,
+              background: on ? '#C9A86C' : 'rgba(244,239,230,0.06)',
+              border: on ? '1px solid rgba(201,168,108,0.9)' : '1px solid rgba(244,239,230,0.11)',
+              color: on ? '#060404' : 'rgba(244,239,230,0.48)',
+              fontWeight: on ? 600 : 400,
+            }}
+          >
+            {chip.label}
+          </button>
+        )
+      })}
     </div>
   )
 }
