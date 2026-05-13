@@ -29,3 +29,23 @@ dist-ssr
 
 # Local Netlify folder
 .netlify
+
+# Windows system files
+desktop.ini
+Thumbs.db
+
+# Video/design reference files
+*.mp4
+*.mov
+
+# Root-level design screenshots
+Athena*.png
+Athena*.jpg
+
+# Duplicate asset staging folders
+Pilate Exercise Card Slots/
+
+# Root-level loose images (not in public/)
+Community nav.jpg
+Mood nav.jpg
+Sleep.jpg
