@@ -15,6 +15,10 @@ const SESSION_IMAGES = {
   'rising energy core':       '/images/sessions/Rising Energy Core.png',
   'spinal release & breathe': '/images/sessions/Spinal Release & Breathe.png',
   'supine surrender flow':    '/images/sessions/Supine Surrender Flow.png',
+  'arm & shoulder sculpt':    '/images/sessions/Arm & Shoulder Sculpt.png',
+  'wind down restoration':    '/images/sessions/Wind Down Restoration.png',
+  'mindful core & breathing': '/images/sessions/Mindful Core & Breathing.png',
+  'intuitive movement':       '/images/sessions/Intutive Movement.png',
 }
 
 function getSessionImage(title) {
