@@ -1,5 +1,16 @@
 import ExerciseRow from './components/ExerciseRow'
 
+const SESSION_IMAGES = {
+  'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.png',
+  'glute awakening':          '/images/sessions/Glute Awakening.png',
+  'grounding evening flow':   '/images/sessions/Grounding Evening Flow.png',
+  'pelvic floor reset':       '/images/sessions/Pelvic Floor Reset.png',
+  'restorative mat session':  '/images/sessions/Restorative Mat Session.png',
+  'rising energy core':       '/images/sessions/Rising Energy Core.png',
+  'spinal release & breathe': '/images/sessions/Spinal Release & Breathe.png',
+  'supine surrender flow':    '/images/sessions/Supine Surrender Flow.png',
+}
+
 const PHASE_COLORS = {
   menstrual: '#8B1A1A',
   follicular: '#8FAF8A',
@@ -24,6 +35,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
   if (!session) return null
 
   const pc = PHASE_COLORS[session.phase] ?? '#C9A86C'
+  const heroImage = SESSION_IMAGES[(session.title ?? '').toLowerCase()]
   const phaseLabel = session.phase && session.phase !== 'all'
     ? session.phase.charAt(0).toUpperCase() + session.phase.slice(1)
     : 'All phases'
@@ -46,12 +58,26 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
     >
       {/* ── Header area ──────────────────────────────────────────────────── */}
       <div
-        className="relative shrink-0"
+        className="relative shrink-0 overflow-hidden"
         style={{
           height: 240,
-          background: `linear-gradient(160deg, ${pc}45 0%, rgba(8,5,4,0.97) 100%)`,
+          background: heroImage ? 'transparent' : `linear-gradient(160deg, ${pc}45 0%, rgba(8,5,4,0.97) 100%)`,
         }}
       >
+        {heroImage && (
+          <img
+            src={heroImage}
+            alt=""
+            className="absolute inset-0 w-full h-full"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+          />
+        )}
+        {heroImage && (
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to top, rgba(6,4,4,0.92) 0%, rgba(6,4,4,0.3) 55%, transparent 100%)' }}
+          />
+        )}
         <button
           onClick={onClose}
           className="absolute z-10 flex items-center justify-center rounded-full"
