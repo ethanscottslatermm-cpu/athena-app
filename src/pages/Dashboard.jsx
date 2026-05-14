@@ -16,6 +16,8 @@ import communityIcon from '../assets/icons/nav-community.png'
 const MODULE_IMAGES = {
   Pilates: '/images/dashboard/pilates.webp',
   Nourish: '/images/dashboard/nourish.webp',
+  Skin:    '/images/dashboard/skin.webp',
+  Sleep:   '/images/dashboard/sleep.webp',
 }
 
 function ModuleIcon({ src, color }) {
