@@ -18,6 +18,9 @@ const SESSION_IMAGES = {
   'athletic flow':            '/images/sessions/Athletic Flow.webp',
   'full body foundation':     '/images/sessions/Full Body Foundation.webp',
   'gentle restoration flow':  '/images/sessions/Gentle Restoration Flow.webp',
+  'glute sculptor':           '/images/sessions/Glute Sculptor.webp',
+  'total body burn':          '/images/sessions/Total Body Burn.webp',
+  'hip & glute release':      '/images/sessions/Hip & Glute Release.webp',
 }
 
 const PHASE_COLORS = {
