@@ -21,14 +21,6 @@ const SESSION_IMAGES = {
   'intuitive movement':       '/images/sessions/Intuitive Movement.png',
 }
 
-// These PNGs have embedded padding — use a larger background-size to push borders outside the clip boundary
-const PADDED_BG = {
-  'arm & shoulder sculpt':    { backgroundSize: '155%', backgroundPosition: 'center center' },
-  'wind down restoration':    { backgroundSize: '155%', backgroundPosition: 'center center' },
-  'mindful core & breathing': { backgroundSize: '155%', backgroundPosition: 'center center' },
-  'intuitive movement':       { backgroundSize: '170%', backgroundPosition: 'center center' },
-}
-
 function getSessionImage(title) {
   return SESSION_IMAGES[title?.trim().toLowerCase()] ?? null
 }
@@ -71,14 +63,11 @@ export default function SessionCard({
   const pc  = PHASE_COLORS[session.phase] ?? '#C9A86C'
   const img = getSessionImage(session.title)
 
-  const paddedBg = PADDED_BG[session.title?.trim().toLowerCase()] ?? {}
-
   const bgStyle = img
     ? {
         backgroundImage: `url("${img}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center top',
-        ...paddedBg,
       }
     : {
         background: `linear-gradient(135deg, ${pc}30 0%, rgba(8,5,4,0.88) 100%)`,
