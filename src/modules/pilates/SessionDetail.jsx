@@ -17,6 +17,7 @@ const SESSION_IMAGES = {
   'strong arms & back':       '/images/sessions/Strong Arms & Back.webp',
   'athletic flow':            '/images/sessions/Athletic Flow.webp',
   'full body foundation':     '/images/sessions/Full Body Foundation.webp',
+  'gentle restoration flow':  '/images/sessions/Gentle Restoration Flow.webp',
 }
 
 const PHASE_COLORS = {
