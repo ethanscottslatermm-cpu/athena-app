@@ -11,7 +11,7 @@ const SESSION_IMAGES = {
   'supine surrender flow':    '/images/sessions/Supine Surrender Flow.webp',
   'arm & shoulder sculpt':    '/images/sessions/Arm & Shoulder Sculpt.webp',
   'wind down restoration':    '/images/sessions/Wind Down Restoration.webp',
-  'mindful core & breathing': '/images/sessions/Mindful Core & Breathing.webp',
+  'mindful core & breathe':   '/images/sessions/Mindful Core & Breathing.webp',
   'intuitive movement':       '/images/sessions/Intuitive Movement.webp',
   'peak power core':          '/images/sessions/Peak Power Core.webp',
   'strong arms & back':       '/images/sessions/Strong Arms & Back.webp',
