@@ -1,20 +1,20 @@
 import ExerciseRow from './components/ExerciseRow'
 
 const SESSION_IMAGES = {
-  'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.png',
-  'glute awakening':          '/images/sessions/Glute Awakening.png',
-  'grounding evening flow':   '/images/sessions/Grounding Evening Flow.png',
-  'pelvic floor reset':       '/images/sessions/Pelvic Floor Reset.png',
-  'restorative mat session':  '/images/sessions/Restorative Mat Session.png',
-  'rising energy core':       '/images/sessions/Rising Energy Core.png',
-  'spinal release & breathe': '/images/sessions/Spinal Release & Breathe.png',
-  'supine surrender flow':    '/images/sessions/Supine Surrender Flow.png',
-  'arm & shoulder sculpt':    '/images/sessions/Arm & Shoulder Sculpt.png',
-  'wind down restoration':    '/images/sessions/Wind Down Restoration.png',
-  'mindful core & breathing': '/images/sessions/Mindful Core & Breathing.png',
-  'intuitive movement':       '/images/sessions/Intuitive Movement.png',
-  'peak power core':          '/images/sessions/Peak Power Core.png',
-  'strong arms & back':       '/images/sessions/Strong Arms & Back.png',
+  'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
+  'glute awakening':          '/images/sessions/Glute Awakening.webp',
+  'grounding evening flow':   '/images/sessions/Grounding Evening Flow.webp',
+  'pelvic floor reset':       '/images/sessions/Pelvic Floor Reset.webp',
+  'restorative mat session':  '/images/sessions/Restorative Mat Session.webp',
+  'rising energy core':       '/images/sessions/Rising Energy Core.webp',
+  'spinal release & breathe': '/images/sessions/Spinal Release & Breathe.webp',
+  'supine surrender flow':    '/images/sessions/Supine Surrender Flow.webp',
+  'arm & shoulder sculpt':    '/images/sessions/Arm & Shoulder Sculpt.webp',
+  'wind down restoration':    '/images/sessions/Wind Down Restoration.webp',
+  'mindful core & breathing': '/images/sessions/Mindful Core & Breathing.webp',
+  'intuitive movement':       '/images/sessions/Intuitive Movement.webp',
+  'peak power core':          '/images/sessions/Peak Power Core.webp',
+  'strong arms & back':       '/images/sessions/Strong Arms & Back.webp',
 }
 
 const PHASE_COLORS = {
