@@ -13,6 +13,11 @@ import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
 import communityIcon from '../assets/icons/nav-community.png'
 
+const MODULE_IMAGES = {
+  Pilates: '/images/dashboard/pilates.webp',
+  Nourish: '/images/dashboard/nourish.webp',
+}
+
 function ModuleIcon({ src, color }) {
   return (
     <span
@@ -376,32 +381,44 @@ export default function Dashboard() {
           <SectionHeader title="Phase Guidance" delay={0.21} />
           <div className="module-scroll overflow-x-auto mb-6" style={anim(0.23)}>
             <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-              {content.cards.map(({ module, tip, to }) => (
-                <button
-                  key={module}
-                  onClick={() => navigate(to)}
-                  className="text-left rounded-2xl p-4 flex-shrink-0"
-                  style={{
-                    width: '172px',
-                    background: `${activeColor}0e`,
-                    border: `1px solid ${activeColor}22`,
-                  }}
-                >
-                  <p className="font-cinzel text-[10px] tracking-widest uppercase mb-2"
-                    style={{ color: activeColor, opacity: 0.8 }}>
-                    {module}
-                  </p>
-                  <p className="font-garamond text-sm leading-snug"
-                    style={{ color: 'rgba(244,239,230,0.6)' }}>
-                    {tip}
-                  </p>
-                  <div className="flex items-center gap-1 mt-3"
-                    style={{ color: activeColor, opacity: 0.45 }}>
-                    <span className="font-cinzel text-[8px] tracking-widest uppercase">Explore</span>
-                    <ChevronRight size={9} />
-                  </div>
-                </button>
-              ))}
+              {content.cards.map(({ module, tip, to }) => {
+                const img = MODULE_IMAGES[module]
+                return (
+                  <button
+                    key={module}
+                    onClick={() => navigate(to)}
+                    className="relative text-left rounded-2xl flex-shrink-0 overflow-hidden"
+                    style={{
+                      width: '172px',
+                      minHeight: '130px',
+                      border: `1px solid ${img ? 'rgba(201,168,108,0.2)' : `${activeColor}22`}`,
+                      backgroundImage: img ? `url("${img}")` : undefined,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      background: img ? undefined : `${activeColor}0e`,
+                    }}
+                  >
+                    {img && (
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(6,4,4,0.93) 0%, rgba(6,4,4,0.45) 55%, rgba(6,4,4,0.15) 100%)' }} />
+                    )}
+                    <div className="relative z-10 p-4 flex flex-col h-full">
+                      <p className="font-cinzel text-[10px] tracking-widest uppercase mb-2"
+                        style={{ color: activeColor, opacity: 0.9 }}>
+                        {module}
+                      </p>
+                      <p className="font-garamond text-sm leading-snug flex-1"
+                        style={{ color: 'rgba(244,239,230,0.75)' }}>
+                        {tip}
+                      </p>
+                      <div className="flex items-center gap-1 mt-3"
+                        style={{ color: activeColor, opacity: 0.55 }}>
+                        <span className="font-cinzel text-[8px] tracking-widest uppercase">Explore</span>
+                        <ChevronRight size={9} />
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </>
