@@ -11,7 +11,17 @@ export default defineConfig({
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
-        additionalManifestEntries: [],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /\/images\/sessions\/.+\.webp$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'session-images-v1',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+        ],
       },
       manifest: {
         name: 'Athena',
