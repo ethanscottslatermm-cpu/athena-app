@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import ExerciseAnimation from './ExerciseAnimation'
 
 export default function ExerciseRow({ exercise, index, active = false }) {
   const [expanded, setExpanded] = useState(false)
@@ -46,20 +45,17 @@ export default function ExerciseRow({ exercise, index, active = false }) {
 
       {expanded && (
         <div className="px-4 pb-4" style={{ paddingLeft: '2.75rem' }}>
-          <div className="flex items-center gap-4 mb-3">
-            <ExerciseAnimation focusArea={exercise.focus_area} size={90} />
-            <div className="flex-1">
-              {exercise.form_cue && (
-                <p className="font-garamond italic text-ivory/50 text-sm leading-relaxed">
-                  {exercise.form_cue}
-                </p>
-              )}
-              {exercise.rest_sec > 0 && (
-                <p className="font-garamond text-ivory/28 text-xs mt-1.5">
-                  Rest {exercise.rest_sec}s after this exercise
-                </p>
-              )}
-            </div>
+          <div className="mb-3">
+            {exercise.form_cue && (
+              <p className="font-garamond italic text-ivory/50 text-sm leading-relaxed">
+                {exercise.form_cue}
+              </p>
+            )}
+            {exercise.rest_sec > 0 && (
+              <p className="font-garamond text-ivory/28 text-xs mt-1.5">
+                Rest {exercise.rest_sec}s after this exercise
+              </p>
+            )}
           </div>
         </div>
       )}
