@@ -259,8 +259,12 @@ export default function HomeTab({
             <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase">
               Recommended
             </p>
-            <button onClick={onSeeAll} className="font-garamond text-gold text-xs">
-              See all →
+            <button
+              onClick={onSeeAll}
+              className="font-cinzel text-gold text-[11px] tracking-wide px-3 py-1 rounded-lg"
+              style={{ background: 'rgba(201,168,108,0.12)', border: '1px solid rgba(201,168,108,0.35)' }}
+            >
+              See All →
             </button>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">

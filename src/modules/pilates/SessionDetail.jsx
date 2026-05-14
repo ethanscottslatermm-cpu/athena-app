@@ -99,9 +99,9 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
         <button
           onClick={onClose}
           className="absolute z-10 flex items-center justify-center rounded-full"
-          style={{ top: 52, left: 16, width: 40, height: 40, background: 'rgba(0,0,0,0.5)' }}
+          style={{ top: 52, left: 16, width: 44, height: 44, background: 'rgba(0,0,0,0.72)', border: '1px solid rgba(244,239,230,0.18)' }}
         >
-          <span className="text-ivory/80 text-xl leading-none">‹</span>
+          <span className="text-ivory text-2xl leading-none">‹</span>
         </button>
         <button
           onClick={() => onFavoriteToggle?.(session.id)}
@@ -150,7 +150,6 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
               className="flex flex-col items-center py-2.5 rounded-xl"
               style={{ background: 'rgba(201,168,108,0.07)', border: '1px solid rgba(201,168,108,0.12)' }}
             >
-              <span className="text-base mb-0.5">{icon}</span>
               <span className="font-garamond text-ivory/55 text-[10px] text-center leading-tight capitalize">
                 {label}
               </span>
