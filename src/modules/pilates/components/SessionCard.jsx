@@ -21,6 +21,8 @@ const SESSION_IMAGES = {
   'intuitive movement':       '/images/sessions/Intuitive Movement.webp',
   'peak power core':          '/images/sessions/Peak Power Core.webp',
   'strong arms & back':       '/images/sessions/Strong Arms & Back.webp',
+  'athletic flow':            '/images/sessions/Athletic Flow.webp',
+  'full body foundation':     '/images/sessions/Full Body Foundation.webp',
 }
 
 function getSessionImage(title) {
