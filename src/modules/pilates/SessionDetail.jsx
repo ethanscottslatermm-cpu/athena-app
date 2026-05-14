@@ -23,6 +23,10 @@ const SESSION_IMAGES = {
   'hip & glute release':      '/images/sessions/Hip & Glute Release.webp',
 }
 
+const HERO_POSITION = {
+  'gentle restoration flow': 'center 20%',
+}
+
 const PHASE_COLORS = {
   menstrual: '#8B1A1A',
   follicular: '#8FAF8A',
@@ -47,7 +51,9 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
   if (!session) return null
 
   const pc = PHASE_COLORS[session.phase] ?? '#C9A86C'
-  const heroImage = SESSION_IMAGES[(session.title ?? '').toLowerCase()]
+  const titleKey  = (session.title ?? '').toLowerCase()
+  const heroImage = SESSION_IMAGES[titleKey]
+  const heroPos   = HERO_POSITION[titleKey] ?? 'center'
   const phaseLabel = session.phase && session.phase !== 'all'
     ? session.phase.charAt(0).toUpperCase() + session.phase.slice(1)
     : 'All phases'
@@ -81,7 +87,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             src={heroImage}
             alt=""
             className="absolute inset-0 w-full h-full"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            style={{ objectFit: 'cover', objectPosition: heroPos }}
           />
         )}
         {heroImage && (
