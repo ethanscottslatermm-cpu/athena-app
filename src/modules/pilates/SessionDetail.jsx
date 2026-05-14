@@ -13,6 +13,8 @@ const SESSION_IMAGES = {
   'wind down restoration':    '/images/sessions/Wind Down Restoration.png',
   'mindful core & breathing': '/images/sessions/Mindful Core & Breathing.png',
   'intuitive movement':       '/images/sessions/Intuitive Movement.png',
+  'peak power core':          '/images/sessions/Peak Power Core.png',
+  'strong arms & back':       '/images/sessions/Strong Arms & Back.png',
 }
 
 const PHASE_COLORS = {
