@@ -318,30 +318,36 @@ export default function Dashboard() {
       <SectionHeader title="My Modules" delay={0.12} />
       <div className="module-scroll overflow-x-auto mb-6" style={anim(0.15)}>
         <div className="flex gap-4 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-          {MODULE_NAV.map(({ key, label, icon, to }) => (
-            <button
-              key={key}
-              onClick={() => navigate(to)}
-              className="flex flex-col items-center gap-2"
-              style={{ minWidth: '56px' }}
-            >
-              <div
-                className="flex items-center justify-center rounded-2xl"
-                style={{
-                  width: '56px', height: '56px',
-                  background: `${activeColor}15`,
-                  border: `1px solid ${activeColor}28`,
-                  transition: 'background 0.2s',
-                }}
+          {MODULE_NAV.map(({ key, label, icon, to }) => {
+            const tileImg = MODULE_IMAGES[label]
+            return (
+              <button
+                key={key}
+                onClick={() => navigate(to)}
+                className="flex flex-col items-center gap-2"
+                style={{ minWidth: '56px' }}
               >
-                <ModuleIcon src={icon} color={activeColor} />
-              </div>
-              <span className="font-garamond text-[10px] tracking-wide"
-                style={{ color: 'rgba(244,239,230,0.45)' }}>
-                {label}
-              </span>
-            </button>
-          ))}
+                <div
+                  className="flex items-center justify-center rounded-2xl overflow-hidden"
+                  style={{
+                    width: '56px', height: '56px',
+                    border: `1px solid ${tileImg ? 'rgba(201,168,108,0.3)' : `${activeColor}28`}`,
+                    ...(tileImg
+                      ? { backgroundImage: `url("${tileImg}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                      : { background: `${activeColor}15` }
+                    ),
+                    transition: 'opacity 0.2s',
+                  }}
+                >
+                  {!tileImg && <ModuleIcon src={icon} color={activeColor} />}
+                </div>
+                <span className="font-garamond text-[10px] tracking-wide"
+                  style={{ color: 'rgba(244,239,230,0.45)' }}>
+                  {label}
+                </span>
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -392,10 +398,10 @@ export default function Dashboard() {
                       width: '172px',
                       minHeight: '130px',
                       border: `1px solid ${img ? 'rgba(201,168,108,0.2)' : `${activeColor}22`}`,
-                      backgroundImage: img ? `url("${img}")` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      background: img ? undefined : `${activeColor}0e`,
+                      ...(img
+                        ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                        : { background: `${activeColor}0e` }
+                      ),
                     }}
                   >
                     {img && (
