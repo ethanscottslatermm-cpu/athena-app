@@ -315,10 +315,10 @@ export default function Login() {
           transition: background-color 5000s ease-in-out 0s, border-color 0.3s, filter 0.3s;
         }
 
-        .athena-hero-img { filter: contrast(1.38) brightness(1.07) saturate(1.22); }
+        .athena-hero-img { filter: contrast(1.12) brightness(1.22) saturate(1.06); }
         @media (min-width: 769px) {
           .athena-hero-img {
-            filter: contrast(1.06) brightness(1.02) saturate(1.06);
+            filter: contrast(1.04) brightness(1.12) saturate(1.02);
             object-position: center 20%;
           }
         }
@@ -365,8 +365,14 @@ export default function Login() {
         </div>
 
         {/* ── 2. Base vignette ── */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/40 via-transparent via-40% to-black/20" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/18 via-transparent to-black/18" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/20 via-transparent via-40% to-black/10" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/8 via-transparent to-black/8" />
+
+        {/* ── 2b. Feminine light bloom ── */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 90% 65% at 50% 35%, rgba(255,245,248,0.22) 0%, rgba(245,235,245,0.1) 50%, transparent 75%)',
+          mixBlendMode: 'screen',
+        }} />
 
         {/* ── 3. Cloud A ── */}
         <div
