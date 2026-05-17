@@ -22,7 +22,7 @@ const PARTICLES = Array.from({ length: 170 }, (_, i) => ({
     : (i * 37 + 13) % 100,
   y: (i * 53 + 7) % 100,
   size: 0.7 + (i % 5) * 0.45,
-  duration: 2.2 + (i % 7) * 0.65,
+  duration: 3.0 + (i % 7) * 0.85,
   delay: (i * 0.22) % 8,
   opacity: 0.35 + (i % 6) * 0.11,
   anim: ANIM_TYPES[i % ANIM_TYPES.length],
@@ -248,9 +248,9 @@ export default function Login() {
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
         @keyframes iconPulse {
-          0%   { opacity: 0.8;  filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(4) drop-shadow(0 0 4px rgba(255,220,80,0.5)); }
-          50%  { opacity: 1;    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(6) drop-shadow(0 0 14px rgba(255,225,80,1)) drop-shadow(0 0 28px rgba(255,200,60,0.6)); }
-          100% { opacity: 0.9;  filter: sepia(1) saturate(7) hue-rotate(10deg) brightness(5) drop-shadow(0 0 8px rgba(255,220,80,0.7)); }
+          0%   { opacity: 0.65; filter: sepia(1) saturate(5) hue-rotate(10deg) brightness(4); }
+          50%  { opacity: 1;    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(7) drop-shadow(0 0 16px rgba(255,225,80,1)) drop-shadow(0 0 30px rgba(255,200,60,0.65)); }
+          100% { opacity: 1;    filter: sepia(1) saturate(7) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 10px rgba(255,220,80,0.85)); }
         }
         @keyframes linePulse {
           0%, 100% { border-bottom-color: rgba(235,215,140,0.6); }
@@ -274,15 +274,13 @@ export default function Login() {
           height: 20px;
           object-fit: contain;
           pointer-events: none;
-          opacity: 0.82;
-          filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(4.5) drop-shadow(0 0 5px rgba(255,220,80,0.55));
+          opacity: 0.65;
+          filter: sepia(1) saturate(5) hue-rotate(10deg) brightness(4) drop-shadow(0 0 3px rgba(255,220,80,0.35));
           transition: opacity 0.3s, filter 0.4s;
-          animation: iconPulse 2.8s ease-in-out infinite;
         }
         .iw:focus-within .input-icon-img {
           opacity: 1;
-          filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(6) drop-shadow(0 0 12px rgba(255,225,80,0.9)) drop-shadow(0 0 24px rgba(255,200,60,0.5));
-          animation: iconPulse 1.4s ease-in-out infinite;
+          filter: sepia(1) saturate(7) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 10px rgba(255,225,80,0.85)) drop-shadow(0 0 22px rgba(255,200,60,0.45));
         }
         .input-icon-img.pulse {
           animation: iconPulse 0.6s ease forwards;
