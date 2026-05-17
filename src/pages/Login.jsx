@@ -240,21 +240,20 @@ export default function Login() {
           100% { box-shadow: 0 0 8px rgba(196,133,154,0.18); border-color: rgba(196,133,154,0.52); }
         }
         @keyframes placeholderPulse {
-          0%, 100% { color: rgba(235,210,130,0.6); text-shadow: none; }
-          50%      { color: rgba(255,238,155,0.95); text-shadow: 0 0 10px rgba(255,220,80,0.5), 0 0 22px rgba(255,200,60,0.25); }
+          0%, 100% { color: rgba(235,210,130,0.6);  text-shadow: 0 0 8px rgba(255,248,225,0.25), 0 0 20px rgba(255,240,205,0.12); }
+          50%      { color: rgba(255,238,155,0.95); text-shadow: 0 0 10px rgba(255,252,240,0.92), 0 0 26px rgba(255,246,220,0.65), 0 0 52px rgba(255,238,200,0.32); }
         }
         @keyframes accessWordPulse {
           0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
-        @keyframes iconPulse {
-          0%   { opacity: 0.65; filter: sepia(1) saturate(2.5) hue-rotate(5deg) brightness(8) drop-shadow(0 0 8px rgba(255,220,80,0.45)); }
-          50%  { opacity: 1;    filter: sepia(1) saturate(3.5) hue-rotate(5deg) brightness(12) drop-shadow(0 0 14px rgba(255,220,80,0.75)) drop-shadow(0 0 28px rgba(255,200,60,0.35)); }
-          100% { opacity: 0.95; filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(10) drop-shadow(0 0 10px rgba(255,220,80,0.5)) drop-shadow(0 0 22px rgba(255,200,60,0.25)); }
+        @keyframes iconColorPulse {
+          0%, 100% { color: rgba(235,210,130,0.6);  filter: drop-shadow(0 0 5px rgba(255,248,225,0.3)); }
+          50%      { color: rgba(255,238,155,0.95); filter: drop-shadow(0 0 12px rgba(255,252,240,0.88)) drop-shadow(0 0 26px rgba(255,246,215,0.45)); }
         }
         @keyframes linePulse {
-          0%, 100% { border-bottom-color: rgba(235,215,140,0.6); }
-          50%      { border-bottom-color: rgba(255,240,160,1); box-shadow: 0 1px 10px rgba(255,220,80,0.4); }
+          0%, 100% { border-bottom-color: rgba(235,215,140,0.55); box-shadow: 0 1px 8px rgba(255,248,220,0.15); }
+          50%      { border-bottom-color: rgba(255,238,155,0.95); box-shadow: 0 1px 14px rgba(255,252,235,0.7), 0 1px 32px rgba(255,244,210,0.38); }
         }
 
         .iw {
@@ -272,18 +271,9 @@ export default function Login() {
           transform: translateY(-50%);
           width: 20px;
           height: 20px;
-          object-fit: contain;
+          display: block;
           pointer-events: none;
-          opacity: 0.65;
-          filter: sepia(1) saturate(2.5) hue-rotate(5deg) brightness(8) drop-shadow(0 0 8px rgba(255,220,80,0.45));
-          transition: opacity 0.3s, filter 0.4s;
-        }
-        .iw:focus-within .input-icon-img {
-          opacity: 0.95;
-          filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(10) drop-shadow(0 0 10px rgba(255,220,80,0.5)) drop-shadow(0 0 22px rgba(255,200,60,0.25));
-        }
-        .input-icon-img.pulse {
-          animation: iconPulse 0.6s ease forwards;
+          animation: iconColorPulse 2.5s ease-in-out infinite;
         }
         .iw input:focus {
           border-color: rgba(255,235,140,0.85);
@@ -308,7 +298,7 @@ export default function Login() {
           transition: box-shadow 0.3s;
           caret-color: rgba(255,230,120,0.9);
           -webkit-appearance: none;
-          animation: linePulse 3s ease-in-out infinite;
+          animation: linePulse 2.5s ease-in-out infinite;
         }
         .athena-input::placeholder {
           font-family: 'Cormorant Garamond', serif;
@@ -317,9 +307,8 @@ export default function Login() {
           animation: placeholderPulse 2.5s ease-in-out infinite;
         }
         .athena-input:focus {
-          border-bottom-color: rgba(255,238,160,1);
-          box-shadow: 0 1px 10px rgba(255,220,80,0.3);
-          animation-play-state: paused;
+          border-bottom-color: rgba(255,238,155,1);
+          box-shadow: 0 1px 14px rgba(255,252,235,0.7), 0 1px 32px rgba(255,244,210,0.38);
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
@@ -729,10 +718,13 @@ export default function Login() {
             <form onSubmit={handleSubmit} noValidate>
               {/* Email row */}
               <div className="iw">
-                <img
-                  src={knightIcon}
-                  alt=""
+                <span
                   className="input-icon-img"
+                  style={{
+                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
+                    mask: `url(${knightIcon}) no-repeat center / contain`,
+                    backgroundColor: 'currentColor',
+                  }}
                 />
                 <input
                   className="athena-input"
@@ -746,22 +738,18 @@ export default function Login() {
                   spellCheck={false}
                   enterKeyHint="next"
                   disabled={loading}
-                  onFocus={(e) => {
-                    const icon = e.target.closest('.iw').querySelector('.input-icon-img')
-                    icon.classList.remove('pulse')
-                    void icon.offsetWidth
-                    icon.classList.add('pulse')
-                    icon.addEventListener('animationend', () => icon.classList.remove('pulse'), { once: true })
-                  }}
                 />
               </div>
 
               {/* Password row */}
               <div className="iw">
-                <img
-                  src={knightIcon}
-                  alt=""
+                <span
                   className="input-icon-img"
+                  style={{
+                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
+                    mask: `url(${knightIcon}) no-repeat center / contain`,
+                    backgroundColor: 'currentColor',
+                  }}
                 />
                 <input
                   className="athena-input"
@@ -773,13 +761,6 @@ export default function Login() {
                   enterKeyHint="go"
                   onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
                   disabled={loading}
-                  onFocus={(e) => {
-                    const icon = e.target.closest('.iw').querySelector('.input-icon-img')
-                    icon.classList.remove('pulse')
-                    void icon.offsetWidth
-                    icon.classList.add('pulse')
-                    icon.addEventListener('animationend', () => icon.classList.remove('pulse'), { once: true })
-                  }}
                 />
               </div>
 
