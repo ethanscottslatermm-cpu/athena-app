@@ -561,9 +561,7 @@ export default function Login() {
             style={{
               position: 'absolute', inset: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'rgba(242,237,232,0.5)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
+              background: 'transparent',
               animation: 'overlayIn 0.35s ease',
               zIndex: 30,
               padding: '28px 20px',
@@ -573,15 +571,15 @@ export default function Login() {
               width: '100%',
               maxWidth: '360px',
               maxHeight: '80vh',
-              background: 'rgba(242,237,232,0.92)',
-              backdropFilter: 'blur(32px)',
-              WebkitBackdropFilter: 'blur(32px)',
-              border: '1px solid rgba(196,133,154,0.3)',
+              background: 'rgba(242,237,232,0.08)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              border: '1px solid rgba(196,133,154,0.25)',
               borderRadius: '10px',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
-              boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
+              boxShadow: '0 8px 48px rgba(0,0,0,0.25)',
             }}>
 
               {/* Modal header */}
