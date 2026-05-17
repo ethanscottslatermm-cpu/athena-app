@@ -892,13 +892,13 @@ export default function Login() {
             margin: '0 auto 13px',
           }} />
           <span style={{
-            fontFamily: "'Great Vibes', cursive",
-            fontSize: 'clamp(58px, 16vw, 96px)',
+            fontFamily: "'Cinzel', serif",
+            fontSize: 'clamp(28px, 8vw, 50px)',
             fontWeight: 400,
             display: 'block',
-            letterSpacing: '0.04em',
+            letterSpacing: '0.26em',
             lineHeight: 1,
-            transform: 'scaleX(1)',
+            transform: 'scaleX(0.84)',
             backgroundImage: 'linear-gradient(90deg, rgba(212,208,232,0.82) 0%, rgba(212,208,232,0.82) 30%, rgba(240,237,252,0.95) 44%, rgba(248,246,255,1) 50%, rgba(240,237,252,0.95) 56%, rgba(212,208,232,0.82) 70%, rgba(212,208,232,0.82) 100%)',
             backgroundSize: '200% 100%',
             WebkitBackgroundClip: 'text',
@@ -908,7 +908,7 @@ export default function Login() {
             filter: 'drop-shadow(0 0 3px rgba(238,234,255,0.55)) drop-shadow(0 0 10px rgba(222,218,248,0.38)) drop-shadow(0 0 22px rgba(210,206,242,0.2))',
             animation: 'shimmer 5s linear infinite',
           }}>
-            Athena
+            ATHENA
           </span>
         </div>
 
