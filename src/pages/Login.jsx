@@ -240,20 +240,27 @@ export default function Login() {
           100% { box-shadow: 0 0 8px rgba(196,133,154,0.18); border-color: rgba(196,133,154,0.52); }
         }
         @keyframes placeholderPulse {
-          0%, 100% { color: rgba(235,210,130,0.6);  text-shadow: 0 0 8px rgba(255,248,225,0.25), 0 0 20px rgba(255,240,205,0.12); }
-          50%      { color: rgba(255,238,155,0.95); text-shadow: 0 0 10px rgba(255,252,240,0.92), 0 0 26px rgba(255,246,220,0.65), 0 0 52px rgba(255,238,200,0.32); }
+          0%, 25% { color: rgba(200,200,216,0.65); text-shadow: 0 0 6px rgba(230,230,248,0.22); }
+          50%     { color: rgba(232,232,242,1);    text-shadow: 0 0 10px rgba(255,255,255,0.88), 0 0 24px rgba(222,222,245,0.62), 0 0 48px rgba(200,200,235,0.28); }
+          75%, 100%{ color: rgba(200,200,216,0.65); text-shadow: 0 0 6px rgba(230,230,248,0.22); }
         }
         @keyframes accessWordPulse {
           0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
         @keyframes iconColorPulse {
-          0%, 100% { color: rgba(235,210,130,0.6);  filter: drop-shadow(0 0 5px rgba(255,248,225,0.3)); }
-          50%      { color: rgba(255,238,155,0.95); filter: drop-shadow(0 0 12px rgba(255,252,240,0.88)) drop-shadow(0 0 26px rgba(255,246,215,0.45)); }
+          0%, 25% { color: rgba(200,200,216,0.65); filter: drop-shadow(0 0 4px rgba(228,228,248,0.28)); }
+          50%     { color: rgba(232,232,242,1);    filter: drop-shadow(0 0 11px rgba(255,255,255,0.85)) drop-shadow(0 0 24px rgba(218,218,242,0.42)); }
+          75%, 100%{ color: rgba(200,200,216,0.65); filter: drop-shadow(0 0 4px rgba(228,228,248,0.28)); }
+        }
+        @keyframes inputIconShimmer {
+          0%, 35%   { background-position: -250% 0; }
+          65%, 100% { background-position:  250% 0; }
         }
         @keyframes linePulse {
-          0%, 100% { border-bottom-color: rgba(235,215,140,0.55); box-shadow: 0 1px 8px rgba(255,248,220,0.15); }
-          50%      { border-bottom-color: rgba(255,238,155,0.95); box-shadow: 0 1px 14px rgba(255,252,235,0.7), 0 1px 32px rgba(255,244,210,0.38); }
+          0%   { border-bottom-color: rgba(235,215,140,0.42); box-shadow: 0 1px 4px rgba(255,242,195,0.1); }
+          40%  { border-bottom-color: rgba(255,242,168,1);    box-shadow: 0 1px 16px rgba(255,248,215,0.72), 0 2px 38px rgba(255,236,188,0.34); }
+          100% { border-bottom-color: rgba(235,215,140,0.48); box-shadow: 0 1px 7px rgba(255,244,205,0.18); }
         }
 
         .iw {
@@ -276,12 +283,7 @@ export default function Login() {
           animation: iconColorPulse 2.5s ease-in-out infinite;
         }
         .iw input:focus {
-          border-color: rgba(255,235,140,0.85);
-          background: rgba(255,220,80,0.02);
-          box-shadow:
-            0 0 0 1px rgba(255,220,80,0.08),
-            0 0 24px rgba(255,210,70,0.06),
-            inset 0 0 16px rgba(255,210,70,0.03);
+          background: rgba(255,252,245,0.015);
         }
 
         .athena-input {
@@ -307,8 +309,8 @@ export default function Login() {
           animation: placeholderPulse 2.5s ease-in-out infinite;
         }
         .athena-input:focus {
-          border-bottom-color: rgba(255,238,155,1);
-          box-shadow: 0 1px 14px rgba(255,252,235,0.7), 0 1px 32px rgba(255,244,210,0.38);
+          border-bottom-color: rgba(255,242,168,1);
+          box-shadow: 0 1px 16px rgba(255,248,215,0.72), 0 2px 38px rgba(255,236,188,0.34);
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
@@ -718,14 +720,24 @@ export default function Login() {
             <form onSubmit={handleSubmit} noValidate>
               {/* Email row */}
               <div className="iw">
-                <span
-                  className="input-icon-img"
-                  style={{
+                <span className="input-icon-img">
+                  <span style={{
+                    display: 'block', width: '100%', height: '100%',
                     WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
                     mask: `url(${knightIcon}) no-repeat center / contain`,
                     backgroundColor: 'currentColor',
-                  }}
-                />
+                  }} />
+                  <span style={{
+                    position: 'absolute', inset: 0,
+                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
+                    mask: `url(${knightIcon}) no-repeat center / contain`,
+                    background: 'linear-gradient(110deg, transparent 25%, rgba(248,248,255,0.82) 50%, transparent 75%)',
+                    backgroundSize: '250% 100%',
+                    animation: 'inputIconShimmer 4s ease-in-out infinite',
+                    mixBlendMode: 'screen',
+                    pointerEvents: 'none',
+                  }} />
+                </span>
                 <input
                   className="athena-input"
                   type="email"
@@ -743,14 +755,24 @@ export default function Login() {
 
               {/* Password row */}
               <div className="iw">
-                <span
-                  className="input-icon-img"
-                  style={{
+                <span className="input-icon-img">
+                  <span style={{
+                    display: 'block', width: '100%', height: '100%',
                     WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
                     mask: `url(${knightIcon}) no-repeat center / contain`,
                     backgroundColor: 'currentColor',
-                  }}
-                />
+                  }} />
+                  <span style={{
+                    position: 'absolute', inset: 0,
+                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
+                    mask: `url(${knightIcon}) no-repeat center / contain`,
+                    background: 'linear-gradient(110deg, transparent 25%, rgba(248,248,255,0.82) 50%, transparent 75%)',
+                    backgroundSize: '250% 100%',
+                    animation: 'inputIconShimmer 4s ease-in-out infinite',
+                    mixBlendMode: 'screen',
+                    pointerEvents: 'none',
+                  }} />
+                </span>
                 <input
                   className="athena-input"
                   type="password"
