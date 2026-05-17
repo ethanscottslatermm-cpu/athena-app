@@ -240,17 +240,17 @@ export default function Login() {
           100% { box-shadow: 0 0 8px rgba(196,133,154,0.18); border-color: rgba(196,133,154,0.52); }
         }
         @keyframes placeholderPulse {
-          0%, 100% { color: rgba(59,51,48,0.45); text-shadow: none; }
-          50%      { color: rgba(59,51,48,0.85); text-shadow: none; }
+          0%, 100% { color: rgba(235,210,130,0.6); text-shadow: none; }
+          50%      { color: rgba(255,238,155,0.95); text-shadow: 0 0 10px rgba(255,220,80,0.5), 0 0 22px rgba(255,200,60,0.25); }
         }
         @keyframes accessWordPulse {
           0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
         @keyframes iconPulse {
-          0%   { opacity: 0.65; filter: sepia(1) saturate(5) hue-rotate(10deg) brightness(4); }
-          50%  { opacity: 1;    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(7) drop-shadow(0 0 16px rgba(255,225,80,1)) drop-shadow(0 0 30px rgba(255,200,60,0.65)); }
-          100% { opacity: 1;    filter: sepia(1) saturate(7) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 10px rgba(255,220,80,0.85)); }
+          0%   { opacity: 0.82; filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 6px rgba(255,220,80,0.55)); }
+          50%  { opacity: 1;    filter: sepia(1) saturate(9) hue-rotate(10deg) brightness(8) drop-shadow(0 0 18px rgba(255,225,80,1)) drop-shadow(0 0 34px rgba(255,200,60,0.65)); }
+          100% { opacity: 1;    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(7) drop-shadow(0 0 12px rgba(255,220,80,0.95)); }
         }
         @keyframes linePulse {
           0%, 100% { border-bottom-color: rgba(235,215,140,0.6); }
@@ -274,30 +274,30 @@ export default function Login() {
           height: 20px;
           object-fit: contain;
           pointer-events: none;
-          opacity: 0.65;
-          filter: sepia(1) saturate(5) hue-rotate(10deg) brightness(4) drop-shadow(0 0 3px rgba(255,220,80,0.35));
+          opacity: 0.82;
+          filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 6px rgba(255,220,80,0.55));
           transition: opacity 0.3s, filter 0.4s;
         }
         .iw:focus-within .input-icon-img {
           opacity: 1;
-          filter: sepia(1) saturate(7) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 10px rgba(255,225,80,0.85)) drop-shadow(0 0 22px rgba(255,200,60,0.45));
+          filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(7) drop-shadow(0 0 12px rgba(255,225,80,0.95)) drop-shadow(0 0 26px rgba(255,200,60,0.5));
         }
         .input-icon-img.pulse {
           animation: iconPulse 0.6s ease forwards;
         }
         .iw input:focus {
-          border-color: rgba(196,133,154,0.8);
-          background: rgba(196,133,154,0.04);
+          border-color: rgba(255,235,140,0.85);
+          background: rgba(255,220,80,0.02);
           box-shadow:
-            0 0 0 1px rgba(196,133,154,0.1),
-            0 0 24px rgba(196,133,154,0.06),
-            inset 0 0 16px rgba(196,133,154,0.03);
+            0 0 0 1px rgba(255,220,80,0.08),
+            0 0 24px rgba(255,210,70,0.06),
+            inset 0 0 16px rgba(255,210,70,0.03);
         }
 
         .athena-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(196,133,154,0.6);
+          border-bottom: 1px solid rgba(235,215,140,0.65);
           outline: none;
           color: rgba(59,51,48,0.92);
           font-family: 'Cormorant Garamond', serif;
@@ -305,9 +305,10 @@ export default function Login() {
           letter-spacing: 0.22em;
           padding: 7px 0 7px 6px;
           width: 100%;
-          transition: border-color 0.3s, box-shadow 0.3s;
-          caret-color: rgba(196,133,154,0.8);
+          transition: box-shadow 0.3s;
+          caret-color: rgba(255,230,120,0.9);
           -webkit-appearance: none;
+          animation: linePulse 3s ease-in-out infinite;
         }
         .athena-input::placeholder {
           font-family: 'Cormorant Garamond', serif;
@@ -316,8 +317,9 @@ export default function Login() {
           animation: placeholderPulse 2.5s ease-in-out infinite;
         }
         .athena-input:focus {
-          border-bottom-color: rgba(196,133,154,0.95);
-          animation: inputFocusPulse 0.5s ease forwards;
+          border-bottom-color: rgba(255,238,160,1);
+          box-shadow: 0 1px 10px rgba(255,220,80,0.3);
+          animation-play-state: paused;
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
