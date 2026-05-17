@@ -240,18 +240,18 @@ export default function Login() {
           100% { box-shadow: 0 0 8px rgba(196,133,154,0.18); border-color: rgba(196,133,154,0.52); }
         }
         @keyframes placeholderPulse {
-          0%, 25% { color: rgba(200,185,230,0.65); text-shadow: 0 0 6px rgba(220,205,252,0.25); }
-          50%     { color: rgba(232,222,252,1);    text-shadow: 0 0 10px rgba(255,255,255,0.88), 0 0 24px rgba(222,210,252,0.65), 0 0 48px rgba(190,170,238,0.3); }
-          75%, 100%{ color: rgba(200,185,230,0.65); text-shadow: 0 0 6px rgba(220,205,252,0.25); }
+          0%, 25% { color: rgba(215,210,232,0.65); text-shadow: 0 0 6px rgba(230,226,248,0.22); }
+          50%     { color: rgba(240,237,252,1);    text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 24px rgba(228,224,250,0.6), 0 0 48px rgba(208,204,240,0.26); }
+          75%, 100%{ color: rgba(215,210,232,0.65); text-shadow: 0 0 6px rgba(230,226,248,0.22); }
         }
         @keyframes accessWordPulse {
           0%, 100% { opacity: 0.68; filter: drop-shadow(0 0 2px rgba(255,255,255,0.2)); }
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
         @keyframes iconColorPulse {
-          0%, 25% { color: rgba(200,185,230,0.65); filter: drop-shadow(0 0 4px rgba(218,202,252,0.3)); }
-          50%     { color: rgba(232,222,252,1);    filter: drop-shadow(0 0 11px rgba(255,255,255,0.88)) drop-shadow(0 0 24px rgba(210,192,252,0.45)); }
-          75%, 100%{ color: rgba(200,185,230,0.65); filter: drop-shadow(0 0 4px rgba(218,202,252,0.3)); }
+          0%, 25% { color: rgba(215,210,232,0.65); filter: drop-shadow(0 0 4px rgba(228,225,248,0.28)); }
+          50%     { color: rgba(240,237,252,1);    filter: drop-shadow(0 0 11px rgba(255,255,255,0.9)) drop-shadow(0 0 24px rgba(222,218,248,0.42)); }
+          75%, 100%{ color: rgba(215,210,232,0.65); filter: drop-shadow(0 0 4px rgba(228,225,248,0.28)); }
         }
         @keyframes inputIconShimmer {
           0%, 35%   { background-position: -250% 0; }
@@ -725,7 +725,7 @@ export default function Login() {
                     position: 'absolute', inset: 0,
                     WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
                     mask: `url(${knightIcon}) no-repeat center / contain`,
-                    background: 'linear-gradient(110deg, transparent 25%, rgba(245,238,255,0.85) 50%, transparent 75%)',
+                    background: 'linear-gradient(110deg, transparent 25%, rgba(250,248,255,0.85) 50%, transparent 75%)',
                     backgroundSize: '250% 100%',
                     animation: 'inputIconShimmer 4s ease-in-out infinite',
                     mixBlendMode: 'screen',
@@ -760,7 +760,7 @@ export default function Login() {
                     position: 'absolute', inset: 0,
                     WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
                     mask: `url(${knightIcon}) no-repeat center / contain`,
-                    background: 'linear-gradient(110deg, transparent 25%, rgba(245,238,255,0.85) 50%, transparent 75%)',
+                    background: 'linear-gradient(110deg, transparent 25%, rgba(250,248,255,0.85) 50%, transparent 75%)',
                     backgroundSize: '250% 100%',
                     animation: 'inputIconShimmer 4s ease-in-out infinite',
                     mixBlendMode: 'screen',
@@ -895,13 +895,13 @@ export default function Login() {
             letterSpacing: '0.26em',
             lineHeight: 1,
             transform: 'scaleX(0.84)',
-            backgroundImage: 'linear-gradient(90deg, rgba(200,185,230,0.82) 0%, rgba(200,185,230,0.82) 30%, rgba(235,225,252,0.95) 44%, rgba(245,238,255,1) 50%, rgba(235,225,252,0.95) 56%, rgba(200,185,230,0.82) 70%, rgba(200,185,230,0.82) 100%)',
+            backgroundImage: 'linear-gradient(90deg, rgba(212,208,232,0.82) 0%, rgba(212,208,232,0.82) 30%, rgba(240,237,252,0.95) 44%, rgba(248,246,255,1) 50%, rgba(240,237,252,0.95) 56%, rgba(212,208,232,0.82) 70%, rgba(212,208,232,0.82) 100%)',
             backgroundSize: '200% 100%',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             textShadow: 'none',
-            filter: 'drop-shadow(0 0 3px rgba(230,218,255,0.55)) drop-shadow(0 0 10px rgba(210,195,252,0.38)) drop-shadow(0 0 22px rgba(188,170,238,0.2))',
+            filter: 'drop-shadow(0 0 3px rgba(238,234,255,0.55)) drop-shadow(0 0 10px rgba(222,218,248,0.38)) drop-shadow(0 0 22px rgba(210,206,242,0.2))',
             animation: 'shimmer 5s linear infinite',
           }}>
             ATHENA
