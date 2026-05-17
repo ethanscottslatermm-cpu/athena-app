@@ -1,7 +1,7 @@
-﻿import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { differenceInDays, format } from 'date-fns'
 
-const MOOD_COLORS  = ['#C4859A', '#C4AFA8', 'rgba(37,34,32,0.4)', '#8FA58C', '#C4859A']
+const MOOD_COLORS  = ['#C4859A', '#C4AFA8', 'rgba(59,51,48,0.4)', '#8FA58C', '#C4859A']
 const MOOD_LABELS  = ['Low', 'Anxious', 'Neutral', 'Good', 'Great']
 
 // ── SVG bar chart ─────────────────────────────────────────────────────────────
@@ -27,14 +27,14 @@ function BarChart({ values, barColor, labels }) {
             <rect x={x} y={y} width={barW} height={bH} fill={barColor} rx={3} opacity={0.8} />
             <text
               x={x + barW / 2} y={H + 14}
-              textAnchor="middle" fill="rgba(37,34,32,0.3)"
+              textAnchor="middle" fill="rgba(59,51,48,0.3)"
               fontSize={9} fontFamily="Cormorant Garamond, serif"
             >
               {labels ? labels[i] : `C${i + 1}`}
             </text>
             <text
               x={x + barW / 2} y={y - 3}
-              textAnchor="middle" fill="rgba(37,34,32,0.45)"
+              textAnchor="middle" fill="rgba(59,51,48,0.45)"
               fontSize={8} fontFamily="Cormorant Garamond, serif"
             >
               {v}
@@ -45,9 +45,9 @@ function BarChart({ values, barColor, labels }) {
       {/* Avg dashed line */}
       <line
         x1={0} y1={avgY} x2={W} y2={avgY}
-        stroke="rgba(37,34,32,0.25)" strokeWidth={1} strokeDasharray="4 4"
+        stroke="rgba(59,51,48,0.25)" strokeWidth={1} strokeDasharray="4 4"
       />
-      <text x={W - 4} y={avgY - 3} textAnchor="end" fill="rgba(37,34,32,0.25)" fontSize={8}>
+      <text x={W - 4} y={avgY - 3} textAnchor="end" fill="rgba(59,51,48,0.25)" fontSize={8}>
         avg
       </text>
     </svg>
@@ -228,7 +228,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
       {stats.topSymptoms.length > 0 && (
         <div
           className="rounded-xl p-4"
-          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.46)' }}
+          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
         >
           <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-3">Most Logged Symptoms</p>
           <div className="space-y-2.5">
@@ -238,7 +238,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
                   <span className="font-garamond text-brown/70 text-sm">{name}</span>
                   <span className="font-garamond text-brown/40 text-xs">{pct}%</span>
                 </div>
-                <div className="h-1.5 rounded-full" style={{ background: 'rgba(37,34,32,0.08)' }}>
+                <div className="h-1.5 rounded-full" style={{ background: 'rgba(59,51,48,0.08)' }}>
                   <div
                     className="h-full rounded-full transition-all"
                     style={{ width: `${pct}%`, background: 'rgba(196,133,154,0.65)' }}
@@ -279,7 +279,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
       {cycles.length > 0 && (
         <div
           className="rounded-xl overflow-hidden"
-          style={{ border: '1px solid rgba(37,34,32,0.08)' }}
+          style={{ border: '1px solid rgba(59,51,48,0.08)' }}
         >
           <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase px-4 pt-4 pb-2">
             Cycle History
@@ -300,7 +300,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
                 <button
                   onClick={() => setExpanded(isOpen ? null : i)}
                   className="w-full flex items-center justify-between px-4 py-3 transition-colors hover:bg-white/5 text-left"
-                  style={{ borderTop: i > 0 ? '1px solid rgba(196,175,168,0.40)' : 'none' }}
+                  style={{ borderTop: i > 0 ? '1px solid rgba(196,175,168,0.25)' : 'none' }}
                 >
                   <div>
                     <span className="font-cinzel text-brown/60 text-[10px] tracking-widest mr-2">

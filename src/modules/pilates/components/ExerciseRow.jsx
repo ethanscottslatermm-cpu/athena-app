@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 
 export default function ExerciseRow({ exercise, index, active = false }) {
   const [expanded, setExpanded] = useState(false)
@@ -30,7 +30,7 @@ export default function ExerciseRow({ exercise, index, active = false }) {
         </span>
         <span
           className="font-garamond text-sm flex-1 leading-tight"
-          style={{ color: active ? '#252220' : 'rgba(37,34,32,0.75)' }}
+          style={{ color: active ? '#3B3330' : 'rgba(59,51,48,0.75)' }}
         >
           {exercise.name}
         </span>

@@ -1,4 +1,4 @@
-﻿export default function ProgressRing({ value = 0, max = 1, size = 96, strokeWidth = 7, color = '#C4859A' }) {
+export default function ProgressRing({ value = 0, max = 1, size = 96, strokeWidth = 7, color = '#C4859A' }) {
   const r = (size - strokeWidth) / 2
   const circ = 2 * Math.PI * r
   const offset = circ * (1 - Math.min(1, max > 0 ? value / max : 0))
@@ -7,7 +7,7 @@
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', position: 'absolute', top: 0, left: 0 }}>
         <circle cx={size / 2} cy={size / 2} r={r}
-          fill="none" stroke="rgba(37,34,32,0.1)" strokeWidth={strokeWidth} />
+          fill="none" stroke="rgba(59,51,48,0.1)" strokeWidth={strokeWidth} />
         <circle cx={size / 2} cy={size / 2} r={r}
           fill="none" stroke={color} strokeWidth={strokeWidth}
           strokeLinecap="round"

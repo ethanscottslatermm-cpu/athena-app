@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 
 function formatTime(s) {
   const m = Math.floor(s / 60)
@@ -55,7 +55,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
             <div
               key={label}
               className="flex flex-col items-center py-3 px-4 rounded-xl"
-              style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.58)' }}
+              style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.4)' }}
             >
               <span className="text-base mb-1">{icon}</span>
               <span className="font-cinzel text-rose text-sm capitalize">{value}</span>
@@ -77,7 +77,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
                 className="w-10 h-10 flex items-center justify-center text-2xl transition-transform"
                 style={{
                   transform: (hovered || rating) >= star ? 'scale(1.2)' : 'scale(1)',
-                  color: (hovered || rating) >= star ? '#C4859A' : 'rgba(37,34,32,0.2)',
+                  color: (hovered || rating) >= star ? '#C4859A' : 'rgba(59,51,48,0.2)',
                 }}
               >
                 ★

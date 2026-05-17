@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
 import BodyHeatmap from './components/BodyHeatmap'
 
@@ -43,14 +43,14 @@ function WeeklyBarChart({ data }) {
           <g key={i}>
             <rect
               x={x} y={y} width={barW} height={bH}
-              fill={d.minutes > 0 ? '#C4859A' : 'rgba(37,34,32,0.08)'}
+              fill={d.minutes > 0 ? '#C4859A' : 'rgba(59,51,48,0.08)'}
               rx={3}
               opacity={isToday ? 1 : 0.75}
             />
             <text
               x={x + barW / 2} y={H + 14}
               textAnchor="middle"
-              fill={isToday ? 'rgba(196,133,154,0.8)' : 'rgba(37,34,32,0.35)'}
+              fill={isToday ? 'rgba(196,133,154,0.8)' : 'rgba(59,51,48,0.35)'}
               fontSize={9}
               fontFamily="Cormorant Garamond, serif"
             >
@@ -91,7 +91,7 @@ function PhaseDonut({ data, total }) {
           return seg
         })}
         {total === 0 && (
-          <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(37,34,32,0.08)" strokeWidth={10} />
+          <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(59,51,48,0.08)" strokeWidth={10} />
         )}
       </svg>
       <div className="space-y-1.5 flex-1">
@@ -147,13 +147,13 @@ function MonthHeatmap({ completions }) {
                   ? 'rgba(196,133,154,0.75)'
                   : count === 1
                   ? 'rgba(196,133,154,0.35)'
-                  : 'rgba(37,34,32,0.06)',
+                  : 'rgba(59,51,48,0.06)',
                 border: isToday ? '1px solid rgba(196,133,154,0.5)' : 'none',
               }}
             >
               <span
                 className="font-garamond text-[8px]"
-                style={{ color: count > 0 ? '#F2EDE8' : 'rgba(37,34,32,0.3)' }}
+                style={{ color: count > 0 ? '#F2EDE8' : 'rgba(59,51,48,0.3)' }}
               >
                 {format(day, 'd')}
               </span>
@@ -239,7 +239,7 @@ export default function ProgressTab({
     return (
       <div
         className="flex flex-col items-center justify-center py-16 rounded-2xl text-center"
-        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.46)' }}
+        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
       >
         <span className="text-3xl mb-3">✦</span>
         <p className="font-cinzel text-brown/40 text-sm mb-2">No sessions completed yet</p>
@@ -277,7 +277,7 @@ export default function ProgressTab({
       {/* ── Monthly heatmap ─────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.46)' }}
+        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
       >
         <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           {format(today, 'MMMM yyyy')}
@@ -288,7 +288,7 @@ export default function ProgressTab({
       {/* ── Body heatmap ────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.46)' }}
+        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
       >
         <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           Body Area Focus

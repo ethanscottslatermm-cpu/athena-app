@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
@@ -18,7 +18,7 @@ function TabIcon({ src, active }) {
       flexShrink: 0,
       WebkitMask: `url(${src}) no-repeat center / contain`,
       mask: `url(${src}) no-repeat center / contain`,
-      backgroundColor: active ? '#C4859A' : 'rgba(37,34,32,0.35)',
+      backgroundColor: active ? '#C4859A' : 'rgba(59,51,48,0.35)',
       transition: 'background-color 0.2s',
     }} />
   )
@@ -204,7 +204,7 @@ export default function PilatesStudio() {
               <TabIcon src={tab.icon} active={activeTab === tab.id} />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(37,34,32,0.45)' }}
+                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(59,51,48,0.45)' }}
               >
                 {tab.label.toUpperCase()}
               </span>
@@ -221,7 +221,7 @@ export default function PilatesStudio() {
           background: 'rgba(242,237,232,0.92)',
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
-          borderTop: '1px solid rgba(196,175,168,0.58)',
+          borderTop: '1px solid rgba(196,175,168,0.4)',
         }}
       >
         <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">

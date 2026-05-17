@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { seedPilates } from '../lib/seedPilates'
 
 export default function SeedPage() {
@@ -59,7 +59,7 @@ export default function SeedPage() {
       {log.length > 0 && (
         <div
           className="rounded-xl p-4 space-y-1"
-          style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.52)' }}
+          style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.35)' }}
         >
           {log.map((l, i) => (
             <p key={i} className="font-garamond text-sm" style={{ color: l.ok ? '#8FAF8A' : '#C49A9A' }}>

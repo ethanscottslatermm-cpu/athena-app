@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 function formatTime(s) {
   const m = Math.floor(s / 60)
@@ -76,7 +76,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
       style={{ background: '#F2EDE8' }}
     >
       {/* ── Top progress bar ────────────────────────────────────────────── */}
-      <div className="h-1 w-full" style={{ background: 'rgba(37,34,32,0.1)' }}>
+      <div className="h-1 w-full" style={{ background: 'rgba(59,51,48,0.1)' }}>
         <div
           className="h-full transition-all duration-500"
           style={{ width: `${pct}%`, background: '#C4859A' }}
@@ -189,9 +189,9 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
                 className="shrink-0 px-3 py-2 rounded-lg font-garamond text-xs text-center"
                 style={{
                   minWidth: 80,
-                  background: isCurrent ? 'rgba(196,133,154,0.18)' : isNext ? 'rgba(37,34,32,0.06)' : 'rgba(196,175,168,0.2)',
-                  border: isCurrent ? '1px solid rgba(196,133,154,0.6)' : isNext ? '1px solid rgba(37,34,32,0.15)' : '1px solid rgba(196,175,168,0.46)',
-                  color: isCurrent ? '#C4859A' : isNext ? 'rgba(37,34,32,0.7)' : 'rgba(37,34,32,0.35)',
+                  background: isCurrent ? 'rgba(196,133,154,0.18)' : isNext ? 'rgba(59,51,48,0.06)' : 'rgba(196,175,168,0.2)',
+                  border: isCurrent ? '1px solid rgba(196,133,154,0.6)' : isNext ? '1px solid rgba(59,51,48,0.15)' : '1px solid rgba(196,175,168,0.3)',
+                  color: isCurrent ? '#C4859A' : isNext ? 'rgba(59,51,48,0.7)' : 'rgba(59,51,48,0.35)',
                 }}
               >
                 {ex.name}
@@ -205,7 +205,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
       {showExitModal && (
         <div
           className="absolute inset-0 z-10 flex items-center justify-center px-8"
-          style={{ background: 'rgba(37,34,32,0.55)' }}
+          style={{ background: 'rgba(59,51,48,0.55)' }}
         >
           <div
             className="w-full rounded-2xl p-6 text-center"
@@ -217,7 +217,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
               <button
                 onClick={() => setShowExitModal(false)}
                 className="flex-1 py-3 rounded-xl font-garamond text-sm text-brown/60"
-                style={{ border: '1px solid rgba(37,34,32,0.2)' }}
+                style={{ border: '1px solid rgba(59,51,48,0.2)' }}
               >
                 Keep Going
               </button>

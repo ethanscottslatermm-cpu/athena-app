@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { supabase } from '../../lib/supabase'
 
@@ -167,7 +167,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
           <button
             onClick={() => { setPeriodOn(p => !p); if (!periodOn && flow === 0) setFlow(2) }}
             className="relative w-11 h-6 rounded-full transition-all"
-            style={{ background: periodOn ? '#C4859A' : 'rgba(37,34,32,0.15)' }}
+            style={{ background: periodOn ? '#C4859A' : 'rgba(59,51,48,0.15)' }}
           >
             <div
               className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all shadow"
@@ -186,7 +186,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               >
                 <span
                   className="text-xl transition-all"
-                  style={{ color: flow >= i + 1 ? '#C4859A' : 'rgba(37,34,32,0.18)' }}
+                  style={{ color: flow >= i + 1 ? '#C4859A' : 'rgba(59,51,48,0.18)' }}
                 >
                   {flow >= i + 1 ? '💧' : '○'}
                 </span>
@@ -214,8 +214,8 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                       className="font-garamond text-xs py-1.5 px-2 rounded-lg text-center transition-all leading-tight"
                       style={{
                         background: on ? 'rgba(196,133,154,0.18)' : 'transparent',
-                        border: on ? '1px solid rgba(196,133,154,0.6)' : '1px solid rgba(37,34,32,0.18)',
-                        color: on ? '#C4859A' : 'rgba(37,34,32,0.5)',
+                        border: on ? '1px solid rgba(196,133,154,0.6)' : '1px solid rgba(59,51,48,0.18)',
+                        color: on ? '#C4859A' : 'rgba(59,51,48,0.5)',
                       }}
                     >
                       {sym}
@@ -241,8 +241,8 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
                 style={{
-                  border: mood === m.value ? '2px solid #C4859A' : '2px solid rgba(37,34,32,0.1)',
-                  background: mood === m.value ? 'rgba(196,133,154,0.12)' : 'rgba(37,34,32,0.05)',
+                  border: mood === m.value ? '2px solid #C4859A' : '2px solid rgba(59,51,48,0.1)',
+                  background: mood === m.value ? 'rgba(196,133,154,0.12)' : 'rgba(59,51,48,0.05)',
                 }}
               >
                 <img
@@ -266,7 +266,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
       {/* ── Body Stats ───────────────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4 space-y-4"
-        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.52)' }}
+        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.35)' }}
       >
         <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase">Body Stats</p>
 
@@ -327,7 +327,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                 <button key={i} onClick={() => setWater(i + 1)}>
                   <span
                     className="text-sm transition-all"
-                    style={{ color: i < water ? '#C4859A' : 'rgba(37,34,32,0.18)' }}
+                    style={{ color: i < water ? '#C4859A' : 'rgba(59,51,48,0.18)' }}
                   >
                     {i < water ? '💧' : '○'}
                   </span>

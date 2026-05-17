@@ -1,4 +1,4 @@
-﻿const PHASE_COLORS = {
+const PHASE_COLORS = {
   menstrual: '#C4859A',
   follicular: '#8FA58C',
   ovulation: '#C4859A',
@@ -37,7 +37,7 @@ function Heart({ filled, size = 18 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24"
       fill={filled ? '#C4859A' : 'none'}
-      stroke={filled ? '#C4859A' : 'rgba(37,34,32,0.4)'}
+      stroke={filled ? '#C4859A' : 'rgba(59,51,48,0.4)'}
       strokeWidth={2}
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -83,7 +83,7 @@ export default function SessionCard({
 
   // Overlay gradient — deeper when there's a photo so text stays readable
   const overlayStyle = img
-    ? { background: 'linear-gradient(to bottom, rgba(37,34,32,0.04) 0%, rgba(37,34,32,0.45) 45%, rgba(37,34,32,0.88) 100%)' }
+    ? { background: 'linear-gradient(to bottom, rgba(59,51,48,0.04) 0%, rgba(59,51,48,0.45) 45%, rgba(59,51,48,0.88) 100%)' }
     : { background: `linear-gradient(to bottom, transparent 0%, rgba(242,237,232,0.5) 60%, rgba(242,237,232,0.85) 100%)` }
 
   // ── Featured (full-width, 220px tall) ────────────────────────────────────
@@ -92,7 +92,7 @@ export default function SessionCard({
       <div
         onClick={onTap}
         className="relative w-full rounded-2xl overflow-hidden cursor-pointer"
-        style={{ height: 220, border: `1px solid ${img ? 'rgba(196,175,168,0.52)' : `${pc}45`}`, ...bgStyle }}
+        style={{ height: 220, border: `1px solid ${img ? 'rgba(196,175,168,0.35)' : `${pc}45`}`, ...bgStyle }}
       >
         <div className="absolute inset-0" style={overlayStyle} />
 
@@ -145,7 +145,7 @@ export default function SessionCard({
       <div
         onClick={onTap}
         className="relative shrink-0 rounded-xl overflow-hidden cursor-pointer"
-        style={{ width: 160, height: 210, border: `1px solid ${img ? 'rgba(196,175,168,0.49)' : `${pc}40`}`, ...bgStyle }}
+        style={{ width: 160, height: 210, border: `1px solid ${img ? 'rgba(196,175,168,0.32)' : `${pc}40`}`, ...bgStyle }}
       >
         <div className="absolute inset-0" style={overlayStyle} />
 

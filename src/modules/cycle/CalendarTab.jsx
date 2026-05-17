@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { format, differenceInDays, addMonths, isSameMonth } from 'date-fns'
 import {
   getPhaseForDate,
@@ -54,7 +54,7 @@ function DayCell({ cell, highlight, onClick }) {
 
   let bg          = 'transparent'
   let border      = 'transparent'
-  let textColor   = isPast ? 'rgba(37,34,32,0.85)' : 'rgba(37,34,32,0.4)'
+  let textColor   = isPast ? 'rgba(59,51,48,0.85)' : 'rgba(59,51,48,0.4)'
   let glow        = false
   let opacity     = 1
 
@@ -73,18 +73,18 @@ function DayCell({ cell, highlight, onClick }) {
     glow      = true
   } else if (phase === 'menstrual') {
     bg        = isPast ? 'rgba(196,133,154,0.6)' : 'rgba(196,133,154,0.25)'
-    textColor = isPast ? '#F2EDE8' : 'rgba(37,34,32,0.55)'
+    textColor = isPast ? '#F2EDE8' : 'rgba(59,51,48,0.55)'
   } else if (fertile) {
     border    = '#C4859A'
     bg        = 'rgba(196,133,154,0.1)'
   } else if (phase === 'follicular') {
     bg        = isPast ? 'rgba(143,165,140,0.35)' : 'rgba(143,165,140,0.15)'
   } else if (phase === 'luteal') {
-    bg        = isPast ? 'rgba(196,175,168,0.62)' : 'rgba(196,175,168,0.2)'
+    bg        = isPast ? 'rgba(196,175,168,0.45)' : 'rgba(196,175,168,0.2)'
   }
 
   if (isToday && !ovulation) {
-    border = 'rgba(37,34,32,0.6)'
+    border = 'rgba(59,51,48,0.6)'
   }
 
   return (
@@ -112,7 +112,7 @@ function DayDetailSheet({ cell, symptoms, phaseData, onClose, onQuickLog }) {
   const log = symptoms.find(s => s.logged_date === cell.dateStr)
 
   const phaseName = cell.phase ? phaseLabels[cell.phase] : '—'
-  const phaseCol  = cell.phase ? phaseColors[cell.phase] : '#5A4C48'
+  const phaseCol  = cell.phase ? phaseColors[cell.phase] : '#7A6A65'
 
   const loggedSymptoms = []
   if (log?.cramps)            loggedSymptoms.push('Cramps')
@@ -132,7 +132,7 @@ function DayDetailSheet({ cell, symptoms, phaseData, onClose, onQuickLog }) {
         className="w-full rounded-t-3xl p-6 pb-10"
         style={{
           background: 'rgba(242,237,232,0.97)',
-          border: '1px solid rgba(196,175,168,0.58)',
+          border: '1px solid rgba(196,175,168,0.4)',
           animation: 'sheetUp 0.28s ease-out',
         }}
         onClick={e => e.stopPropagation()}

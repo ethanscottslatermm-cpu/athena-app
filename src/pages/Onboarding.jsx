@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 import { useAuth } from '../hooks/useAuth'
@@ -117,8 +117,8 @@ const STEP_TITLES = [
 // ─── Small helpers ────────────────────────────────────────────────────────────
 
 const GOLD = '#C4859A'
-const IVORY = 'rgba(37,34,32,0.88)'
-const DIM = 'rgba(37,34,32,0.55)'
+const IVORY = 'rgba(59,51,48,0.88)'
+const DIM = 'rgba(59,51,48,0.55)'
 
 function toggleArr(arr, val, limit) {
   if (arr.includes(val)) return arr.filter(v => v !== val)
@@ -150,7 +150,7 @@ function ProgressDots({ step, total }) {
           width: i === step ? '18px' : '6px',
           height: '6px',
           borderRadius: '3px',
-          background: i <= step ? GOLD : 'rgba(37,34,32,0.15)',
+          background: i <= step ? GOLD : 'rgba(59,51,48,0.15)',
           transition: 'all 0.4s ease',
         }} />
       ))}
@@ -165,8 +165,8 @@ function ChipTag({ label, selected, onClick, disabled }) {
       style={{
         padding: '8px 14px',
         borderRadius: '100px',
-        border: `1px solid ${selected ? GOLD : 'rgba(37,34,32,0.18)'}`,
-        background: selected ? 'rgba(196,133,154,0.18)' : 'rgba(37,34,32,0.05)',
+        border: `1px solid ${selected ? GOLD : 'rgba(59,51,48,0.18)'}`,
+        background: selected ? 'rgba(196,133,154,0.18)' : 'rgba(59,51,48,0.05)',
         color: selected ? GOLD : DIM,
         fontFamily: 'Cormorant Garamond, serif',
         fontSize: '13px',
@@ -191,8 +191,8 @@ function CardOption({ label, sub, selected, onClick }) {
         textAlign: 'left',
         padding: '14px 16px',
         borderRadius: '14px',
-        border: `1px solid ${selected ? GOLD : 'rgba(37,34,32,0.12)'}`,
-        background: selected ? 'rgba(196,133,154,0.14)' : 'rgba(37,34,32,0.05)',
+        border: `1px solid ${selected ? GOLD : 'rgba(59,51,48,0.12)'}`,
+        background: selected ? 'rgba(196,133,154,0.14)' : 'rgba(59,51,48,0.05)',
         marginBottom: '8px',
         transition: 'all 0.2s',
         boxShadow: selected ? `0 0 12px rgba(196,133,154,0.15)` : 'none',
@@ -202,7 +202,7 @@ function CardOption({ label, sub, selected, onClick }) {
         {label}
       </p>
       {sub && (
-        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '12px', color: 'rgba(37,34,32,0.3)', margin: '2px 0 0' }}>
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '12px', color: 'rgba(59,51,48,0.3)', margin: '2px 0 0' }}>
           {sub}
         </p>
       )}
@@ -217,8 +217,8 @@ function EmojiGoalCard({ emoji, label, selected, onClick }) {
       style={{
         padding: '14px 10px',
         borderRadius: '16px',
-        border: `1px solid ${selected ? GOLD : 'rgba(37,34,32,0.12)'}`,
-        background: selected ? 'rgba(196,133,154,0.15)' : 'rgba(37,34,32,0.05)',
+        border: `1px solid ${selected ? GOLD : 'rgba(59,51,48,0.12)'}`,
+        background: selected ? 'rgba(196,133,154,0.15)' : 'rgba(59,51,48,0.05)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
         transition: 'all 0.2s',
         boxShadow: selected ? `0 0 14px rgba(196,133,154,0.18)` : 'none',
@@ -256,8 +256,8 @@ function GoldSlider({ min, max, value, onChange, label }) {
         style={{ width: '100%', accentColor: GOLD }}
       />
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
-        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '11px', color: 'rgba(37,34,32,0.22)' }}>{min}</span>
-        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '11px', color: 'rgba(37,34,32,0.22)' }}>{max}</span>
+        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '11px', color: 'rgba(59,51,48,0.22)' }}>{min}</span>
+        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '11px', color: 'rgba(59,51,48,0.22)' }}>{max}</span>
       </div>
     </div>
   )
@@ -517,7 +517,7 @@ export default function Onboarding() {
                 onClick={handleExit}
                 style={{
                   fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.3em',
-                  color: 'rgba(37,34,32,0.45)', background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'rgba(59,51,48,0.45)', background: 'none', border: 'none', cursor: 'pointer',
                 }}
               >
                 EXIT
@@ -541,7 +541,7 @@ export default function Onboarding() {
               fontFamily: 'Cormorant Garamond, serif',
               fontStyle: 'italic',
               fontSize: '20px',
-              color: 'rgba(37,34,32,0.88)',
+              color: 'rgba(59,51,48,0.88)',
               textAlign: 'center',
               letterSpacing: '0.04em',
               lineHeight: 1.65,
@@ -605,7 +605,7 @@ export default function Onboarding() {
               <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.28em', color: 'rgba(196,133,154,0.55)', textTransform: 'uppercase', marginBottom: '4px' }}>
                 Step {step + 1} of 5
               </p>
-              <h2 style={{ fontFamily: 'Cinzel, serif', fontSize: '18px', color: 'rgba(37,34,32,0.92)', letterSpacing: '0.06em', margin: 0 }}>
+              <h2 style={{ fontFamily: 'Cinzel, serif', fontSize: '18px', color: 'rgba(59,51,48,0.92)', letterSpacing: '0.06em', margin: 0 }}>
                 {stepTitle}
               </h2>
             </div>
@@ -628,8 +628,8 @@ export default function Onboarding() {
                       onChange={e => set('full_name', e.target.value)}
                       style={{
                         width: '100%', background: 'transparent',
-                        border: 'none', borderBottom: `1px solid ${answers.full_name ? 'rgba(196,133,154,0.65)' : 'rgba(37,34,32,0.18)'}`,
-                        padding: '8px 0', color: 'rgba(37,34,32,0.9)',
+                        border: 'none', borderBottom: `1px solid ${answers.full_name ? 'rgba(196,133,154,0.65)' : 'rgba(59,51,48,0.18)'}`,
+                        padding: '8px 0', color: 'rgba(59,51,48,0.9)',
                         fontFamily: 'Cormorant Garamond, serif', fontSize: '15px',
                         outline: 'none', caretColor: GOLD,
                         transition: 'border-color 0.3s',
@@ -647,10 +647,10 @@ export default function Onboarding() {
                       value={answers.date_of_birth}
                       onChange={e => set('date_of_birth', e.target.value)}
                       style={{
-                        width: '100%', background: 'rgba(37,34,32,0.04)',
-                        border: `1px solid ${answers.date_of_birth ? 'rgba(196,133,154,0.5)' : 'rgba(37,34,32,0.12)'}`,
+                        width: '100%', background: 'rgba(59,51,48,0.04)',
+                        border: `1px solid ${answers.date_of_birth ? 'rgba(196,133,154,0.5)' : 'rgba(59,51,48,0.12)'}`,
                         borderRadius: '12px', padding: '11px 14px',
-                        color: 'rgba(37,34,32,0.85)',
+                        color: 'rgba(59,51,48,0.85)',
                         fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
                         outline: 'none', colorScheme: 'light',
                       }}
@@ -693,17 +693,17 @@ export default function Onboarding() {
                           value={answers.last_period_date}
                           onChange={e => set('last_period_date', e.target.value)}
                           style={{
-                            width: '100%', background: 'rgba(37,34,32,0.04)',
-                            border: `1px solid ${answers.last_period_date ? 'rgba(196,133,154,0.5)' : 'rgba(37,34,32,0.12)'}`,
+                            width: '100%', background: 'rgba(59,51,48,0.04)',
+                            border: `1px solid ${answers.last_period_date ? 'rgba(196,133,154,0.5)' : 'rgba(59,51,48,0.12)'}`,
                             borderRadius: '12px', padding: '11px 14px',
-                            color: 'rgba(37,34,32,0.85)',
+                            color: 'rgba(59,51,48,0.85)',
                             fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
                             outline: 'none', colorScheme: 'light',
                           }}
                         />
                         <button
                           onClick={() => setPeriodUnknown(true)}
-                          style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '12px', color: 'rgba(37,34,32,0.3)', background: 'none', border: 'none', cursor: 'pointer', marginTop: '8px', padding: 0 }}
+                          style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '12px', color: 'rgba(59,51,48,0.3)', background: 'none', border: 'none', cursor: 'pointer', marginTop: '8px', padding: 0 }}
                         >
                           I'm not sure — let me pick my phase instead
                         </button>
@@ -720,7 +720,7 @@ export default function Onboarding() {
                         ))}
                         <button
                           onClick={() => setPeriodUnknown(false)}
-                          style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '12px', color: 'rgba(37,34,32,0.3)', background: 'none', border: 'none', cursor: 'pointer', marginTop: '4px', padding: 0 }}
+                          style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '12px', color: 'rgba(59,51,48,0.3)', background: 'none', border: 'none', cursor: 'pointer', marginTop: '4px', padding: 0 }}
                         >
                           ← I know my last period date
                         </button>
@@ -930,7 +930,7 @@ export default function Onboarding() {
                         onClick={() => set('notifications_on', !answers.notifications_on)}
                         style={{
                           width: '44px', height: '24px', borderRadius: '12px',
-                          background: answers.notifications_on ? 'rgba(196,133,154,0.7)' : 'rgba(37,34,32,0.1)',
+                          background: answers.notifications_on ? 'rgba(196,133,154,0.7)' : 'rgba(59,51,48,0.1)',
                           border: 'none', cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
                         }}
                       >
@@ -953,7 +953,7 @@ export default function Onboarding() {
                           value={answers.notification_time}
                           onChange={e => set('notification_time', e.target.value)}
                           style={{
-                            background: 'rgba(37,34,32,0.04)',
+                            background: 'rgba(59,51,48,0.04)',
                             border: '1px solid rgba(196,133,154,0.35)',
                             borderRadius: '12px', padding: '10px 14px',
                             color: GOLD, fontFamily: 'Cinzel, serif', fontSize: '16px',
@@ -976,7 +976,7 @@ export default function Onboarding() {
                           onClick={() => set('theme', t.key)}
                           style={{
                             flexShrink: 0, width: '80px',
-                            border: `1px solid ${answers.theme === t.key ? GOLD : 'rgba(37,34,32,0.12)'}`,
+                            border: `1px solid ${answers.theme === t.key ? GOLD : 'rgba(59,51,48,0.12)'}`,
                             borderRadius: '14px', overflow: 'hidden', background: 'none',
                             boxShadow: answers.theme === t.key ? `0 0 16px rgba(196,133,154,0.3)` : 'none',
                             cursor: 'pointer', transition: 'all 0.25s',
@@ -1013,8 +1013,8 @@ export default function Onboarding() {
                       onChange={e => set('intention', e.target.value)}
                       style={{
                         width: '100%', background: 'transparent',
-                        border: 'none', borderBottom: `1px solid ${answers.intention ? 'rgba(196,133,154,0.5)' : 'rgba(37,34,32,0.18)'}`,
-                        padding: '8px 0', color: 'rgba(37,34,32,0.85)',
+                        border: 'none', borderBottom: `1px solid ${answers.intention ? 'rgba(196,133,154,0.5)' : 'rgba(59,51,48,0.18)'}`,
+                        padding: '8px 0', color: 'rgba(59,51,48,0.85)',
                         fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
                         outline: 'none', caretColor: GOLD, transition: 'border-color 0.3s',
                       }}
@@ -1030,7 +1030,7 @@ export default function Onboarding() {
               padding: '14px 22px',
               paddingBottom: 'calc(env(safe-area-inset-bottom) + 14px)',
               flexShrink: 0,
-              borderTop: '1px solid rgba(37,34,32,0.08)',
+              borderTop: '1px solid rgba(59,51,48,0.08)',
             }}>
               {/* Save error */}
               {saveError && (
@@ -1081,7 +1081,7 @@ export default function Onboarding() {
                     width: '100%', background: 'none', border: 'none',
                     fontFamily: 'Cormorant Garamond, serif',
                     fontStyle: 'italic', fontSize: '13px',
-                    color: 'rgba(37,34,32,0.32)', cursor: 'pointer',
+                    color: 'rgba(59,51,48,0.32)', cursor: 'pointer',
                     letterSpacing: '0.04em',
                   }}
                 >

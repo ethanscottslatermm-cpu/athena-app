@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
@@ -154,7 +154,7 @@ export default function CycleTracker() {
               />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(37,34,32,0.45)' }}
+                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(59,51,48,0.45)' }}
               >
                 {tab.label.toUpperCase()}
               </span>
@@ -171,7 +171,7 @@ export default function CycleTracker() {
           background: 'rgba(242,237,232,0.92)',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
-          borderTop: '1px solid rgba(196,175,168,0.58)',
+          borderTop: '1px solid rgba(196,175,168,0.4)',
         }}
       >
         <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">
