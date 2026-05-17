@@ -21,7 +21,7 @@ const PARTICLES = Array.from({ length: 170 }, (_, i) => ({
     ? 22 + (i * 41 + 7) % 54
     : (i * 37 + 13) % 100,
   y: (i * 53 + 7) % 100,
-  size: 1 + (i % 5) * 0.65,
+  size: 0.7 + (i % 5) * 0.45,
   duration: 2.2 + (i % 7) * 0.65,
   delay: (i * 0.22) % 8,
   opacity: 0.35 + (i % 6) * 0.11,
