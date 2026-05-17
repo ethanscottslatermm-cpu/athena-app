@@ -315,10 +315,10 @@ export default function Login() {
           transition: background-color 5000s ease-in-out 0s, border-color 0.3s, filter 0.3s;
         }
 
-        .athena-hero-img { filter: contrast(1.12) brightness(1.22) saturate(1.06); }
+        .athena-hero-img { filter: contrast(1.28) brightness(1.22) saturate(1.1); }
         @media (min-width: 769px) {
           .athena-hero-img {
-            filter: contrast(1.04) brightness(1.12) saturate(1.02);
+            filter: contrast(1.14) brightness(1.12) saturate(1.04);
             object-position: center 20%;
           }
         }
