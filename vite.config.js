@@ -27,8 +27,8 @@ export default defineConfig({
         name: 'Athena',
         short_name: 'Athena',
         description: 'Your strength. Your cycle. Your story.',
-        theme_color: '#060404',
-        background_color: '#060404',
+        theme_color: '#F2EDE8',
+        background_color: '#F2EDE8',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
