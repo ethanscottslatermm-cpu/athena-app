@@ -4,18 +4,21 @@ import heroImg    from '../assets/athena-hero.webp'
 import knightIcon from '../assets/knight-icon.png'
 import { supabase } from '../lib/supabase'
 
-const PARTICLES = Array.from({ length: 96 }, (_, i) => ({
+const ANIM_TYPES = ['dustUp', 'dustDriftL', 'dustDriftR', 'dustFloat', 'dustSwirl', 'dustFall']
+
+const PARTICLES = Array.from({ length: 220 }, (_, i) => ({
   id: i,
   x: (i * 37 + 13) % 100,
-  y: i < 40
+  y: i < 80
     ? (i * 53 + 7) % 100
-    : i < 68
-    ? 56 + ((i * 31 + 17) % 38)
-    : 4 + ((i * 43 + 11) % 38),
-  size: i >= 68 ? 0.4 + (i % 3) * 0.4 : 0.8 + (i % 3) * 0.65,
-  duration: 1.8 + (i % 4),
-  delay: (i * 0.28) % 6,
-  opacity: i >= 68 ? 0.12 + (i % 5) * 0.06 : 0.18 + (i % 5) * 0.1,
+    : i < 140
+    ? 55 + ((i * 31 + 17) % 40)
+    : 3 + ((i * 43 + 11) % 40),
+  size: 1 + (i % 5) * 0.7,
+  duration: 2.5 + (i % 7) * 0.7,
+  delay: (i * 0.19) % 8,
+  opacity: 0.28 + (i % 6) * 0.1,
+  anim: ANIM_TYPES[i % ANIM_TYPES.length],
 }))
 
 
@@ -132,11 +135,44 @@ export default function Login() {
           0%,100% { opacity: 0.04; }
           50%     { opacity: 0.15; }
         }
-        @keyframes dust {
-          0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
-          15%  { opacity: 1; }
-          85%  { opacity: 1; }
-          100% { transform: translateY(-60px) translateX(10px); opacity: 0; }
+        @keyframes dustUp {
+          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          12%  { opacity: 1; }
+          88%  { opacity: 1; }
+          100% { transform: translateY(-80px)  translateX(6px);   opacity: 0; }
+        }
+        @keyframes dustDriftL {
+          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          12%  { opacity: 1; }
+          88%  { opacity: 1; }
+          100% { transform: translateY(-55px)  translateX(-45px); opacity: 0; }
+        }
+        @keyframes dustDriftR {
+          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          12%  { opacity: 1; }
+          88%  { opacity: 1; }
+          100% { transform: translateY(-50px)  translateX(50px);  opacity: 0; }
+        }
+        @keyframes dustFloat {
+          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          12%  { opacity: 1; }
+          50%  { transform: translateY(-20px)  translateX(35px); }
+          88%  { opacity: 1; }
+          100% { transform: translateY(-15px)  translateX(70px);  opacity: 0; }
+        }
+        @keyframes dustSwirl {
+          0%   { transform: translateY(0px)   translateX(0px)   rotate(0deg);   opacity: 0; }
+          12%  { opacity: 1; }
+          33%  { transform: translateY(-30px)  translateX(25px)  rotate(60deg); }
+          66%  { transform: translateY(-55px)  translateX(-15px) rotate(130deg); }
+          88%  { opacity: 1; }
+          100% { transform: translateY(-75px)  translateX(10px)  rotate(200deg); opacity: 0; }
+        }
+        @keyframes dustFall {
+          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          12%  { opacity: 1; }
+          88%  { opacity: 1; }
+          100% { transform: translateY(50px)   translateX(-30px); opacity: 0; }
         }
         @keyframes breathe {
           0%,100% { opacity: 0.35; transform: translateX(-50%) scale(1); }
@@ -431,7 +467,8 @@ export default function Login() {
               width: `${p.size}px`, height: `${p.size}px`,
               borderRadius: '50%',
               backgroundColor: `rgba(196,133,154,${p.opacity})`,
-              animation: `dust ${p.duration}s ease-in-out infinite ${p.delay}s`,
+              boxShadow: p.size >= 2.5 ? `0 0 ${p.size * 2}px rgba(196,133,154,${p.opacity * 0.6})` : 'none',
+              animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
             }} />
           ))}
         </div>
