@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
@@ -82,7 +82,7 @@ const PHASE_CONTENT = {
   luteal: {
     headline: 'Turn Inward',
     sub: 'Wisdom rises. Slow down and listen.',
-    gradient: 'linear-gradient(135deg, rgba(196,175,168,0.38) 0%, rgba(196,175,168,0.12) 100%)',
+    gradient: 'linear-gradient(135deg, rgba(196,175,168,0.55) 0%, rgba(196,175,168,0.12) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'Yoga, pilates & low-impact flow',        to: '/pilates'   },
       { module: 'Nourish',   tip: 'Magnesium, complex carbs & warmth',      to: '/nourish'   },
@@ -148,7 +148,7 @@ function PhaseRing({ phase, day, cycleLength }) {
   return (
     <svg width="128" height="128" viewBox="0 0 128 128">
       {/* Track */}
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(59,51,48,0.1)" strokeWidth="5" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(37,34,32,0.1)" strokeWidth="5" />
 
       {segments.map(seg => {
         const dash = Math.max(0, (seg.days / cycleLength) * C - GAP)
@@ -174,16 +174,16 @@ function PhaseRing({ phase, day, cycleLength }) {
 
       {/* Day dot */}
       {dotX != null && (
-        <circle cx={dotX} cy={dotY} r={4.5} fill="rgba(59,51,48,0.9)"
-          style={{ filter: 'drop-shadow(0 0 5px rgba(59,51,48,0.4))' }} />
+        <circle cx={dotX} cy={dotY} r={4.5} fill="rgba(37,34,32,0.9)"
+          style={{ filter: 'drop-shadow(0 0 5px rgba(37,34,32,0.4))' }} />
       )}
 
       {/* Center */}
-      <text x={cx} y={cy - 7} textAnchor="middle" fill="rgba(59,51,48,0.88)"
+      <text x={cx} y={cy - 7} textAnchor="middle" fill="rgba(37,34,32,0.88)"
         fontSize="26" fontFamily="Cinzel, serif">
         {day ?? '--'}
       </text>
-      <text x={cx} y={cy + 11} textAnchor="middle" fill="rgba(59,51,48,0.4)"
+      <text x={cx} y={cy + 11} textAnchor="middle" fill="rgba(37,34,32,0.4)"
         fontSize="7.5" fontFamily="Cormorant Garamond, serif" letterSpacing="2">
         {day ? `OF ${cycleLength}` : 'SET UP'}
       </text>
@@ -197,10 +197,10 @@ function SectionHeader({ title, delay }) {
   return (
     <div className="flex items-center gap-3 px-5 mb-3" style={anim(delay)}>
       <span className="font-cinzel text-[9px] tracking-[0.28em] uppercase whitespace-nowrap"
-        style={{ color: '#7A6A65' }}>
+        style={{ color: '#5A4C48' }}>
         {title}
       </span>
-      <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, rgba(122,106,101,0.25), transparent)' }} />
+      <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, rgba(90,76,72,0.25), transparent)' }} />
     </div>
   )
 }
@@ -269,17 +269,17 @@ export default function Dashboard() {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
           <h1 className="font-cinzel text-[21px] font-medium tracking-wide mt-0.5 leading-tight header-shimmer"
-            style={{ backgroundImage: 'linear-gradient(110deg, rgba(59,51,48,0.92) 0%, rgba(59,51,48,0.92) 25%, rgba(168,155,185,0.95) 44%, rgba(232,224,248,1) 50%, rgba(168,155,185,0.95) 56%, rgba(59,51,48,0.92) 75%, rgba(59,51,48,0.92) 100%)' }}>
+            style={{ backgroundImage: 'linear-gradient(110deg, rgba(37,34,32,0.92) 0%, rgba(37,34,32,0.92) 25%, rgba(168,155,185,0.95) 44%, rgba(232,224,248,1) 50%, rgba(168,155,185,0.95) 56%, rgba(37,34,32,0.92) 75%, rgba(37,34,32,0.92) 100%)' }}>
             {greeting()}{firstName ? `, ${firstName}` : ''}
           </h1>
         </div>
         <button onClick={() => navigate('/settings')}
           className="mt-1 p-2 rounded-xl transition-all"
           style={{
-            background: 'rgba(196,175,168,0.25)',
+            background: 'rgba(196,175,168,0.40)',
             border: '1px solid #C4AFA8',
           }}>
-          <Settings size={20} strokeWidth={1.4} style={{ color: '#7A6A65' }} />
+          <Settings size={20} strokeWidth={1.4} style={{ color: '#5A4C48' }} />
         </button>
       </div>
 
@@ -314,7 +314,7 @@ export default function Dashboard() {
                 {content?.headline ?? 'Your Journey'}
               </h2>
               <p className="font-garamond text-sm leading-relaxed"
-                style={{ color: '#7A6A65' }}>
+                style={{ color: '#5A4C48' }}>
                 {content?.sub ?? 'Set up your cycle to unlock phase guidance.'}
               </p>
               <button
@@ -356,7 +356,7 @@ export default function Dashboard() {
                   {!tileImg && <ModuleIcon src={icon} color={activeColor} />}
                 </div>
                 <span className="font-garamond text-[10px] tracking-wide"
-                  style={{ color: '#7A6A65' }}>
+                  style={{ color: '#5A4C48' }}>
                   {label}
                 </span>
               </button>
@@ -372,11 +372,11 @@ export default function Dashboard() {
         <button
           onClick={() => navigate('/mood')}
           className="text-left rounded-2xl p-4"
-          style={{ background: '#C4AFA8', border: '1px solid rgba(196,175,168,0.4)' }}
+          style={{ background: '#C4AFA8', border: '1px solid rgba(196,175,168,0.58)' }}
         >
           <ModuleIcon src={moodIcon} color="#C4859A" />
-          <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1" style={{ color: '#3B3330' }}>Mood</p>
-          <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1" style={{ color: '#252220' }}>Mood</p>
+          <p className="font-garamond text-xs" style={{ color: '#5A4C48' }}>
             How are you feeling today?
           </p>
         </button>
@@ -385,11 +385,11 @@ export default function Dashboard() {
         <button
           onClick={() => navigate('/sleep')}
           className="text-left rounded-2xl p-4"
-          style={{ background: '#C4AFA8', border: '1px solid rgba(196,175,168,0.4)' }}
+          style={{ background: '#C4AFA8', border: '1px solid rgba(196,175,168,0.58)' }}
         >
           <ModuleIcon src={sleepIcon} color="#C4859A" />
-          <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1" style={{ color: '#3B3330' }}>Sleep</p>
-          <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1" style={{ color: '#252220' }}>Sleep</p>
+          <p className="font-garamond text-xs" style={{ color: '#5A4C48' }}>
             How did you sleep last night?
           </p>
         </button>
@@ -411,7 +411,7 @@ export default function Dashboard() {
                     style={{
                       width: '172px',
                       minHeight: '130px',
-                      border: `1px solid ${img ? 'rgba(196,175,168,0.35)' : `${activeColor}40`}`,
+                      border: `1px solid ${img ? 'rgba(196,175,168,0.52)' : `${activeColor}40`}`,
                       ...(img
                         ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
                         : { background: `${activeColor}0e` }
@@ -419,7 +419,7 @@ export default function Dashboard() {
                     }}
                   >
                     {img && (
-                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(59,51,48,0.82) 0%, rgba(59,51,48,0.35) 55%, rgba(59,51,48,0.05) 100%)' }} />
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(37,34,32,0.82) 0%, rgba(37,34,32,0.35) 55%, rgba(37,34,32,0.05) 100%)' }} />
                     )}
                     <div className="relative z-10 p-4 flex flex-col h-full">
                       <p className="font-cinzel text-[10px] tracking-widest uppercase mb-2"
@@ -449,15 +449,15 @@ export default function Dashboard() {
         <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.26)}>
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ background: '#D6CFC9', border: '1px solid rgba(214,207,201,0.6)' }}
+            style={{ background: '#D6CFC9', border: '1px solid rgba(214,207,201,0.76)' }}
           >
-            <Wind size={13} style={{ color: '#7A6A65', flexShrink: 0 }} />
+            <Wind size={13} style={{ color: '#5A4C48', flexShrink: 0 }} />
             <div>
               <p className="font-cinzel text-[8px] tracking-widest uppercase mb-0.5"
-                style={{ color: '#7A6A65' }}>
+                style={{ color: '#5A4C48' }}>
                 Conditions
               </p>
-              <p className="font-garamond text-xs" style={{ color: '#3B3330' }}>
+              <p className="font-garamond text-xs" style={{ color: '#252220' }}>
                 {weather.temp}°F · UV {weather.uv} · {uvNote(weather.uv)}
               </p>
             </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+﻿import { useState, useMemo } from 'react'
 import PhaseFilter from './components/PhaseFilter'
 import SessionCard from './components/SessionCard'
 
@@ -180,7 +180,7 @@ export default function LibraryTab({
         ) : (
           <div
             className="py-10 flex flex-col items-center gap-3 rounded-2xl"
-            style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
+            style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.46)' }}
           >
             <p className="font-garamond text-brown/35 text-sm text-center">
               No sessions match those filters

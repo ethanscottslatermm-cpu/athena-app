@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeft, ChevronDown, Check,
@@ -44,7 +44,7 @@ function Toggle({ value, onChange, disabled = false }) {
     <button
       onClick={() => !disabled && onChange(!value)}
       className="relative w-11 h-6 rounded-full transition-colors flex-shrink-0"
-      style={{ background: value && !disabled ? '#C4859A' : 'rgba(59,51,48,0.15)', opacity: disabled ? 0.38 : 1 }}
+      style={{ background: value && !disabled ? '#C4859A' : 'rgba(37,34,32,0.15)', opacity: disabled ? 0.38 : 1 }}
     >
       <div
         className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all"
@@ -73,9 +73,9 @@ function PillSelect({ options, value, onChange, multi = false }) {
             onClick={() => toggle(opt)}
             className="px-3 py-1.5 rounded-full font-garamond text-sm transition-all"
             style={{
-              background: on ? 'rgba(196,133,154,0.18)' : 'rgba(59,51,48,0.06)',
-              border: `1px solid ${on ? 'rgba(196,133,154,0.55)' : 'rgba(59,51,48,0.18)'}`,
-              color: on ? '#C4859A' : '#7A6A65',
+              background: on ? 'rgba(196,133,154,0.18)' : 'rgba(37,34,32,0.06)',
+              border: `1px solid ${on ? 'rgba(196,133,154,0.55)' : 'rgba(37,34,32,0.18)'}`,
+              color: on ? '#C4859A' : '#5A4C48',
             }}
           >
             {opt}
@@ -115,7 +115,7 @@ function GoldSlider({ value, min, max, step = 1, onChange, fmt = v => v }) {
         type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(parseFloat(e.target.value))}
         className="w-full h-1 rounded-full outline-none cursor-pointer slider-gold"
-        style={{ background: `linear-gradient(to right, #C4859A ${pct}%, rgba(59,51,48,0.15) ${pct}%)` }}
+        style={{ background: `linear-gradient(to right, #C4859A ${pct}%, rgba(37,34,32,0.15) ${pct}%)` }}
       />
     </div>
   )
@@ -139,7 +139,7 @@ function SettingRow({ label, sub, last = false, block = false, children }) {
           <div className="flex-shrink-0">{children}</div>
         </div>
       )}
-      {!last && <div style={{ height: '1px', background: 'rgba(196,175,168,0.3)' }} />}
+      {!last && <div style={{ height: '1px', background: 'rgba(196,175,168,0.46)' }} />}
     </>
   )
 }
@@ -178,7 +178,7 @@ function Toast({ message, type, visible }) {
       background: type === 'error' ? 'rgba(196,133,154,0.95)' : '#C4AFA8',
       border: `1px solid ${type === 'error' ? 'rgba(196,133,154,0.6)' : 'rgba(196,175,168,0.6)'}`,
       borderRadius: '20px', padding: '9px 20px',
-      color: type === 'error' ? '#F2EDE8' : '#3B3330',
+      color: type === 'error' ? '#F2EDE8' : '#252220',
       fontFamily: 'Cormorant Garamond, serif', fontSize: '13px', letterSpacing: '0.06em',
       whiteSpace: 'nowrap',
       opacity: visible ? 1 : 0,
@@ -196,7 +196,7 @@ function Modal({ title, onClose, children }) {
   return (
     <div
       className="fixed inset-0 z-[300] flex items-end justify-center"
-      style={{ background: 'rgba(59,51,48,0.55)' }}
+      style={{ background: 'rgba(37,34,32,0.55)' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
@@ -259,7 +259,7 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
       className="mb-3 rounded-2xl overflow-hidden"
       style={{
         background: 'rgba(242,237,232,0.85)',
-        border: '1px solid rgba(196,175,168,0.45)',
+        border: '1px solid rgba(196,175,168,0.62)',
       }}
     >
       <button
@@ -286,7 +286,7 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
 
       <div style={{ maxHeight: open ? '3000px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease' }}>
         <div className="px-4 pb-3">
-          <div style={{ height: '1px', background: 'rgba(196,175,168,0.35)', marginBottom: '4px' }} />
+          <div style={{ height: '1px', background: 'rgba(196,175,168,0.52)', marginBottom: '4px' }} />
           {children}
           {dirty && (
             <button
@@ -519,7 +519,7 @@ export default function Settings() {
           className="relative flex items-center justify-between h-14 px-3 max-w-md mx-auto"
           style={{
             background: 'rgba(242,237,232,0.92)',
-            borderBottom: '1px solid rgba(196,175,168,0.4)',
+            borderBottom: '1px solid rgba(196,175,168,0.58)',
           }}
         >
           <Brackets />
@@ -556,7 +556,7 @@ export default function Settings() {
               Change photo
             </button>
           </div>
-          <div style={{ height: '1px', background: 'rgba(196,175,168,0.3)', marginBottom: '4px' }} />
+          <div style={{ height: '1px', background: 'rgba(196,175,168,0.46)', marginBottom: '4px' }} />
           <SettingRow label="Display name" block>
             <TextInput value={d.full_name} onChange={set('full_name')} placeholder="Your name" />
           </SettingRow>
@@ -827,12 +827,12 @@ export default function Settings() {
                   className="rounded-xl px-3 py-2.5 flex items-center gap-2 transition-all"
                   style={{
                     background: t.bg,
-                    border: active ? `1px solid ${t.accent}` : '1px solid rgba(59,51,48,0.12)',
+                    border: active ? `1px solid ${t.accent}` : '1px solid rgba(37,34,32,0.12)',
                     boxShadow: active ? `0 0 10px ${t.accent}30` : 'none',
                   }}
                 >
                   <div className="w-3.5 h-3.5 rounded-full flex-shrink-0" style={{ background: t.accent }} />
-                  <span className="font-cinzel text-[9px] tracking-widest" style={{ color: active ? t.accent : '#7A6A65' }}>
+                  <span className="font-cinzel text-[9px] tracking-widest" style={{ color: active ? t.accent : '#5A4C48' }}>
                     {t.label.toUpperCase()}
                   </span>
                 </button>
@@ -883,13 +883,13 @@ export default function Settings() {
             >
               DOWNLOAD MY DATA
             </button>
-            <button onClick={handleClearCache} className="font-garamond text-sm" style={{ color: '#7A6A65' }}>
+            <button onClick={handleClearCache} className="font-garamond text-sm" style={{ color: '#5A4C48' }}>
               Clear app cache
             </button>
           </div>
-          <div className="flex gap-5 mt-5 pt-3" style={{ borderTop: '1px solid rgba(196,175,168,0.3)' }}>
-            <a href="/privacy" className="font-garamond text-xs" style={{ color: '#7A6A65' }}>Privacy policy</a>
-            <a href="/terms"   className="font-garamond text-xs" style={{ color: '#7A6A65' }}>Terms of service</a>
+          <div className="flex gap-5 mt-5 pt-3" style={{ borderTop: '1px solid rgba(196,175,168,0.46)' }}>
+            <a href="/privacy" className="font-garamond text-xs" style={{ color: '#5A4C48' }}>Privacy policy</a>
+            <a href="/terms"   className="font-garamond text-xs" style={{ color: '#5A4C48' }}>Terms of service</a>
           </div>
         </Section>
 

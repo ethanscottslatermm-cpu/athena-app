@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { format, startOfWeek, isSameDay, subDays } from 'date-fns'
 import SessionCard from './components/SessionCard'
 import ProgressRing from './components/ProgressRing'
@@ -157,7 +157,7 @@ export default function HomeTab({
           <button
             onClick={fetchInsight}
             className="font-garamond text-sm italic"
-            style={{ color: 'rgba(59,51,48,0.4)' }}
+            style={{ color: 'rgba(37,34,32,0.4)' }}
           >
             Tap to load today's guidance →
           </button>
@@ -238,7 +238,7 @@ export default function HomeTab({
                         ? '#C4859A'
                         : isSameDay(d, today)
                         ? 'rgba(196,133,154,0.3)'
-                        : 'rgba(59,51,48,0.08)',
+                        : 'rgba(37,34,32,0.08)',
                       border: isSameDay(d, today) ? '1px solid rgba(196,133,154,0.5)' : 'none',
                     }}
                   />

@@ -1,4 +1,4 @@
-export default function BodyHeatmap({ completions = [], sessions = [] }) {
+﻿export default function BodyHeatmap({ completions = [], sessions = [] }) {
   const freq = {}
   completions.forEach(c => {
     const s = sessions.find(x => x.id === c.session_id)
@@ -10,7 +10,7 @@ export default function BodyHeatmap({ completions = [], sessions = [] }) {
     const f = freq[area] || 0
     const fb = fallbackArea ? (freq[fallbackArea] || 0) * 0.6 : 0
     const effective = Math.max(f, fb)
-    if (effective === 0) return 'rgba(59,51,48,0.07)'
+    if (effective === 0) return 'rgba(37,34,32,0.07)'
     return `rgba(196,133,154,${Math.min(0.85, 0.15 + (effective / maxF) * 0.7)})`
   }
 
@@ -21,44 +21,44 @@ export default function BodyHeatmap({ completions = [], sessions = [] }) {
       <svg viewBox="0 0 100 220" className="w-20 h-44">
         {/* Head */}
         <ellipse cx="50" cy="14" rx="11" ry="13"
-          fill="rgba(59,51,48,0.07)" stroke="rgba(59,51,48,0.12)" strokeWidth="0.8" />
+          fill="rgba(37,34,32,0.07)" stroke="rgba(37,34,32,0.12)" strokeWidth="0.8" />
         {/* Neck */}
         <rect x="44" y="26" width="12" height="12" rx="3"
-          fill="rgba(59,51,48,0.05)" stroke="rgba(59,51,48,0.1)" strokeWidth="0.8" />
+          fill="rgba(37,34,32,0.05)" stroke="rgba(37,34,32,0.1)" strokeWidth="0.8" />
         {/* Core / torso */}
         <rect x="35" y="40" width="30" height="52" rx="8"
           fill={glow('core', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
+          stroke="rgba(37,34,32,0.1)" strokeWidth="0.8"
           style={{ transition: 'fill 0.5s' }}
         />
         {/* Left arm */}
         <rect x="18" y="42" width="14" height="44" rx="6"
           fill={glow('arms', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
+          stroke="rgba(37,34,32,0.1)" strokeWidth="0.8"
           style={{ transition: 'fill 0.5s' }}
         />
         {/* Right arm */}
         <rect x="68" y="42" width="14" height="44" rx="6"
           fill={glow('arms', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
+          stroke="rgba(37,34,32,0.1)" strokeWidth="0.8"
           style={{ transition: 'fill 0.5s' }}
         />
         {/* Hips / glutes */}
         <rect x="33" y="94" width="34" height="30" rx="7"
           fill={glow('glutes', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
+          stroke="rgba(37,34,32,0.1)" strokeWidth="0.8"
           style={{ transition: 'fill 0.5s' }}
         />
         {/* Left leg */}
         <rect x="34" y="126" width="13" height="70" rx="6"
           fill={glow('full_body', 'flexibility')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
+          stroke="rgba(37,34,32,0.1)" strokeWidth="0.8"
           style={{ transition: 'fill 0.5s' }}
         />
         {/* Right leg */}
         <rect x="53" y="126" width="13" height="70" rx="6"
           fill={glow('full_body', 'flexibility')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
+          stroke="rgba(37,34,32,0.1)" strokeWidth="0.8"
           style={{ transition: 'fill 0.5s' }}
         />
         {/* Recovery glow overlay */}

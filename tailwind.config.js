@@ -4,11 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        gold:    '#C9A86C',
-        mauve:   '#6B4F6B',
-        rose:    '#C49A9A',
-        ivory:   '#F4EFE6',
-        sage:    '#8FAF8A',
+        linen:   '#F2EDE8',
+        surface: '#C4AFA8',
+        sage:    '#8FA58C',
+        rose:    '#C4859A',
+        brown:   '#252220',
+        taupe:   '#5A4C48',
+        greige:  '#8A7E78',
+        mist:    '#D6CFC9',
+        // legacy aliases kept for phaseEngine / module shells
+        gold:    '#C4859A',
+        mauve:   '#C4AFA8',
+        ivory:   '#F2EDE8',
         crimson: '#8B1A1A',
       },
       fontFamily: {

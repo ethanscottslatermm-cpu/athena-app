@@ -1,4 +1,4 @@
-import ExerciseRow from './components/ExerciseRow'
+﻿import ExerciseRow from './components/ExerciseRow'
 
 const SESSION_IMAGES = {
   'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
@@ -39,7 +39,7 @@ function Heart({ filled }) {
   return (
     <svg width={22} height={22} viewBox="0 0 24 24"
       fill={filled ? '#C4859A' : 'none'}
-      stroke={filled ? '#C4859A' : 'rgba(59,51,48,0.5)'}
+      stroke={filled ? '#C4859A' : 'rgba(37,34,32,0.5)'}
       strokeWidth={1.8}
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -93,7 +93,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
         {heroImage && (
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(59,51,48,0.85) 0%, rgba(59,51,48,0.25) 55%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to top, rgba(37,34,32,0.85) 0%, rgba(37,34,32,0.25) 55%, transparent 100%)' }}
           />
         )}
         <button

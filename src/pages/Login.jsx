@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import heroImg    from '../assets/athena-hero.webp'
 import knightIcon from '../assets/knight-icon.png'
@@ -290,7 +290,7 @@ export default function Login() {
           background: transparent;
           border: none;
           outline: none;
-          color: rgba(59,51,48,0.92);
+          color: rgba(37,34,32,0.92);
           font-family: 'Cormorant Garamond', serif;
           font-size: 12px;
           letter-spacing: 0.22em;
@@ -309,7 +309,7 @@ export default function Login() {
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
         .athena-input:-webkit-autofill:focus {
-          -webkit-text-fill-color: rgba(59,51,48,0.88);
+          -webkit-text-fill-color: rgba(37,34,32,0.88);
           -webkit-box-shadow: 0 0 0 1000px transparent inset;
           box-shadow: 0 0 0 1000px transparent inset;
           transition: background-color 5000s ease-in-out 0s, border-color 0.3s, filter 0.3s;
@@ -599,7 +599,7 @@ export default function Login() {
                 <h2 style={{
                   fontFamily: "'Cinzel', serif",
                   fontSize: '16px', fontWeight: 400,
-                  color: 'rgba(59,51,48,0.88)',
+                  color: 'rgba(37,34,32,0.88)',
                   letterSpacing: '0.1em',
                   margin: 0,
                 }}>Terms & Conditions</h2>
@@ -610,7 +610,7 @@ export default function Login() {
                 <div style={{
                   fontFamily: "'The Seasons', 'Cormorant Garamond', serif",
                   fontSize: '13px', lineHeight: 1.8,
-                  color: 'rgba(59,51,48,0.75)',
+                  color: 'rgba(37,34,32,0.75)',
                   letterSpacing: '0.02em',
                 }}>
                   <p style={{ marginBottom: '14px' }}>
@@ -670,7 +670,7 @@ export default function Login() {
                   <span style={{
                     fontFamily: "'The Seasons', 'Cormorant Garamond', serif",
                     fontSize: '12px', lineHeight: 1.55,
-                    color: 'rgba(59,51,48,0.6)',
+                    color: 'rgba(37,34,32,0.6)',
                     letterSpacing: '0.02em',
                     userSelect: 'none',
                   }}>
@@ -686,7 +686,7 @@ export default function Login() {
                     background: 'transparent',
                     border: `1px solid ${termsChecked ? 'rgba(196,133,154,0.55)' : 'rgba(196,133,154,0.2)'}`,
                     borderRadius: '3px',
-                    color: termsChecked ? 'rgba(59,51,48,0.88)' : 'rgba(59,51,48,0.3)',
+                    color: termsChecked ? 'rgba(37,34,32,0.88)' : 'rgba(37,34,32,0.3)',
                     fontFamily: "'Cinzel', serif",
                     fontSize: '10px', letterSpacing: '0.32em',
                     cursor: termsChecked ? 'pointer' : 'not-allowed',

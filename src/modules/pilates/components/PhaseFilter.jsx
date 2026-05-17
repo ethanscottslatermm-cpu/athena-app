@@ -1,4 +1,4 @@
-const CHIPS = [
+﻿const CHIPS = [
   { id: 'all',          key: null,         val: null,           label: 'All' },
   { id: 'beginner',     key: 'difficulty', val: 'beginner',     label: 'Beginner' },
   { id: 'intermediate', key: 'difficulty', val: 'intermediate', label: 'Intermediate' },
@@ -24,9 +24,9 @@ export default function PhaseFilter({ activeId = 'all', onChange }) {
             className="shrink-0 font-garamond text-[13px] px-4 rounded-full transition-all"
             style={{
               height: 32,
-              background: on ? '#C4859A' : 'rgba(59,51,48,0.06)',
-              border: on ? '1px solid rgba(196,133,154,0.9)' : '1px solid rgba(59,51,48,0.15)',
-              color: on ? '#F2EDE8' : 'rgba(59,51,48,0.48)',
+              background: on ? '#C4859A' : 'rgba(37,34,32,0.06)',
+              border: on ? '1px solid rgba(196,133,154,0.9)' : '1px solid rgba(37,34,32,0.15)',
+              color: on ? '#F2EDE8' : 'rgba(37,34,32,0.48)',
               fontWeight: on ? 600 : 400,
             }}
           >

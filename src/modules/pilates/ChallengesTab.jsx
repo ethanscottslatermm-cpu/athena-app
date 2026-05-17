@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { differenceInDays, format, addDays } from 'date-fns'
 import { supabase } from '../../lib/supabase'
 
@@ -134,7 +134,7 @@ export default function ChallengesTab({
             <p className="font-garamond text-brown/45 text-sm mb-3">
               {entry.sessions_completed ?? 0} of {challenge.sessions_required} sessions completed
             </p>
-            <div className="h-1.5 rounded-full mb-3" style={{ background: 'rgba(59,51,48,0.1)' }}>
+            <div className="h-1.5 rounded-full mb-3" style={{ background: 'rgba(37,34,32,0.1)' }}>
               <div
                 className="h-full rounded-full transition-all"
                 style={{ width: `${pct}%`, background: phaseC }}
@@ -212,7 +212,7 @@ export default function ChallengesTab({
       {!challenges.length && (
         <div
           className="py-10 flex flex-col items-center rounded-2xl"
-          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
+          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.46)' }}
         >
           <p className="font-garamond text-brown/35 text-sm">No challenges available yet</p>
           <p className="font-garamond italic text-brown/25 text-xs mt-1">Check back soon</p>
