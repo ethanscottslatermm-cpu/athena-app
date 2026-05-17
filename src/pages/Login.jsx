@@ -248,9 +248,9 @@ export default function Login() {
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
         @keyframes iconPulse {
-          0%   { opacity: 0.82; filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 6px rgba(255,220,80,0.55)); }
-          50%  { opacity: 1;    filter: sepia(1) saturate(9) hue-rotate(10deg) brightness(8) drop-shadow(0 0 18px rgba(255,225,80,1)) drop-shadow(0 0 34px rgba(255,200,60,0.65)); }
-          100% { opacity: 1;    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(7) drop-shadow(0 0 12px rgba(255,220,80,0.95)); }
+          0%   { opacity: 0.65; filter: sepia(1) saturate(2.5) hue-rotate(5deg) brightness(8) drop-shadow(0 0 8px rgba(255,220,80,0.45)); }
+          50%  { opacity: 1;    filter: sepia(1) saturate(3.5) hue-rotate(5deg) brightness(12) drop-shadow(0 0 14px rgba(255,220,80,0.75)) drop-shadow(0 0 28px rgba(255,200,60,0.35)); }
+          100% { opacity: 0.95; filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(10) drop-shadow(0 0 10px rgba(255,220,80,0.5)) drop-shadow(0 0 22px rgba(255,200,60,0.25)); }
         }
         @keyframes linePulse {
           0%, 100% { border-bottom-color: rgba(235,215,140,0.6); }
@@ -274,13 +274,13 @@ export default function Login() {
           height: 20px;
           object-fit: contain;
           pointer-events: none;
-          opacity: 0.82;
-          filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(5.5) drop-shadow(0 0 6px rgba(255,220,80,0.55));
+          opacity: 0.65;
+          filter: sepia(1) saturate(2.5) hue-rotate(5deg) brightness(8) drop-shadow(0 0 8px rgba(255,220,80,0.45));
           transition: opacity 0.3s, filter 0.4s;
         }
         .iw:focus-within .input-icon-img {
-          opacity: 1;
-          filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(7) drop-shadow(0 0 12px rgba(255,225,80,0.95)) drop-shadow(0 0 26px rgba(255,200,60,0.5));
+          opacity: 0.95;
+          filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(10) drop-shadow(0 0 10px rgba(255,220,80,0.5)) drop-shadow(0 0 22px rgba(255,200,60,0.25));
         }
         .input-icon-img.pulse {
           animation: iconPulse 0.6s ease forwards;
