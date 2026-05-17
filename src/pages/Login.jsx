@@ -895,13 +895,13 @@ export default function Login() {
             letterSpacing: '0.26em',
             lineHeight: 1,
             transform: 'scaleX(0.84)',
-            backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(248,246,242,0.95) 44%, rgba(255,255,255,1) 50%, rgba(248,246,242,0.95) 56%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+            backgroundImage: 'linear-gradient(90deg, rgba(200,185,230,0.82) 0%, rgba(200,185,230,0.82) 30%, rgba(235,225,252,0.95) 44%, rgba(245,238,255,1) 50%, rgba(235,225,252,0.95) 56%, rgba(200,185,230,0.82) 70%, rgba(200,185,230,0.82) 100%)',
             backgroundSize: '200% 100%',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             textShadow: 'none',
-            filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.5)) drop-shadow(0 0 10px rgba(255,255,255,0.35)) drop-shadow(0 0 22px rgba(255,255,255,0.18))',
+            filter: 'drop-shadow(0 0 3px rgba(230,218,255,0.55)) drop-shadow(0 0 10px rgba(210,195,252,0.38)) drop-shadow(0 0 22px rgba(188,170,238,0.2))',
             animation: 'shimmer 5s linear infinite',
           }}>
             ATHENA
