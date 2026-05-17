@@ -264,11 +264,11 @@ export default function Dashboard() {
       {/* ── Header ── */}
       <div className="flex items-start justify-between px-5 pt-10 pb-4 max-w-md mx-auto" style={anim(0)}>
         <div>
-          <p className="font-garamond text-[11px] tracking-[0.2em] uppercase header-shimmer"
+          <p className="font-garamond text-[11px] font-medium tracking-[0.2em] uppercase header-shimmer"
             style={{ backgroundImage: 'linear-gradient(110deg, rgba(175,162,200,0.78) 0%, rgba(175,162,200,0.78) 25%, rgba(218,210,236,0.94) 44%, rgba(238,230,250,1) 50%, rgba(218,210,236,0.94) 56%, rgba(175,162,200,0.78) 75%, rgba(175,162,200,0.78) 100%)' }}>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
-          <h1 className="font-cinzel text-[21px] tracking-wide mt-0.5 leading-tight header-shimmer"
+          <h1 className="font-cinzel text-[21px] font-medium tracking-wide mt-0.5 leading-tight header-shimmer"
             style={{ backgroundImage: 'linear-gradient(110deg, rgba(178,162,205,0.82) 0%, rgba(178,162,205,0.82) 25%, rgba(220,210,238,0.95) 44%, rgba(240,232,252,1) 50%, rgba(220,210,238,0.95) 56%, rgba(178,162,205,0.82) 75%, rgba(178,162,205,0.82) 100%)' }}>
             {greeting()}{firstName ? `, ${firstName}` : ''}
           </h1>
