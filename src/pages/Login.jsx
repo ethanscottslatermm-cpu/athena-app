@@ -4,7 +4,7 @@ import heroImg    from '../assets/athena-hero.webp'
 import knightIcon from '../assets/knight-icon.png'
 import { supabase } from '../lib/supabase'
 
-const ANIM_TYPES  = ['dustUp', 'dustDriftL', 'dustDriftR', 'dustFloat', 'dustSwirl', 'dustFall']
+const ANIM_TYPES  = ['dustUp', 'dustUp', 'dustDriftL', 'dustUp', 'dustDriftR', 'dustUp']
 const GOLD_COLORS = [
   'rgba(255,252,225,',
   'rgba(245,232,170,',
@@ -14,17 +14,16 @@ const GOLD_COLORS = [
   'rgba(242,225,158,',
 ]
 
-const PARTICLES = Array.from({ length: 220 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 170 }, (_, i) => ({
   id: i,
-  x: (i * 37 + 13) % 100,
-  y: i < 80
-    ? (i * 53 + 7) % 100
-    : i < 140
-    ? 55 + ((i * 31 + 17) % 40)
-    : 3 + ((i * 43 + 11) % 40),
-  size: 1 + (i % 5) * 0.7,
-  duration: 2.5 + (i % 7) * 0.7,
-  delay: (i * 0.19) % 8,
+  // ~65% of particles clustered behind the figure (centre of frame x:22–76%)
+  x: i < 110
+    ? 22 + (i * 41 + 7) % 54
+    : (i * 37 + 13) % 100,
+  y: (i * 53 + 7) % 100,
+  size: 1 + (i % 5) * 0.65,
+  duration: 2.2 + (i % 7) * 0.65,
+  delay: (i * 0.22) % 8,
   opacity: 0.35 + (i % 6) * 0.11,
   anim: ANIM_TYPES[i % ANIM_TYPES.length],
   color: GOLD_COLORS[i % GOLD_COLORS.length],
@@ -151,37 +150,16 @@ export default function Login() {
           100% { transform: translateY(-80px)  translateX(6px);   opacity: 0; }
         }
         @keyframes dustDriftL {
-          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          0%   { transform: translateY(0px)  translateX(0px);   opacity: 0; }
           12%  { opacity: 1; }
           88%  { opacity: 1; }
-          100% { transform: translateY(-55px)  translateX(-45px); opacity: 0; }
+          100% { transform: translateY(-82px) translateX(-14px); opacity: 0; }
         }
         @keyframes dustDriftR {
-          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
+          0%   { transform: translateY(0px)  translateX(0px);   opacity: 0; }
           12%  { opacity: 1; }
           88%  { opacity: 1; }
-          100% { transform: translateY(-50px)  translateX(50px);  opacity: 0; }
-        }
-        @keyframes dustFloat {
-          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
-          12%  { opacity: 1; }
-          50%  { transform: translateY(-20px)  translateX(35px); }
-          88%  { opacity: 1; }
-          100% { transform: translateY(-15px)  translateX(70px);  opacity: 0; }
-        }
-        @keyframes dustSwirl {
-          0%   { transform: translateY(0px)   translateX(0px)   rotate(0deg);   opacity: 0; }
-          12%  { opacity: 1; }
-          33%  { transform: translateY(-30px)  translateX(25px)  rotate(60deg); }
-          66%  { transform: translateY(-55px)  translateX(-15px) rotate(130deg); }
-          88%  { opacity: 1; }
-          100% { transform: translateY(-75px)  translateX(10px)  rotate(200deg); opacity: 0; }
-        }
-        @keyframes dustFall {
-          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
-          12%  { opacity: 1; }
-          88%  { opacity: 1; }
-          100% { transform: translateY(50px)   translateX(-30px); opacity: 0; }
+          100% { transform: translateY(-78px) translateX(14px);  opacity: 0; }
         }
         @keyframes breathe {
           0%,100% { opacity: 0.35; transform: translateX(-50%) scale(1); }
@@ -290,18 +268,18 @@ export default function Login() {
           animation: iconPulse 0.6s ease forwards;
         }
         .iw input:focus {
-          border-color: rgba(255,235,140,0.95);
-          background: rgba(255,225,80,0.03);
+          border-color: rgba(196,133,154,0.8);
+          background: rgba(196,133,154,0.04);
           box-shadow:
-            0 1px 12px rgba(255,220,80,0.3),
-            inset 0 0 16px rgba(255,220,80,0.04);
-          animation-play-state: paused;
+            0 0 0 1px rgba(196,133,154,0.1),
+            0 0 24px rgba(196,133,154,0.06),
+            inset 0 0 16px rgba(196,133,154,0.03);
         }
 
         .athena-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(235,215,140,0.65);
+          border-bottom: 1px solid rgba(196,133,154,0.6);
           outline: none;
           color: rgba(59,51,48,0.92);
           font-family: 'Cormorant Garamond', serif;
@@ -310,8 +288,7 @@ export default function Login() {
           padding: 7px 0 7px 6px;
           width: 100%;
           transition: border-color 0.3s, box-shadow 0.3s;
-          caret-color: rgba(255,230,120,0.9);
-          animation: linePulse 2.8s ease-in-out infinite;
+          caret-color: rgba(196,133,154,0.8);
           -webkit-appearance: none;
         }
         .athena-input::placeholder {
@@ -321,7 +298,7 @@ export default function Login() {
           animation: placeholderPulse 2.5s ease-in-out infinite;
         }
         .athena-input:focus {
-          border-bottom-color: rgba(196,133,154,1);
+          border-bottom-color: rgba(196,133,154,0.95);
           animation: inputFocusPulse 0.5s ease forwards;
         }
         .athena-input:-webkit-autofill,
