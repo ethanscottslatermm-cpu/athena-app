@@ -27,7 +27,7 @@ function PngIcon({ src, delay = 0 }) {
         mask: `url(${src}) no-repeat center / contain`,
         background: 'linear-gradient(110deg, transparent 25%, rgba(245,240,225,0.7) 50%, transparent 75%)',
         backgroundSize: '250% 100%',
-        animation: `navShimmer 6.5s ease-in-out infinite ${delay}s`,
+        animation: `navShimmer 10s ease-in-out infinite ${delay}s`,
         mixBlendMode: 'screen',
         pointerEvents: 'none',
       }} />
@@ -88,8 +88,8 @@ export default function BottomNav() {
             @keyframes exitFadeIn  { from { opacity: 0; } to { opacity: 1; } }
             @keyframes exitBlackIn { from { opacity: 0; } to { opacity: 1; } }
             @keyframes navShimmer {
-              0%, 30%   { background-position: -250% 0; }
-              70%, 100% { background-position:  250% 0; }
+              0%, 42%   { background-position: -250% 0; }
+              78%, 100% { background-position:  250% 0; }
             }
           `}</style>
           <video
@@ -118,8 +118,8 @@ export default function BottomNav() {
 
       <style>{`
         @keyframes navShimmer {
-          0%, 30%   { background-position: -250% 0; }
-          70%, 100% { background-position:  250% 0; }
+          0%, 42%   { background-position: -250% 0; }
+          78%, 100% { background-position:  250% 0; }
         }
       `}</style>
       <nav
