@@ -246,18 +246,30 @@ export default function Dashboard() {
           from { opacity: 0; transform: translateY(12px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        @keyframes dashShimmer {
+          0%, 42%   { background-position: -250% 0; }
+          78%, 100% { background-position:  250% 0; }
+        }
         .module-scroll::-webkit-scrollbar { display: none; }
         .module-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .header-shimmer {
+          background-size: 250% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: dashShimmer 10s ease-in-out infinite;
+        }
       `}</style>
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between px-5 pt-10 pb-4 max-w-md mx-auto" style={anim(0)}>
         <div>
-          <p className="font-garamond text-[11px] tracking-[0.2em] uppercase"
-            style={{ color: '#7A6A65' }}>
+          <p className="font-garamond text-[11px] tracking-[0.2em] uppercase header-shimmer"
+            style={{ backgroundImage: 'linear-gradient(110deg, rgba(138,124,118,0.8) 0%, rgba(138,124,118,0.8) 25%, rgba(196,182,174,0.95) 44%, rgba(218,208,200,1) 50%, rgba(196,182,174,0.95) 56%, rgba(138,124,118,0.8) 75%, rgba(138,124,118,0.8) 100%)' }}>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
-          <h1 className="font-cinzel text-[21px] text-brown tracking-wide mt-0.5 leading-tight">
+          <h1 className="font-cinzel text-[21px] tracking-wide mt-0.5 leading-tight header-shimmer"
+            style={{ backgroundImage: 'linear-gradient(110deg, rgba(90,76,72,0.88) 0%, rgba(90,76,72,0.88) 25%, rgba(158,140,134,0.95) 44%, rgba(188,172,164,1) 50%, rgba(158,140,134,0.95) 56%, rgba(90,76,72,0.88) 75%, rgba(90,76,72,0.88) 100%)' }}>
             {greeting()}{firstName ? `, ${firstName}` : ''}
           </h1>
         </div>
