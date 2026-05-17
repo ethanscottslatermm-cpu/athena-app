@@ -27,7 +27,7 @@ function PngIcon({ src, delay = 0 }) {
         mask: `url(${src}) no-repeat center / contain`,
         background: 'linear-gradient(110deg, transparent 25%, rgba(245,240,225,0.7) 50%, transparent 75%)',
         backgroundSize: '250% 100%',
-        animation: `navShimmer 4.5s ease-in-out infinite ${delay}s`,
+        animation: `navShimmer 6.5s ease-in-out infinite ${delay}s`,
         mixBlendMode: 'screen',
         pointerEvents: 'none',
       }} />
