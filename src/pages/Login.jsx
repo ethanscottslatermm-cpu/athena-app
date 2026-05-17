@@ -577,7 +577,7 @@ export default function Login() {
               width: '100%',
               maxWidth: '360px',
               maxHeight: '80vh',
-              background: 'rgba(242,237,232,0.08)',
+              background: 'transparent',
               backdropFilter: 'blur(28px)',
               WebkitBackdropFilter: 'blur(28px)',
               border: '1px solid rgba(196,133,154,0.25)',
