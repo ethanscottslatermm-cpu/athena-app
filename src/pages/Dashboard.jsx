@@ -265,11 +265,11 @@ export default function Dashboard() {
       <div className="flex items-start justify-between px-5 pt-10 pb-4 max-w-md mx-auto" style={anim(0)}>
         <div>
           <p className="font-garamond text-[11px] font-medium tracking-[0.2em] uppercase header-shimmer"
-            style={{ backgroundImage: 'linear-gradient(110deg, rgba(175,162,200,0.78) 0%, rgba(175,162,200,0.78) 25%, rgba(218,210,236,0.94) 44%, rgba(238,230,250,1) 50%, rgba(218,210,236,0.94) 56%, rgba(175,162,200,0.78) 75%, rgba(175,162,200,0.78) 100%)' }}>
+            style={{ backgroundImage: 'linear-gradient(110deg, rgba(112,98,94,0.9) 0%, rgba(112,98,94,0.9) 25%, rgba(188,178,205,0.95) 44%, rgba(232,224,248,1) 50%, rgba(188,178,205,0.95) 56%, rgba(112,98,94,0.9) 75%, rgba(112,98,94,0.9) 100%)' }}>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
           <h1 className="font-cinzel text-[21px] font-medium tracking-wide mt-0.5 leading-tight header-shimmer"
-            style={{ backgroundImage: 'linear-gradient(110deg, rgba(178,162,205,0.82) 0%, rgba(178,162,205,0.82) 25%, rgba(220,210,238,0.95) 44%, rgba(240,232,252,1) 50%, rgba(220,210,238,0.95) 56%, rgba(178,162,205,0.82) 75%, rgba(178,162,205,0.82) 100%)' }}>
+            style={{ backgroundImage: 'linear-gradient(110deg, rgba(59,51,48,0.92) 0%, rgba(59,51,48,0.92) 25%, rgba(168,155,185,0.95) 44%, rgba(232,224,248,1) 50%, rgba(168,155,185,0.95) 56%, rgba(59,51,48,0.92) 75%, rgba(59,51,48,0.92) 100%)' }}>
             {greeting()}{firstName ? `, ${firstName}` : ''}
           </h1>
         </div>
