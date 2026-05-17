@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
-import { Settings, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
+import settingsIcon from '../assets/icons/settings-icon.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
@@ -278,7 +279,12 @@ export default function Dashboard() {
             background: 'rgba(196,175,168,0.25)',
             border: '1px solid #C4AFA8',
           }}>
-          <Settings size={20} strokeWidth={1.4} style={{ color: '#7A6A65' }} />
+          <span style={{
+            display: 'block', width: '22px', height: '22px',
+            WebkitMask: `url(${settingsIcon}) no-repeat center / contain`,
+            mask: `url(${settingsIcon}) no-repeat center / contain`,
+            backgroundColor: '#7A6A65',
+          }} />
         </button>
       </div>
 
