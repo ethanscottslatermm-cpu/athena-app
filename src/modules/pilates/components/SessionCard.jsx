@@ -1,9 +1,9 @@
 const PHASE_COLORS = {
-  menstrual: '#8B1A1A',
-  follicular: '#8FAF8A',
-  ovulation: '#C9A86C',
-  luteal: '#6B4F6B',
-  all: '#C9A86C',
+  menstrual: '#C4859A',
+  follicular: '#8FA58C',
+  ovulation: '#C4859A',
+  luteal: '#C4AFA8',
+  all: '#C4859A',
 }
 
 const SESSION_IMAGES = {
@@ -36,8 +36,8 @@ function getSessionImage(title) {
 function Heart({ filled, size = 18 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24"
-      fill={filled ? '#C9A86C' : 'none'}
-      stroke={filled ? '#C9A86C' : 'rgba(244,239,230,0.5)'}
+      fill={filled ? '#C4859A' : 'none'}
+      stroke={filled ? '#C4859A' : 'rgba(59,51,48,0.4)'}
       strokeWidth={2}
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -50,9 +50,9 @@ function Pill({ children }) {
     <span
       className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
       style={{
-        background: 'rgba(8,5,4,0.55)',
-        border: '1px solid rgba(201,168,108,0.45)',
-        color: '#C9A86C',
+        background: 'rgba(242,237,232,0.7)',
+        border: '1px solid rgba(196,133,154,0.45)',
+        color: '#C4859A',
       }}
     >
       {children}
@@ -68,7 +68,7 @@ export default function SessionCard({
   variant = 'grid',
 }) {
   if (!session) return null
-  const pc  = PHASE_COLORS[session.phase] ?? '#C9A86C'
+  const pc  = PHASE_COLORS[session.phase] ?? '#C4859A'
   const img = getSessionImage(session.title)
 
   const bgStyle = img
@@ -78,13 +78,13 @@ export default function SessionCard({
         backgroundPosition: 'center top',
       }
     : {
-        background: `linear-gradient(135deg, ${pc}30 0%, rgba(8,5,4,0.88) 100%)`,
+        background: `linear-gradient(135deg, ${pc}30 0%, rgba(242,237,232,0.85) 100%)`,
       }
 
   // Overlay gradient — deeper when there's a photo so text stays readable
   const overlayStyle = img
-    ? { background: 'linear-gradient(to bottom, rgba(6,4,4,0.08) 0%, rgba(6,4,4,0.55) 45%, rgba(6,4,4,0.94) 100%)' }
-    : { background: `linear-gradient(to bottom, transparent 0%, rgba(8,5,4,0.7) 60%, rgba(8,5,4,0.95) 100%)` }
+    ? { background: 'linear-gradient(to bottom, rgba(59,51,48,0.04) 0%, rgba(59,51,48,0.45) 45%, rgba(59,51,48,0.88) 100%)' }
+    : { background: `linear-gradient(to bottom, transparent 0%, rgba(242,237,232,0.5) 60%, rgba(242,237,232,0.85) 100%)` }
 
   // ── Featured (full-width, 220px tall) ────────────────────────────────────
   if (variant === 'featured') {
@@ -92,7 +92,7 @@ export default function SessionCard({
       <div
         onClick={onTap}
         className="relative w-full rounded-2xl overflow-hidden cursor-pointer"
-        style={{ height: 220, border: `1px solid ${img ? 'rgba(201,168,108,0.2)' : `${pc}35`}`, ...bgStyle }}
+        style={{ height: 220, border: `1px solid ${img ? 'rgba(196,175,168,0.35)' : `${pc}45`}`, ...bgStyle }}
       >
         <div className="absolute inset-0" style={overlayStyle} />
 
@@ -104,10 +104,10 @@ export default function SessionCard({
         </button>
 
         <div className="absolute inset-0 flex flex-col justify-end p-4 z-10">
-          <h3 className="font-cinzel text-ivory text-lg leading-tight mb-1">{session.title}</h3>
+          <h3 className="font-cinzel text-white text-lg leading-tight mb-1">{session.title}</h3>
           {session.description && (
             <p
-              className="font-garamond italic text-ivory/60 text-xs leading-snug mb-2"
+              className="font-garamond italic text-white/70 text-xs leading-snug mb-2"
               style={{
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
@@ -129,8 +129,8 @@ export default function SessionCard({
           onClick={e => { e.stopPropagation(); onTap?.() }}
           className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-gold cursor-pointer z-10"
           style={{
-            background: 'rgba(8,5,4,0.7)',
-            border: '1px solid rgba(201,168,108,0.4)',
+            background: 'rgba(242,237,232,0.75)',
+            border: '1px solid rgba(196,133,154,0.4)',
           }}
         >
           START
@@ -145,7 +145,7 @@ export default function SessionCard({
       <div
         onClick={onTap}
         className="relative shrink-0 rounded-xl overflow-hidden cursor-pointer"
-        style={{ width: 160, height: 210, border: `1px solid ${img ? 'rgba(201,168,108,0.18)' : `${pc}28`}`, ...bgStyle }}
+        style={{ width: 160, height: 210, border: `1px solid ${img ? 'rgba(196,175,168,0.32)' : `${pc}40`}`, ...bgStyle }}
       >
         <div className="absolute inset-0" style={overlayStyle} />
 
@@ -157,7 +157,7 @@ export default function SessionCard({
         </button>
 
         <div className="absolute inset-0 flex flex-col justify-end p-3 z-10">
-          <h4 className="font-cinzel text-ivory text-[13px] leading-tight mb-1">{session.title}</h4>
+          <h4 className="font-cinzel text-white text-[13px] leading-tight mb-1">{session.title}</h4>
           {session.description && (
             <p
               className="font-garamond italic text-ivory/50 text-[11px] leading-snug mb-1.5"
@@ -185,8 +185,8 @@ export default function SessionCard({
       onClick={onTap}
       className="relative rounded-xl overflow-hidden cursor-pointer"
       style={{
-        background: 'rgba(8,5,4,0.65)',
-        border: '1px solid rgba(244,239,230,0.08)',
+        background: '#F2EDE8',
+        border: '1px solid rgba(196,175,168,0.35)',
       }}
     >
       <div

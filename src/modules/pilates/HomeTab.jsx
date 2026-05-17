@@ -8,7 +8,7 @@ function Shimmer({ className = '' }) {
     <div
       className={`rounded-xl ${className}`}
       style={{
-        background: 'linear-gradient(90deg, rgba(201,168,108,0.05) 25%, rgba(201,168,108,0.1) 50%, rgba(201,168,108,0.05) 75%)',
+        background: 'linear-gradient(90deg, rgba(196,133,154,0.05) 25%, rgba(196,133,154,0.1) 50%, rgba(196,133,154,0.05) 75%)',
         backgroundSize: '200% 100%',
         animation: 'shimmerSlide 1.4s infinite',
       }}
@@ -36,11 +36,11 @@ export default function HomeTab({
   const [insightLoad, setInsightLoad] = useState(false)
   const today = new Date()
   const pc = {
-    menstrual: '#8B1A1A',
-    follicular: '#8FAF8A',
-    ovulation: '#C9A86C',
-    luteal: '#6B4F6B',
-  }[phaseData?.phase] ?? '#C9A86C'
+    menstrual: '#C4859A',
+    follicular: '#8FA58C',
+    ovulation: '#C4859A',
+    luteal: '#C4AFA8',
+  }[phaseData?.phase] ?? '#C4859A'
 
   // ── AI phase insight ──────────────────────────────────────────────────────
   async function fetchInsight() {
@@ -116,7 +116,7 @@ export default function HomeTab({
       <div
         className="rounded-2xl p-4"
         style={{
-          background: `linear-gradient(135deg, ${pc}18 0%, rgba(8,5,4,0.5) 100%)`,
+          background: `linear-gradient(135deg, ${pc}22 0%, rgba(242,237,232,0.7) 100%)`,
           border: `1px solid ${pc}35`,
         }}
       >
@@ -129,7 +129,7 @@ export default function HomeTab({
             {phaseLabel} Phase
           </span>
         </div>
-        <p className="font-cinzel text-ivory/80 text-sm mb-2">What your body needs today</p>
+        <p className="font-cinzel text-brown/75 text-sm mb-2">What your body needs today</p>
 
         {insightLoad ? (
           <div className="space-y-1.5">
@@ -138,7 +138,7 @@ export default function HomeTab({
           </div>
         ) : insight?.body ? (
           <>
-            <p className="font-garamond italic text-ivory/60 text-sm leading-relaxed">
+            <p className="font-garamond italic text-brown/60 text-sm leading-relaxed">
               {insight.body}
             </p>
             <button
@@ -150,14 +150,14 @@ export default function HomeTab({
             </button>
           </>
         ) : !phaseData?.phase ? (
-          <p className="font-garamond text-ivory/35 text-sm italic">
+          <p className="font-garamond text-taupe text-sm italic">
             Set up your cycle to unlock phase guidance.
           </p>
         ) : (
           <button
             onClick={fetchInsight}
             className="font-garamond text-sm italic"
-            style={{ color: 'rgba(244,239,230,0.4)' }}
+            style={{ color: 'rgba(59,51,48,0.4)' }}
           >
             Tap to load today's guidance →
           </button>
@@ -181,9 +181,9 @@ export default function HomeTab({
       ) : (
         <div
           className="h-48 rounded-2xl flex items-center justify-center"
-          style={{ background: 'rgba(201,168,108,0.05)', border: '1px solid rgba(201,168,108,0.12)' }}
+          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.35)' }}
         >
-          <p className="font-garamond text-ivory/25 text-sm">Sessions loading…</p>
+          <p className="font-garamond text-taupe text-sm">Sessions loading…</p>
         </div>
       )}
 
@@ -191,13 +191,13 @@ export default function HomeTab({
       {recentCompletion && (
         <div
           className="flex items-center justify-between rounded-xl px-4 py-3"
-          style={{ background: 'rgba(201,168,108,0.07)', border: '1px solid rgba(201,168,108,0.15)' }}
+          style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.4)' }}
         >
           <div className="flex-1 min-w-0">
-            <p className="font-cinzel text-ivory/50 text-[10px] tracking-widest uppercase mb-0.5">
+            <p className="font-cinzel text-taupe text-[10px] tracking-widest uppercase mb-0.5">
               Recently Completed
             </p>
-            <p className="font-garamond text-ivory/75 text-sm truncate">
+            <p className="font-garamond text-brown/80 text-sm truncate">
               {recentCompletion.title}
             </p>
           </div>
@@ -213,18 +213,18 @@ export default function HomeTab({
       {/* ── Weekly progress ring ──────────────────────────────────────── */}
       <div
         className="rounded-2xl p-4"
-        style={{ background: 'rgba(201,168,108,0.06)', border: '1px solid rgba(201,168,108,0.12)' }}
+        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.38)' }}
       >
-        <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase mb-4">
+        <p className="font-cinzel text-taupe text-[10px] tracking-widest uppercase mb-4">
           This Week
         </p>
         <div className="flex items-center gap-6">
           <ProgressRing value={weekDone} max={weekTarget} size={88} />
           <div className="flex-1">
-            <p className="font-garamond text-ivory/60 text-sm mb-1">
+            <p className="font-garamond text-brown/65 text-sm mb-1">
               {weekDone} of {weekTarget} sessions
             </p>
-            <p className="font-garamond italic text-ivory/35 text-xs mb-3">
+            <p className="font-garamond italic text-taupe text-xs mb-3">
               {weekDone >= weekTarget ? 'Weekly goal met ✦' : `${weekTarget - weekDone} more to reach your goal`}
             </p>
             {/* 7-day dots */}
@@ -235,14 +235,14 @@ export default function HomeTab({
                     className="w-5 h-5 rounded-full"
                     style={{
                       background: activeDays[i]
-                        ? '#C9A86C'
+                        ? '#C4859A'
                         : isSameDay(d, today)
-                        ? 'rgba(201,168,108,0.25)'
-                        : 'rgba(244,239,230,0.06)',
-                      border: isSameDay(d, today) ? '1px solid rgba(201,168,108,0.5)' : 'none',
+                        ? 'rgba(196,133,154,0.3)'
+                        : 'rgba(59,51,48,0.08)',
+                      border: isSameDay(d, today) ? '1px solid rgba(196,133,154,0.5)' : 'none',
                     }}
                   />
-                  <span className="font-garamond text-[8px] text-ivory/25">
+                  <span className="font-garamond text-[8px] text-taupe/60">
                     {format(d, 'EEEEE')}
                   </span>
                 </div>
@@ -256,13 +256,13 @@ export default function HomeTab({
       {recommended.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-2">
-            <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase">
+            <p className="font-cinzel text-taupe text-[10px] tracking-widest uppercase">
               Recommended
             </p>
             <button
               onClick={onSeeAll}
               className="font-cinzel text-gold text-[11px] tracking-wide px-3 py-1 rounded-lg"
-              style={{ background: 'rgba(201,168,108,0.12)', border: '1px solid rgba(201,168,108,0.35)' }}
+              style={{ background: 'rgba(196,133,154,0.12)', border: '1px solid rgba(196,133,154,0.4)' }}
             >
               See All →
             </button>

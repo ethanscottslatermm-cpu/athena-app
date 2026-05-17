@@ -11,10 +11,10 @@ export default function ExerciseRow({ exercise, index, active = false }) {
     <div
       style={{
         background: active
-          ? 'rgba(201,168,108,0.12)'
+          ? 'rgba(196,133,154,0.1)'
           : index % 2 === 0
-          ? 'rgba(8,5,4,0.5)'
-          : 'rgba(244,239,230,0.02)',
+          ? 'rgba(242,237,232,0.7)'
+          : 'rgba(242,237,232,0.4)',
       }}
     >
       <button
@@ -24,35 +24,35 @@ export default function ExerciseRow({ exercise, index, active = false }) {
       >
         <span
           className="font-cinzel text-[10px] w-5 text-center shrink-0 leading-none"
-          style={{ color: active ? '#C9A86C' : 'rgba(201,168,108,0.4)' }}
+          style={{ color: active ? '#C4859A' : 'rgba(196,133,154,0.5)' }}
         >
           {index + 1}
         </span>
         <span
           className="font-garamond text-sm flex-1 leading-tight"
-          style={{ color: active ? '#F4EFE6' : 'rgba(244,239,230,0.75)' }}
+          style={{ color: active ? '#3B3330' : 'rgba(59,51,48,0.75)' }}
         >
           {exercise.name}
         </span>
         <span
           className="font-garamond text-sm shrink-0"
-          style={{ color: active ? '#C9A86C' : 'rgba(201,168,108,0.65)' }}
+          style={{ color: active ? '#C4859A' : 'rgba(196,133,154,0.7)' }}
         >
           {durationLabel}
         </span>
-        <span className="text-ivory/25 text-xs shrink-0">{expanded ? '▾' : '›'}</span>
+        <span className="text-brown/25 text-xs shrink-0">{expanded ? '▾' : '›'}</span>
       </button>
 
       {expanded && (
         <div className="px-4 pb-4" style={{ paddingLeft: '2.75rem' }}>
           <div className="mb-3">
             {exercise.form_cue && (
-              <p className="font-garamond italic text-ivory/50 text-sm leading-relaxed">
+              <p className="font-garamond italic text-brown/50 text-sm leading-relaxed">
                 {exercise.form_cue}
               </p>
             )}
             {exercise.rest_sec > 0 && (
-              <p className="font-garamond text-ivory/28 text-xs mt-1.5">
+              <p className="font-garamond text-brown/35 text-xs mt-1.5">
                 Rest {exercise.rest_sec}s after this exercise
               </p>
             )}

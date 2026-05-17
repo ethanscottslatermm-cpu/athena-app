@@ -3,21 +3,21 @@ import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval
 import BodyHeatmap from './components/BodyHeatmap'
 
 const PHASE_COLORS = {
-  menstrual: '#8B1A1A',
-  follicular: '#8FAF8A',
-  ovulation: '#C9A86C',
-  luteal: '#6B4F6B',
+  menstrual: '#C4859A',
+  follicular: '#8FA58C',
+  ovulation: '#C4859A',
+  luteal: '#C4AFA8',
 }
 
 function StatTile({ icon, value, label }) {
   return (
     <div
       className="flex flex-col items-center justify-center py-4 rounded-xl"
-      style={{ background: 'rgba(201,168,108,0.07)', border: '1px solid rgba(201,168,108,0.15)' }}
+      style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,133,154,0.2)' }}
     >
       <span className="text-lg mb-1">{icon}</span>
-      <span className="font-cinzel text-gold text-xl leading-none">{value ?? '—'}</span>
-      <span className="font-garamond text-ivory/40 text-[10px] mt-1 text-center leading-tight">
+      <span className="font-cinzel text-rose text-xl leading-none">{value ?? '—'}</span>
+      <span className="font-garamond text-brown/40 text-[10px] mt-1 text-center leading-tight">
         {label}
       </span>
     </div>
@@ -43,14 +43,14 @@ function WeeklyBarChart({ data }) {
           <g key={i}>
             <rect
               x={x} y={y} width={barW} height={bH}
-              fill={d.minutes > 0 ? '#C9A86C' : 'rgba(244,239,230,0.06)'}
+              fill={d.minutes > 0 ? '#C4859A' : 'rgba(59,51,48,0.08)'}
               rx={3}
               opacity={isToday ? 1 : 0.75}
             />
             <text
               x={x + barW / 2} y={H + 14}
               textAnchor="middle"
-              fill={isToday ? 'rgba(201,168,108,0.7)' : 'rgba(244,239,230,0.3)'}
+              fill={isToday ? 'rgba(196,133,154,0.8)' : 'rgba(59,51,48,0.35)'}
               fontSize={9}
               fontFamily="Cormorant Garamond, serif"
             >
@@ -91,15 +91,15 @@ function PhaseDonut({ data, total }) {
           return seg
         })}
         {total === 0 && (
-          <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(244,239,230,0.06)" strokeWidth={10} />
+          <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(59,51,48,0.08)" strokeWidth={10} />
         )}
       </svg>
       <div className="space-y-1.5 flex-1">
         {data.map(({ phase, count }) => (
           <div key={phase} className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full shrink-0" style={{ background: PHASE_COLORS[phase] }} />
-            <span className="font-garamond text-ivory/55 text-xs capitalize flex-1">{phase}</span>
-            <span className="font-garamond text-ivory/35 text-xs">
+            <span className="font-garamond text-brown/55 text-xs capitalize flex-1">{phase}</span>
+            <span className="font-garamond text-brown/35 text-xs">
               {total > 0 ? Math.round((count / total) * 100) : 0}%
             </span>
           </div>
@@ -127,7 +127,7 @@ function MonthHeatmap({ completions }) {
     <div>
       <div className="grid grid-cols-7 gap-0.5 mb-1">
         {dayLabels.map((d, i) => (
-          <span key={i} className="font-garamond text-[9px] text-ivory/25 text-center">{d}</span>
+          <span key={i} className="font-garamond text-[9px] text-brown/30 text-center">{d}</span>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-0.5">
@@ -144,16 +144,16 @@ function MonthHeatmap({ completions }) {
               className="aspect-square rounded-sm flex items-center justify-center"
               style={{
                 background: count >= 2
-                  ? 'rgba(201,168,108,0.8)'
+                  ? 'rgba(196,133,154,0.75)'
                   : count === 1
-                  ? 'rgba(201,168,108,0.35)'
-                  : 'rgba(244,239,230,0.05)',
-                border: isToday ? '1px solid rgba(201,168,108,0.5)' : 'none',
+                  ? 'rgba(196,133,154,0.35)'
+                  : 'rgba(59,51,48,0.06)',
+                border: isToday ? '1px solid rgba(196,133,154,0.5)' : 'none',
               }}
             >
               <span
                 className="font-garamond text-[8px]"
-                style={{ color: count > 0 ? '#060404' : 'rgba(244,239,230,0.2)' }}
+                style={{ color: count > 0 ? '#F2EDE8' : 'rgba(59,51,48,0.3)' }}
               >
                 {format(day, 'd')}
               </span>
@@ -228,7 +228,7 @@ export default function ProgressTab({
       <div className="space-y-4 pb-4">
         {[1, 2, 3].map(i => (
           <div key={i} className="h-28 rounded-xl"
-            style={{ background: 'rgba(201,168,108,0.05)', animation: 'shimmerSlide 1.4s infinite' }}
+            style={{ background: 'rgba(196,133,154,0.07)', animation: 'shimmerSlide 1.4s infinite' }}
           />
         ))}
       </div>
@@ -239,11 +239,11 @@ export default function ProgressTab({
     return (
       <div
         className="flex flex-col items-center justify-center py-16 rounded-2xl text-center"
-        style={{ background: 'rgba(201,168,108,0.04)', border: '1px solid rgba(201,168,108,0.1)' }}
+        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
       >
         <span className="text-3xl mb-3">✦</span>
-        <p className="font-cinzel text-ivory/40 text-sm mb-2">No sessions completed yet</p>
-        <p className="font-garamond italic text-ivory/25 text-sm">
+        <p className="font-cinzel text-brown/40 text-sm mb-2">No sessions completed yet</p>
+        <p className="font-garamond italic text-brown/25 text-sm">
           Complete your first session to see progress here.
         </p>
       </div>
@@ -266,9 +266,9 @@ export default function ProgressTab({
       {/* ── Weekly activity ─────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(201,168,108,0.06)', border: '1px solid rgba(201,168,108,0.12)' }}
+        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.35)' }}
       >
-        <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase mb-3">
+        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           Last 7 Days
         </p>
         <WeeklyBarChart data={weeklyData} />
@@ -277,9 +277,9 @@ export default function ProgressTab({
       {/* ── Monthly heatmap ─────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(201,168,108,0.05)', border: '1px solid rgba(201,168,108,0.1)' }}
+        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
       >
-        <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase mb-3">
+        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           {format(today, 'MMMM yyyy')}
         </p>
         <MonthHeatmap completions={completions} />
@@ -288,9 +288,9 @@ export default function ProgressTab({
       {/* ── Body heatmap ────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(107,79,107,0.08)', border: '1px solid rgba(107,79,107,0.18)' }}
+        style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
       >
-        <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase mb-3">
+        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           Body Area Focus
         </p>
         <BodyHeatmap completions={completions} sessions={sessions} />
@@ -299,9 +299,9 @@ export default function ProgressTab({
       {/* ── Phase distribution ──────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(143,175,138,0.07)', border: '1px solid rgba(143,175,138,0.15)' }}
+        style={{ background: 'rgba(143,165,140,0.1)', border: '1px solid rgba(143,165,140,0.2)' }}
       >
-        <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase mb-3">
+        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           Phase Training
         </p>
         <PhaseDonut
@@ -309,7 +309,7 @@ export default function ProgressTab({
           total={phaseTotal}
         />
         {phaseTotal === 0 && (
-          <p className="font-garamond italic text-ivory/25 text-xs text-center mt-2">
+          <p className="font-garamond italic text-brown/25 text-xs text-center mt-2">
             Phase data appears after cycle tracking is set up
           </p>
         )}
@@ -318,9 +318,9 @@ export default function ProgressTab({
       {/* ── Session history ─────────────────────────────────────────── */}
       <div
         className="rounded-xl overflow-hidden"
-        style={{ border: '1px solid rgba(244,239,230,0.08)' }}
+        style={{ border: '1px solid rgba(196,175,168,0.35)' }}
       >
-        <p className="font-cinzel text-ivory/40 text-[10px] tracking-widest uppercase px-4 pt-4 pb-2">
+        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase px-4 pt-4 pb-2">
           History
         </p>
         {completions.slice(0, 20).map((c, i) => {
@@ -329,19 +329,19 @@ export default function ProgressTab({
             <button
               key={c.id ?? i}
               onClick={() => s && onSelectSession(s)}
-              className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-white/5"
-              style={{ borderTop: i > 0 ? '1px solid rgba(244,239,230,0.05)' : 'none', minHeight: 44 }}
+              className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-black/5"
+              style={{ borderTop: i > 0 ? '1px solid rgba(196,175,168,0.2)' : 'none', minHeight: 44 }}
             >
               <div className="flex-1 min-w-0">
-                <p className="font-garamond text-ivory/65 text-sm truncate">
+                <p className="font-garamond text-brown/65 text-sm truncate">
                   {s?.title ?? 'Session'}
                 </p>
-                <p className="font-garamond text-ivory/30 text-xs">
+                <p className="font-garamond text-brown/35 text-xs">
                   {format(new Date(c.completed_at), 'MMM d, yyyy')} · {c.duration_min ?? 30} min
                 </p>
               </div>
               {c.rating > 0 && (
-                <span className="font-garamond text-gold/60 text-xs ml-3 shrink-0">
+                <span className="font-garamond text-rose/60 text-xs ml-3 shrink-0">
                   {'★'.repeat(c.rating)}
                 </span>
               )}

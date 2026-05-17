@@ -24,9 +24,9 @@ export default function PhaseFilter({ activeId = 'all', onChange }) {
             className="shrink-0 font-garamond text-[13px] px-4 rounded-full transition-all"
             style={{
               height: 32,
-              background: on ? '#C9A86C' : 'rgba(244,239,230,0.06)',
-              border: on ? '1px solid rgba(201,168,108,0.9)' : '1px solid rgba(244,239,230,0.11)',
-              color: on ? '#060404' : 'rgba(244,239,230,0.48)',
+              background: on ? '#C4859A' : 'rgba(59,51,48,0.06)',
+              border: on ? '1px solid rgba(196,133,154,0.9)' : '1px solid rgba(59,51,48,0.15)',
+              color: on ? '#F2EDE8' : 'rgba(59,51,48,0.48)',
               fontWeight: on ? 600 : 400,
             }}
           >

@@ -27,12 +27,14 @@
 - Auth: email/password (Supabase Auth)
 
 ## Design Tokens
-- Gold: #C9A86C
-- Mauve: #6B4F6B
-- Dusty Rose: #C49A9A
-- Ivory: #F4EFE6
-- Sage: #8FAF8A
-- Deep Crimson: #8B1A1A
+- Background (linen): #F2EDE8
+- Rose (accent/CTA): #C4859A
+- Surface (mist/card): #C4AFA8
+- Sage: #8FA58C
+- Brown (text primary): #3B3330
+- Taupe (text secondary): #7A6A65
+- Greige (nav bar): #8A7E78
+- Mist (conditions card): #D6CFC9
 - Font Display: Cinzel (Roman serif)
 - Font Body: Cormorant Garamond
 

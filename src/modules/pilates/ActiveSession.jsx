@@ -64,22 +64,22 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
   }
 
   const pc = {
-    menstrual: '#8B1A1A',
-    follicular: '#8FAF8A',
-    ovulation: '#C9A86C',
-    luteal: '#6B4F6B',
-  }[phaseData?.phase] ?? '#C9A86C'
+    menstrual: '#C4859A',
+    follicular: '#8FA58C',
+    ovulation: '#C4859A',
+    luteal: '#C4AFA8',
+  }[phaseData?.phase] ?? '#C4859A'
 
   return (
     <div
       className="fixed inset-0 z-[60] flex flex-col"
-      style={{ background: 'rgba(6,4,4,0.97)' }}
+      style={{ background: '#F2EDE8' }}
     >
       {/* ── Top progress bar ────────────────────────────────────────────── */}
-      <div className="h-1 w-full" style={{ background: 'rgba(244,239,230,0.06)' }}>
+      <div className="h-1 w-full" style={{ background: 'rgba(59,51,48,0.1)' }}>
         <div
           className="h-full transition-all duration-500"
-          style={{ width: `${pct}%`, background: '#C9A86C' }}
+          style={{ width: `${pct}%`, background: '#C4859A' }}
         />
       </div>
 
@@ -90,19 +90,19 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
       >
         <button
           onClick={() => setShowExitModal(true)}
-          className="w-10 h-10 flex items-center justify-center text-ivory/50 text-xl"
+          className="w-10 h-10 flex items-center justify-center text-brown/50 text-xl"
         >
           ×
         </button>
-        <span className="font-garamond text-ivory/45 text-sm flex-1 text-center truncate px-2">
+        <span className="font-garamond text-brown/45 text-sm flex-1 text-center truncate px-2">
           {session?.title}
         </span>
-        <span className="font-cinzel text-gold text-base w-14 text-right">
+        <span className="font-cinzel text-rose text-base w-14 text-right">
           {formatTime(elapsed)}
         </span>
       </div>
 
-      <p className="font-cinzel text-ivory/30 text-[10px] tracking-widest text-center pb-2">
+      <p className="font-cinzel text-brown/30 text-[10px] tracking-widest text-center pb-2">
         EXERCISE {exIdx + 1} OF {total}
       </p>
 
@@ -111,32 +111,31 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
         {restSecs > 0 ? (
           // Rest mode
           <>
-            <p className="font-cinzel text-ivory/40 text-xs tracking-widest uppercase mb-3">REST</p>
+            <p className="font-cinzel text-brown/40 text-xs tracking-widest uppercase mb-3">REST</p>
             <span
-              className="font-cinzel text-gold leading-none mb-4"
+              className="font-cinzel text-rose leading-none mb-4"
               style={{ fontSize: 88 }}
             >
               {restSecs}
             </span>
             <button
               onClick={skipRest}
-              className="font-garamond text-ivory/40 text-sm underline underline-offset-2"
+              className="font-garamond text-brown/40 text-sm underline underline-offset-2"
             >
               Skip rest
             </button>
-            <p className="font-garamond italic text-ivory/25 text-sm mt-6">
+            <p className="font-garamond italic text-brown/25 text-sm mt-6">
               Up next: {exercises[exIdx + 1]?.name ?? '—'}
             </p>
           </>
         ) : (
           // Exercise mode
           <>
-
-            <h2 className="font-cinzel text-ivory text-2xl leading-tight mb-3">
+            <h2 className="font-cinzel text-brown text-2xl leading-tight mb-3">
               {current?.name ?? '—'}
             </h2>
             <p
-              className="font-cinzel text-gold mb-4"
+              className="font-cinzel text-rose mb-4"
               style={{ fontSize: 40, lineHeight: 1 }}
             >
               {current?.duration_sec
@@ -144,7 +143,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
                 : `${current?.sets ?? 1} × ${current?.reps ?? 0}`}
             </p>
             {current?.form_cue && (
-              <p className="font-garamond italic text-ivory/45 text-sm leading-relaxed max-w-xs">
+              <p className="font-garamond italic text-brown/45 text-sm leading-relaxed max-w-xs">
                 {current.form_cue}
               </p>
             )}
@@ -158,22 +157,22 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
           <button
             onClick={handlePrev}
             disabled={exIdx === 0 && restSecs === 0}
-            className="w-12 h-12 flex items-center justify-center rounded-full text-gold text-2xl"
-            style={{ background: 'rgba(201,168,108,0.1)', opacity: (exIdx === 0 && restSecs === 0) ? 0.35 : 1 }}
+            className="w-12 h-12 flex items-center justify-center rounded-full text-rose text-2xl"
+            style={{ background: 'rgba(196,133,154,0.12)', opacity: (exIdx === 0 && restSecs === 0) ? 0.35 : 1 }}
           >
             ←
           </button>
           <button
             onClick={() => setPaused(p => !p)}
             className="w-14 h-14 flex items-center justify-center rounded-full"
-            style={{ background: 'rgba(201,168,108,0.15)', border: '1px solid rgba(201,168,108,0.4)' }}
+            style={{ background: 'rgba(196,133,154,0.15)', border: '1px solid rgba(196,133,154,0.4)' }}
           >
-            <span className="font-cinzel text-gold text-lg">{paused ? '▶' : '⏸'}</span>
+            <span className="font-cinzel text-rose text-lg">{paused ? '▶' : '⏸'}</span>
           </button>
           <button
             onClick={handleNext}
-            className="w-12 h-12 flex items-center justify-center rounded-full text-gold text-2xl"
-            style={{ background: 'rgba(201,168,108,0.1)' }}
+            className="w-12 h-12 flex items-center justify-center rounded-full text-rose text-2xl"
+            style={{ background: 'rgba(196,133,154,0.12)' }}
           >
             {exIdx >= total - 1 ? '✓' : '→'}
           </button>
@@ -190,9 +189,9 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
                 className="shrink-0 px-3 py-2 rounded-lg font-garamond text-xs text-center"
                 style={{
                   minWidth: 80,
-                  background: isCurrent ? 'rgba(201,168,108,0.18)' : isNext ? 'rgba(244,239,230,0.06)' : 'rgba(8,5,4,0.8)',
-                  border: isCurrent ? '1px solid rgba(201,168,108,0.6)' : isNext ? '1px solid rgba(244,239,230,0.2)' : '1px solid rgba(244,239,230,0.07)',
-                  color: isCurrent ? '#C9A86C' : isNext ? 'rgba(244,239,230,0.7)' : 'rgba(244,239,230,0.25)',
+                  background: isCurrent ? 'rgba(196,133,154,0.18)' : isNext ? 'rgba(59,51,48,0.06)' : 'rgba(196,175,168,0.2)',
+                  border: isCurrent ? '1px solid rgba(196,133,154,0.6)' : isNext ? '1px solid rgba(59,51,48,0.15)' : '1px solid rgba(196,175,168,0.3)',
+                  color: isCurrent ? '#C4859A' : isNext ? 'rgba(59,51,48,0.7)' : 'rgba(59,51,48,0.35)',
                 }}
               >
                 {ex.name}
@@ -206,26 +205,26 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
       {showExitModal && (
         <div
           className="absolute inset-0 z-10 flex items-center justify-center px-8"
-          style={{ background: 'rgba(6,4,4,0.88)' }}
+          style={{ background: 'rgba(59,51,48,0.55)' }}
         >
           <div
             className="w-full rounded-2xl p-6 text-center"
-            style={{ background: 'rgba(20,14,12,0.98)', border: '1px solid rgba(201,168,108,0.25)' }}
+            style={{ background: '#F2EDE8', border: '1px solid rgba(196,133,154,0.3)' }}
           >
-            <p className="font-cinzel text-ivory text-base mb-2">End Session?</p>
-            <p className="font-garamond text-ivory/50 text-sm mb-6">Your progress won't be saved.</p>
+            <p className="font-cinzel text-brown text-base mb-2">End Session?</p>
+            <p className="font-garamond text-brown/50 text-sm mb-6">Your progress won't be saved.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowExitModal(false)}
-                className="flex-1 py-3 rounded-xl font-garamond text-sm text-ivory/60"
-                style={{ border: '1px solid rgba(244,239,230,0.15)' }}
+                className="flex-1 py-3 rounded-xl font-garamond text-sm text-brown/60"
+                style={{ border: '1px solid rgba(59,51,48,0.2)' }}
               >
                 Keep Going
               </button>
               <button
                 onClick={onExit}
-                className="flex-1 py-3 rounded-xl font-cinzel text-xs tracking-widest text-gold"
-                style={{ border: '1px solid rgba(201,168,108,0.4)' }}
+                className="flex-1 py-3 rounded-xl font-cinzel text-xs tracking-widest text-rose"
+                style={{ border: '1px solid rgba(196,133,154,0.4)' }}
               >
                 END
               </button>

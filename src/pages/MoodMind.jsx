@@ -35,29 +35,29 @@ export default function MoodMind() {
   }
 
   return (
-    <div className="min-h-screen bg-[#060404] pb-nav px-4 pt-8 max-w-md mx-auto">
-      <h2 className="font-cinzel text-2xl text-ivory tracking-widest mb-6">Mood & Mind</h2>
+    <div className="min-h-screen bg-[#F2EDE8] pb-nav px-4 pt-8 max-w-md mx-auto">
+      <h2 className="font-cinzel text-2xl text-brown tracking-widest mb-6">Mood & Mind</h2>
 
       <GlassCard className="mb-4 space-y-4">
         <div>
-          <p className="font-garamond text-ivory/60 text-sm mb-2">Mood: {mood}/10</p>
-          <input type="range" min="1" max="10" value={mood} onChange={e => setMood(Number(e.target.value))} className="w-full accent-mauve" />
+          <p className="font-garamond text-brown/60 text-sm mb-2">Mood: {mood}/10</p>
+          <input type="range" min="1" max="10" value={mood} onChange={e => setMood(Number(e.target.value))} className="w-full accent-rose" />
         </div>
         <div>
-          <p className="font-garamond text-ivory/60 text-sm mb-2">Energy: {energy}/10</p>
+          <p className="font-garamond text-brown/60 text-sm mb-2">Energy: {energy}/10</p>
           <input type="range" min="1" max="10" value={energy} onChange={e => setEnergy(Number(e.target.value))} className="w-full accent-sage" />
         </div>
       </GlassCard>
 
       <GlassCard className="mb-4">
-        <p className="font-garamond text-ivory/60 text-sm mb-3">How are you feeling?</p>
+        <p className="font-garamond text-brown/60 text-sm mb-3">How are you feeling?</p>
         <div className="flex flex-wrap gap-2">
           {emotions.map(e => (
             <button
               key={e}
               onClick={() => toggleEmotion(e)}
               className={`px-3 py-1.5 rounded-full font-garamond text-sm border transition-colors ${
-                selected.includes(e) ? 'bg-mauve/30 border-mauve text-rose' : 'bg-white/5 border-white/10 text-ivory/50'
+                selected.includes(e) ? 'bg-rose/20 border-rose/60 text-rose' : 'border-brown/15 text-brown/50'
               }`}
             >
               {e}
@@ -69,7 +69,8 @@ export default function MoodMind() {
       <button
         onClick={save}
         disabled={saving || saved}
-        className="w-full bg-mauve/80 hover:bg-mauve text-ivory font-cinzel tracking-widest py-3 rounded-xl transition-colors disabled:opacity-50"
+        className="w-full font-cinzel tracking-widest py-3 rounded-xl transition-colors disabled:opacity-50"
+        style={{ background: 'rgba(196,133,154,0.15)', border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
       >
         {saved ? 'SAVED' : saving ? '...' : 'LOG MOOD'}
       </button>

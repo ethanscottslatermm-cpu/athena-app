@@ -44,7 +44,7 @@ function Toggle({ value, onChange, disabled = false }) {
     <button
       onClick={() => !disabled && onChange(!value)}
       className="relative w-11 h-6 rounded-full transition-colors flex-shrink-0"
-      style={{ background: value && !disabled ? '#C9A86C' : 'rgba(244,239,230,0.15)', opacity: disabled ? 0.38 : 1 }}
+      style={{ background: value && !disabled ? '#C4859A' : 'rgba(59,51,48,0.15)', opacity: disabled ? 0.38 : 1 }}
     >
       <div
         className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all"
@@ -73,9 +73,9 @@ function PillSelect({ options, value, onChange, multi = false }) {
             onClick={() => toggle(opt)}
             className="px-3 py-1.5 rounded-full font-garamond text-sm transition-all"
             style={{
-              background: on ? 'rgba(201,168,108,0.18)' : 'rgba(244,239,230,0.04)',
-              border: `1px solid ${on ? 'rgba(201,168,108,0.55)' : 'rgba(244,239,230,0.14)'}`,
-              color: on ? '#C9A86C' : 'rgba(244,239,230,0.48)',
+              background: on ? 'rgba(196,133,154,0.18)' : 'rgba(59,51,48,0.06)',
+              border: `1px solid ${on ? 'rgba(196,133,154,0.55)' : 'rgba(59,51,48,0.18)'}`,
+              color: on ? '#C4859A' : '#7A6A65',
             }}
           >
             {opt}
@@ -92,13 +92,13 @@ function Stepper({ value, min, max, onChange }) {
       <button
         onClick={() => value > min && onChange(value - 1)}
         className="w-8 h-8 rounded-full flex items-center justify-center text-xl leading-none flex-shrink-0"
-        style={{ border: '1px solid rgba(201,168,108,0.35)', color: '#C9A86C' }}
+        style={{ border: '1px solid rgba(196,133,154,0.45)', color: '#C4859A' }}
       >−</button>
-      <span className="font-garamond text-gold text-sm w-6 text-center">{value}</span>
+      <span className="font-garamond text-rose text-sm w-6 text-center">{value}</span>
       <button
         onClick={() => value < max && onChange(value + 1)}
         className="w-8 h-8 rounded-full flex items-center justify-center text-xl leading-none flex-shrink-0"
-        style={{ border: '1px solid rgba(201,168,108,0.35)', color: '#C9A86C' }}
+        style={{ border: '1px solid rgba(196,133,154,0.45)', color: '#C4859A' }}
       >+</button>
     </div>
   )
@@ -109,13 +109,13 @@ function GoldSlider({ value, min, max, step = 1, onChange, fmt = v => v }) {
   return (
     <div className="mt-1 mb-1">
       <div className="text-center mb-2">
-        <span className="font-garamond text-gold text-sm">{fmt(value)}</span>
+        <span className="font-garamond text-rose text-sm">{fmt(value)}</span>
       </div>
       <input
         type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(parseFloat(e.target.value))}
         className="w-full h-1 rounded-full outline-none cursor-pointer slider-gold"
-        style={{ background: `linear-gradient(to right, #C9A86C ${pct}%, rgba(244,239,230,0.15) ${pct}%)` }}
+        style={{ background: `linear-gradient(to right, #C4859A ${pct}%, rgba(59,51,48,0.15) ${pct}%)` }}
       />
     </div>
   )
@@ -126,20 +126,20 @@ function SettingRow({ label, sub, last = false, block = false, children }) {
     <>
       {block ? (
         <div className="py-3">
-          <span className="font-garamond text-sm text-ivory/65 block mb-2">{label}</span>
-          {sub && <span className="font-garamond text-xs text-ivory/30 block mb-2">{sub}</span>}
+          <span className="font-garamond text-sm text-brown/75 block mb-2">{label}</span>
+          {sub && <span className="font-garamond text-xs text-taupe/60 block mb-2">{sub}</span>}
           {children}
         </div>
       ) : (
         <div className="flex items-center justify-between gap-3 py-3" style={{ minHeight: '48px' }}>
           <div className="min-w-0 flex-1">
-            <span className="font-garamond text-sm text-ivory/65 leading-tight block">{label}</span>
-            {sub && <span className="font-garamond text-xs text-ivory/30 mt-0.5 block">{sub}</span>}
+            <span className="font-garamond text-sm text-brown/75 leading-tight block">{label}</span>
+            {sub && <span className="font-garamond text-xs text-taupe/60 mt-0.5 block">{sub}</span>}
           </div>
           <div className="flex-shrink-0">{children}</div>
         </div>
       )}
-      {!last && <div style={{ height: '1px', background: 'rgba(201,168,108,0.08)' }} />}
+      {!last && <div style={{ height: '1px', background: 'rgba(196,175,168,0.3)' }} />}
     </>
   )
 }
@@ -147,12 +147,12 @@ function SettingRow({ label, sub, last = false, block = false, children }) {
 function TextInput({ value, onChange, placeholder, prefix }) {
   return (
     <div className="flex items-center gap-1">
-      {prefix && <span className="font-garamond text-gold text-sm flex-shrink-0">{prefix}</span>}
+      {prefix && <span className="font-garamond text-rose text-sm flex-shrink-0">{prefix}</span>}
       <input
         type="text" value={value ?? ''} onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 bg-transparent font-garamond text-gold text-sm outline-none pb-0.5"
-        style={{ borderBottom: '1px solid rgba(201,168,108,0.28)' }}
+        className="flex-1 bg-transparent font-garamond text-brown text-sm outline-none pb-0.5"
+        style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
       />
     </div>
   )
@@ -162,8 +162,8 @@ function TimePicker({ value, onChange }) {
   return (
     <input
       type="time" value={value ?? ''} onChange={e => onChange(e.target.value || null)}
-      className="bg-transparent font-garamond text-gold text-sm outline-none pb-0.5 w-24"
-      style={{ borderBottom: '1px solid rgba(201,168,108,0.28)' }}
+      className="bg-transparent font-garamond text-brown text-sm outline-none pb-0.5 w-24"
+      style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
     />
   )
 }
@@ -175,11 +175,10 @@ function Toast({ message, type, visible }) {
     <div style={{
       position: 'fixed', bottom: '88px', left: '50%', transform: 'translateX(-50%)',
       zIndex: 500,
-      background: type === 'error' ? 'rgba(139,26,26,0.9)' : 'rgba(8,5,4,0.92)',
-      border: `1px solid ${type === 'error' ? 'rgba(196,154,154,0.4)' : 'rgba(201,168,108,0.4)'}`,
-      backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+      background: type === 'error' ? 'rgba(196,133,154,0.95)' : '#C4AFA8',
+      border: `1px solid ${type === 'error' ? 'rgba(196,133,154,0.6)' : 'rgba(196,175,168,0.6)'}`,
       borderRadius: '20px', padding: '9px 20px',
-      color: type === 'error' ? '#C49A9A' : '#C9A86C',
+      color: type === 'error' ? '#F2EDE8' : '#3B3330',
       fontFamily: 'Cormorant Garamond, serif', fontSize: '13px', letterSpacing: '0.06em',
       whiteSpace: 'nowrap',
       opacity: visible ? 1 : 0,
@@ -197,21 +196,21 @@ function Modal({ title, onClose, children }) {
   return (
     <div
       className="fixed inset-0 z-[300] flex items-end justify-center"
-      style={{ background: 'rgba(6,4,4,0.88)' }}
+      style={{ background: 'rgba(59,51,48,0.55)' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
         className="w-full max-w-sm rounded-t-2xl px-6 pt-6 pb-10"
         style={{
-          background: 'rgba(8,5,4,0.97)',
-          border: '1px solid rgba(201,168,108,0.22)', borderBottom: 'none',
+          background: '#F2EDE8',
+          border: '1px solid rgba(196,175,168,0.5)', borderBottom: 'none',
           animation: 'sheetUp 0.28s ease',
           maxHeight: '82vh', overflowY: 'auto',
         }}
       >
         <div className="flex items-center justify-between mb-5">
-          <h3 className="font-cinzel text-[10px] tracking-[0.28em] uppercase text-gold">{title}</h3>
-          <button onClick={onClose} className="font-garamond text-ivory/35 text-xl leading-none px-1">✕</button>
+          <h3 className="font-cinzel text-[10px] tracking-[0.28em] uppercase text-rose">{title}</h3>
+          <button onClick={onClose} className="font-garamond text-brown/40 text-xl leading-none px-1">✕</button>
         </div>
         {children}
       </div>
@@ -222,11 +221,11 @@ function Modal({ title, onClose, children }) {
 function MInput({ label, type = 'text', value, onChange, placeholder }) {
   return (
     <div className="mb-4">
-      <label className="font-garamond text-[10px] tracking-widest uppercase text-ivory/35 block mb-1">{label}</label>
+      <label className="font-garamond text-[10px] tracking-widest uppercase text-taupe block mb-1">{label}</label>
       <input
         type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full bg-transparent font-garamond text-ivory text-sm outline-none py-2"
-        style={{ borderBottom: '1px solid rgba(201,168,108,0.28)' }}
+        className="w-full bg-transparent font-garamond text-brown text-sm outline-none py-2"
+        style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
       />
     </div>
   )
@@ -235,14 +234,14 @@ function MInput({ label, type = 'text', value, onChange, placeholder }) {
 function MActions({ onCancel, onConfirm, label = 'Confirm', danger, disabled }) {
   return (
     <div className="flex items-center justify-between mt-6">
-      <button onClick={onCancel} className="font-garamond text-ivory/38 text-sm">Cancel</button>
+      <button onClick={onCancel} className="font-garamond text-brown/45 text-sm">Cancel</button>
       <button
         onClick={onConfirm} disabled={disabled}
         className="px-5 py-2 rounded-full font-cinzel text-[9px] tracking-widest transition-all"
         style={{
-          border: danger ? '1px solid rgba(139,26,26,0.55)' : '1px solid rgba(201,168,108,0.5)',
-          color: danger ? '#C49A9A' : '#C9A86C',
-          background: danger ? 'rgba(139,26,26,0.1)' : 'transparent',
+          border: danger ? '1px solid rgba(196,133,154,0.55)' : '1px solid rgba(196,133,154,0.5)',
+          color: danger ? '#C4859A' : '#C4859A',
+          background: danger ? 'rgba(196,133,154,0.1)' : 'transparent',
           opacity: disabled ? 0.38 : 1,
         }}
       >
@@ -259,9 +258,8 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
     <div
       className="mb-3 rounded-2xl overflow-hidden"
       style={{
-        background: 'rgba(8,5,4,0.44)',
-        backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)',
-        border: '1px solid rgba(201,168,108,0.18)',
+        background: 'rgba(242,237,232,0.85)',
+        border: '1px solid rgba(196,175,168,0.45)',
       }}
     >
       <button
@@ -270,15 +268,15 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
         onClick={onToggle}
       >
         <div className="flex items-center gap-3">
-          <span style={{ color: 'rgba(201,168,108,0.7)' }}>{icon}</span>
-          <span className="font-cinzel text-[10px] tracking-[0.25em] uppercase text-ivory/72">{title}</span>
+          <span style={{ color: '#C4859A' }}>{icon}</span>
+          <span className="font-cinzel text-[10px] tracking-[0.25em] uppercase text-brown/75">{title}</span>
         </div>
         <div className="flex items-center gap-2">
-          {dirty && !open && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#C9A86C' }} />}
+          {dirty && !open && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#C4859A' }} />}
           <ChevronDown
             size={14}
             style={{
-              color: 'rgba(201,168,108,0.5)',
+              color: 'rgba(196,133,154,0.6)',
               transition: 'transform 0.3s',
               transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
             }}
@@ -288,13 +286,13 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
 
       <div style={{ maxHeight: open ? '3000px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease' }}>
         <div className="px-4 pb-3">
-          <div style={{ height: '1px', background: 'rgba(201,168,108,0.1)', marginBottom: '4px' }} />
+          <div style={{ height: '1px', background: 'rgba(196,175,168,0.35)', marginBottom: '4px' }} />
           {children}
           {dirty && (
             <button
               onClick={onSave} disabled={saving || saved}
               className="mt-3 mb-1 flex items-center gap-1.5 px-4 py-1.5 rounded-full font-cinzel text-[9px] tracking-widest transition-all"
-              style={{ border: '1px solid rgba(201,168,108,0.45)', color: '#C9A86C', background: saved ? 'rgba(201,168,108,0.1)' : 'transparent' }}
+              style={{ border: '1px solid rgba(196,133,154,0.5)', color: '#C4859A', background: saved ? 'rgba(196,133,154,0.1)' : 'transparent' }}
             >
               {saved ? <><Check size={10} />SAVED</> : saving ? '···' : 'SAVE CHANGES'}
             </button>
@@ -308,7 +306,7 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
 // ─── Corner brackets ──────────────────────────────────────────────────────────
 
 function Brackets() {
-  const b = { position: 'absolute', width: '10px', height: '10px', borderColor: 'rgba(201,168,108,0.3)' }
+  const b = { position: 'absolute', width: '10px', height: '10px', borderColor: 'rgba(196,133,154,0.4)' }
   return (
     <>
       <span style={{ ...b, top: '10px', left: '10px', borderTop: '1px solid', borderLeft: '1px solid' }} />
@@ -476,8 +474,8 @@ export default function Settings() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#060404] flex items-center justify-center">
-        <span className="font-cinzel text-[10px] tracking-[0.3em] text-gold/30">LOADING</span>
+      <div className="min-h-screen bg-[#F2EDE8] flex items-center justify-center">
+        <span className="font-cinzel text-[10px] tracking-[0.3em] text-rose/40">LOADING</span>
       </div>
     )
   }
@@ -488,7 +486,7 @@ export default function Settings() {
   const notifOn     = d.notifications_on ?? true
 
   return (
-    <div className="relative h-[100svh] overflow-y-auto bg-[#060404]">
+    <div className="relative h-[100svh] overflow-y-auto bg-[#F2EDE8]">
       <style>{`
         @keyframes sheetUp {
           from { transform: translateY(60px); opacity: 0 }
@@ -497,11 +495,11 @@ export default function Settings() {
         .slider-gold::-webkit-slider-thumb {
           -webkit-appearance: none;
           width: 16px; height: 16px; border-radius: 50%;
-          background: #C9A86C; cursor: pointer;
+          background: #C4859A; cursor: pointer;
         }
         .slider-gold::-moz-range-thumb {
           width: 16px; height: 16px; border-radius: 50%;
-          background: #C9A86C; border: none; cursor: pointer;
+          background: #C4859A; border: none; cursor: pointer;
         }
         input[type="time"]::-webkit-calendar-picker-indicator,
         input[type="date"]::-webkit-calendar-picker-indicator {
@@ -511,8 +509,8 @@ export default function Settings() {
 
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={athenaHero} alt="" className="w-full h-full object-cover object-top" style={{ opacity: 0.06 }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(6,4,4,0.78) 0%, rgba(6,4,4,0.95) 40%, rgba(6,4,4,0.99) 100%)' }} />
+        <img src={athenaHero} alt="" className="w-full h-full object-cover object-top" style={{ opacity: 0.04 }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(242,237,232,0.6) 0%, rgba(242,237,232,0.88) 40%, rgba(242,237,232,0.96) 100%)' }} />
       </div>
 
       {/* Fixed header */}
@@ -520,16 +518,15 @@ export default function Settings() {
         <div
           className="relative flex items-center justify-between h-14 px-3 max-w-md mx-auto"
           style={{
-            background: 'rgba(6,4,4,0.86)',
-            backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-            borderBottom: '1px solid rgba(201,168,108,0.1)',
+            background: 'rgba(242,237,232,0.92)',
+            borderBottom: '1px solid rgba(196,175,168,0.4)',
           }}
         >
           <Brackets />
-          <button onClick={() => navigate(-1)} className="p-2 flex items-center" style={{ color: 'rgba(201,168,108,0.55)' }}>
+          <button onClick={() => navigate(-1)} className="p-2 flex items-center" style={{ color: '#C4859A' }}>
             <ChevronLeft size={18} />
           </button>
-          <span className="font-cinzel text-gold text-[12px] tracking-[0.35em]">SETTINGS</span>
+          <span className="font-cinzel text-rose text-[12px] tracking-[0.35em]">SETTINGS</span>
           <div className="w-10" />
         </div>
       </div>
@@ -543,23 +540,23 @@ export default function Settings() {
           <div className="flex flex-col items-center pt-3 pb-4">
             <div
               className="relative w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
-              style={{ border: '2px solid rgba(201,168,108,0.45)' }}
+              style={{ border: '2px solid rgba(196,133,154,0.5)' }}
             >
               {avatarUrl
                 ? <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
-                : <User size={30} style={{ color: 'rgba(201,168,108,0.3)' }} />
+                : <User size={30} style={{ color: 'rgba(196,133,154,0.4)' }} />
               }
               {uploading && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                  <span className="font-cinzel text-[8px] text-gold">···</span>
+                <div className="absolute inset-0 bg-[#F2EDE8]/60 flex items-center justify-center">
+                  <span className="font-cinzel text-[8px] text-rose">···</span>
                 </div>
               )}
             </div>
-            <button onClick={() => fileRef.current?.click()} className="mt-2 font-garamond text-gold text-sm">
+            <button onClick={() => fileRef.current?.click()} className="mt-2 font-garamond text-rose text-sm">
               Change photo
             </button>
           </div>
-          <div style={{ height: '1px', background: 'rgba(201,168,108,0.08)', marginBottom: '4px' }} />
+          <div style={{ height: '1px', background: 'rgba(196,175,168,0.3)', marginBottom: '4px' }} />
           <SettingRow label="Display name" block>
             <TextInput value={d.full_name} onChange={set('full_name')} placeholder="Your name" />
           </SettingRow>
@@ -567,12 +564,12 @@ export default function Settings() {
             <TextInput value={d.username} onChange={set('username')} placeholder="handle" prefix="@" />
           </SettingRow>
           <SettingRow label="Email">
-            <button onClick={() => setModal('email')} className="font-garamond text-gold text-sm text-right max-w-[170px] truncate">
+            <button onClick={() => setModal('email')} className="font-garamond text-rose text-sm text-right max-w-[170px] truncate">
               {user?.email ?? '—'}
             </button>
           </SettingRow>
           <SettingRow label="Password">
-            <button onClick={() => setModal('password')} className="font-garamond text-gold text-sm">
+            <button onClick={() => setModal('password')} className="font-garamond text-rose text-sm">
               Change password
             </button>
           </SettingRow>
@@ -582,8 +579,8 @@ export default function Settings() {
               value={d.life_stage} onChange={set('life_stage')}
             />
           </SettingRow>
-          <div className="mt-4 pt-3" style={{ borderTop: '1px solid rgba(139,26,26,0.18)' }}>
-            <button onClick={() => setModal('delete')} className="font-garamond text-sm" style={{ color: 'rgba(196,154,154,0.65)' }}>
+          <div className="mt-4 pt-3" style={{ borderTop: '1px solid rgba(196,133,154,0.25)' }}>
+            <button onClick={() => setModal('delete')} className="font-garamond text-sm" style={{ color: 'rgba(196,133,154,0.65)' }}>
               Delete my account
             </button>
           </div>
@@ -595,8 +592,8 @@ export default function Settings() {
             <input
               type="date" value={d.last_period_date ?? ''} max={new Date().toISOString().split('T')[0]}
               onChange={e => set('last_period_date')(e.target.value || null)}
-              className="bg-transparent font-garamond text-gold text-sm outline-none pb-0.5"
-              style={{ borderBottom: '1px solid rgba(201,168,108,0.28)' }}
+              className="bg-transparent font-garamond text-brown text-sm outline-none pb-0.5"
+              style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
             />
           </SettingRow>
           <SettingRow label={`Cycle length — ${d.cycle_length ?? 28} days`} block last>
@@ -615,7 +612,7 @@ export default function Settings() {
           <SettingRow label="Period reminder">
             <div className="flex items-center gap-2">
               <Stepper value={d.period_reminder_days ?? 2} min={1} max={5} onChange={set('period_reminder_days')} />
-              <span className="font-garamond text-ivory/30 text-xs">days</span>
+              <span className="font-garamond text-taupe text-xs">days</span>
             </div>
           </SettingRow>
           <SettingRow label="Ovulation reminder" last>
@@ -625,7 +622,7 @@ export default function Settings() {
             <button
               onClick={() => window.print()}
               className="px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest"
-              style={{ border: '1px solid rgba(201,168,108,0.35)', color: '#C9A86C' }}
+              style={{ border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
             >
               EXPORT PDF REPORT
             </button>
@@ -690,10 +687,10 @@ export default function Settings() {
               <input
                 type="number" value={d.water_goal_ml ?? 2000} min={0} max={6000}
                 onChange={e => set('water_goal_ml')(parseInt(e.target.value) || 0)}
-                className="w-16 bg-transparent font-garamond text-gold text-sm outline-none text-right pb-0.5"
-                style={{ borderBottom: '1px solid rgba(201,168,108,0.28)' }}
+                className="w-16 bg-transparent font-garamond text-brown text-sm outline-none text-right pb-0.5"
+                style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
               />
-              <span className="font-garamond text-ivory/35 text-xs">ml</span>
+              <span className="font-garamond text-taupe text-xs">ml</span>
             </div>
           </SettingRow>
           <SettingRow label="Dietary approach" block last>
@@ -785,7 +782,7 @@ export default function Settings() {
             <Toggle value={d.notify_reactions ?? false} onChange={set('notify_reactions')} />
           </SettingRow>
           <SettingRow label="Block list" last>
-            <button onClick={() => setModal('blocklist')} className="font-garamond text-gold text-sm">View</button>
+            <button onClick={() => setModal('blocklist')} className="font-garamond text-rose text-sm">View</button>
           </SettingRow>
         </Section>
 
@@ -815,27 +812,27 @@ export default function Settings() {
 
         {/* ── 10. Appearance ── */}
         <Section {...sec('appearance', 'Appearance', <Palette size={15} />)}>
-          <p className="font-cinzel text-[9px] tracking-widest text-ivory/28 uppercase mt-1 mb-2">Theme</p>
+          <p className="font-cinzel text-[9px] tracking-widest text-taupe uppercase mt-1 mb-2">Theme</p>
           <div className="grid grid-cols-2 gap-2 mb-3">
             {[
-              { id: 'obsidian', label: 'Obsidian', bg: '#0a0706', accent: '#C9A86C' },
-              { id: 'ash',      label: 'Ash',      bg: '#18191e', accent: '#9BA8B4' },
-              { id: 'sepia',    label: 'Sepia',    bg: '#180f04', accent: '#C98A4A' },
-              { id: 'crimson',  label: 'Crimson',  bg: '#100404', accent: '#8B3030' },
+              { id: 'linen',   label: 'Linen',   bg: '#F2EDE8', accent: '#C4859A' },
+              { id: 'sage',    label: 'Sage',     bg: '#E8EDEA', accent: '#8FA58C' },
+              { id: 'blush',   label: 'Blush',    bg: '#EDE8E8', accent: '#C4AFA8' },
+              { id: 'greige',  label: 'Greige',   bg: '#EAE7E4', accent: '#8A7E78' },
             ].map(t => {
-              const active = (d.theme ?? 'obsidian') === t.id
+              const active = (d.theme ?? 'linen') === t.id
               return (
                 <button
                   key={t.id} onClick={() => set('theme')(t.id)}
                   className="rounded-xl px-3 py-2.5 flex items-center gap-2 transition-all"
                   style={{
                     background: t.bg,
-                    border: active ? `1px solid ${t.accent}` : '1px solid rgba(255,255,255,0.07)',
-                    boxShadow: active ? `0 0 14px ${t.accent}35` : 'none',
+                    border: active ? `1px solid ${t.accent}` : '1px solid rgba(59,51,48,0.12)',
+                    boxShadow: active ? `0 0 10px ${t.accent}30` : 'none',
                   }}
                 >
                   <div className="w-3.5 h-3.5 rounded-full flex-shrink-0" style={{ background: t.accent }} />
-                  <span className="font-cinzel text-[9px] tracking-widest" style={{ color: active ? t.accent : 'rgba(244,239,230,0.35)' }}>
+                  <span className="font-cinzel text-[9px] tracking-widest" style={{ color: active ? t.accent : '#7A6A65' }}>
                     {t.label.toUpperCase()}
                   </span>
                 </button>
@@ -882,17 +879,17 @@ export default function Settings() {
             <button
               onClick={handleDownloadData}
               className="w-full py-3 rounded-xl font-cinzel text-[9px] tracking-widest"
-              style={{ border: '1px solid rgba(201,168,108,0.3)', color: '#C9A86C' }}
+              style={{ border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
             >
               DOWNLOAD MY DATA
             </button>
-            <button onClick={handleClearCache} className="font-garamond text-sm" style={{ color: 'rgba(201,168,108,0.5)' }}>
+            <button onClick={handleClearCache} className="font-garamond text-sm" style={{ color: '#7A6A65' }}>
               Clear app cache
             </button>
           </div>
-          <div className="flex gap-5 mt-5 pt-3" style={{ borderTop: '1px solid rgba(201,168,108,0.07)' }}>
-            <a href="/privacy" className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.25)' }}>Privacy policy</a>
-            <a href="/terms"   className="font-garamond text-xs" style={{ color: 'rgba(244,239,230,0.25)' }}>Terms of service</a>
+          <div className="flex gap-5 mt-5 pt-3" style={{ borderTop: '1px solid rgba(196,175,168,0.3)' }}>
+            <a href="/privacy" className="font-garamond text-xs" style={{ color: '#7A6A65' }}>Privacy policy</a>
+            <a href="/terms"   className="font-garamond text-xs" style={{ color: '#7A6A65' }}>Terms of service</a>
           </div>
         </Section>
 
@@ -902,21 +899,21 @@ export default function Settings() {
           open={openSections.includes('info')} onToggle={() => toggleSection('info')}
           dirty={false} onSave={() => {}} saving={false} saved={false}
         >
-          <SettingRow label="Version"><span className="font-garamond text-gold/60 text-sm">1.0.0</span></SettingRow>
+          <SettingRow label="Version"><span className="font-garamond text-rose/70 text-sm">1.0.0</span></SettingRow>
           <SettingRow label="What's new">
-            <button onClick={() => setModal('whatsNew')} className="font-garamond text-gold text-sm">View</button>
+            <button onClick={() => setModal('whatsNew')} className="font-garamond text-rose text-sm">View</button>
           </SettingRow>
           <SettingRow label="Send feedback">
-            <button onClick={() => setModal('feedback')} className="font-garamond text-gold text-sm">Open</button>
+            <button onClick={() => setModal('feedback')} className="font-garamond text-rose text-sm">Open</button>
           </SettingRow>
           <SettingRow label="Contact support">
-            <a href="mailto:support@athena.app" className="font-garamond text-gold text-sm">Email</a>
+            <a href="mailto:support@athena.app" className="font-garamond text-rose text-sm">Email</a>
           </SettingRow>
           <SettingRow label="About Athena">
-            <button onClick={() => setModal('about')} className="font-garamond text-gold text-sm">View</button>
+            <button onClick={() => setModal('about')} className="font-garamond text-rose text-sm">View</button>
           </SettingRow>
           <SettingRow label="Open source licenses" last>
-            <button onClick={() => setModal('licenses')} className="font-garamond text-gold text-sm">View</button>
+            <button onClick={() => setModal('licenses')} className="font-garamond text-rose text-sm">View</button>
           </SettingRow>
         </Section>
 
@@ -943,7 +940,7 @@ export default function Settings() {
 
       {modal === 'delete' && (
         <Modal title="Delete Account" onClose={() => { setModal(null); setDelConfirm('') }}>
-          <p className="font-garamond text-ivory/48 text-sm leading-relaxed mb-4">
+          <p className="font-garamond text-brown/55 text-sm leading-relaxed mb-4">
             This will permanently delete all your data. This cannot be undone.
           </p>
           <MInput label='Type "DELETE" to confirm' value={delConfirm} onChange={setDelConfirm} placeholder="DELETE" />
@@ -953,8 +950,8 @@ export default function Settings() {
 
       {modal === 'whatsNew' && (
         <Modal title="What's New" onClose={() => setModal(null)}>
-          <p className="font-cinzel text-[10px] tracking-widest text-gold mb-2">v1.0.0 — Initial Release</p>
-          <p className="font-garamond text-ivory/50 text-sm leading-relaxed mb-5">
+          <p className="font-cinzel text-[10px] tracking-widest text-rose mb-2">v1.0.0 — Initial Release</p>
+          <p className="font-garamond text-brown/55 text-sm leading-relaxed mb-5">
             Athena launches. Full cycle tracking, mood journaling, pilates studio, nourish planner, sleep tracker, skin module, and community circles.
           </p>
           <MActions onCancel={() => setModal(null)} onConfirm={() => setModal(null)} label="CLOSE" />
@@ -963,12 +960,12 @@ export default function Settings() {
 
       {modal === 'feedback' && (
         <Modal title="Send Feedback" onClose={() => setModal(null)}>
-          <p className="font-garamond text-ivory/35 text-xs mb-3">Tell us what's working and what you'd love to see.</p>
+          <p className="font-garamond text-taupe text-xs mb-3">Tell us what's working and what you'd love to see.</p>
           <textarea
             value={feedbackTxt} onChange={e => setFeedbackTxt(e.target.value.slice(0, 1000))} rows={5}
             placeholder="Your thoughts..."
-            className="w-full bg-transparent font-garamond text-ivory/70 text-sm resize-none outline-none p-3 rounded-xl placeholder:text-ivory/18"
-            style={{ border: '1px solid rgba(201,168,108,0.18)' }}
+            className="w-full bg-transparent font-garamond text-brown/75 text-sm resize-none outline-none p-3 rounded-xl placeholder:text-taupe/40"
+            style={{ border: '1px solid rgba(196,133,154,0.3)' }}
           />
           <MActions
             onCancel={() => setModal(null)}
@@ -980,11 +977,11 @@ export default function Settings() {
 
       {modal === 'about' && (
         <Modal title="About Athena" onClose={() => setModal(null)}>
-          <p className="font-cinzel text-ivory/65 text-sm leading-loose tracking-wide mb-4">
+          <p className="font-cinzel text-brown/70 text-sm leading-loose tracking-wide mb-4">
             "Built for the woman who refuses to settle.<br />
             Your strength. Your cycle. Your story."
           </p>
-          <p className="font-garamond text-ivory/38 text-sm leading-relaxed">
+          <p className="font-garamond text-taupe text-sm leading-relaxed">
             Athena is a women's wellness platform designed to help you understand your body, honor your cycle, and live in alignment with your natural rhythms.
           </p>
           <MActions onCancel={() => setModal(null)} onConfirm={() => setModal(null)} label="CLOSE" />
@@ -995,7 +992,7 @@ export default function Settings() {
         <Modal title="Open Source Licenses" onClose={() => setModal(null)}>
           <div className="space-y-2 mb-5">
             {['React — MIT', 'Vite — MIT', 'Tailwind CSS — MIT', 'Supabase JS — MIT', 'date-fns — MIT', 'React Router — MIT', 'Lucide React — ISC'].map(l => (
-              <p key={l} className="font-garamond text-ivory/38 text-sm">{l}</p>
+              <p key={l} className="font-garamond text-taupe text-sm">{l}</p>
             ))}
           </div>
           <MActions onCancel={() => setModal(null)} onConfirm={() => setModal(null)} label="CLOSE" />
@@ -1004,7 +1001,7 @@ export default function Settings() {
 
       {modal === 'blocklist' && (
         <Modal title="Blocked Users" onClose={() => setModal(null)}>
-          <p className="font-garamond text-ivory/30 text-sm text-center py-8">No blocked users.</p>
+          <p className="font-garamond text-taupe text-sm text-center py-8">No blocked users.</p>
           <MActions onCancel={() => setModal(null)} onConfirm={() => setModal(null)} label="DONE" />
         </Modal>
       )}

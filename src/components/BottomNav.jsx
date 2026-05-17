@@ -71,7 +71,7 @@ export default function BottomNav() {
         <div
           style={{
             position: 'fixed', inset: 0, zIndex: 200,
-            backgroundColor: '#060404',
+            backgroundColor: '#F2EDE8',
             animation: 'exitFadeIn 1.4s ease forwards',
           }}
         >
@@ -104,8 +104,8 @@ export default function BottomNav() {
       )}
 
       <nav
-        className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t border-white/10 z-50"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed bottom-0 left-0 right-0 z-50"
+        style={{ backgroundColor: '#8A7E78', paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-2">
           {navItems.map(({ to, label, png }) => (
@@ -115,7 +115,7 @@ export default function BottomNav() {
               end={to === '/'}
               className={({ isActive }) =>
                 `flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
-                  isActive ? 'text-gold' : 'text-white/40 hover:text-white/70'
+                  isActive ? 'text-rose' : 'text-linen/70 hover:text-linen'
                 }`
               }
             >
@@ -126,7 +126,7 @@ export default function BottomNav() {
 
           <button
             onClick={handleSignOut}
-            className="flex flex-col items-center gap-1 px-3 py-2 text-white/40 hover:text-white/70 transition-colors"
+            className="flex flex-col items-center gap-1 px-3 py-2 text-linen/70 hover:text-linen transition-colors"
           >
             <PngIcon src={exitIcon} />
             <span className="text-[10px] font-garamond tracking-wide">Exit</span>

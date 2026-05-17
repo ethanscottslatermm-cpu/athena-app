@@ -3,10 +3,10 @@ import PhaseFilter from './components/PhaseFilter'
 import SessionCard from './components/SessionCard'
 
 const PHASE_COLORS = {
-  menstrual: '#8B1A1A',
-  follicular: '#8FAF8A',
-  ovulation: '#C9A86C',
-  luteal: '#6B4F6B',
+  menstrual: '#C4859A',
+  follicular: '#8FA58C',
+  ovulation: '#C4859A',
+  luteal: '#C4AFA8',
 }
 
 const PROGRAMS = [
@@ -18,7 +18,7 @@ const PROGRAMS = [
     weeks: 4,
     difficulty: 'beginner',
     phase: null,
-    color: '#8FAF8A',
+    color: '#8FA58C',
   },
   {
     id: 'phase-power',
@@ -28,7 +28,7 @@ const PROGRAMS = [
     weeks: 4,
     difficulty: 'intermediate',
     phase: null,
-    color: '#C9A86C',
+    color: '#C4859A',
   },
   {
     id: 'core-restore',
@@ -38,7 +38,7 @@ const PROGRAMS = [
     weeks: 3,
     difficulty: 'all',
     phase: null,
-    color: '#8B1A1A',
+    color: '#C4AFA8',
   },
   {
     id: 'strength-flow',
@@ -48,7 +48,7 @@ const PROGRAMS = [
     weeks: 4,
     difficulty: 'advanced',
     phase: null,
-    color: '#6B4F6B',
+    color: '#8A7E78',
   },
 ]
 
@@ -58,13 +58,13 @@ function ProgramCard({ program, enrolled, onEnroll }) {
       className="shrink-0 rounded-xl overflow-hidden"
       style={{
         width: 180,
-        background: `linear-gradient(160deg, ${program.color}22 0%, rgba(8,5,4,0.88) 100%)`,
-        border: `1px solid ${program.color}30`,
+        background: `linear-gradient(160deg, ${program.color}25 0%, rgba(242,237,232,0.9) 100%)`,
+        border: `1px solid ${program.color}35`,
       }}
     >
       <div className="p-3">
-        <h4 className="font-cinzel text-ivory text-[13px] leading-tight mb-1">{program.name}</h4>
-        <p className="font-garamond text-ivory/45 text-xs mb-2">
+        <h4 className="font-cinzel text-brown text-[13px] leading-tight mb-1">{program.name}</h4>
+        <p className="font-garamond text-brown/45 text-xs mb-2">
           {program.sessions} sessions · {program.weeks} weeks
         </p>
         <button
@@ -72,7 +72,7 @@ function ProgramCard({ program, enrolled, onEnroll }) {
           className="font-garamond text-xs px-3 py-1.5 rounded-lg transition-all w-full text-center"
           style={{
             background: enrolled ? `${program.color}25` : 'transparent',
-            border: `1px solid ${program.color}50`,
+            border: `1px solid ${program.color}55`,
             color: enrolled ? program.color : `${program.color}90`,
           }}
         >
@@ -127,7 +127,7 @@ export default function LibraryTab({
       {/* ── Filter bar (sticky) ──────────────────────────────────────── */}
       <div
         className="sticky top-0 z-10 -mx-4 px-4 pb-1"
-        style={{ background: 'rgba(8,5,4,0.88)', backdropFilter: 'blur(16px)' }}
+        style={{ background: 'rgba(242,237,232,0.92)' }}
       >
         <PhaseFilter activeId={activeChip.id} onChange={setActiveChip} />
       </div>
@@ -135,7 +135,7 @@ export default function LibraryTab({
       {/* ── Program strips ───────────────────────────────────────────── */}
       {!hasFilters && (
         <div>
-          <p className="font-cinzel text-ivory/35 text-[10px] tracking-widest uppercase mb-2">
+          <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase mb-2">
             Programs
           </p>
           <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
@@ -154,11 +154,11 @@ export default function LibraryTab({
       {/* ── Session grid ─────────────────────────────────────────────── */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="font-cinzel text-ivory/35 text-[10px] tracking-widest uppercase">
+          <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase">
             {hasFilters ? `${filtered.length} Result${filtered.length !== 1 ? 's' : ''}` : 'All Sessions'}
           </p>
           {hasFilters && (
-            <button onClick={clearFilters} className="font-garamond text-gold text-xs">
+            <button onClick={clearFilters} className="font-garamond text-rose text-xs">
               Clear filters
             </button>
           )}
@@ -180,14 +180,14 @@ export default function LibraryTab({
         ) : (
           <div
             className="py-10 flex flex-col items-center gap-3 rounded-2xl"
-            style={{ background: 'rgba(201,168,108,0.04)', border: '1px solid rgba(201,168,108,0.1)' }}
+            style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.3)' }}
           >
-            <p className="font-garamond text-ivory/35 text-sm text-center">
+            <p className="font-garamond text-brown/35 text-sm text-center">
               No sessions match those filters
             </p>
             <button
               onClick={clearFilters}
-              className="font-garamond text-gold text-sm"
+              className="font-garamond text-rose text-sm"
             >
               Clear filters
             </button>

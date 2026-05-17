@@ -1,10 +1,10 @@
 import { differenceInDays, addDays } from 'date-fns'
 
 export const phaseColors = {
-  menstrual:  '#8B1A1A',
-  follicular: '#8FAF8A',
-  ovulation:  '#C9A86C',
-  luteal:     '#6B4F6B',
+  menstrual:  '#C4859A',
+  follicular: '#8FA58C',
+  ovulation:  '#C4859A',
+  luteal:     '#C4AFA8',
 }
 
 export const phaseLabels = {

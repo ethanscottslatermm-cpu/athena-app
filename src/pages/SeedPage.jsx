@@ -26,10 +26,10 @@ export default function SeedPage() {
   }
 
   return (
-    <div className="min-h-[100svh] bg-[#060404] px-6 pt-16 pb-10 max-w-md mx-auto">
-      <p className="font-cinzel text-gold text-xs tracking-widest uppercase mb-1">Dev Tool</p>
-      <h2 className="font-cinzel text-ivory text-2xl mb-2">Seed Pilates Data</h2>
-      <p className="font-garamond text-ivory/45 text-sm mb-8">
+    <div className="min-h-[100svh] bg-[#F2EDE8] px-6 pt-16 pb-10 max-w-md mx-auto">
+      <p className="font-cinzel text-rose text-xs tracking-widest uppercase mb-1">Dev Tool</p>
+      <h2 className="font-cinzel text-brown text-2xl mb-2">Seed Pilates Data</h2>
+      <p className="font-garamond text-brown/45 text-sm mb-8">
         Inserts 20 sessions, ~120 exercises, and 5 challenges into Supabase.
         Run once — delete this page after.
       </p>
@@ -40,9 +40,9 @@ export default function SeedPage() {
           disabled={running}
           className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm mb-6"
           style={{
-            background: running ? 'rgba(201,168,108,0.08)' : 'rgba(201,168,108,0.15)',
-            border: '1px solid rgba(201,168,108,0.5)',
-            color: '#C9A86C',
+            background: running ? 'rgba(196,133,154,0.08)' : 'rgba(196,133,154,0.15)',
+            border: '1px solid rgba(196,133,154,0.5)',
+            color: '#C4859A',
           }}
         >
           {running ? 'Seeding…' : 'Seed Pilates Data'}
@@ -59,7 +59,7 @@ export default function SeedPage() {
       {log.length > 0 && (
         <div
           className="rounded-xl p-4 space-y-1"
-          style={{ background: 'rgba(8,5,4,0.7)', border: '1px solid rgba(244,239,230,0.08)' }}
+          style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.35)' }}
         >
           {log.map((l, i) => (
             <p key={i} className="font-garamond text-sm" style={{ color: l.ok ? '#8FAF8A' : '#C49A9A' }}>

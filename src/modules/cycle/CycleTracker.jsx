@@ -67,15 +67,15 @@ export default function CycleTracker() {
   }
 
   return (
-    <div className="relative min-h-[100svh] overflow-hidden bg-[#060404]">
+    <div className="relative min-h-[100svh] overflow-hidden bg-[#F2EDE8]">
       <style>{`
         @keyframes cycleSlideDown {
           from { opacity: 0; transform: translateY(-100%); }
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes goldPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(201,168,108,0); }
-          50%      { box-shadow: 0 0 24px 6px rgba(201,168,108,0.35); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(196,133,154,0); }
+          50%      { box-shadow: 0 0 24px 6px rgba(196,133,154,0.25); }
         }
         @keyframes shimmerSlide {
           0%   { background-position: -200% 0; }
@@ -96,8 +96,8 @@ export default function CycleTracker() {
       />
       <div className="absolute inset-0" style={{
         background: `
-          linear-gradient(to bottom, rgba(6,4,4,0.6) 0%, rgba(6,4,4,0.2) 35%, rgba(6,4,4,0.08) 55%),
-          radial-gradient(ellipse at 50% 15%, rgba(139,26,26,0.28) 0%, transparent 60%)
+          linear-gradient(to bottom, rgba(242,237,232,0.5) 0%, rgba(242,237,232,0.1) 35%, rgba(242,237,232,0.04) 55%),
+          radial-gradient(ellipse at 50% 15%, rgba(196,133,154,0.1) 0%, transparent 60%)
         `,
       }} />
 
@@ -106,17 +106,17 @@ export default function CycleTracker() {
         <div
           className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3"
           style={{
-            background: 'rgba(8,5,4,0.92)',
-            borderBottom: '1px solid rgba(201,168,108,0.35)',
+            background: 'rgba(242,237,232,0.95)',
+            borderBottom: '1px solid rgba(196,133,154,0.35)',
             animation: 'cycleSlideDown 0.35s ease-out',
           }}
         >
-          <span className="font-garamond text-ivory/90 text-sm">
+          <span className="font-garamond text-brown/90 text-sm">
             {banner === 'period'
               ? '🩸 Your period is predicted in 2 days.'
               : '✦ Your fertile window opens today.'}
           </span>
-          <button onClick={() => setBannerOn(false)} className="text-ivory/40 hover:text-ivory ml-4 text-xl leading-none">×</button>
+          <button onClick={() => setBannerOn(false)} className="text-brown/40 ml-4 text-xl leading-none">×</button>
         </div>
       )}
 
@@ -125,7 +125,7 @@ export default function CycleTracker() {
         className="absolute top-0 left-0 right-0 z-20"
         style={{
           paddingTop: 'max(env(safe-area-inset-top, 0px), 36px)',
-          background: 'linear-gradient(to bottom, rgba(6,4,4,0.82) 0%, rgba(6,4,4,0.0) 100%)',
+          background: 'linear-gradient(to bottom, rgba(242,237,232,0.88) 0%, rgba(242,237,232,0.0) 100%)',
         }}
       >
         <div className="flex">
@@ -136,7 +136,7 @@ export default function CycleTracker() {
               className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-all"
               style={{
                 borderBottom: activeTab === tab.id
-                  ? '2px solid #C9A86C'
+                  ? '2px solid #C4859A'
                   : '2px solid transparent',
               }}
             >
@@ -149,11 +149,12 @@ export default function CycleTracker() {
                   objectFit: 'contain',
                   opacity: activeTab === tab.id ? 1 : 0.4,
                   transition: 'opacity 0.2s',
+                  filter: activeTab === tab.id ? 'none' : 'brightness(0.4)',
                 }}
               />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#C9A86C' : 'rgba(244,239,230,0.38)' }}
+                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(59,51,48,0.45)' }}
               >
                 {tab.label.toUpperCase()}
               </span>
@@ -167,12 +168,10 @@ export default function CycleTracker() {
         className="absolute left-0 right-0 bottom-0"
         style={{
           top: '24%',
-          background: 'rgba(8,5,4,0.44)',
-          backdropFilter: 'blur(22px)',
-          WebkitBackdropFilter: 'blur(22px)',
+          background: 'rgba(242,237,232,0.92)',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
-          borderTop: '1px solid rgba(201,168,108,0.12)',
+          borderTop: '1px solid rgba(196,175,168,0.4)',
         }}
       >
         <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">

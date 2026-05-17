@@ -18,7 +18,7 @@ function TabIcon({ src, active }) {
       flexShrink: 0,
       WebkitMask: `url(${src}) no-repeat center / contain`,
       mask: `url(${src}) no-repeat center / contain`,
-      backgroundColor: active ? '#C9A86C' : 'rgba(244,239,230,0.35)',
+      backgroundColor: active ? '#C4859A' : 'rgba(59,51,48,0.35)',
       transition: 'background-color 0.2s',
     }} />
   )
@@ -147,7 +147,7 @@ export default function PilatesStudio() {
   }
 
   return (
-    <div className="relative min-h-[100svh] overflow-hidden bg-[#060404]">
+    <div className="relative min-h-[100svh] overflow-hidden bg-[#F2EDE8]">
       <style>{`
         @keyframes shimmerSlide {
           0%   { background-position: -200% 0; }
@@ -158,8 +158,8 @@ export default function PilatesStudio() {
           to   { transform: translateY(0);    opacity: 1; }
         }
         @keyframes goldPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(201,168,108,0); }
-          50%      { box-shadow: 0 0 24px 6px rgba(201,168,108,0.3); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(196,133,154,0); }
+          50%      { box-shadow: 0 0 24px 6px rgba(196,133,154,0.25); }
         }
         @keyframes cycleSlideDown {
           from { opacity: 0; transform: translateY(-100%); }
@@ -176,8 +176,8 @@ export default function PilatesStudio() {
       />
       <div className="absolute inset-0" style={{
         background: `
-          linear-gradient(to bottom, rgba(6,4,4,0.65) 0%, rgba(6,4,4,0.2) 30%, rgba(6,4,4,0.08) 50%),
-          radial-gradient(ellipse at 50% 10%, rgba(201,168,108,0.12) 0%, transparent 60%)
+          linear-gradient(to bottom, rgba(242,237,232,0.5) 0%, rgba(242,237,232,0.1) 30%, rgba(242,237,232,0.04) 50%),
+          radial-gradient(ellipse at 50% 10%, rgba(196,133,154,0.1) 0%, transparent 60%)
         `,
       }} />
 
@@ -186,7 +186,7 @@ export default function PilatesStudio() {
         className="absolute top-0 left-0 right-0 z-20"
         style={{
           paddingTop: 'max(env(safe-area-inset-top, 0px), 36px)',
-          background: 'linear-gradient(to bottom, rgba(6,4,4,0.85) 0%, rgba(6,4,4,0.0) 100%)',
+          background: 'linear-gradient(to bottom, rgba(242,237,232,0.88) 0%, rgba(242,237,232,0.0) 100%)',
         }}
       >
         <div className="flex">
@@ -197,14 +197,14 @@ export default function PilatesStudio() {
               className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-all"
               style={{
                 borderBottom: activeTab === tab.id
-                  ? '2px solid #C9A86C'
+                  ? '2px solid #C4859A'
                   : '2px solid transparent',
               }}
             >
               <TabIcon src={tab.icon} active={activeTab === tab.id} />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#C9A86C' : 'rgba(244,239,230,0.38)' }}
+                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(59,51,48,0.45)' }}
               >
                 {tab.label.toUpperCase()}
               </span>
@@ -218,12 +218,10 @@ export default function PilatesStudio() {
         className="absolute left-0 right-0 bottom-0"
         style={{
           top: '15%',
-          background: 'rgba(8,5,4,0.44)',
-          backdropFilter: 'blur(22px)',
-          WebkitBackdropFilter: 'blur(22px)',
+          background: 'rgba(242,237,232,0.92)',
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
-          borderTop: '1px solid rgba(201,168,108,0.12)',
+          borderTop: '1px solid rgba(196,175,168,0.4)',
         }}
       >
         <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">

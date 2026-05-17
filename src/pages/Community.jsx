@@ -12,13 +12,13 @@ const circles = [
 
 export default function Community() {
   return (
-    <div className="min-h-screen bg-[#060404] pb-nav px-4 pt-8 max-w-md mx-auto">
-      <h2 className="font-cinzel text-2xl text-ivory tracking-widest mb-6">Community</h2>
+    <div className="min-h-screen bg-[#F2EDE8] pb-nav px-4 pt-8 max-w-md mx-auto">
+      <h2 className="font-cinzel text-2xl text-brown tracking-widest mb-6">Community</h2>
       <div className="space-y-3">
         {circles.map(c => (
-          <GlassCard key={c.slug} className="flex items-center gap-3 cursor-pointer hover:border-gold/30 transition-colors">
+          <GlassCard key={c.slug} className="flex items-center gap-3 cursor-pointer transition-colors">
             <span className="text-2xl">{c.emoji}</span>
-            <span className="font-garamond text-ivory">{c.name}</span>
+            <span className="font-garamond text-brown">{c.name}</span>
           </GlassCard>
         ))}
       </div>

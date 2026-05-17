@@ -147,27 +147,27 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
     <div className="space-y-5 pb-4">
       {/* ── Date header ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
-        <p className="font-cinzel text-ivory/60 text-[10px] tracking-widest uppercase">Logging for</p>
+        <p className="font-cinzel text-brown/60 text-[10px] tracking-widest uppercase">Logging for</p>
         <input
           type="date"
           value={dateStr}
           max={maxDate}
           onChange={e => setSelectedDate(new Date(e.target.value + 'T00:00:00'))}
-          className="font-garamond text-gold text-sm bg-transparent border-b border-gold/30 pb-0.5 outline-none cursor-pointer"
+          className="font-garamond text-rose text-sm bg-transparent border-b border-rose/30 pb-0.5 outline-none cursor-pointer"
         />
       </div>
 
       {/* ── Period & Flow ────────────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(139,26,26,0.12)', border: '1px solid rgba(139,26,26,0.25)' }}
+        style={{ background: 'rgba(196,133,154,0.1)', border: '1px solid rgba(196,133,154,0.25)' }}
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="font-cinzel text-ivory/80 text-xs tracking-widest">PERIOD TODAY?</span>
+          <span className="font-cinzel text-brown/80 text-xs tracking-widest">PERIOD TODAY?</span>
           <button
             onClick={() => { setPeriodOn(p => !p); if (!periodOn && flow === 0) setFlow(2) }}
             className="relative w-11 h-6 rounded-full transition-all"
-            style={{ background: periodOn ? '#C9A86C' : 'rgba(244,239,230,0.15)' }}
+            style={{ background: periodOn ? '#C4859A' : 'rgba(59,51,48,0.15)' }}
           >
             <div
               className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all shadow"
@@ -186,11 +186,11 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               >
                 <span
                   className="text-xl transition-all"
-                  style={{ color: flow >= i + 1 ? '#C9A86C' : 'rgba(244,239,230,0.18)' }}
+                  style={{ color: flow >= i + 1 ? '#C4859A' : 'rgba(59,51,48,0.18)' }}
                 >
                   {flow >= i + 1 ? '💧' : '○'}
                 </span>
-                <span className="font-garamond text-[9px] text-ivory/35">{label}</span>
+                <span className="font-garamond text-[9px] text-brown/35">{label}</span>
               </button>
             ))}
           </div>
@@ -199,11 +199,11 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
 
       {/* ── Symptoms ─────────────────────────────────────────────────────────── */}
       <div>
-        <p className="font-cinzel text-ivory/50 text-[10px] tracking-widest uppercase mb-3">Symptoms</p>
+        <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-3">Symptoms</p>
         <div className="space-y-3">
           {SYMPTOM_CATEGORIES.map(cat => (
             <div key={cat.name}>
-              <p className="font-garamond text-ivory/30 text-xs mb-2 italic">{cat.name}</p>
+              <p className="font-garamond text-brown/30 text-xs mb-2 italic">{cat.name}</p>
               <div className="grid grid-cols-3 gap-2">
                 {cat.items.map(sym => {
                   const on = selected.includes(sym)
@@ -213,9 +213,9 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                       onClick={() => toggleSymptom(sym)}
                       className="font-garamond text-xs py-1.5 px-2 rounded-lg text-center transition-all leading-tight"
                       style={{
-                        background: on ? 'rgba(201,168,108,0.18)' : 'transparent',
-                        border: on ? '1px solid rgba(201,168,108,0.6)' : '1px solid rgba(244,239,230,0.18)',
-                        color: on ? '#C9A86C' : 'rgba(244,239,230,0.6)',
+                        background: on ? 'rgba(196,133,154,0.18)' : 'transparent',
+                        border: on ? '1px solid rgba(196,133,154,0.6)' : '1px solid rgba(59,51,48,0.18)',
+                        color: on ? '#C4859A' : 'rgba(59,51,48,0.5)',
                       }}
                     >
                       {sym}
@@ -230,7 +230,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
 
       {/* ── Mood ─────────────────────────────────────────────────────────────── */}
       <div>
-        <p className="font-cinzel text-ivory/50 text-[10px] tracking-widest uppercase mb-3">Mood</p>
+        <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-3">Mood</p>
         <div className="flex justify-between">
           {MOODS.map(m => (
             <button
@@ -241,8 +241,8 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
                 style={{
-                  border: mood === m.value ? '2px solid #C9A86C' : '2px solid rgba(244,239,230,0.1)',
-                  background: mood === m.value ? 'rgba(201,168,108,0.12)' : 'rgba(244,239,230,0.06)',
+                  border: mood === m.value ? '2px solid #C4859A' : '2px solid rgba(59,51,48,0.1)',
+                  background: mood === m.value ? 'rgba(196,133,154,0.12)' : 'rgba(59,51,48,0.05)',
                 }}
               >
                 <img
@@ -257,7 +257,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                   }}
                 />
               </div>
-              <span className="font-garamond text-[9px] text-ivory/35">{m.label}</span>
+              <span className="font-garamond text-[9px] text-brown/35">{m.label}</span>
             </button>
           ))}
         </div>
@@ -266,13 +266,13 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
       {/* ── Body Stats ───────────────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4 space-y-4"
-        style={{ background: 'rgba(201,168,108,0.06)', border: '1px solid rgba(201,168,108,0.12)' }}
+        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.35)' }}
       >
-        <p className="font-cinzel text-ivory/50 text-[10px] tracking-widest uppercase">Body Stats</p>
+        <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase">Body Stats</p>
 
         {/* BBT */}
         <div>
-          <p className="font-garamond text-ivory/40 text-xs mb-1">Basal Body Temp</p>
+          <p className="font-garamond text-brown/40 text-xs mb-1">Basal Body Temp</p>
           <div className="flex items-center gap-3">
             <input
               type="number"
@@ -280,11 +280,11 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               placeholder={bbtUnit === 'F' ? '98.6' : '37.0'}
               value={bbt}
               onChange={e => setBbt(e.target.value)}
-              className="flex-1 bg-transparent border-b border-ivory/20 text-ivory font-garamond text-sm py-1 outline-none"
+              className="flex-1 bg-transparent border-b border-brown/20 text-brown font-garamond text-sm py-1 outline-none"
             />
             <button
               onClick={() => setBbtUnit(u => u === 'F' ? 'C' : 'F')}
-              className="font-cinzel text-[10px] text-gold border border-gold/30 px-2 py-1 rounded"
+              className="font-cinzel text-[10px] text-rose border border-rose/30 px-2 py-1 rounded"
             >
               °{bbtUnit}
             </button>
@@ -293,7 +293,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
 
         {/* Weight */}
         <div>
-          <p className="font-garamond text-ivory/40 text-xs mb-1">Weight</p>
+          <p className="font-garamond text-brown/40 text-xs mb-1">Weight</p>
           <div className="flex items-center gap-3">
             <input
               type="number"
@@ -301,11 +301,11 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               placeholder={weightUnit === 'lbs' ? '130' : '59'}
               value={weight}
               onChange={e => setWeight(e.target.value)}
-              className="flex-1 bg-transparent border-b border-ivory/20 text-ivory font-garamond text-sm py-1 outline-none"
+              className="flex-1 bg-transparent border-b border-brown/20 text-brown font-garamond text-sm py-1 outline-none"
             />
             <button
               onClick={() => setWeightUnit(u => u === 'lbs' ? 'kg' : 'lbs')}
-              className="font-cinzel text-[10px] text-gold border border-gold/30 px-2 py-1 rounded"
+              className="font-cinzel text-[10px] text-rose border border-rose/30 px-2 py-1 rounded"
             >
               {weightUnit}
             </button>
@@ -314,11 +314,11 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
 
         {/* Water */}
         <div>
-          <p className="font-garamond text-ivory/40 text-xs mb-2">Water Intake</p>
+          <p className="font-garamond text-brown/40 text-xs mb-2">Water Intake</p>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setWater(w => Math.max(0, w - 1))}
-              className="w-7 h-7 flex items-center justify-center text-gold border border-gold/30 rounded-full text-lg leading-none"
+              className="w-7 h-7 flex items-center justify-center text-rose border border-rose/30 rounded-full text-lg leading-none"
             >
               −
             </button>
@@ -327,7 +327,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                 <button key={i} onClick={() => setWater(i + 1)}>
                   <span
                     className="text-sm transition-all"
-                    style={{ color: i < water ? '#C9A86C' : 'rgba(244,239,230,0.18)' }}
+                    style={{ color: i < water ? '#C4859A' : 'rgba(59,51,48,0.18)' }}
                   >
                     {i < water ? '💧' : '○'}
                   </span>
@@ -336,7 +336,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
             </div>
             <button
               onClick={() => setWater(w => Math.min(10, w + 1))}
-              className="w-7 h-7 flex items-center justify-center text-gold border border-gold/30 rounded-full text-lg leading-none"
+              className="w-7 h-7 flex items-center justify-center text-rose border border-rose/30 rounded-full text-lg leading-none"
             >
               +
             </button>
@@ -346,16 +346,16 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
 
       {/* ── Notes ────────────────────────────────────────────────────────────── */}
       <div>
-        <p className="font-cinzel text-ivory/50 text-[10px] tracking-widest uppercase mb-2">Notes</p>
+        <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-2">Notes</p>
         <div className="relative">
           <textarea
             value={notes}
             onChange={e => setNotes(e.target.value.slice(0, 500))}
             rows={3}
             placeholder="How are you feeling today? Any other observations..."
-            className="w-full bg-transparent text-ivory/70 font-garamond text-sm resize-none outline-none border-b border-ivory/15 pb-5 placeholder:text-ivory/25 leading-relaxed"
+            className="w-full bg-transparent text-brown/70 font-garamond text-sm resize-none outline-none border-b border-brown/15 pb-5 placeholder:text-brown/25 leading-relaxed"
           />
-          <span className="absolute bottom-1 right-0 font-garamond text-[10px] text-ivory/25">
+          <span className="absolute bottom-1 right-0 font-garamond text-[10px] text-brown/25">
             {notes.length}/500
           </span>
         </div>
@@ -367,9 +367,9 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
         disabled={saving || saved}
         className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm transition-all"
         style={{
-          background: saved ? 'rgba(201,168,108,0.12)' : 'transparent',
-          border: '1px solid rgba(201,168,108,0.55)',
-          color: '#C9A86C',
+          background: saved ? 'rgba(196,133,154,0.12)' : 'transparent',
+          border: '1px solid rgba(196,133,154,0.55)',
+          color: '#C4859A',
           animation: saved ? 'goldPulse 0.6s ease-out' : undefined,
         }}
       >
