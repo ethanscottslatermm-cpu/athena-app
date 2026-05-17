@@ -165,6 +165,26 @@ export default function Login() {
           0%,100% { opacity: 0.35; transform: translateX(-50%) scale(1); }
           50%     { opacity: 0.65; transform: translateX(-50%) scale(1.08); }
         }
+        @keyframes headFogA {
+          0%   { transform: translateX(-10%) scaleX(1);    opacity: 0.4; }
+          28%  { transform: translateX(7%)   scaleX(1.14); opacity: 0.65; }
+          55%  { transform: translateX(-4%)  scaleX(0.96); opacity: 0.48; }
+          82%  { transform: translateX(5%)   scaleX(1.08); opacity: 0.6; }
+          100% { transform: translateX(-10%) scaleX(1);    opacity: 0.4; }
+        }
+        @keyframes headFogB {
+          0%   { transform: translateX(9%)  translateY(0%)  scaleX(1.06); opacity: 0.32; }
+          32%  { transform: translateX(-8%) translateY(-2%) scaleX(0.93); opacity: 0.58; }
+          64%  { transform: translateX(6%)  translateY(1%)  scaleX(1.12); opacity: 0.42; }
+          100% { transform: translateX(9%)  translateY(0%)  scaleX(1.06); opacity: 0.32; }
+        }
+        @keyframes headFogC {
+          0%   { transform: translateX(-5%) translateY(1%)  scaleX(1);    opacity: 0.5; }
+          22%  { transform: translateX(8%)  translateY(-2%) scaleX(1.1);  opacity: 0.68; }
+          48%  { transform: translateX(-7%) translateY(0%)  scaleX(0.91); opacity: 0.44; }
+          75%  { transform: translateX(4%)  translateY(-1%) scaleX(1.07); opacity: 0.62; }
+          100% { transform: translateX(-5%) translateY(1%)  scaleX(1);    opacity: 0.5; }
+        }
         @keyframes steamDriftA {
           0%   { transform: translateX(-8%) translateY(0%) scaleX(1); opacity: 0.5; }
           50%  { transform: translateX(8%) translateY(-5%) scaleX(1.15); opacity: 1; }
@@ -468,7 +488,32 @@ export default function Login() {
           ))}
         </div>
 
-        {/* ── 10. Ground steam / mist ── */}
+        {/* ── 10. Head fog / crown mist ── */}
+        <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ top: '0%', height: '34%' }}>
+          <div style={{
+            position: 'absolute', top: '18%', left: '5%',
+            width: '90%', height: '55%',
+            background: 'radial-gradient(ellipse 100% 55% at 50% 30%, rgba(222,216,208,0.55) 0%, rgba(222,216,208,0.18) 55%, transparent 78%)',
+            animation: 'headFogA 14s ease-in-out infinite',
+            filter: 'blur(24px)',
+          }} />
+          <div style={{
+            position: 'absolute', top: '5%', left: '-5%',
+            width: '110%', height: '50%',
+            background: 'radial-gradient(ellipse 90% 45% at 50% 22%, rgba(215,208,198,0.42) 0%, rgba(215,208,198,0.12) 60%, transparent 80%)',
+            animation: 'headFogB 19s ease-in-out infinite 4s',
+            filter: 'blur(30px)',
+          }} />
+          <div style={{
+            position: 'absolute', top: '25%', left: '8%',
+            width: '84%', height: '50%',
+            background: 'radial-gradient(ellipse 85% 40% at 50% 20%, rgba(228,220,208,0.38) 0%, transparent 72%)',
+            animation: 'headFogC 24s ease-in-out infinite 8s',
+            filter: 'blur(34px)',
+          }} />
+        </div>
+
+        {/* ── 11. Ground steam / mist ── */}
         <div className="absolute inset-x-0 pointer-events-none overflow-hidden" style={{ bottom: '0%', height: '35%' }}>
           <div style={{
             position: 'absolute', bottom: '15%', left: '-5%',
@@ -491,6 +536,21 @@ export default function Login() {
             animation: 'steamDriftC 20s ease-in-out infinite 5s',
             filter: 'blur(20px)',
           }} />
+          {/* extra organic foot layers */}
+          <div style={{
+            position: 'absolute', bottom: '18%', left: '15%',
+            width: '70%', height: '38%',
+            background: 'radial-gradient(ellipse 100% 50% at 50% 75%, rgba(218,210,198,0.55) 0%, transparent 72%)',
+            animation: 'headFogA 17s ease-in-out infinite 3s',
+            filter: 'blur(22px)',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '10%', left: '-8%',
+            width: '80%', height: '42%',
+            background: 'radial-gradient(ellipse 100% 45% at 50% 82%, rgba(212,205,194,0.48) 0%, transparent 70%)',
+            animation: 'headFogB 21s ease-in-out infinite 9s',
+            filter: 'blur(26px)',
+          }} />
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             height: '25%',
@@ -499,7 +559,7 @@ export default function Login() {
           }} />
         </div>
 
-        {/* ── 11. Warrior ground glow ── */}
+        {/* ── 12. Warrior ground glow ── */}
         <div style={{
           position: 'absolute',
           bottom: '20%', left: '50%',
