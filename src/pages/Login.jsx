@@ -289,7 +289,6 @@ export default function Login() {
         .athena-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(235,215,140,0.65);
           outline: none;
           color: rgba(59,51,48,0.92);
           font-family: 'Cormorant Garamond', serif;
@@ -300,17 +299,12 @@ export default function Login() {
           transition: box-shadow 0.3s;
           caret-color: rgba(255,230,120,0.9);
           -webkit-appearance: none;
-          animation: linePulse 2.5s ease-in-out infinite;
         }
         .athena-input::placeholder {
           font-family: 'Cormorant Garamond', serif;
           font-weight: 500;
           letter-spacing: 0.24em;
           animation: placeholderPulse 2.5s ease-in-out infinite;
-        }
-        .athena-input:focus {
-          border-bottom-color: rgba(255,242,168,1);
-          box-shadow: 0 1px 16px rgba(255,248,215,0.72), 0 2px 38px rgba(255,236,188,0.34);
         }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:hover,
