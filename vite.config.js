@@ -13,6 +13,7 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
+        globIgnores: ['**/Themes/**', '**/favicon*'],
         runtimeCaching: [
           {
             urlPattern: /\/images\/sessions\/.+\.webp$/i,

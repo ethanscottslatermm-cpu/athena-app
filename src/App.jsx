@@ -54,7 +54,7 @@ function AppShell({ children }) {
 function PhoneFrame({ children }) {
   return (
     <div className="min-h-[100svh] bg-[#F2EDE8] flex items-stretch justify-center">
-      <div className="relative w-full md:max-w-sm md:overflow-hidden bg-[#F2EDE8] min-h-[100svh] flex flex-col">
+      <div className="relative w-full md:max-w-sm bg-[#F2EDE8] h-[100svh] flex flex-col overflow-hidden">
         {children}
       </div>
     </div>

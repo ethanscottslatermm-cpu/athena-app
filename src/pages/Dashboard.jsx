@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
-import { Wind, Settings, ChevronRight } from 'lucide-react'
+import { Settings, ChevronRight } from 'lucide-react'
+import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
@@ -112,12 +113,6 @@ function greeting() {
   return 'Good night'
 }
 
-function uvNote(uv) {
-  if (uv >= 8) return 'Very high UV — SPF essential'
-  if (uv >= 6) return 'High UV — wear SPF'
-  if (uv >= 3) return 'Moderate UV — SPF recommended'
-  return 'Low UV today'
-}
 
 function anim(delay = 0) {
   return { animation: `dashUp 0.5s ease ${delay}s both` }
@@ -229,10 +224,14 @@ export default function Dashboard() {
       async ({ coords: { latitude, longitude } }) => {
         try {
           const res = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,uv_index&temperature_unit=fahrenheit&timezone=auto`
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,uv_index,relative_humidity_2m&temperature_unit=fahrenheit&timezone=auto`
           )
           const { current } = await res.json()
-          setWeather({ temp: Math.round(current.temperature_2m), uv: Math.round(current.uv_index ?? 0) })
+          setWeather({
+            temp:     Math.round(current.temperature_2m),
+            uv:       Math.round(current.uv_index ?? 0),
+            humidity: Math.round(current.relative_humidity_2m ?? 58),
+          })
         } catch (_) {}
       },
       () => {}
@@ -240,7 +239,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#F2EDE8] pb-nav overflow-y-auto">
+    <div className="flex-1 min-h-0 bg-[#F2EDE8] pb-nav overflow-y-auto">
       <style>{`
         @keyframes dashUp {
           from { opacity: 0; transform: translateY(12px); }
@@ -444,26 +443,11 @@ export default function Dashboard() {
         </>
       )}
 
-      {/* ── Conditions (Open-Meteo) ── */}
-      {weather && (
-        <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.26)}>
-          <div
-            className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ background: '#D6CFC9', border: '1px solid rgba(214,207,201,0.6)' }}
-          >
-            <Wind size={13} style={{ color: '#7A6A65', flexShrink: 0 }} />
-            <div>
-              <p className="font-cinzel text-[8px] tracking-widest uppercase mb-0.5"
-                style={{ color: '#7A6A65' }}>
-                Conditions
-              </p>
-              <p className="font-garamond text-xs" style={{ color: '#3B3330' }}>
-                {weather.temp}°F · UV {weather.uv} · {uvNote(weather.uv)}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ── Wellness Weather ── */}
+      <SectionHeader title="Wellness" delay={0.26} />
+      <div className="px-4 max-w-md mx-auto mb-6" style={anim(0.28)}>
+        <WellnessWeatherWidget weather={weather} phase={phase} />
+      </div>
 
     </div>
   )
