@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import heroImg    from '../assets/athena-hero.webp'
-import knightIcon from '../assets/knight-icon.png'
+import heroImg        from '../assets/athena-hero.webp'
+import knightIcon     from '../assets/knight-icon.png'
+import athenaWordmark from '../assets/athena-wordmark.png'
 import { supabase } from '../lib/supabase'
 
 const ANIM_TYPES  = ['dustUp', 'dustUp', 'dustDriftL', 'dustUp', 'dustDriftR', 'dustUp']
@@ -891,25 +892,27 @@ export default function Login() {
             background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.5), transparent)',
             margin: '0 auto 13px',
           }} />
-          <span style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: 'clamp(28px, 8vw, 50px)',
-            fontWeight: 400,
-            display: 'block',
-            letterSpacing: '0.26em',
-            lineHeight: 1,
-            transform: 'scaleX(0.84)',
+          <div style={{
+            width: 'clamp(210px, 60vw, 290px)',
+            aspectRatio: '1 / 1',
+            margin: '0 auto',
+            WebkitMaskImage: `url(${athenaWordmark}), url(${athenaWordmark})`,
+            maskImage: `url(${athenaWordmark}), url(${athenaWordmark})`,
+            WebkitMaskMode: 'luminance, alpha',
+            maskMode: 'luminance, alpha',
+            WebkitMaskSize: 'contain, contain',
+            maskSize: 'contain, contain',
+            WebkitMaskRepeat: 'no-repeat, no-repeat',
+            maskRepeat: 'no-repeat, no-repeat',
+            WebkitMaskPosition: 'center, center',
+            maskPosition: 'center, center',
+            WebkitMaskComposite: 'xor',
+            maskComposite: 'exclude',
             backgroundImage: 'linear-gradient(90deg, rgba(212,208,232,0.82) 0%, rgba(212,208,232,0.82) 30%, rgba(240,237,252,0.95) 44%, rgba(248,246,255,1) 50%, rgba(240,237,252,0.95) 56%, rgba(212,208,232,0.82) 70%, rgba(212,208,232,0.82) 100%)',
             backgroundSize: '200% 100%',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            textShadow: 'none',
-            filter: 'drop-shadow(0 0 3px rgba(238,234,255,0.55)) drop-shadow(0 0 10px rgba(222,218,248,0.38)) drop-shadow(0 0 22px rgba(210,206,242,0.2))',
             animation: 'shimmer 5s linear infinite',
-          }}>
-            ATHENA
-          </span>
+            filter: 'drop-shadow(0 0 3px rgba(238,234,255,0.55)) drop-shadow(0 0 10px rgba(222,218,248,0.38)) drop-shadow(0 0 22px rgba(210,206,242,0.2))',
+          }} />
         </div>
 
       </div>
