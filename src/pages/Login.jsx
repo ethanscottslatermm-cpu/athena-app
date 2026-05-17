@@ -4,7 +4,15 @@ import heroImg    from '../assets/athena-hero.webp'
 import knightIcon from '../assets/knight-icon.png'
 import { supabase } from '../lib/supabase'
 
-const ANIM_TYPES = ['dustUp', 'dustDriftL', 'dustDriftR', 'dustFloat', 'dustSwirl', 'dustFall']
+const ANIM_TYPES  = ['dustUp', 'dustDriftL', 'dustDriftR', 'dustFloat', 'dustSwirl', 'dustFall']
+const GOLD_COLORS = [
+  'rgba(255,252,225,',
+  'rgba(245,232,170,',
+  'rgba(255,245,195,',
+  'rgba(238,220,150,',
+  'rgba(255,250,210,',
+  'rgba(242,225,158,',
+]
 
 const PARTICLES = Array.from({ length: 220 }, (_, i) => ({
   id: i,
@@ -17,8 +25,9 @@ const PARTICLES = Array.from({ length: 220 }, (_, i) => ({
   size: 1 + (i % 5) * 0.7,
   duration: 2.5 + (i % 7) * 0.7,
   delay: (i * 0.19) % 8,
-  opacity: 0.28 + (i % 6) * 0.1,
+  opacity: 0.35 + (i % 6) * 0.11,
   anim: ANIM_TYPES[i % ANIM_TYPES.length],
+  color: GOLD_COLORS[i % GOLD_COLORS.length],
 }))
 
 
@@ -241,9 +250,13 @@ export default function Login() {
           50%      { opacity: 1;    filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 28px rgba(255,255,255,0.5)); }
         }
         @keyframes iconPulse {
-          0%   { opacity: 0.55; filter: invert(1) sepia(1) saturate(3) hue-rotate(2deg) brightness(0.85); }
-          50%  { opacity: 1;    filter: invert(1) sepia(1) saturate(6) hue-rotate(2deg) brightness(1.2); }
-          100% { opacity: 0.9;  filter: invert(1) sepia(1) saturate(4) hue-rotate(2deg) brightness(1); }
+          0%   { opacity: 0.8;  filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(4) drop-shadow(0 0 4px rgba(255,220,80,0.5)); }
+          50%  { opacity: 1;    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(6) drop-shadow(0 0 14px rgba(255,225,80,1)) drop-shadow(0 0 28px rgba(255,200,60,0.6)); }
+          100% { opacity: 0.9;  filter: sepia(1) saturate(7) hue-rotate(10deg) brightness(5) drop-shadow(0 0 8px rgba(255,220,80,0.7)); }
+        }
+        @keyframes linePulse {
+          0%, 100% { border-bottom-color: rgba(235,215,140,0.6); }
+          50%      { border-bottom-color: rgba(255,240,160,1); box-shadow: 0 1px 10px rgba(255,220,80,0.4); }
         }
 
         .iw {
@@ -263,30 +276,32 @@ export default function Login() {
           height: 20px;
           object-fit: contain;
           pointer-events: none;
-          opacity: 0.5;
-          filter: sepia(1) saturate(3) hue-rotate(310deg) brightness(0.75);
-          transition: opacity 0.3s, filter 0.3s;
+          opacity: 0.82;
+          filter: sepia(1) saturate(6) hue-rotate(10deg) brightness(4.5) drop-shadow(0 0 5px rgba(255,220,80,0.55));
+          transition: opacity 0.3s, filter 0.4s;
+          animation: iconPulse 2.8s ease-in-out infinite;
         }
         .iw:focus-within .input-icon-img {
-          opacity: 0.9;
-          filter: sepia(1) saturate(4) hue-rotate(310deg) brightness(0.8);
+          opacity: 1;
+          filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(6) drop-shadow(0 0 12px rgba(255,225,80,0.9)) drop-shadow(0 0 24px rgba(255,200,60,0.5));
+          animation: iconPulse 1.4s ease-in-out infinite;
         }
         .input-icon-img.pulse {
           animation: iconPulse 0.6s ease forwards;
         }
         .iw input:focus {
-          border-color: rgba(196,133,154,0.5);
-          background: rgba(196,133,154,0.04);
+          border-color: rgba(255,235,140,0.95);
+          background: rgba(255,225,80,0.03);
           box-shadow:
-            0 0 0 1px rgba(196,133,154,0.1),
-            0 0 24px rgba(196,133,154,0.06),
-            inset 0 0 16px rgba(196,133,154,0.03);
+            0 1px 12px rgba(255,220,80,0.3),
+            inset 0 0 16px rgba(255,220,80,0.04);
+          animation-play-state: paused;
         }
 
         .athena-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(196,133,154,0.6);
+          border-bottom: 1px solid rgba(235,215,140,0.65);
           outline: none;
           color: rgba(59,51,48,0.92);
           font-family: 'Cormorant Garamond', serif;
@@ -294,8 +309,9 @@ export default function Login() {
           letter-spacing: 0.22em;
           padding: 7px 0 7px 6px;
           width: 100%;
-          transition: border-color 0.3s;
-          caret-color: rgba(196,133,154,0.8);
+          transition: border-color 0.3s, box-shadow 0.3s;
+          caret-color: rgba(255,230,120,0.9);
+          animation: linePulse 2.8s ease-in-out infinite;
           -webkit-appearance: none;
         }
         .athena-input::placeholder {
@@ -466,8 +482,10 @@ export default function Login() {
               left: `${p.x}%`, top: `${p.y}%`,
               width: `${p.size}px`, height: `${p.size}px`,
               borderRadius: '50%',
-              backgroundColor: `rgba(196,133,154,${p.opacity})`,
-              boxShadow: p.size >= 2.5 ? `0 0 ${p.size * 2}px rgba(196,133,154,${p.opacity * 0.6})` : 'none',
+              backgroundColor: `${p.color}${p.opacity})`,
+              boxShadow: p.size >= 2.5
+                ? `0 0 ${p.size * 3}px ${p.color}${p.opacity * 0.8}), 0 0 ${p.size * 6}px ${p.color}${p.opacity * 0.35})`
+                : `0 0 ${p.size * 2}px ${p.color}${p.opacity * 0.5})`,
               animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
             }} />
           ))}
