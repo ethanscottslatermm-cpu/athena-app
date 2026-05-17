@@ -266,7 +266,7 @@ export default function ProgressTab({
       {/* ── Weekly activity ─────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.35)' }}
+        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.65)' }}
       >
         <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-3">
           Last 7 Days
@@ -318,7 +318,7 @@ export default function ProgressTab({
       {/* ── Session history ─────────────────────────────────────────── */}
       <div
         className="rounded-xl overflow-hidden"
-        style={{ border: '1px solid rgba(196,175,168,0.35)' }}
+        style={{ border: '1px solid rgba(196,175,168,0.65)' }}
       >
         <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase px-4 pt-4 pb-2">
           History

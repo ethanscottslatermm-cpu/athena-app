@@ -167,7 +167,7 @@ export default function HomeTab({
       {/* ── Today's featured session ──────────────────────────────────── */}
       {featured ? (
         <div>
-          <p className="font-cinzel text-ivory/35 text-[10px] tracking-widest uppercase mb-2">
+          <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-2">
             Featured Today
           </p>
           <SessionCard
@@ -181,7 +181,7 @@ export default function HomeTab({
       ) : (
         <div
           className="h-48 rounded-2xl flex items-center justify-center"
-          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.35)' }}
+          style={{ background: 'rgba(196,175,168,0.15)', border: '1px solid rgba(196,175,168,0.65)' }}
         >
           <p className="font-garamond text-taupe text-sm">Sessions loading…</p>
         </div>
@@ -191,7 +191,7 @@ export default function HomeTab({
       {recentCompletion && (
         <div
           className="flex items-center justify-between rounded-xl px-4 py-3"
-          style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.4)' }}
+          style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.65)' }}
         >
           <div className="flex-1 min-w-0">
             <p className="font-cinzel text-taupe text-[10px] tracking-widest uppercase mb-0.5">
@@ -203,7 +203,7 @@ export default function HomeTab({
           </div>
           <button
             onClick={() => onSelectSession(recentCompletion)}
-            className="font-garamond text-gold text-sm ml-4 shrink-0"
+            className="font-garamond text-brown/75 text-sm ml-4 shrink-0"
           >
             Revisit →
           </button>
@@ -213,7 +213,7 @@ export default function HomeTab({
       {/* ── Weekly progress ring ──────────────────────────────────────── */}
       <div
         className="rounded-2xl p-4"
-        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.38)' }}
+        style={{ background: 'rgba(196,175,168,0.18)', border: '1px solid rgba(196,175,168,0.65)' }}
       >
         <p className="font-cinzel text-taupe text-[10px] tracking-widest uppercase mb-4">
           This Week
@@ -261,7 +261,7 @@ export default function HomeTab({
             </p>
             <button
               onClick={onSeeAll}
-              className="font-cinzel text-gold text-[11px] tracking-wide px-3 py-1 rounded-lg"
+              className="font-cinzel text-brown/75 text-[11px] tracking-wide px-3 py-1 rounded-lg"
               style={{ background: 'rgba(196,133,154,0.12)', border: '1px solid rgba(196,133,154,0.4)' }}
             >
               See All →

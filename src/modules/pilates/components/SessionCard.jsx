@@ -127,7 +127,7 @@ export default function SessionCard({
 
         <div
           onClick={e => { e.stopPropagation(); onTap?.() }}
-          className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-gold cursor-pointer z-10"
+          className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-brown/80 cursor-pointer z-10"
           style={{
             background: 'rgba(242,237,232,0.75)',
             border: '1px solid rgba(196,133,154,0.4)',
@@ -186,7 +186,7 @@ export default function SessionCard({
       className="relative rounded-xl overflow-hidden cursor-pointer"
       style={{
         background: '#F2EDE8',
-        border: '1px solid rgba(196,175,168,0.35)',
+        border: '1px solid rgba(196,175,168,0.65)',
       }}
     >
       <div
@@ -203,10 +203,10 @@ export default function SessionCard({
         </button>
       </div>
       <div className="p-2.5">
-        <h4 className="font-cinzel text-ivory text-[13px] leading-tight mb-1">{session.title}</h4>
+        <h4 className="font-cinzel text-brown/85 text-[13px] leading-tight mb-1">{session.title}</h4>
         {session.description && (
           <p
-            className="font-garamond italic text-ivory/40 text-[11px] leading-snug mb-1"
+            className="font-garamond italic text-brown/50 text-[11px] leading-snug mb-1"
             style={{
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -217,7 +217,7 @@ export default function SessionCard({
             {session.description}
           </p>
         )}
-        <p className="font-garamond text-ivory/40 text-xs capitalize">
+        <p className="font-garamond text-brown/50 text-xs capitalize">
           {session.duration_min} min · {(session.focus_area ?? '').replace(/_/g, ' ')} · {session.difficulty}
         </p>
       </div>

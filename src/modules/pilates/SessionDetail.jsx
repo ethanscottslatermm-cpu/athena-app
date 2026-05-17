@@ -148,7 +148,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             <div
               key={label}
               className="flex flex-col items-center py-2.5 rounded-xl"
-              style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.35)' }}
+              style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.65)' }}
             >
               <span className="font-garamond text-brown/55 text-[10px] text-center leading-tight capitalize">
                 {label}
@@ -174,7 +174,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
           </p>
           <div
             className="mx-4 rounded-xl overflow-hidden"
-            style={{ border: '1px solid rgba(196,175,168,0.35)' }}
+            style={{ border: '1px solid rgba(196,175,168,0.65)' }}
           >
             {sessionExercises.length > 0 ? sessionExercises.map((ex, i) => (
               <ExerciseRow key={ex.id ?? i} exercise={ex} index={i} />
