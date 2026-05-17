@@ -341,7 +341,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(196,133,154,0.1) 0%, rgba(196,133,154,0.04) 40%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.1) 40%, transparent 70%)',
             animation: 'cloudA 16s ease-in-out infinite',
             filter: 'blur(18px)',
           }} />
@@ -354,7 +354,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(196,133,154,0.1) 0%, rgba(196,133,154,0.03) 50%, transparent 70%)',
+            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(196,133,154,0.25) 0%, rgba(196,133,154,0.08) 50%, transparent 70%)',
             animation: 'cloudB 22s ease-in-out infinite 2s',
             filter: 'blur(25px)',
           }} />
@@ -367,7 +367,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 80% 30% at 50% 35%, rgba(196,133,154,0.1) 0%, transparent 65%)',
+            background: 'radial-gradient(ellipse 80% 30% at 50% 35%, rgba(196,133,154,0.22) 0%, transparent 65%)',
             animation: 'cloudC 30s ease-in-out infinite 5s',
             filter: 'blur(30px)',
           }} />
@@ -377,7 +377,7 @@ export default function Login() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(196,133,154,0.1) 0%, transparent 65%)',
+            background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(196,133,154,0.22) 0%, transparent 65%)',
             animation: 'hazePulse 8s ease-in-out infinite',
           }}
         />
@@ -387,7 +387,7 @@ export default function Login() {
           <div style={{
             position: 'absolute', top: '-10%', left: '12%',
             width: '25%', height: '110%',
-            background: 'linear-gradient(175deg, rgba(196,133,154,0.2) 0%, transparent 60%)',
+            background: 'linear-gradient(175deg, rgba(196,133,154,0.4) 0%, transparent 60%)',
             animation: 'rayPulse 11s ease-in-out infinite',
             filter: 'blur(16px)',
             transform: 'skewX(-12deg)',
@@ -395,7 +395,7 @@ export default function Login() {
           <div style={{
             position: 'absolute', top: '-10%', right: '18%',
             width: '16%', height: '90%',
-            background: 'linear-gradient(175deg, rgba(196,133,154,0.15) 0%, transparent 60%)',
+            background: 'linear-gradient(175deg, rgba(196,133,154,0.28) 0%, transparent 60%)',
             animation: 'rayPulse2 17s ease-in-out infinite 4s',
             filter: 'blur(24px)',
             transform: 'skewX(14deg)',
@@ -430,7 +430,7 @@ export default function Login() {
               left: `${p.x}%`, top: `${p.y}%`,
               width: `${p.size}px`, height: `${p.size}px`,
               borderRadius: '50%',
-              backgroundColor: `rgba(196,133,154,${p.opacity * 0.6})`,
+              backgroundColor: `rgba(196,133,154,${p.opacity})`,
               animation: `dust ${p.duration}s ease-in-out infinite ${p.delay}s`,
             }} />
           ))}
@@ -441,28 +441,28 @@ export default function Login() {
           <div style={{
             position: 'absolute', bottom: '15%', left: '-5%',
             width: '75%', height: '45%',
-            background: 'radial-gradient(ellipse 100% 60% at 50% 80%, rgba(230,225,215,0.55) 0%, rgba(230,225,215,0.2) 50%, transparent 75%)',
+            background: 'radial-gradient(ellipse 100% 60% at 50% 80%, rgba(220,210,200,0.75) 0%, rgba(220,210,200,0.3) 50%, transparent 75%)',
             animation: 'steamDriftA 12s ease-in-out infinite',
             filter: 'blur(14px)',
           }} />
           <div style={{
             position: 'absolute', bottom: '8%', right: '-5%',
             width: '65%', height: '40%',
-            background: 'radial-gradient(ellipse 100% 55% at 50% 85%, rgba(230,225,215,0.45) 0%, rgba(230,225,215,0.15) 55%, transparent 75%)',
+            background: 'radial-gradient(ellipse 100% 55% at 50% 85%, rgba(220,210,200,0.65) 0%, rgba(220,210,200,0.2) 55%, transparent 75%)',
             animation: 'steamDriftB 16s ease-in-out infinite 2s',
             filter: 'blur(18px)',
           }} />
           <div style={{
             position: 'absolute', bottom: '5%', left: '5%',
             width: '90%', height: '35%',
-            background: 'radial-gradient(ellipse 100% 50% at 50% 90%, rgba(210,205,195,0.4) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse 100% 50% at 50% 90%, rgba(210,205,195,0.65) 0%, transparent 70%)',
             animation: 'steamDriftC 20s ease-in-out infinite 5s',
             filter: 'blur(20px)',
           }} />
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             height: '25%',
-            background: 'linear-gradient(to top, rgba(200,195,185,0.35) 0%, transparent 100%)',
+            background: 'linear-gradient(to top, rgba(200,195,185,0.6) 0%, transparent 100%)',
             filter: 'blur(10px)',
           }} />
         </div>
@@ -472,7 +472,7 @@ export default function Login() {
           position: 'absolute',
           bottom: '20%', left: '50%',
           width: '60%', height: '30%',
-          background: 'radial-gradient(ellipse, rgba(196,133,154,0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(196,133,154,0.32) 0%, transparent 70%)',
           animation: 'breathe 5s ease-in-out infinite',
           filter: 'blur(18px)',
           pointerEvents: 'none',
