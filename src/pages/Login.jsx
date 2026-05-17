@@ -227,13 +227,13 @@ export default function Login() {
           height: 20px;
           object-fit: contain;
           pointer-events: none;
-          opacity: 0.55;
-          filter: invert(1) sepia(1) saturate(3) hue-rotate(2deg) brightness(0.85);
+          opacity: 0.5;
+          filter: sepia(1) saturate(3) hue-rotate(310deg) brightness(0.75);
           transition: opacity 0.3s, filter 0.3s;
         }
         .iw:focus-within .input-icon-img {
           opacity: 0.9;
-          filter: invert(1) sepia(1) saturate(4) hue-rotate(2deg) brightness(1);
+          filter: sepia(1) saturate(4) hue-rotate(310deg) brightness(0.8);
         }
         .input-icon-img.pulse {
           animation: iconPulse 0.6s ease forwards;
