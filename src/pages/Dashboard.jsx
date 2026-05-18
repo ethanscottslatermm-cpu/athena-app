@@ -15,6 +15,7 @@ import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
 import communityIcon from '../assets/icons/nav-community.png'
 
+// Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
   Pilates: '/images/dashboard/pilates.webp',
   Nourish: '/images/dashboard/nourish.webp',
@@ -22,23 +23,62 @@ const MODULE_IMAGES = {
   Sleep:   '/images/dashboard/sleep.webp',
 }
 
-function ModuleIcon({ src, color }) {
+// ─── Platinum shimmer icon ────────────────────────────────────────────────────
+// Two stacked mask-spans: base platinum layer + animated sweep overlay
+
+function ShimmerIcon({ src, delay = 0, size = 22 }) {
+  const maskVal = `url(${src}) no-repeat center / contain`
   return (
-    <span
+    <span style={{ position: 'relative', display: 'inline-block', width: size, height: size, flexShrink: 0 }}>
+      {/* Base — platinum silver with soft glow */}
+      <span style={{
+        position: 'absolute', inset: 0,
+        WebkitMask: maskVal, mask: maskVal,
+        backgroundColor: '#E8E8F0',
+        filter: 'drop-shadow(0 0 4px rgba(220,220,240,0.7))',
+      }} />
+      {/* Sweep overlay */}
+      <span
+        className="icon-sweep-el"
+        style={{
+          position: 'absolute', inset: 0,
+          WebkitMask: maskVal, mask: maskVal,
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.82) 50%, transparent 100%)',
+          backgroundSize: '200% 100%',
+          animationName: 'iconSweep',
+          animationDuration: '2.5s',
+          animationTimingFunction: 'ease-in-out',
+          animationDelay: `${delay}s`,
+          animationIterationCount: 'infinite',
+        }}
+      />
+    </span>
+  )
+}
+
+// ─── Shimmer rim rotating gradient — shared inner div ─────────────────────────
+
+function RimSpin({ duration = '3s', delay = 0 }) {
+  return (
+    <div
+      className="srim-spin-el"
       style={{
-        display: 'inline-block',
-        width: '22px',
-        height: '22px',
-        flexShrink: 0,
-        WebkitMask: `url(${src}) no-repeat center / contain`,
-        mask: `url(${src}) no-repeat center / contain`,
-        backgroundColor: color,
+        position: 'absolute',
+        width: '150%', height: '150%',
+        top: '-25%', left: '-25%',
+        background: 'conic-gradient(rgba(200,200,215,0.28) 0%, rgba(200,200,215,0.28) 36%, rgba(215,215,238,0.68) 45%, rgba(238,238,255,0.9) 50%, rgba(215,215,238,0.68) 55%, rgba(200,200,215,0.28) 64%, rgba(200,200,215,0.28) 100%)',
+        animationName: 'srimRotate',
+        animationDuration: duration,
+        animationTimingFunction: 'linear',
+        animationIterationCount: 'infinite',
+        animationDelay: `${delay}s`,
+        pointerEvents: 'none',
       }}
     />
   )
 }
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
 const PHASE_META = {
   menstrual:  { color: '#C4859A', label: 'Menstrual',  days: 5  },
@@ -64,10 +104,10 @@ const PHASE_CONTENT = {
     sub: 'Energy builds. Lean into curiosity.',
     gradient: 'linear-gradient(135deg, rgba(143,165,140,0.38) 0%, rgba(143,165,140,0.12) 100%)',
     cards: [
-      { module: 'Pilates',   tip: 'Light cardio, barre & core work',        to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Lean proteins & fresh greens',           to: '/nourish'   },
-      { module: 'Skin',      tip: 'Exfoliate & brighten — skin is ready',   to: '/skin'      },
-      { module: 'Sleep',     tip: 'Consistent sleep fuels your surge',      to: '/sleep'     },
+      { module: 'Pilates',   tip: 'Light cardio, barre & core work',       to: '/pilates'   },
+      { module: 'Nourish',   tip: 'Lean proteins & fresh greens',          to: '/nourish'   },
+      { module: 'Skin',      tip: 'Exfoliate & brighten — skin is ready',  to: '/skin'      },
+      { module: 'Sleep',     tip: 'Consistent sleep fuels your surge',     to: '/sleep'     },
     ],
   },
   ovulation: {
@@ -75,10 +115,10 @@ const PHASE_CONTENT = {
     sub: 'Radiant and magnetic — your strongest phase.',
     gradient: 'linear-gradient(135deg, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.10) 100%)',
     cards: [
-      { module: 'Pilates',   tip: 'HIIT, strength training & dance',        to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Antioxidants, zinc & whole foods',       to: '/nourish'   },
-      { module: 'Skin',      tip: 'Lightweight moisture & SPF',             to: '/skin'      },
-      { module: 'Sleep',     tip: 'Recovery sleep after peak output',       to: '/sleep'     },
+      { module: 'Pilates',   tip: 'HIIT, strength training & dance',       to: '/pilates'   },
+      { module: 'Nourish',   tip: 'Antioxidants, zinc & whole foods',      to: '/nourish'   },
+      { module: 'Skin',      tip: 'Lightweight moisture & SPF',            to: '/skin'      },
+      { module: 'Sleep',     tip: 'Recovery sleep after peak output',      to: '/sleep'     },
     ],
   },
   luteal: {
@@ -86,10 +126,10 @@ const PHASE_CONTENT = {
     sub: 'Wisdom rises. Slow down and listen.',
     gradient: 'linear-gradient(135deg, rgba(196,175,168,0.38) 0%, rgba(196,175,168,0.12) 100%)',
     cards: [
-      { module: 'Pilates',   tip: 'Yoga, pilates & low-impact flow',        to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Magnesium, complex carbs & warmth',      to: '/nourish'   },
-      { module: 'Skin',      tip: 'Nourishing masks & barrier support',     to: '/skin'      },
-      { module: 'Sleep',     tip: 'Wind-down rituals are essential',        to: '/sleep'     },
+      { module: 'Pilates',   tip: 'Yoga, pilates & low-impact flow',       to: '/pilates'   },
+      { module: 'Nourish',   tip: 'Magnesium, complex carbs & warmth',     to: '/nourish'   },
+      { module: 'Skin',      tip: 'Nourishing masks & barrier support',    to: '/skin'      },
+      { module: 'Sleep',     tip: 'Wind-down rituals are essential',       to: '/sleep'     },
     ],
   },
 }
@@ -104,7 +144,7 @@ const MODULE_NAV = [
   { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },
 ]
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function greeting() {
   const h = new Date().getHours()
@@ -113,7 +153,6 @@ function greeting() {
   if (h < 21) return 'Good evening'
   return 'Good night'
 }
-
 
 function anim(delay = 0) {
   return { animation: `dashUp 0.5s ease ${delay}s both` }
@@ -135,7 +174,6 @@ function PhaseRing({ phase, day, cycleLength }) {
   let cumDays = 0
   const GAP = 5
 
-  // Day indicator dot position
   const dotAngleDeg = day != null ? ((day - 1) / cycleLength) * 360 - 90 : null
   const dotRad = dotAngleDeg != null ? dotAngleDeg * Math.PI / 180 : null
   const dotX = dotRad != null ? cx + r * Math.cos(dotRad) : null
@@ -143,9 +181,7 @@ function PhaseRing({ phase, day, cycleLength }) {
 
   return (
     <svg width="128" height="128" viewBox="0 0 128 128">
-      {/* Track */}
       <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(59,51,48,0.1)" strokeWidth="5" />
-
       {segments.map(seg => {
         const dash = Math.max(0, (seg.days / cycleLength) * C - GAP)
         const gap = C - dash
@@ -167,14 +203,10 @@ function PhaseRing({ phase, day, cycleLength }) {
           />
         )
       })}
-
-      {/* Day dot */}
       {dotX != null && (
         <circle cx={dotX} cy={dotY} r={4.5} fill="rgba(59,51,48,0.9)"
           style={{ filter: 'drop-shadow(0 0 5px rgba(59,51,48,0.4))' }} />
       )}
-
-      {/* Center */}
       <text x={cx} y={cy - 7} textAnchor="middle" fill="rgba(59,51,48,0.88)"
         fontSize="26" fontFamily="Cinzel, serif">
         {day ?? '--'}
@@ -250,6 +282,16 @@ export default function Dashboard() {
           0%, 42%   { background-position: -250% 0; }
           78%, 100% { background-position:  250% 0; }
         }
+        /* Shimmer rim rotation — used by dashboard + wellness widget */
+        @keyframes srimRotate {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        /* Icon sweep — left-to-right highlight */
+        @keyframes iconSweep {
+          0%, 20%   { background-position: -150% 0; }
+          80%, 100% { background-position:  250% 0; }
+        }
         .module-scroll::-webkit-scrollbar { display: none; }
         .module-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         .header-shimmer {
@@ -258,6 +300,12 @@ export default function Dashboard() {
           background-clip: text;
           -webkit-text-fill-color: transparent;
           animation: dashShimmer 10s ease-in-out infinite;
+        }
+        /* Reduced-motion overrides */
+        @media (prefers-reduced-motion: reduce) {
+          .srim-spin-el  { animation: none !important; }
+          .icon-sweep-el { animation: none !important; }
+          .header-shimmer { animation: none !important; }
         }
       `}</style>
 
@@ -275,10 +323,7 @@ export default function Dashboard() {
         </div>
         <button onClick={() => navigate('/settings')}
           className="mt-1 p-2 rounded-xl transition-all"
-          style={{
-            background: 'rgba(196,175,168,0.25)',
-            border: '1px solid #C4AFA8',
-          }}>
+          style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
           <span style={{
             display: 'block', width: '22px', height: '22px',
             WebkitMask: `url(${settingsIcon}) no-repeat center / contain`,
@@ -297,17 +342,12 @@ export default function Dashboard() {
             border: `1px solid ${activeColor}50`,
           }}
         >
-          {/* Ambient glow */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
             background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}18 0%, transparent 65%)`,
           }} />
-
           <div className="relative flex items-center gap-2 p-5">
-            {/* Ring */}
             <PhaseRing phase={phase} day={dayOfCycle} cycleLength={cycleLength} />
-
-            {/* Text */}
             <div className="flex-1 min-w-0 pl-1">
               {phaseMeta && (
                 <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase px-2 py-1 rounded-full mb-3 inline-block"
@@ -318,8 +358,7 @@ export default function Dashboard() {
               <h2 className="font-cinzel text-[20px] text-brown leading-tight mt-2 mb-1">
                 {content?.headline ?? 'Your Journey'}
               </h2>
-              <p className="font-garamond text-sm leading-relaxed"
-                style={{ color: '#7A6A65' }}>
+              <p className="font-garamond text-sm leading-relaxed" style={{ color: '#7A6A65' }}>
                 {content?.sub ?? 'Set up your cycle to unlock phase guidance.'}
               </p>
               <button
@@ -337,70 +376,81 @@ export default function Dashboard() {
       <SectionHeader title="My Modules" delay={0.12} />
       <div className="module-scroll overflow-x-auto mb-6" style={anim(0.15)}>
         <div className="flex gap-4 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-          {MODULE_NAV.map(({ key, label, icon, to }) => {
-            const tileImg = MODULE_IMAGES[label]
-            return (
-              <button
-                key={key}
-                onClick={() => navigate(to)}
-                className="flex flex-col items-center gap-2"
-                style={{ minWidth: '56px' }}
-              >
-                <div
-                  className="flex items-center justify-center rounded-2xl overflow-hidden"
-                  style={{
-                    width: '56px', height: '56px',
-                    border: `1px solid ${tileImg ? '#C4AFA8' : `${activeColor}55`}`,
-                    ...(tileImg
-                      ? { backgroundImage: `url("${tileImg}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                      : { background: '#F2EDE8' }
-                    ),
-                    transition: 'opacity 0.2s',
-                  }}
-                >
-                  {!tileImg && <ModuleIcon src={icon} color={activeColor} />}
+          {MODULE_NAV.map(({ key, label, icon, to }, i) => (
+            <button
+              key={key}
+              onClick={() => navigate(to)}
+              className="flex flex-col items-center gap-2"
+              style={{ minWidth: '56px' }}
+            >
+              {/* Shimmer rim tile — overflow:hidden clips the rotating gradient */}
+              <div style={{ position: 'relative', width: 56, height: 56, borderRadius: 16, overflow: 'hidden' }}>
+                <RimSpin duration="3s" delay={i * 0.2} />
+                {/* Inner tile — inset 1px so 1px of rim shows */}
+                <div style={{
+                  position: 'absolute', inset: 1,
+                  borderRadius: 15,
+                  background: '#C4AFA8',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <ShimmerIcon src={icon} delay={i * 0.2} />
                 </div>
-                <span className="font-garamond text-[10px] tracking-wide"
-                  style={{ color: '#7A6A65' }}>
-                  {label}
-                </span>
-              </button>
-            )
-          })}
+              </div>
+              <span className="font-garamond text-[10px] tracking-wide" style={{ color: '#7A6A65' }}>
+                {label}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 
       {/* ── Today's Check-ins ── */}
       <SectionHeader title="Today" delay={0.17} />
       <div className="grid grid-cols-2 gap-3 px-4 max-w-md mx-auto mb-6" style={anim(0.19)}>
-        {/* Mood check-in */}
-        <button
-          onClick={() => navigate('/mood')}
-          className="text-left rounded-2xl p-4"
-          style={{ background: '#C4AFA8', border: '1px solid rgba(196,175,168,0.4)' }}
-        >
-          <ModuleIcon src={moodIcon} color="#C4859A" />
-          <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1" style={{ color: '#3B3330' }}>Mood</p>
-          <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
-            How are you feeling today?
-          </p>
-        </button>
 
-        {/* Sleep check-in */}
-        <button
-          onClick={() => navigate('/sleep')}
-          className="text-left rounded-2xl p-4"
-          style={{ background: '#C4AFA8', border: '1px solid rgba(196,175,168,0.4)' }}
-        >
-          <ModuleIcon src={sleepIcon} color="#C4859A" />
-          <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1" style={{ color: '#3B3330' }}>Sleep</p>
-          <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
-            How did you sleep last night?
-          </p>
-        </button>
+        {/* Mood — shimmer rim wrapper */}
+        <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
+          <RimSpin duration="3.5s" delay={0} />
+          <button
+            onClick={() => navigate('/mood')}
+            style={{
+              position: 'relative', zIndex: 1,
+              display: 'block', width: 'calc(100% - 2px)', margin: 1,
+              background: '#C4AFA8', border: 'none', cursor: 'pointer',
+              borderRadius: 15, padding: 16, textAlign: 'left',
+            }}
+          >
+            <ShimmerIcon src={moodIcon} delay={0} />
+            <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2" style={{ color: '#3B3330' }}>Mood</p>
+            <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
+              How are you feeling today?
+            </p>
+          </button>
+        </div>
+
+        {/* Sleep — shimmer rim wrapper */}
+        <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
+          <RimSpin duration="3.5s" delay={0.5} />
+          <button
+            onClick={() => navigate('/sleep')}
+            style={{
+              position: 'relative', zIndex: 1,
+              display: 'block', width: 'calc(100% - 2px)', margin: 1,
+              background: '#C4AFA8', border: 'none', cursor: 'pointer',
+              borderRadius: 15, padding: 16, textAlign: 'left',
+            }}
+          >
+            <ShimmerIcon src={sleepIcon} delay={0.5} />
+            <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2" style={{ color: '#3B3330' }}>Sleep</p>
+            <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
+              How did you sleep last night?
+            </p>
+          </button>
+        </div>
+
       </div>
 
-      {/* ── Phase Guidance (horizontal scroll) ── */}
+      {/* ── Phase Guidance (horizontal scroll) — images unchanged ── */}
       {content && (
         <>
           <SectionHeader title="Phase Guidance" delay={0.21} />
@@ -414,8 +464,7 @@ export default function Dashboard() {
                     onClick={() => navigate(to)}
                     className="relative text-left rounded-2xl flex-shrink-0 overflow-hidden"
                     style={{
-                      width: '172px',
-                      minHeight: '130px',
+                      width: '172px', minHeight: '130px',
                       border: `1px solid ${img ? 'rgba(196,175,168,0.35)' : `${activeColor}40`}`,
                       ...(img
                         ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }

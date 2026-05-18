@@ -88,27 +88,38 @@ function LevelDot({ color }) {
   )
 }
 
-function StatTile({ Icon, label, value, levelColor }) {
+function StatTile({ Icon, label, value, levelColor, rimDelay = 0 }) {
   return (
-    <div style={{
-      background: '#C4AFA8', borderRadius: 12,
-      padding: '10px 12px',
-      border: '1px solid rgba(196,175,168,0.4)',
-      display: 'flex', flexDirection: 'column', gap: 5,
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Icon size={13} color="#7A6A65" strokeWidth={1.5} />
-        {levelColor && <LevelDot color={levelColor} />}
+    <div style={{ position: 'relative', borderRadius: 12, overflow: 'hidden' }}>
+      {/* Rotating rim — keyframe srimRotate defined in Dashboard.jsx style tag */}
+      <div className="srim-spin-el" style={{
+        position: 'absolute', width: '150%', height: '150%', top: '-25%', left: '-25%',
+        background: 'conic-gradient(rgba(200,200,215,0.28) 0%, rgba(200,200,215,0.28) 36%, rgba(215,215,238,0.68) 45%, rgba(238,238,255,0.9) 50%, rgba(215,215,238,0.68) 55%, rgba(200,200,215,0.28) 64%, rgba(200,200,215,0.28) 100%)',
+        animationName: 'srimRotate', animationDuration: '3.5s',
+        animationTimingFunction: 'linear', animationIterationCount: 'infinite',
+        animationDelay: `${rimDelay}s`, pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'relative', zIndex: 1,
+        margin: 1, borderRadius: 11,
+        background: '#C4AFA8',
+        padding: '10px 12px',
+        display: 'flex', flexDirection: 'column', gap: 5,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Icon size={13} color="#7A6A65" strokeWidth={1.5} />
+          {levelColor && <LevelDot color={levelColor} />}
+        </div>
+        <p style={{
+          fontFamily: 'Cinzel, serif', fontSize: 15, fontWeight: 600,
+          color: '#3B3330', margin: 0, lineHeight: 1.1,
+        }}>{value}</p>
+        <p style={{
+          fontFamily: 'Cormorant Garamond, serif', fontSize: 10,
+          color: '#7A6A65', letterSpacing: '0.1em',
+          textTransform: 'uppercase', margin: 0,
+        }}>{label}</p>
       </div>
-      <p style={{
-        fontFamily: 'Cinzel, serif', fontSize: 15, fontWeight: 600,
-        color: '#3B3330', margin: 0, lineHeight: 1.1,
-      }}>{value}</p>
-      <p style={{
-        fontFamily: 'Cormorant Garamond, serif', fontSize: 10,
-        color: '#7A6A65', letterSpacing: '0.1em',
-        textTransform: 'uppercase', margin: 0,
-      }}>{label}</p>
     </div>
   )
 }
@@ -185,10 +196,10 @@ export default function WellnessWeatherWidget({ weather, phase }) {
         {tab === 'conditions' && (
           <div key="conditions" style={{ animation: 'wTabFade 0.22s ease both' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <StatTile Icon={Thermometer} label="Temperature" value={`${data.temp}°F`} />
-              <StatTile Icon={Sun}         label="UV Index"    value={`UV ${data.uv}`}   levelColor={uvLvl.color} />
-              <StatTile Icon={Wind}        label="Air Quality" value={`AQI ${data.aqi}`} levelColor={aqiLvl.color} />
-              <StatTile Icon={Droplets}    label="Humidity"    value={`${data.humidity}%`} />
+              <StatTile Icon={Thermometer} label="Temperature" value={`${data.temp}°F`}   rimDelay={0} />
+              <StatTile Icon={Sun}         label="UV Index"    value={`UV ${data.uv}`}     levelColor={uvLvl.color}  rimDelay={0.25} />
+              <StatTile Icon={Wind}        label="Air Quality" value={`AQI ${data.aqi}`}   levelColor={aqiLvl.color} rimDelay={0.5} />
+              <StatTile Icon={Droplets}    label="Humidity"    value={`${data.humidity}%`} rimDelay={0.75} />
             </div>
           </div>
         )}
