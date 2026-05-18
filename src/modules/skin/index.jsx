@@ -1,40 +1,11 @@
-// Skin module — sub-routes live here
-// e.g. /skin  /skin/log  /skin/history  /skin/routine
-import { Routes, Route } from 'react-router-dom'
-
-function SkinHome() {
-  return <ModuleShell title="Skin Journal" />
-}
-
-function SkinLog() {
-  return <ModuleShell title="Log Skin" />
-}
-
-function SkinHistory() {
-  return <ModuleShell title="Skin History" />
-}
-
-function Routine() {
-  return <ModuleShell title="My Routine" />
-}
-
-function ModuleShell({ title }) {
-  return (
-    <div className="min-h-screen bg-[#F2EDE8] pb-nav px-4 pt-8 max-w-md mx-auto">
-      <p className="font-cinzel text-rose tracking-widest text-xs uppercase mb-2">Skin</p>
-      <h3 className="font-cinzel text-2xl text-brown tracking-wide mb-6">{title}</h3>
-      <p className="font-garamond text-brown/30 text-sm">— design this section —</p>
-    </div>
-  )
-}
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Skin from '../../pages/Skin'
 
 export default function SkinModule() {
   return (
     <Routes>
-      <Route index          element={<SkinHome />} />
-      <Route path="log"     element={<SkinLog />} />
-      <Route path="history" element={<SkinHistory />} />
-      <Route path="routine" element={<Routine />} />
+      <Route index element={<Skin />} />
+      <Route path="*" element={<Navigate to="/skin" replace />} />
     </Routes>
   )
 }

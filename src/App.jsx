@@ -14,6 +14,7 @@ import CycleTracker from './pages/CycleTracker'
 import MoodMind     from './pages/MoodMind'
 import Nourish      from './pages/Nourish'
 import Sleep        from './pages/Sleep'
+import Skin         from './pages/Skin'
 import Settings     from './pages/Settings'
 
 import PilatesModule from './modules/pilates'
@@ -95,6 +96,7 @@ export default function App() {
                     <Route path="nourish/*" element={<NourishModule />} />
                     <Route path="sleep"     element={<Sleep />} />
                     <Route path="sleep/*"   element={<SleepModule />} />
+                    <Route path="skin"      element={<Skin />} />
                     <Route path="skin/*"    element={<SkinModule />} />
                     <Route path="settings"  element={<Settings />} />
                     <Route path="*"         element={<Navigate to="/" replace />} />
