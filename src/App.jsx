@@ -12,6 +12,7 @@ import PilatesStudio from './pages/PilatesStudio'
 import Community    from './pages/Community'
 import CycleTracker from './pages/CycleTracker'
 import MoodMind     from './pages/MoodMind'
+import Nourish      from './pages/Nourish'
 import Settings     from './pages/Settings'
 
 import PilatesModule from './modules/pilates'
@@ -89,6 +90,7 @@ export default function App() {
                     <Route path="cycle/*"   element={<CycleModule />} />
                     <Route path="mood"      element={<MoodMind />} />
                     <Route path="mood/*"    element={<MoodModule />} />
+                    <Route path="nourish"   element={<Nourish />} />
                     <Route path="nourish/*" element={<NourishModule />} />
                     <Route path="sleep/*"   element={<SleepModule />} />
                     <Route path="skin/*"    element={<SkinModule />} />
