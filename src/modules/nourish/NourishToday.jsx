@@ -259,7 +259,7 @@ export default function NourishToday({ onOpenSearch }) {
       .from('food_log')
       .select('*')
       .eq('user_id', user.id)
-      .eq('date', today)
+      .eq('log_date', today)
       .order('created_at')
       .then(({ data }) => setLogs(data || []))
   }, [user, today])
@@ -271,7 +271,7 @@ export default function NourishToday({ onOpenSearch }) {
       .from('water_log')
       .select('glasses_count')
       .eq('user_id', user.id)
-      .eq('date', today)
+      .eq('log_date', today)
       .maybeSingle()
       .then(({ data }) => setGlasses(data?.glasses_count ?? 0))
   }, [user, today])
@@ -298,8 +298,8 @@ export default function NourishToday({ onOpenSearch }) {
     await supabase
       .from('water_log')
       .upsert(
-        { user_id: user.id, date: today, glasses_count: newCount, updated_at: new Date().toISOString() },
-        { onConflict: 'user_id,date' }
+        { user_id: user.id, log_date: today, glasses_count: newCount, updated_at: new Date().toISOString() },
+        { onConflict: 'user_id,log_date' }
       )
   }
 

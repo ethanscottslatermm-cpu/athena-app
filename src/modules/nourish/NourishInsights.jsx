@@ -315,32 +315,32 @@ export default function NourishInsights() {
     const [{ data: foodRows }, { data: waterRows }] = await Promise.all([
       supabase
         .from('food_log')
-        .select('date, calories, protein_g, carbs_g, fat_g')
+        .select('log_date, calories, protein_g, carbs_g, fat_g')
         .eq('user_id', user.id)
-        .gte('date', start)
-        .lte('date', end),
+        .gte('log_date', start)
+        .lte('log_date', end),
       supabase
         .from('water_log')
-        .select('date, glasses_count')
+        .select('log_date, glasses_count')
         .eq('user_id', user.id)
-        .gte('date', start)
-        .lte('date', end),
+        .gte('log_date', start)
+        .lte('log_date', end),
     ])
 
     // Aggregate food by date
     const food = {}
     ;(foodRows || []).forEach(row => {
-      if (!food[row.date]) food[row.date] = { calories: 0, protein_g: 0, carbs_g: 0, fat_g: 0 }
-      food[row.date].calories  += row.calories  || 0
-      food[row.date].protein_g += row.protein_g || 0
-      food[row.date].carbs_g   += row.carbs_g   || 0
-      food[row.date].fat_g     += row.fat_g     || 0
+      if (!food[row.log_date]) food[row.log_date] = { calories: 0, protein_g: 0, carbs_g: 0, fat_g: 0 }
+      food[row.log_date].calories  += row.calories  || 0
+      food[row.log_date].protein_g += row.protein_g || 0
+      food[row.log_date].carbs_g   += row.carbs_g   || 0
+      food[row.log_date].fat_g     += row.fat_g     || 0
     })
     setDayData(food)
 
     // Water keyed by date
     const water = {}
-    ;(waterRows || []).forEach(row => { water[row.date] = row.glasses_count })
+    ;(waterRows || []).forEach(row => { water[row.log_date] = row.glasses_count })
     setWaterData(water)
 
     setLoading(false)

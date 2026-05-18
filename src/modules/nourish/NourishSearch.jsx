@@ -108,7 +108,7 @@ export default function NourishSearch({ onLogSaved }) {
     try {
       await supabase.from('food_log').insert({
         user_id:      user.id,
-        date:         new Date().toISOString().split('T')[0],
+        log_date:     new Date().toISOString().split('T')[0],
         meal_type:    mealType,
         food_name:    result.food_name,
         calories:     Math.round((result.calories  || 0) * serving),
