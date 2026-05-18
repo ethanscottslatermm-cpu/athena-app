@@ -578,14 +578,18 @@ export default function Login() {
               maxWidth: '360px',
               maxHeight: '80vh',
               background: 'transparent',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              border: '1px solid rgba(196,133,154,0.25)',
               borderRadius: '10px',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
+              boxShadow: '0 8px 48px rgba(0,0,0,0.25)',
             }}>
 
               {/* Modal header */}
-              <div style={{ padding: '22px 22px 14px', flexShrink: 0 }}>
+              <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(196,133,154,0.2)', flexShrink: 0 }}>
                 <p style={{
                   fontFamily: "'Cinzel', serif",
                   fontSize: '9px', letterSpacing: '0.3em',
@@ -641,7 +645,7 @@ export default function Login() {
               </div>
 
               {/* Modal footer */}
-              <div style={{ padding: '14px 22px 22px', flexShrink: 0 }}>
+              <div style={{ padding: '14px 22px 22px', borderTop: '1px solid rgba(196,133,154,0.2)', flexShrink: 0 }}>
                 <label
                   style={{ display: 'flex', alignItems: 'flex-start', gap: '11px', cursor: 'pointer', marginBottom: '16px' }}
                   onClick={() => setTermsChecked(v => !v)}
