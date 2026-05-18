@@ -17,10 +17,10 @@ import communityIcon from '../assets/icons/nav-community.png'
 
 // Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
-  Pilates: '/images/dashboard/pilates.webp',
-  Nourish: '/images/dashboard/nourish.webp',
-  Skin:    '/images/dashboard/skin.webp',
-  Sleep:   '/images/dashboard/sleep.webp',
+  Pilates:    '/images/dashboard/pilates.webp',
+  'Body Fuel': '/images/dashboard/nourish.webp',
+  Skin:       '/images/dashboard/skin.webp',
+  Sleep:      '/images/dashboard/sleep.webp',
 }
 
 // ─── Platinum shimmer icon ────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ const PHASE_CONTENT = {
     gradient: 'linear-gradient(135deg, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.10) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'Restorative movement & breathwork', to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Iron-rich foods & warming broths',  to: '/nourish'   },
+      { module: 'Body Fuel', tip: 'Iron-rich foods & warming broths',  to: '/nourish'   },
       { module: 'Skin',      tip: 'Deep hydration & gentle cleansing', to: '/skin'      },
       { module: 'Sleep',     tip: 'Extra rest is healing right now',   to: '/sleep'     },
     ],
@@ -105,7 +105,7 @@ const PHASE_CONTENT = {
     gradient: 'linear-gradient(135deg, rgba(143,165,140,0.38) 0%, rgba(143,165,140,0.12) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'Light cardio, barre & core work',       to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Lean proteins & fresh greens',          to: '/nourish'   },
+      { module: 'Body Fuel', tip: 'Lean proteins & fresh greens',          to: '/nourish'   },
       { module: 'Skin',      tip: 'Exfoliate & brighten — skin is ready',  to: '/skin'      },
       { module: 'Sleep',     tip: 'Consistent sleep fuels your surge',     to: '/sleep'     },
     ],
@@ -116,7 +116,7 @@ const PHASE_CONTENT = {
     gradient: 'linear-gradient(135deg, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.10) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'HIIT, strength training & dance',       to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Antioxidants, zinc & whole foods',      to: '/nourish'   },
+      { module: 'Body Fuel', tip: 'Antioxidants, zinc & whole foods',      to: '/nourish'   },
       { module: 'Skin',      tip: 'Lightweight moisture & SPF',            to: '/skin'      },
       { module: 'Sleep',     tip: 'Recovery sleep after peak output',      to: '/sleep'     },
     ],
@@ -127,7 +127,7 @@ const PHASE_CONTENT = {
     gradient: 'linear-gradient(135deg, rgba(196,175,168,0.38) 0%, rgba(196,175,168,0.12) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'Yoga, pilates & low-impact flow',       to: '/pilates'   },
-      { module: 'Nourish',   tip: 'Magnesium, complex carbs & warmth',     to: '/nourish'   },
+      { module: 'Body Fuel', tip: 'Magnesium, complex carbs & warmth',     to: '/nourish'   },
       { module: 'Skin',      tip: 'Nourishing masks & barrier support',    to: '/skin'      },
       { module: 'Sleep',     tip: 'Wind-down rituals are essential',       to: '/sleep'     },
     ],
@@ -138,7 +138,7 @@ const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
   { key: 'mood',      label: 'Mood',      icon: moodIcon,      to: '/mood'      },
-  { key: 'nourish',   label: 'Nourish',   icon: nourishIcon,   to: '/nourish'   },
+  { key: 'nourish',   label: 'Body Fuel', icon: nourishIcon,   to: '/nourish'   },
   { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     to: '/sleep'     },
   { key: 'skin',      label: 'Skin',      icon: skinIcon,      to: '/skin'      },
   { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },

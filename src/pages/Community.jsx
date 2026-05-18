@@ -4,7 +4,7 @@ const circles = [
   { name: 'Pilates Studio',  emoji: '🎯', slug: 'pilates-studio' },
   { name: 'Cycle Support',   emoji: '◯',  slug: 'cycle-support'  },
   { name: 'Mental Wellness', emoji: '☽',  slug: 'mental-wellness'},
-  { name: 'Nourish',         emoji: '🌿', slug: 'nourish'        },
+  { name: 'Body Fuel',       emoji: '🍽', slug: 'nourish'        },
   { name: 'Glow Up',         emoji: '✿',  slug: 'glow-up'        },
   { name: 'Progress & Wins', emoji: '🏆', slug: 'progress-wins'  },
   { name: 'Life Stages',     emoji: '✦',  slug: 'life-stages'    },

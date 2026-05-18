@@ -36,7 +36,7 @@ export default function Nourish() {
       {/* Header + pill switcher */}
       <div className="flex-shrink-0 px-4 pt-8 pb-3">
         <h2 className="font-cinzel text-2xl tracking-widest mb-4" style={{ color: '#3B3330' }}>
-          Nourish
+          Body Fuel
         </h2>
         <div style={{
           display: 'flex', gap: 4, padding: '4px',

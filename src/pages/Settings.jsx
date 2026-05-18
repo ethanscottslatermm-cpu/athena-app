@@ -681,7 +681,7 @@ export default function Settings() {
         </Section>
 
         {/* ── 5. Nourish ── */}
-        <Section {...sec('nourish', 'Nourish', <Leaf size={15} />)}>
+        <Section {...sec('nourish', 'Body Fuel', <Leaf size={15} />)}>
           <SettingRow label="Daily water goal">
             <div className="flex items-center gap-2">
               <input
