@@ -1,35 +1,11 @@
-// Sleep module — sub-routes live here
-// e.g. /sleep  /sleep/log  /sleep/history
-import { Routes, Route } from 'react-router-dom'
-
-function SleepHome() {
-  return <ModuleShell title="Sleep" />
-}
-
-function SleepLog() {
-  return <ModuleShell title="Log Sleep" />
-}
-
-function SleepHistory() {
-  return <ModuleShell title="Sleep History" />
-}
-
-function ModuleShell({ title }) {
-  return (
-    <div className="min-h-screen bg-[#F2EDE8] pb-nav px-4 pt-8 max-w-md mx-auto">
-      <p className="font-cinzel text-gold/70 tracking-widest text-xs uppercase mb-2">Sleep</p>
-      <h3 className="font-cinzel text-2xl text-brown tracking-wide mb-6">{title}</h3>
-      <p className="font-garamond text-brown/30 text-sm">— design this section —</p>
-    </div>
-  )
-}
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Sleep from '../../pages/Sleep'
 
 export default function SleepModule() {
   return (
     <Routes>
-      <Route index          element={<SleepHome />} />
-      <Route path="log"     element={<SleepLog />} />
-      <Route path="history" element={<SleepHistory />} />
+      <Route index element={<Sleep />} />
+      <Route path="*" element={<Navigate to="/sleep" replace />} />
     </Routes>
   )
 }
