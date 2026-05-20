@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+﻿import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { Trophy, Lock, X } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
@@ -9,7 +9,7 @@ const SAGE  = '#8FA58C'
 const BROWN = '#3B3330'
 const TAUPE = '#7A6A65'
 const MAUVE = '#C4AFA8'
-const ROSE  = '#C4859A'
+const ROSE  = '#D4A0A0'
 const GOLD  = '#C9A84C'
 
 // ── Progress tracking ─────────────────────────────────────────────────────────

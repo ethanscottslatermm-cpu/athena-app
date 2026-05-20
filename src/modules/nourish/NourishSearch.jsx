@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Search, Minus, Plus, Check } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -44,7 +44,7 @@ function NutritionCard({ food, serving }) {
           { label: 'Cal',     value: Math.round((food.calories || 0) * serving), color: '#3B3330', bg: 'rgba(196,175,168,0.2)' },
           { label: 'Protein', value: `${multiplied(food.protein_g)}g`, color: '#8FA58C',  bg: 'rgba(143,165,140,0.15)' },
           { label: 'Carbs',   value: `${multiplied(food.carbs_g)}g`,   color: '#C9A84C',  bg: 'rgba(201,168,76,0.13)'  },
-          { label: 'Fat',     value: `${multiplied(food.fat_g)}g`,     color: '#C4859A',  bg: 'rgba(196,133,154,0.15)' },
+          { label: 'Fat',     value: `${multiplied(food.fat_g)}g`,     color: '#D4A0A0',  bg: 'rgba(212,160,160,0.15)' },
         ].map(m => (
           <div key={m.label} style={{
             background: m.bg, borderRadius: 10,
@@ -178,7 +178,7 @@ export default function NourishSearch({ onLogSaved }) {
       </form>
 
       {error && (
-        <p className="font-garamond text-sm italic mb-3" style={{ color: '#C4859A' }}>{error}</p>
+        <p className="font-garamond text-sm italic mb-3" style={{ color: '#D4A0A0' }}>{error}</p>
       )}
 
       {loading && (

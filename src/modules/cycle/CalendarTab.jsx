@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { format, differenceInDays, addMonths, isSameMonth } from 'date-fns'
 import {
   getPhaseForDate,
@@ -11,9 +11,9 @@ import {
 const DOW = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
 const LEGEND = [
-  { label: 'Menstrual',  phase: 'menstrual',  color: '#C4859A', ring: false },
-  { label: 'Fertile',    phase: 'fertile',    color: '#C4859A', ring: true  },
-  { label: 'Ovulation',  phase: 'ovulation',  color: '#C4859A', ring: false },
+  { label: 'Menstrual',  phase: 'menstrual',  color: '#D4A0A0', ring: false },
+  { label: 'Fertile',    phase: 'fertile',    color: '#D4A0A0', ring: true  },
+  { label: 'Ovulation',  phase: 'ovulation',  color: '#D4A0A0', ring: false },
   { label: 'Luteal',     phase: 'luteal',     color: '#C4AFA8', ring: false },
 ]
 
@@ -68,15 +68,15 @@ function DayCell({ cell, highlight, onClick }) {
   }
 
   if (ovulation) {
-    bg        = '#C4859A'
+    bg        = '#D4A0A0'
     textColor = '#F2EDE8'
     glow      = true
   } else if (phase === 'menstrual') {
-    bg        = isPast ? 'rgba(196,133,154,0.6)' : 'rgba(196,133,154,0.25)'
+    bg        = isPast ? 'rgba(212,160,160,0.6)' : 'rgba(212,160,160,0.25)'
     textColor = isPast ? '#F2EDE8' : 'rgba(59,51,48,0.55)'
   } else if (fertile) {
-    border    = '#C4859A'
-    bg        = 'rgba(196,133,154,0.1)'
+    border    = '#D4A0A0'
+    bg        = 'rgba(212,160,160,0.1)'
   } else if (phase === 'follicular') {
     bg        = isPast ? 'rgba(143,165,140,0.35)' : 'rgba(143,165,140,0.15)'
   } else if (phase === 'luteal') {
@@ -95,7 +95,7 @@ function DayCell({ cell, highlight, onClick }) {
         background: bg,
         border: border !== 'transparent' ? `1.5px solid ${border}` : 'none',
         opacity,
-        boxShadow: glow ? '0 0 10px 3px rgba(196,133,154,0.5)' : undefined,
+        boxShadow: glow ? '0 0 10px 3px rgba(212,160,160,0.5)' : undefined,
       }}
     >
       <span className="font-garamond text-[11px] leading-none" style={{ color: textColor }}>
@@ -174,7 +174,7 @@ function DayDetailSheet({ cell, symptoms, phaseData, onClose, onQuickLog }) {
             )}
             {log.mood && (
               <p className="font-garamond text-brown/70 text-sm">
-                Mood: <span style={{ color: '#C4859A' }}>{MOOD_LABELS[log.mood]}</span>
+                Mood: <span style={{ color: '#D4A0A0' }}>{MOOD_LABELS[log.mood]}</span>
               </p>
             )}
             {log.notes && (
@@ -216,15 +216,15 @@ export default function CalendarTab({ profile, phaseData, symptoms, onQuickLog }
   const predictions = []
   if (phaseData?.nextPeriodDate) {
     const d = differenceInDays(phaseData.nextPeriodDate, today)
-    if (d > 0) predictions.push({ label: `Period in ${d} day${d === 1 ? '' : 's'}`, date: format(phaseData.nextPeriodDate, 'MMM d'), color: '#C4859A' })
+    if (d > 0) predictions.push({ label: `Period in ${d} day${d === 1 ? '' : 's'}`, date: format(phaseData.nextPeriodDate, 'MMM d'), color: '#D4A0A0' })
   }
   if (phaseData?.fertileStart) {
     const d = differenceInDays(phaseData.fertileStart, today)
-    if (d > 0) predictions.push({ label: `Fertile window in ${d} day${d === 1 ? '' : 's'}`, date: format(phaseData.fertileStart, 'MMM d'), color: '#C4859A' })
+    if (d > 0) predictions.push({ label: `Fertile window in ${d} day${d === 1 ? '' : 's'}`, date: format(phaseData.fertileStart, 'MMM d'), color: '#D4A0A0' })
   }
   if (phaseData?.ovulationDay) {
     const d = differenceInDays(phaseData.ovulationDay, today)
-    if (d > 0) predictions.push({ label: `Ovulation in ${d} day${d === 1 ? '' : 's'}`, date: format(phaseData.ovulationDay, 'MMM d'), color: '#C4859A' })
+    if (d > 0) predictions.push({ label: `Ovulation in ${d} day${d === 1 ? '' : 's'}`, date: format(phaseData.ovulationDay, 'MMM d'), color: '#D4A0A0' })
   }
 
   return (

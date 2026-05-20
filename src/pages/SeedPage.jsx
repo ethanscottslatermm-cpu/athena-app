@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { seedPilates } from '../lib/seedPilates'
 
 export default function SeedPage() {
@@ -40,9 +40,9 @@ export default function SeedPage() {
           disabled={running}
           className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm mb-6"
           style={{
-            background: running ? 'rgba(196,133,154,0.08)' : 'rgba(196,133,154,0.15)',
-            border: '1px solid rgba(196,133,154,0.5)',
-            color: '#C4859A',
+            background: running ? 'rgba(212,160,160,0.08)' : 'rgba(212,160,160,0.15)',
+            border: '1px solid rgba(212,160,160,0.5)',
+            color: '#D4A0A0',
           }}
         >
           {running ? 'Seeding…' : 'Seed Pilates Data'}

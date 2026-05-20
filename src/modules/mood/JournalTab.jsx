@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { Mic, Image, X } from 'lucide-react'
 import { usePhase } from '../../hooks/usePhase'
 
@@ -33,11 +33,11 @@ function VoiceTextarea({ label, placeholder, value, onChange, onVoice, recording
         <button
           onClick={onVoice}
           className="flex items-center gap-1"
-          style={{ color: recording ? '#C4859A' : '#7A6A65', flexShrink: 0 }}
+          style={{ color: recording ? '#D4A0A0' : '#7A6A65', flexShrink: 0 }}
         >
           {recording && (
             <span style={{
-              width: 6, height: 6, borderRadius: '50%', background: '#C4859A',
+              width: 6, height: 6, borderRadius: '50%', background: '#D4A0A0',
               display: 'inline-block', animation: 'jRecDot 1s ease-in-out infinite',
             }} />
           )}
@@ -45,7 +45,7 @@ function VoiceTextarea({ label, placeholder, value, onChange, onVoice, recording
         </button>
       </div>
       {recording && (
-        <p className="font-garamond text-[10px] italic mb-1" style={{ color: '#C4859A' }}>speak instead</p>
+        <p className="font-garamond text-[10px] italic mb-1" style={{ color: '#D4A0A0' }}>speak instead</p>
       )}
       <textarea
         value={value}

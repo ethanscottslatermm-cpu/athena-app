@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { useProfile } from '../../hooks/useProfile'
 import { getPhaseForDate, phaseLabels } from '../../lib/phaseEngine'
 
@@ -35,7 +35,7 @@ const FAMILY_COLORS = {
   positive:  'rgba(201,169,110,0.55)',
   calm:      'rgba(143,165,140,0.55)',
   motivated: 'rgba(201,169,110,0.65)',
-  anxious:   'rgba(196,133,154,0.55)',
+  anxious:   'rgba(212,160,160,0.55)',
   sad:       'rgba(168,144,152,0.55)',
   neutral:   'rgba(196,175,168,0.45)',
 }

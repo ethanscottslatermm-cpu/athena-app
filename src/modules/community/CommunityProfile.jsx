@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Check, Trash2 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -8,7 +8,7 @@ const SAGE  = '#8FA58C'
 const BROWN = '#3B3330'
 const TAUPE = '#7A6A65'
 const MAUVE = '#C4AFA8'
-const ROSE  = '#C4859A'
+const ROSE  = '#D4A0A0'
 const GOLD  = '#C9A84C'
 
 const AVATAR_OPTIONS = [
@@ -367,7 +367,7 @@ export default function CommunityProfile({ onSwitchTab }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span className="font-garamond text-xs italic" style={{ color: TAUPE }}>{timeAgo(post.created_at)}</span>
-              <button onClick={() => deletePost(post.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(196,133,154,0.5)', padding: 2 }}>
+              <button onClick={() => deletePost(post.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(212,160,160,0.5)', padding: 2 }}>
                 <Trash2 size={13} strokeWidth={1.5} />
               </button>
             </div>

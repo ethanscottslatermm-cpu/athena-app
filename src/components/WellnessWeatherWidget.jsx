@@ -1,16 +1,16 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Thermometer, Sun, Wind, Droplets, Leaf, Cloud, CloudRain, CloudSun } from 'lucide-react'
 
 // ─── Level helpers ────────────────────────────────────────────────────────────
 
 function uvLevel(uv) {
-  if (uv >= 6) return { label: 'High',     color: '#C4859A' }
+  if (uv >= 6) return { label: 'High',     color: '#D4A0A0' }
   if (uv >= 3) return { label: 'Mod',      color: '#C9A84C' }
   return              { label: 'Low',      color: '#8FA58C' }
 }
 
 function aqiLevel(aqi) {
-  if (aqi >= 101) return { label: 'Poor', color: '#C4859A' }
+  if (aqi >= 101) return { label: 'Poor', color: '#D4A0A0' }
   if (aqi >= 51)  return { label: 'Fair', color: '#C9A84C' }
   return                 { label: 'Good', color: '#8FA58C' }
 }
@@ -239,7 +239,7 @@ export default function WellnessWeatherWidget({ weather, phase }) {
                   border: '1px solid rgba(196,175,168,0.4)',
                   display: 'flex', alignItems: 'flex-start', gap: 9,
                 }}>
-                  <Icon size={13} color="#C4859A" strokeWidth={1.5}
+                  <Icon size={13} color="#D4A0A0" strokeWidth={1.5}
                     style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
                     <p style={{

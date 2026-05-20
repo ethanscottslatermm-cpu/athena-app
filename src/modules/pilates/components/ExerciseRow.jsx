@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 
 export default function ExerciseRow({ exercise, index, active = false }) {
   const [expanded, setExpanded] = useState(false)
@@ -11,7 +11,7 @@ export default function ExerciseRow({ exercise, index, active = false }) {
     <div
       style={{
         background: active
-          ? 'rgba(196,133,154,0.1)'
+          ? 'rgba(212,160,160,0.1)'
           : index % 2 === 0
           ? 'rgba(242,237,232,0.7)'
           : 'rgba(242,237,232,0.4)',
@@ -24,7 +24,7 @@ export default function ExerciseRow({ exercise, index, active = false }) {
       >
         <span
           className="font-cinzel text-[10px] w-5 text-center shrink-0 leading-none"
-          style={{ color: active ? '#C4859A' : 'rgba(196,133,154,0.5)' }}
+          style={{ color: active ? '#D4A0A0' : 'rgba(212,160,160,0.5)' }}
         >
           {index + 1}
         </span>
@@ -36,7 +36,7 @@ export default function ExerciseRow({ exercise, index, active = false }) {
         </span>
         <span
           className="font-garamond text-sm shrink-0"
-          style={{ color: active ? '#C4859A' : 'rgba(196,133,154,0.7)' }}
+          style={{ color: active ? '#D4A0A0' : 'rgba(212,160,160,0.7)' }}
         >
           {durationLabel}
         </span>

@@ -1,4 +1,4 @@
-import ExerciseRow from './components/ExerciseRow'
+﻿import ExerciseRow from './components/ExerciseRow'
 
 const SESSION_IMAGES = {
   'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
@@ -28,18 +28,18 @@ const HERO_POSITION = {
 }
 
 const PHASE_COLORS = {
-  menstrual: '#C4859A',
+  menstrual: '#D4A0A0',
   follicular: '#8FA58C',
-  ovulation: '#C4859A',
+  ovulation: '#D4A0A0',
   luteal: '#C4AFA8',
-  all: '#C4859A',
+  all: '#D4A0A0',
 }
 
 function Heart({ filled }) {
   return (
     <svg width={22} height={22} viewBox="0 0 24 24"
-      fill={filled ? '#C4859A' : 'none'}
-      stroke={filled ? '#C4859A' : 'rgba(59,51,48,0.5)'}
+      fill={filled ? '#D4A0A0' : 'none'}
+      stroke={filled ? '#D4A0A0' : 'rgba(59,51,48,0.5)'}
       strokeWidth={1.8}
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -50,7 +50,7 @@ function Heart({ filled }) {
 export default function SessionDetail({ session, exercises = [], isFavorite, onFavoriteToggle, onStart, onClose }) {
   if (!session) return null
 
-  const pc = PHASE_COLORS[session.phase] ?? '#C4859A'
+  const pc = PHASE_COLORS[session.phase] ?? '#D4A0A0'
   const titleKey  = (session.title ?? '').toLowerCase()
   const heroImage = SESSION_IMAGES[titleKey]
   const heroPos   = HERO_POSITION[titleKey] ?? 'center'
@@ -128,9 +128,9 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
                   key={tag}
                   className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
                   style={{
-                    background: heroImage ? 'rgba(242,237,232,0.75)' : 'rgba(196,133,154,0.12)',
-                    border: heroImage ? '1px solid rgba(196,133,154,0.4)' : '1px solid rgba(196,133,154,0.3)',
-                    color: '#C4859A',
+                    background: heroImage ? 'rgba(242,237,232,0.75)' : 'rgba(212,160,160,0.12)',
+                    border: heroImage ? '1px solid rgba(212,160,160,0.4)' : '1px solid rgba(212,160,160,0.3)',
+                    color: '#D4A0A0',
                   }}
                 >
                   {(tag ?? '').replace(/_/g, ' ')}
@@ -201,11 +201,11 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
           onClick={() => onStart?.(session, sessionExercises)}
           className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm"
           style={{
-            background: 'linear-gradient(90deg, rgba(196,133,154,0.15) 0%, rgba(196,133,154,0.35) 50%, rgba(196,133,154,0.15) 100%)',
+            background: 'linear-gradient(90deg, rgba(212,160,160,0.15) 0%, rgba(212,160,160,0.35) 50%, rgba(212,160,160,0.15) 100%)',
             backgroundSize: '200% 100%',
             animation: 'shimmerSlide 2.5s infinite',
-            border: '1px solid rgba(196,133,154,0.55)',
-            color: '#C4859A',
+            border: '1px solid rgba(212,160,160,0.55)',
+            color: '#D4A0A0',
           }}
         >
           START SESSION

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+﻿import { useState, useCallback } from 'react'
 import SkinLog      from '../modules/skin/SkinLog'
 import SkinRoutine  from '../modules/skin/SkinRoutine'
 import SkinInsights from '../modules/skin/SkinInsights'
@@ -9,7 +9,7 @@ const TABS = [
   { id: 'insights', label: 'Insights' },
 ]
 
-const ROSE = '#C4859A'
+const ROSE = '#D4A0A0'
 
 export default function Skin() {
   const [activeTab,  setActiveTab]  = useState('log')
@@ -40,7 +40,7 @@ export default function Skin() {
         </h2>
         <div style={{
           display: 'flex', gap: 4, padding: '4px',
-          background: 'rgba(196,133,154,0.1)',
+          background: 'rgba(212,160,160,0.1)',
           borderRadius: 22,
         }}>
           {TABS.map(tab => {

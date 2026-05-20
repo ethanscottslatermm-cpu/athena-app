@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 
 function formatTime(s) {
   const m = Math.floor(s / 60)
@@ -30,8 +30,8 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
         <div
           className="w-24 h-24 rounded-full flex items-center justify-center"
           style={{
-            background: 'rgba(196,133,154,0.12)',
-            border: '2px solid rgba(196,133,154,0.5)',
+            background: 'rgba(212,160,160,0.12)',
+            border: '2px solid rgba(212,160,160,0.5)',
             animation: 'goldPulse 1s ease-out',
           }}
         >
@@ -77,7 +77,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
                 className="w-10 h-10 flex items-center justify-center text-2xl transition-transform"
                 style={{
                   transform: (hovered || rating) >= star ? 'scale(1.2)' : 'scale(1)',
-                  color: (hovered || rating) >= star ? '#C4859A' : 'rgba(59,51,48,0.2)',
+                  color: (hovered || rating) >= star ? '#D4A0A0' : 'rgba(59,51,48,0.2)',
                 }}
               >
                 ★
@@ -92,7 +92,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
         <button
           onClick={() => onShareCommunity?.({ session, elapsed, rating })}
           className="w-full py-3 rounded-xl font-garamond text-sm text-rose"
-          style={{ border: '1px solid rgba(196,133,154,0.4)' }}
+          style={{ border: '1px solid rgba(212,160,160,0.4)' }}
         >
           Share to Community
         </button>
@@ -100,10 +100,10 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
           onClick={() => onBack?.(rating)}
           className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm text-rose"
           style={{
-            background: 'linear-gradient(90deg, rgba(196,133,154,0.15) 0%, rgba(196,133,154,0.35) 50%, rgba(196,133,154,0.15) 100%)',
+            background: 'linear-gradient(90deg, rgba(212,160,160,0.15) 0%, rgba(212,160,160,0.35) 50%, rgba(212,160,160,0.15) 100%)',
             backgroundSize: '200% 100%',
             animation: 'shimmerSlide 2.5s infinite',
-            border: '1px solid rgba(196,133,154,0.55)',
+            border: '1px solid rgba(212,160,160,0.55)',
           }}
         >
           BACK TO STUDIO

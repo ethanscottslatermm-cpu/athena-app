@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, ChevronDown } from 'lucide-react'
 import GlassCard from '../../components/GlassCard'
@@ -119,15 +119,15 @@ function FeelingsWheel({ selected, onToggle, expanded, onExpand }) {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 5,
                   padding: '6px 14px', borderRadius: 22,
-                  border: isSelected ? '1px solid rgba(196,133,154,0.65)' : '1px solid rgba(59,51,48,0.14)',
-                  background: isSelected ? 'rgba(196,133,154,0.16)' : 'rgba(242,237,232,0.65)',
-                  color: isSelected ? '#C4859A' : '#3B3330',
+                  border: isSelected ? '1px solid rgba(212,160,160,0.65)' : '1px solid rgba(59,51,48,0.14)',
+                  background: isSelected ? 'rgba(212,160,160,0.16)' : 'rgba(242,237,232,0.65)',
+                  color: isSelected ? '#D4A0A0' : '#3B3330',
                   fontFamily: 'Cormorant Garamond, serif', fontSize: 14, transition: 'all 0.2s',
                 }}
               >
                 {f.label}
                 <ChevronDown size={11} strokeWidth={1.8} style={{
-                  color: isSelected ? '#C4859A' : '#7A6A65',
+                  color: isSelected ? '#D4A0A0' : '#7A6A65',
                   transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                   transition: 'transform 0.22s ease', flexShrink: 0,
                 }} />
@@ -143,9 +143,9 @@ function FeelingsWheel({ selected, onToggle, expanded, onExpand }) {
                         style={{
                           padding: '4px 12px', borderRadius: 20,
                           fontFamily: 'Cormorant Garamond, serif', fontSize: 12.5,
-                          border: subActive ? '1px solid rgba(196,133,154,0.55)' : '1px solid rgba(196,175,168,0.5)',
-                          background: subActive ? 'rgba(196,133,154,0.12)' : 'rgba(196,175,168,0.22)',
-                          color: subActive ? '#C4859A' : '#7A6A65', transition: 'all 0.18s',
+                          border: subActive ? '1px solid rgba(212,160,160,0.55)' : '1px solid rgba(196,175,168,0.5)',
+                          background: subActive ? 'rgba(212,160,160,0.12)' : 'rgba(196,175,168,0.22)',
+                          color: subActive ? '#D4A0A0' : '#7A6A65', transition: 'all 0.18s',
                         }}
                       >
                         {sub}
@@ -213,7 +213,7 @@ function GratitudeModal({ value, onChange, onAdd, onSkip }) {
           placeholder="Something small counts…"
           style={{
             width: '100%', background: 'transparent', border: 'none',
-            borderBottom: '1px solid rgba(196,133,154,0.5)', padding: '8px 0',
+            borderBottom: '1px solid rgba(212,160,160,0.5)', padding: '8px 0',
             fontFamily: 'Cormorant Garamond, serif', fontSize: 15, color: '#3B3330',
             outline: 'none', marginBottom: 24,
           }}
@@ -222,7 +222,7 @@ function GratitudeModal({ value, onChange, onAdd, onSkip }) {
           <button
             onClick={() => onAdd(value)}
             className="flex-1 py-3 rounded-xl font-cinzel text-[8.5px] tracking-[0.2em] uppercase"
-            style={{ background: 'rgba(196,133,154,0.14)', border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
+            style={{ background: 'rgba(212,160,160,0.14)', border: '1px solid rgba(212,160,160,0.4)', color: '#D4A0A0' }}
           >
             Add it
           </button>
@@ -403,7 +403,7 @@ export default function TodayTab({ onLogSaved }) {
         onClick={() => setShowGratitude(true)}
         disabled={saving}
         className="w-full font-cinzel tracking-widest py-3 rounded-xl transition-all disabled:opacity-40 mb-6"
-        style={{ background: 'rgba(196,133,154,0.14)', border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
+        style={{ background: 'rgba(212,160,160,0.14)', border: '1px solid rgba(212,160,160,0.4)', color: '#D4A0A0' }}
       >
         {saving ? '…' : 'LOG MOOD'}
       </button>

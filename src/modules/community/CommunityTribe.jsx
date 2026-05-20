@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Plus, X, Star, MapPin, Calendar, Users, Dumbbell } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
@@ -8,7 +8,7 @@ const SAGE  = '#8FA58C'
 const BROWN = '#3B3330'
 const TAUPE = '#7A6A65'
 const MAUVE = '#C4AFA8'
-const ROSE  = '#C4859A'
+const ROSE  = '#D4A0A0'
 
 const MEETUP_TYPES   = ['pilates','gym','walk_run','yoga','other']
 const MEETUP_EMOJIS  = { pilates:'🧘', gym:'🏋️', walk_run:'🚶', yoga:'☯️', other:'📍' }

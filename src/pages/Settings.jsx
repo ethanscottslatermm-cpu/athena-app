@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeft, ChevronDown, Check,
@@ -44,7 +44,7 @@ function Toggle({ value, onChange, disabled = false }) {
     <button
       onClick={() => !disabled && onChange(!value)}
       className="relative w-11 h-6 rounded-full transition-colors flex-shrink-0"
-      style={{ background: value && !disabled ? '#C4859A' : 'rgba(59,51,48,0.15)', opacity: disabled ? 0.38 : 1 }}
+      style={{ background: value && !disabled ? '#D4A0A0' : 'rgba(59,51,48,0.15)', opacity: disabled ? 0.38 : 1 }}
     >
       <div
         className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all"
@@ -73,9 +73,9 @@ function PillSelect({ options, value, onChange, multi = false }) {
             onClick={() => toggle(opt)}
             className="px-3 py-1.5 rounded-full font-garamond text-sm transition-all"
             style={{
-              background: on ? 'rgba(196,133,154,0.18)' : 'rgba(59,51,48,0.06)',
-              border: `1px solid ${on ? 'rgba(196,133,154,0.55)' : 'rgba(59,51,48,0.18)'}`,
-              color: on ? '#C4859A' : '#7A6A65',
+              background: on ? 'rgba(212,160,160,0.18)' : 'rgba(59,51,48,0.06)',
+              border: `1px solid ${on ? 'rgba(212,160,160,0.55)' : 'rgba(59,51,48,0.18)'}`,
+              color: on ? '#D4A0A0' : '#7A6A65',
             }}
           >
             {opt}
@@ -92,13 +92,13 @@ function Stepper({ value, min, max, onChange }) {
       <button
         onClick={() => value > min && onChange(value - 1)}
         className="w-8 h-8 rounded-full flex items-center justify-center text-xl leading-none flex-shrink-0"
-        style={{ border: '1px solid rgba(196,133,154,0.45)', color: '#C4859A' }}
+        style={{ border: '1px solid rgba(212,160,160,0.45)', color: '#D4A0A0' }}
       >−</button>
       <span className="font-garamond text-rose text-sm w-6 text-center">{value}</span>
       <button
         onClick={() => value < max && onChange(value + 1)}
         className="w-8 h-8 rounded-full flex items-center justify-center text-xl leading-none flex-shrink-0"
-        style={{ border: '1px solid rgba(196,133,154,0.45)', color: '#C4859A' }}
+        style={{ border: '1px solid rgba(212,160,160,0.45)', color: '#D4A0A0' }}
       >+</button>
     </div>
   )
@@ -115,7 +115,7 @@ function GoldSlider({ value, min, max, step = 1, onChange, fmt = v => v }) {
         type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(parseFloat(e.target.value))}
         className="w-full h-1 rounded-full outline-none cursor-pointer slider-gold"
-        style={{ background: `linear-gradient(to right, #C4859A ${pct}%, rgba(59,51,48,0.15) ${pct}%)` }}
+        style={{ background: `linear-gradient(to right, #D4A0A0 ${pct}%, rgba(59,51,48,0.15) ${pct}%)` }}
       />
     </div>
   )
@@ -152,7 +152,7 @@ function TextInput({ value, onChange, placeholder, prefix }) {
         type="text" value={value ?? ''} onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         className="flex-1 bg-transparent font-garamond text-brown text-sm outline-none pb-0.5"
-        style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
+        style={{ borderBottom: '1px solid rgba(212,160,160,0.35)' }}
       />
     </div>
   )
@@ -163,7 +163,7 @@ function TimePicker({ value, onChange }) {
     <input
       type="time" value={value ?? ''} onChange={e => onChange(e.target.value || null)}
       className="bg-transparent font-garamond text-brown text-sm outline-none pb-0.5 w-24"
-      style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
+      style={{ borderBottom: '1px solid rgba(212,160,160,0.35)' }}
     />
   )
 }
@@ -175,8 +175,8 @@ function Toast({ message, type, visible }) {
     <div style={{
       position: 'fixed', bottom: '88px', left: '50%', transform: 'translateX(-50%)',
       zIndex: 500,
-      background: type === 'error' ? 'rgba(196,133,154,0.95)' : '#C4AFA8',
-      border: `1px solid ${type === 'error' ? 'rgba(196,133,154,0.6)' : 'rgba(196,175,168,0.6)'}`,
+      background: type === 'error' ? 'rgba(212,160,160,0.95)' : '#C4AFA8',
+      border: `1px solid ${type === 'error' ? 'rgba(212,160,160,0.6)' : 'rgba(196,175,168,0.6)'}`,
       borderRadius: '20px', padding: '9px 20px',
       color: type === 'error' ? '#F2EDE8' : '#3B3330',
       fontFamily: 'Cormorant Garamond, serif', fontSize: '13px', letterSpacing: '0.06em',
@@ -225,7 +225,7 @@ function MInput({ label, type = 'text', value, onChange, placeholder }) {
       <input
         type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
         className="w-full bg-transparent font-garamond text-brown text-sm outline-none py-2"
-        style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
+        style={{ borderBottom: '1px solid rgba(212,160,160,0.35)' }}
       />
     </div>
   )
@@ -239,9 +239,9 @@ function MActions({ onCancel, onConfirm, label = 'Confirm', danger, disabled }) 
         onClick={onConfirm} disabled={disabled}
         className="px-5 py-2 rounded-full font-cinzel text-[9px] tracking-widest transition-all"
         style={{
-          border: danger ? '1px solid rgba(196,133,154,0.55)' : '1px solid rgba(196,133,154,0.5)',
-          color: danger ? '#C4859A' : '#C4859A',
-          background: danger ? 'rgba(196,133,154,0.1)' : 'transparent',
+          border: danger ? '1px solid rgba(212,160,160,0.55)' : '1px solid rgba(212,160,160,0.5)',
+          color: danger ? '#D4A0A0' : '#D4A0A0',
+          background: danger ? 'rgba(212,160,160,0.1)' : 'transparent',
           opacity: disabled ? 0.38 : 1,
         }}
       >
@@ -268,15 +268,15 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
         onClick={onToggle}
       >
         <div className="flex items-center gap-3">
-          <span style={{ color: '#C4859A' }}>{icon}</span>
+          <span style={{ color: '#D4A0A0' }}>{icon}</span>
           <span className="font-cinzel text-[10px] tracking-[0.25em] uppercase text-brown/75">{title}</span>
         </div>
         <div className="flex items-center gap-2">
-          {dirty && !open && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#C4859A' }} />}
+          {dirty && !open && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#D4A0A0' }} />}
           <ChevronDown
             size={14}
             style={{
-              color: 'rgba(196,133,154,0.6)',
+              color: 'rgba(212,160,160,0.6)',
               transition: 'transform 0.3s',
               transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
             }}
@@ -292,7 +292,7 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
             <button
               onClick={onSave} disabled={saving || saved}
               className="mt-3 mb-1 flex items-center gap-1.5 px-4 py-1.5 rounded-full font-cinzel text-[9px] tracking-widest transition-all"
-              style={{ border: '1px solid rgba(196,133,154,0.5)', color: '#C4859A', background: saved ? 'rgba(196,133,154,0.1)' : 'transparent' }}
+              style={{ border: '1px solid rgba(212,160,160,0.5)', color: '#D4A0A0', background: saved ? 'rgba(212,160,160,0.1)' : 'transparent' }}
             >
               {saved ? <><Check size={10} />SAVED</> : saving ? '···' : 'SAVE CHANGES'}
             </button>
@@ -306,7 +306,7 @@ function Section({ id, title, icon, open, onToggle, dirty, onSave, saving, saved
 // ─── Corner brackets ──────────────────────────────────────────────────────────
 
 function Brackets() {
-  const b = { position: 'absolute', width: '10px', height: '10px', borderColor: 'rgba(196,133,154,0.4)' }
+  const b = { position: 'absolute', width: '10px', height: '10px', borderColor: 'rgba(212,160,160,0.4)' }
   return (
     <>
       <span style={{ ...b, top: '10px', left: '10px', borderTop: '1px solid', borderLeft: '1px solid' }} />
@@ -495,11 +495,11 @@ export default function Settings() {
         .slider-gold::-webkit-slider-thumb {
           -webkit-appearance: none;
           width: 16px; height: 16px; border-radius: 50%;
-          background: #C4859A; cursor: pointer;
+          background: #D4A0A0; cursor: pointer;
         }
         .slider-gold::-moz-range-thumb {
           width: 16px; height: 16px; border-radius: 50%;
-          background: #C4859A; border: none; cursor: pointer;
+          background: #D4A0A0; border: none; cursor: pointer;
         }
         input[type="time"]::-webkit-calendar-picker-indicator,
         input[type="date"]::-webkit-calendar-picker-indicator {
@@ -523,7 +523,7 @@ export default function Settings() {
           }}
         >
           <Brackets />
-          <button onClick={() => navigate(-1)} className="p-2 flex items-center" style={{ color: '#C4859A' }}>
+          <button onClick={() => navigate(-1)} className="p-2 flex items-center" style={{ color: '#D4A0A0' }}>
             <ChevronLeft size={18} />
           </button>
           <span className="font-cinzel text-rose text-[12px] tracking-[0.35em]">SETTINGS</span>
@@ -540,11 +540,11 @@ export default function Settings() {
           <div className="flex flex-col items-center pt-3 pb-4">
             <div
               className="relative w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
-              style={{ border: '2px solid rgba(196,133,154,0.5)' }}
+              style={{ border: '2px solid rgba(212,160,160,0.5)' }}
             >
               {avatarUrl
                 ? <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
-                : <User size={30} style={{ color: 'rgba(196,133,154,0.4)' }} />
+                : <User size={30} style={{ color: 'rgba(212,160,160,0.4)' }} />
               }
               {uploading && (
                 <div className="absolute inset-0 bg-[#F2EDE8]/60 flex items-center justify-center">
@@ -579,8 +579,8 @@ export default function Settings() {
               value={d.life_stage} onChange={set('life_stage')}
             />
           </SettingRow>
-          <div className="mt-4 pt-3" style={{ borderTop: '1px solid rgba(196,133,154,0.25)' }}>
-            <button onClick={() => setModal('delete')} className="font-garamond text-sm" style={{ color: 'rgba(196,133,154,0.65)' }}>
+          <div className="mt-4 pt-3" style={{ borderTop: '1px solid rgba(212,160,160,0.25)' }}>
+            <button onClick={() => setModal('delete')} className="font-garamond text-sm" style={{ color: 'rgba(212,160,160,0.65)' }}>
               Delete my account
             </button>
           </div>
@@ -593,7 +593,7 @@ export default function Settings() {
               type="date" value={d.last_period_date ?? ''} max={new Date().toISOString().split('T')[0]}
               onChange={e => set('last_period_date')(e.target.value || null)}
               className="bg-transparent font-garamond text-brown text-sm outline-none pb-0.5"
-              style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
+              style={{ borderBottom: '1px solid rgba(212,160,160,0.35)' }}
             />
           </SettingRow>
           <SettingRow label={`Cycle length — ${d.cycle_length ?? 28} days`} block last>
@@ -622,7 +622,7 @@ export default function Settings() {
             <button
               onClick={() => window.print()}
               className="px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest"
-              style={{ border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
+              style={{ border: '1px solid rgba(212,160,160,0.4)', color: '#D4A0A0' }}
             >
               EXPORT PDF REPORT
             </button>
@@ -688,7 +688,7 @@ export default function Settings() {
                 type="number" value={d.water_goal_ml ?? 2000} min={0} max={6000}
                 onChange={e => set('water_goal_ml')(parseInt(e.target.value) || 0)}
                 className="w-16 bg-transparent font-garamond text-brown text-sm outline-none text-right pb-0.5"
-                style={{ borderBottom: '1px solid rgba(196,133,154,0.35)' }}
+                style={{ borderBottom: '1px solid rgba(212,160,160,0.35)' }}
               />
               <span className="font-garamond text-taupe text-xs">ml</span>
             </div>
@@ -815,7 +815,7 @@ export default function Settings() {
           <p className="font-cinzel text-[9px] tracking-widest text-taupe uppercase mt-1 mb-2">Theme</p>
           <div className="grid grid-cols-2 gap-2 mb-3">
             {[
-              { id: 'linen',   label: 'Linen',   bg: '#F2EDE8', accent: '#C4859A' },
+              { id: 'linen',   label: 'Linen',   bg: '#F2EDE8', accent: '#D4A0A0' },
               { id: 'sage',    label: 'Sage',     bg: '#E8EDEA', accent: '#8FA58C' },
               { id: 'blush',   label: 'Blush',    bg: '#EDE8E8', accent: '#C4AFA8' },
               { id: 'greige',  label: 'Greige',   bg: '#EAE7E4', accent: '#8A7E78' },
@@ -879,7 +879,7 @@ export default function Settings() {
             <button
               onClick={handleDownloadData}
               className="w-full py-3 rounded-xl font-cinzel text-[9px] tracking-widest"
-              style={{ border: '1px solid rgba(196,133,154,0.4)', color: '#C4859A' }}
+              style={{ border: '1px solid rgba(212,160,160,0.4)', color: '#D4A0A0' }}
             >
               DOWNLOAD MY DATA
             </button>
@@ -965,7 +965,7 @@ export default function Settings() {
             value={feedbackTxt} onChange={e => setFeedbackTxt(e.target.value.slice(0, 1000))} rows={5}
             placeholder="Your thoughts..."
             className="w-full bg-transparent font-garamond text-brown/75 text-sm resize-none outline-none p-3 rounded-xl placeholder:text-taupe/40"
-            style={{ border: '1px solid rgba(196,133,154,0.3)' }}
+            style={{ border: '1px solid rgba(212,160,160,0.3)' }}
           />
           <MActions
             onCancel={() => setModal(null)}

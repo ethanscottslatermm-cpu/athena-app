@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { Bookmark } from 'lucide-react'
 import { usePhase } from '../../hooks/usePhase'
 
@@ -58,7 +58,7 @@ function BreathworkWidget() {
       <button
         onClick={active ? stop : start}
         className="font-cinzel text-[8px] tracking-[0.2em] uppercase"
-        style={{ color: active ? '#C4859A' : '#8FA58C' }}
+        style={{ color: active ? '#D4A0A0' : '#8FA58C' }}
       >
         {active ? 'stop' : 'begin'}
       </button>

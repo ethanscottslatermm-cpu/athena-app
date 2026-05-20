@@ -1,11 +1,11 @@
-import { useState, useMemo } from 'react'
+﻿import { useState, useMemo } from 'react'
 import PhaseFilter from './components/PhaseFilter'
 import SessionCard from './components/SessionCard'
 
 const PHASE_COLORS = {
-  menstrual: '#C4859A',
+  menstrual: '#D4A0A0',
   follicular: '#8FA58C',
-  ovulation: '#C4859A',
+  ovulation: '#D4A0A0',
   luteal: '#C4AFA8',
 }
 
@@ -28,7 +28,7 @@ const PROGRAMS = [
     weeks: 4,
     difficulty: 'intermediate',
     phase: null,
-    color: '#C4859A',
+    color: '#D4A0A0',
   },
   {
     id: 'core-restore',

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Plus, MessageCircle, X, Send, Image, Sparkles, MoreHorizontal, Flag, Ban } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
@@ -9,7 +9,7 @@ const SAGE  = '#8FA58C'
 const BROWN = '#3B3330'
 const TAUPE = '#7A6A65'
 const MAUVE = '#C4AFA8'
-const ROSE  = '#C4859A'
+const ROSE  = '#D4A0A0'
 
 const REACTION_EMOJIS = ['❤️', '🙌', '💜', '🔥']
 
@@ -562,7 +562,7 @@ export default function CommunityFeed() {
               </button>
               <button onClick={() => setIsAnon(p => !p)} style={{
                 display: 'flex', alignItems: 'center', gap: 5,
-                background: isAnon ? 'rgba(196,133,154,0.1)' : 'none',
+                background: isAnon ? 'rgba(212,160,160,0.1)' : 'none',
                 border: `1px solid ${isAnon ? ROSE : 'rgba(196,175,168,0.4)'}`,
                 borderRadius: 10, padding: '5px 10px', cursor: 'pointer',
                 fontFamily: 'Cinzel, serif', fontSize: 8,
@@ -683,7 +683,7 @@ export default function CommunityFeed() {
                 display: 'block', width: '100%', padding: '11px 14px',
                 marginBottom: 6, borderRadius: 12, cursor: 'pointer',
                 border: `1px solid ${reportReason === r ? ROSE : 'rgba(196,175,168,0.4)'}`,
-                background: reportReason === r ? 'rgba(196,133,154,0.1)' : 'rgba(255,255,255,0.55)',
+                background: reportReason === r ? 'rgba(212,160,160,0.1)' : 'rgba(255,255,255,0.55)',
                 fontFamily: 'Cormorant Garamond, serif', fontSize: 15,
                 color: reportReason === r ? ROSE : BROWN, textAlign: 'left',
                 transition: 'all 0.15s',

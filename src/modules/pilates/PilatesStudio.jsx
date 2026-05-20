@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+﻿import { useState, useEffect, useCallback } from 'react'
 import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
@@ -18,7 +18,7 @@ function TabIcon({ src, active }) {
       flexShrink: 0,
       WebkitMask: `url(${src}) no-repeat center / contain`,
       mask: `url(${src}) no-repeat center / contain`,
-      backgroundColor: active ? '#C4859A' : 'rgba(59,51,48,0.35)',
+      backgroundColor: active ? '#D4A0A0' : 'rgba(59,51,48,0.35)',
       transition: 'background-color 0.2s',
     }} />
   )
@@ -158,8 +158,8 @@ export default function PilatesStudio() {
           to   { transform: translateY(0);    opacity: 1; }
         }
         @keyframes goldPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(196,133,154,0); }
-          50%      { box-shadow: 0 0 24px 6px rgba(196,133,154,0.25); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(212,160,160,0); }
+          50%      { box-shadow: 0 0 24px 6px rgba(212,160,160,0.25); }
         }
         @keyframes cycleSlideDown {
           from { opacity: 0; transform: translateY(-100%); }
@@ -177,7 +177,7 @@ export default function PilatesStudio() {
       <div className="absolute inset-0" style={{
         background: `
           linear-gradient(to bottom, rgba(242,237,232,0.5) 0%, rgba(242,237,232,0.1) 30%, rgba(242,237,232,0.04) 50%),
-          radial-gradient(ellipse at 50% 10%, rgba(196,133,154,0.1) 0%, transparent 60%)
+          radial-gradient(ellipse at 50% 10%, rgba(212,160,160,0.1) 0%, transparent 60%)
         `,
       }} />
 
@@ -197,14 +197,14 @@ export default function PilatesStudio() {
               className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-all"
               style={{
                 borderBottom: activeTab === tab.id
-                  ? '2px solid #C4859A'
+                  ? '2px solid #D4A0A0'
                   : '2px solid transparent',
               }}
             >
               <TabIcon src={tab.icon} active={activeTab === tab.id} />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#C4859A' : 'rgba(59,51,48,0.45)' }}
+                style={{ color: activeTab === tab.id ? '#D4A0A0' : 'rgba(59,51,48,0.45)' }}
               >
                 {tab.label.toUpperCase()}
               </span>

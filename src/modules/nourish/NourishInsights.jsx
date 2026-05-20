@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Droplets } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -83,7 +83,7 @@ function CalorieChart({ days, dayData }) {
                   <rect
                     x={x} y={baseY - fatH}
                     width={barW} height={fatH}
-                    fill="rgba(196,133,154,0.5)" rx={cal > 0 ? 0 : 4}
+                    fill="rgba(212,160,160,0.5)" rx={cal > 0 ? 0 : 4}
                   />
                   {/* Carbs — middle */}
                   <rect
@@ -146,7 +146,7 @@ function CalorieChart({ days, dayData }) {
         {[
           { label: 'Protein', color: 'rgba(143,165,140,0.7)' },
           { label: 'Carbs',   color: 'rgba(201,168,76,0.6)'  },
-          { label: 'Fat',     color: 'rgba(196,133,154,0.6)' },
+          { label: 'Fat',     color: 'rgba(212,160,160,0.6)' },
         ].map(l => (
           <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <div style={{ width: 10, height: 10, borderRadius: 3, background: l.color }} />
@@ -187,7 +187,7 @@ function MacroAverages({ dayData, days }) {
           { label: 'Cal',     value: avg('calories'),  color: '#3B3330', bg: 'rgba(196,175,168,0.2)' },
           { label: 'Protein', value: `${avg('protein_g')}g`, color: '#8FA58C', bg: 'rgba(143,165,140,0.15)' },
           { label: 'Carbs',   value: `${avg('carbs_g')}g`,   color: '#C9A84C', bg: 'rgba(201,168,76,0.13)'  },
-          { label: 'Fat',     value: `${avg('fat_g')}g`,     color: '#C4859A', bg: 'rgba(196,133,154,0.15)' },
+          { label: 'Fat',     value: `${avg('fat_g')}g`,     color: '#D4A0A0', bg: 'rgba(212,160,160,0.15)' },
         ].map(m => (
           <div key={m.label} style={{
             background: m.bg, borderRadius: 10,

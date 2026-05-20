@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { ChevronDown, ChevronRight, Droplets, Plus } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -58,7 +58,7 @@ function MacroRing({ totalCal, protein, carbs, fat }) {
           {[
             { label: 'Protein', value: protein, color: '#8FA58C', bg: 'rgba(143,165,140,0.18)' },
             { label: 'Carbs',   value: carbs,   color: '#C9A84C', bg: 'rgba(201,168,76,0.15)'  },
-            { label: 'Fat',     value: fat,     color: '#C4859A', bg: 'rgba(196,133,154,0.18)' },
+            { label: 'Fat',     value: fat,     color: '#D4A0A0', bg: 'rgba(212,160,160,0.18)' },
           ].map(m => (
             <div key={m.label} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',

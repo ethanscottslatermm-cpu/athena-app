@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Sparkles } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
 import { usePhase } from '../../hooks/usePhase'
 
-const ROSE          = '#C4859A'
+const ROSE          = '#D4A0A0'
 const PHASE_KEY     = 'athena_skin_last_phase'
 const INSIGHT_KEY   = 'athena_skin_concern_insights'
 
@@ -24,7 +24,7 @@ function shortDay(dateStr) {
 
 function conditionColor(r) {
   if (!r)    return 'rgba(196,175,168,0.2)'
-  if (r <= 1) return 'rgba(196,133,154,0.65)'   // Flare-Up — rose
+  if (r <= 1) return 'rgba(212,160,160,0.65)'   // Flare-Up — rose
   if (r === 2) return 'rgba(196,175,168,0.5)'   // Dull — taupe
   if (r === 3) return 'rgba(201,168,76,0.45)'   // Normal — gold
   if (r === 4) return 'rgba(143,165,140,0.6)'   // Clear — sage
@@ -59,7 +59,7 @@ function ConditionChart({ days, dayData }) {
       background: 'rgba(255,255,255,0.55)',
       backdropFilter: 'blur(12px)',
       borderRadius: 18, padding: '14px 12px 10px',
-      border: '1px solid rgba(196,133,154,0.25)',
+      border: '1px solid rgba(212,160,160,0.25)',
       marginBottom: 12,
     }}>
       <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
@@ -70,7 +70,7 @@ function ConditionChart({ days, dayData }) {
         {/* Midline at rating 3 (Normal) */}
         <line
           x1={0} y1={H - maxH * (3 / SCALE) - 4} x2={W} y2={H - maxH * (3 / SCALE) - 4}
-          stroke="rgba(196,133,154,0.25)" strokeWidth={1} strokeDasharray="3 3"
+          stroke="rgba(212,160,160,0.25)" strokeWidth={1} strokeDasharray="3 3"
         />
 
         {days.map((date, i) => {
@@ -119,7 +119,7 @@ function ConditionChart({ days, dayData }) {
       {/* Legend */}
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginTop: 8 }}>
         {[
-          { label: 'Flare-Up', color: 'rgba(196,133,154,0.65)' },
+          { label: 'Flare-Up', color: 'rgba(212,160,160,0.65)' },
           { label: 'Normal',   color: 'rgba(201,168,76,0.5)'   },
           { label: 'Glowing',  color: 'rgba(143,165,140,0.88)' },
         ].map(l => (
@@ -142,11 +142,11 @@ function StreakCard({ streak, avgRating }) {
   return (
     <div style={{
       background: streak > 0
-        ? 'linear-gradient(135deg, rgba(196,133,154,0.15) 0%, rgba(255,255,255,0.5) 100%)'
+        ? 'linear-gradient(135deg, rgba(212,160,160,0.15) 0%, rgba(255,255,255,0.5) 100%)'
         : 'rgba(255,255,255,0.55)',
       backdropFilter: 'blur(12px)',
       borderRadius: 16, padding: '12px 16px',
-      border: '1px solid rgba(196,133,154,0.28)',
+      border: '1px solid rgba(212,160,160,0.28)',
       marginBottom: 12,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
@@ -213,8 +213,8 @@ function ConcernInsightCard({ concern, count, phase, label }) {
         </span>
         <span style={{
           fontFamily: 'Cinzel, serif', fontSize: 7, color: '#7A6A65',
-          background: 'rgba(196,133,154,0.1)', borderRadius: 6, padding: '1px 6px',
-          border: '1px solid rgba(196,133,154,0.2)',
+          background: 'rgba(212,160,160,0.1)', borderRadius: 6, padding: '1px 6px',
+          border: '1px solid rgba(212,160,160,0.2)',
         }}>
           ×{count} this phase
         </span>
@@ -233,9 +233,9 @@ function ReflectionCard({ data }) {
   if (!data) return null
   return (
     <div style={{
-      background: 'linear-gradient(135deg, rgba(196,133,154,0.15) 0%, rgba(255,255,255,0.5) 100%)',
+      background: 'linear-gradient(135deg, rgba(212,160,160,0.15) 0%, rgba(255,255,255,0.5) 100%)',
       backdropFilter: 'blur(12px)',
-      border: '1px solid rgba(196,133,154,0.38)',
+      border: '1px solid rgba(212,160,160,0.38)',
       borderRadius: 18, padding: '16px 16px 14px',
       marginBottom: 14,
       animation: 'skFadeUp 0.4s ease both',

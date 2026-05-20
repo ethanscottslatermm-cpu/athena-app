@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import heroImg    from '../assets/athena-hero.webp'
 import knightIcon from '../assets/knight-icon.png'
@@ -225,19 +225,19 @@ export default function Login() {
           40%            { opacity: 1;   transform: scale(1.15); }
         }
         @keyframes inputFocusPulse {
-          0%   { filter: drop-shadow(0 0 0px rgba(196,133,154,0)); }
-          50%  { filter: drop-shadow(0 0 14px rgba(196,133,154,0.4)); }
-          100% { filter: drop-shadow(0 2px 8px rgba(196,133,154,0.15)); }
+          0%   { filter: drop-shadow(0 0 0px rgba(212,160,160,0)); }
+          50%  { filter: drop-shadow(0 0 14px rgba(212,160,160,0.4)); }
+          100% { filter: drop-shadow(0 2px 8px rgba(212,160,160,0.15)); }
         }
         @keyframes checkboxGlow {
-          0%   { box-shadow: 0 0 0px rgba(196,133,154,0); }
-          50%  { box-shadow: 0 0 14px rgba(196,133,154,0.5); }
-          100% { box-shadow: 0 0 4px rgba(196,133,154,0.2); }
+          0%   { box-shadow: 0 0 0px rgba(212,160,160,0); }
+          50%  { box-shadow: 0 0 14px rgba(212,160,160,0.5); }
+          100% { box-shadow: 0 0 4px rgba(212,160,160,0.2); }
         }
         @keyframes goldSuccessPulse {
-          0%   { box-shadow: 0 0 0px rgba(196,133,154,0); border-color: rgba(196,133,154,0.52); }
-          40%  { box-shadow: 0 0 28px rgba(196,133,154,0.55), 0 0 60px rgba(196,133,154,0.22); border-color: rgba(196,133,154,0.95); }
-          100% { box-shadow: 0 0 8px rgba(196,133,154,0.18); border-color: rgba(196,133,154,0.52); }
+          0%   { box-shadow: 0 0 0px rgba(212,160,160,0); border-color: rgba(212,160,160,0.52); }
+          40%  { box-shadow: 0 0 28px rgba(212,160,160,0.55), 0 0 60px rgba(212,160,160,0.22); border-color: rgba(212,160,160,0.95); }
+          100% { box-shadow: 0 0 8px rgba(212,160,160,0.18); border-color: rgba(212,160,160,0.52); }
         }
         @keyframes placeholderPulse {
           0%, 25% { color: rgba(215,210,232,0.65); text-shadow: 0 0 6px rgba(230,226,248,0.22); }
@@ -323,22 +323,22 @@ export default function Login() {
           }
         }
 
-        .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(196,133,154,0.25) transparent; }
+        .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(212,160,160,0.25) transparent; }
         .terms-scroll::-webkit-scrollbar { width: 3px; }
         .terms-scroll::-webkit-scrollbar-track { background: transparent; }
-        .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.25); border-radius: 2px; }
+        .terms-scroll::-webkit-scrollbar-thumb { background: rgba(212,160,160,0.25); border-radius: 2px; }
 
         .access-btn {
           width: 100%;
           padding: 13px;
           background: transparent;
-          border: 1px solid rgba(196,133,154,0.52);
+          border: 1px solid rgba(212,160,160,0.52);
           border-radius: 2px;
           cursor: pointer;
           transition: border-color 0.3s, box-shadow 0.3s;
           -webkit-appearance: none;
         }
-        .access-btn:active { border-color: rgba(196,133,154,0.8); box-shadow: 0 0 16px rgba(196,133,154,0.12); }
+        .access-btn:active { border-color: rgba(212,160,160,0.8); box-shadow: 0 0 16px rgba(212,160,160,0.12); }
         .access-btn:disabled { cursor: wait; opacity: 0.6; }
         @keyframes inputsOut {
           from { opacity: 1; transform: translateY(0); max-height: 120px; }
@@ -381,7 +381,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.1) 40%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 35% at 25% 15%, rgba(212,160,160,0.28) 0%, rgba(212,160,160,0.1) 40%, transparent 70%)',
             animation: 'cloudA 16s ease-in-out infinite',
             filter: 'blur(18px)',
           }} />
@@ -394,7 +394,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(196,133,154,0.25) 0%, rgba(196,133,154,0.08) 50%, transparent 70%)',
+            background: 'radial-gradient(ellipse 55% 40% at 75% 20%, rgba(212,160,160,0.25) 0%, rgba(212,160,160,0.08) 50%, transparent 70%)',
             animation: 'cloudB 22s ease-in-out infinite 2s',
             filter: 'blur(25px)',
           }} />
@@ -407,7 +407,7 @@ export default function Login() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 80% 30% at 50% 35%, rgba(196,133,154,0.22) 0%, transparent 65%)',
+            background: 'radial-gradient(ellipse 80% 30% at 50% 35%, rgba(212,160,160,0.22) 0%, transparent 65%)',
             animation: 'cloudC 30s ease-in-out infinite 5s',
             filter: 'blur(30px)',
           }} />
@@ -417,7 +417,7 @@ export default function Login() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(196,133,154,0.22) 0%, transparent 65%)',
+            background: 'radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,160,160,0.22) 0%, transparent 65%)',
             animation: 'hazePulse 8s ease-in-out infinite',
           }}
         />
@@ -427,7 +427,7 @@ export default function Login() {
           <div style={{
             position: 'absolute', top: '-10%', left: '12%',
             width: '25%', height: '110%',
-            background: 'linear-gradient(175deg, rgba(196,133,154,0.4) 0%, transparent 60%)',
+            background: 'linear-gradient(175deg, rgba(212,160,160,0.4) 0%, transparent 60%)',
             animation: 'rayPulse 11s ease-in-out infinite',
             filter: 'blur(16px)',
             transform: 'skewX(-12deg)',
@@ -435,7 +435,7 @@ export default function Login() {
           <div style={{
             position: 'absolute', top: '-10%', right: '18%',
             width: '16%', height: '90%',
-            background: 'linear-gradient(175deg, rgba(196,133,154,0.28) 0%, transparent 60%)',
+            background: 'linear-gradient(175deg, rgba(212,160,160,0.28) 0%, transparent 60%)',
             animation: 'rayPulse2 17s ease-in-out infinite 4s',
             filter: 'blur(24px)',
             transform: 'skewX(14deg)',
@@ -555,7 +555,7 @@ export default function Login() {
           position: 'absolute',
           bottom: '20%', left: '50%',
           width: '60%', height: '30%',
-          background: 'radial-gradient(ellipse, rgba(196,133,154,0.32) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(212,160,160,0.32) 0%, transparent 70%)',
           animation: 'breathe 5s ease-in-out infinite',
           filter: 'blur(18px)',
           pointerEvents: 'none',
@@ -580,7 +580,7 @@ export default function Login() {
               background: 'transparent',
               backdropFilter: 'blur(28px)',
               WebkitBackdropFilter: 'blur(28px)',
-              border: '1px solid rgba(196,133,154,0.25)',
+              border: '1px solid rgba(212,160,160,0.25)',
               borderRadius: '10px',
               display: 'flex',
               flexDirection: 'column',
@@ -589,11 +589,11 @@ export default function Login() {
             }}>
 
               {/* Modal header */}
-              <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(196,133,154,0.2)', flexShrink: 0 }}>
+              <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(212,160,160,0.2)', flexShrink: 0 }}>
                 <p style={{
                   fontFamily: "'Cinzel', serif",
                   fontSize: '9px', letterSpacing: '0.3em',
-                  color: 'rgba(196,133,154,0.7)',
+                  color: 'rgba(212,160,160,0.7)',
                   marginBottom: '7px',
                 }}>ATHENA</p>
                 <h2 style={{
@@ -617,27 +617,27 @@ export default function Login() {
                     Welcome to Athena. By accessing or using our platform, you agree to be bound by these Terms &amp; Conditions and our Privacy Policy. Please read them carefully before proceeding.
                   </p>
 
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(196,133,154,0.75)', marginBottom: '6px', marginTop: '18px' }}>1. ACCEPTANCE OF TERMS</p>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(212,160,160,0.75)', marginBottom: '6px', marginTop: '18px' }}>1. ACCEPTANCE OF TERMS</p>
                   <p style={{ marginBottom: '14px' }}>
                     By creating an account or using the Athena application, you acknowledge that you have read, understood, and agree to these terms. If you do not agree, please do not use our services.
                   </p>
 
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(196,133,154,0.75)', marginBottom: '6px', marginTop: '18px' }}>2. HEALTH INFORMATION</p>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(212,160,160,0.75)', marginBottom: '6px', marginTop: '18px' }}>2. HEALTH INFORMATION</p>
                   <p style={{ marginBottom: '14px' }}>
                     Athena provides wellness guidance for informational purposes only. The content within this application is not intended as medical advice. Always consult a qualified healthcare professional before making changes to your health regimen.
                   </p>
 
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(196,133,154,0.75)', marginBottom: '6px', marginTop: '18px' }}>3. PRIVACY &amp; DATA</p>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(212,160,160,0.75)', marginBottom: '6px', marginTop: '18px' }}>3. PRIVACY &amp; DATA</p>
                   <p style={{ marginBottom: '14px' }}>
                     We take your privacy seriously. Your personal health data is encrypted and stored securely. We will never sell your personal information to third parties. Your cycle data, mood logs, and wellness entries remain private to you.
                   </p>
 
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(196,133,154,0.75)', marginBottom: '6px', marginTop: '18px' }}>4. USER RESPONSIBILITIES</p>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(212,160,160,0.75)', marginBottom: '6px', marginTop: '18px' }}>4. USER RESPONSIBILITIES</p>
                   <p style={{ marginBottom: '14px' }}>
                     You are responsible for maintaining the confidentiality of your account credentials. You agree to provide accurate information and to notify us immediately of any unauthorized use of your account.
                   </p>
 
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(196,133,154,0.75)', marginBottom: '6px', marginTop: '18px' }}>5. MODIFICATIONS</p>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em', color: 'rgba(212,160,160,0.75)', marginBottom: '6px', marginTop: '18px' }}>5. MODIFICATIONS</p>
                   <p style={{ marginBottom: '4px' }}>
                     Athena reserves the right to modify these terms at any time. Continued use of the platform after changes constitutes your acceptance of the updated terms.
                   </p>
@@ -645,7 +645,7 @@ export default function Login() {
               </div>
 
               {/* Modal footer */}
-              <div style={{ padding: '14px 22px 22px', borderTop: '1px solid rgba(196,133,154,0.2)', flexShrink: 0 }}>
+              <div style={{ padding: '14px 22px 22px', borderTop: '1px solid rgba(212,160,160,0.2)', flexShrink: 0 }}>
                 <label
                   style={{ display: 'flex', alignItems: 'flex-start', gap: '11px', cursor: 'pointer', marginBottom: '16px' }}
                   onClick={() => setTermsChecked(v => !v)}
@@ -653,9 +653,9 @@ export default function Login() {
                   {/* Custom checkbox */}
                   <div style={{
                     width: '15px', height: '15px',
-                    border: `1px solid ${termsChecked ? 'rgba(196,133,154,0.75)' : 'rgba(196,133,154,0.35)'}`,
+                    border: `1px solid ${termsChecked ? 'rgba(212,160,160,0.75)' : 'rgba(212,160,160,0.35)'}`,
                     borderRadius: '2px',
-                    background: termsChecked ? 'rgba(196,133,154,0.12)' : 'transparent',
+                    background: termsChecked ? 'rgba(212,160,160,0.12)' : 'transparent',
                     flexShrink: 0, marginTop: '2px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.2s',
@@ -663,7 +663,7 @@ export default function Login() {
                   }}>
                     {termsChecked && (
                       <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
-                        <path d="M1 3.5l2 2L8 1" stroke="rgba(196,133,154,0.9)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M1 3.5l2 2L8 1" stroke="rgba(212,160,160,0.9)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     )}
                   </div>
@@ -684,7 +684,7 @@ export default function Login() {
                   style={{
                     width: '100%', padding: '12px',
                     background: 'transparent',
-                    border: `1px solid ${termsChecked ? 'rgba(196,133,154,0.55)' : 'rgba(196,133,154,0.2)'}`,
+                    border: `1px solid ${termsChecked ? 'rgba(212,160,160,0.55)' : 'rgba(212,160,160,0.2)'}`,
                     borderRadius: '3px',
                     color: termsChecked ? 'rgba(59,51,48,0.88)' : 'rgba(59,51,48,0.3)',
                     fontFamily: "'Cinzel', serif",
@@ -791,7 +791,7 @@ export default function Login() {
                     <div key={i} style={{
                       width: '5px', height: '5px',
                       borderRadius: '50%',
-                      backgroundColor: 'rgba(196,133,154,0.75)',
+                      backgroundColor: 'rgba(212,160,160,0.75)',
                       animation: `loadingDot 1.1s ease-in-out infinite ${i * 0.18}s`,
                     }} />
                   ))}
@@ -888,7 +888,7 @@ export default function Login() {
         >
           <div style={{
             width: '44px', height: '1px',
-            background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.5), transparent)',
+            background: 'linear-gradient(to right, transparent, rgba(212,160,160,0.5), transparent)',
             margin: '0 auto 13px',
           }} />
           <span style={{

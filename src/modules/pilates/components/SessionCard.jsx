@@ -1,9 +1,9 @@
-const PHASE_COLORS = {
-  menstrual: '#C4859A',
+﻿const PHASE_COLORS = {
+  menstrual: '#D4A0A0',
   follicular: '#8FA58C',
-  ovulation: '#C4859A',
+  ovulation: '#D4A0A0',
   luteal: '#C4AFA8',
-  all: '#C4859A',
+  all: '#D4A0A0',
 }
 
 const SESSION_IMAGES = {
@@ -36,8 +36,8 @@ function getSessionImage(title) {
 function Heart({ filled, size = 18 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24"
-      fill={filled ? '#C4859A' : 'none'}
-      stroke={filled ? '#C4859A' : 'rgba(59,51,48,0.4)'}
+      fill={filled ? '#D4A0A0' : 'none'}
+      stroke={filled ? '#D4A0A0' : 'rgba(59,51,48,0.4)'}
       strokeWidth={2}
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -51,8 +51,8 @@ function Pill({ children }) {
       className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
       style={{
         background: 'rgba(242,237,232,0.7)',
-        border: '1px solid rgba(196,133,154,0.45)',
-        color: '#C4859A',
+        border: '1px solid rgba(212,160,160,0.45)',
+        color: '#D4A0A0',
       }}
     >
       {children}
@@ -68,7 +68,7 @@ export default function SessionCard({
   variant = 'grid',
 }) {
   if (!session) return null
-  const pc  = PHASE_COLORS[session.phase] ?? '#C4859A'
+  const pc  = PHASE_COLORS[session.phase] ?? '#D4A0A0'
   const img = getSessionImage(session.title)
 
   const bgStyle = img
@@ -130,7 +130,7 @@ export default function SessionCard({
           className="absolute bottom-4 right-4 px-4 py-2 rounded-lg font-cinzel text-[10px] tracking-widest text-brown/80 cursor-pointer z-10"
           style={{
             background: 'rgba(242,237,232,0.75)',
-            border: '1px solid rgba(196,133,154,0.4)',
+            border: '1px solid rgba(212,160,160,0.4)',
           }}
         >
           START

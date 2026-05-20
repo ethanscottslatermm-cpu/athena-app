@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { format, startOfWeek, isSameDay, subDays } from 'date-fns'
 import SessionCard from './components/SessionCard'
 import ProgressRing from './components/ProgressRing'
@@ -8,7 +8,7 @@ function Shimmer({ className = '' }) {
     <div
       className={`rounded-xl ${className}`}
       style={{
-        background: 'linear-gradient(90deg, rgba(196,133,154,0.05) 25%, rgba(196,133,154,0.1) 50%, rgba(196,133,154,0.05) 75%)',
+        background: 'linear-gradient(90deg, rgba(212,160,160,0.05) 25%, rgba(212,160,160,0.1) 50%, rgba(212,160,160,0.05) 75%)',
         backgroundSize: '200% 100%',
         animation: 'shimmerSlide 1.4s infinite',
       }}
@@ -36,11 +36,11 @@ export default function HomeTab({
   const [insightLoad, setInsightLoad] = useState(false)
   const today = new Date()
   const pc = {
-    menstrual: '#C4859A',
+    menstrual: '#D4A0A0',
     follicular: '#8FA58C',
-    ovulation: '#C4859A',
+    ovulation: '#D4A0A0',
     luteal: '#C4AFA8',
-  }[phaseData?.phase] ?? '#C4859A'
+  }[phaseData?.phase] ?? '#D4A0A0'
 
   // ── AI phase insight ──────────────────────────────────────────────────────
   async function fetchInsight() {
@@ -235,11 +235,11 @@ export default function HomeTab({
                     className="w-5 h-5 rounded-full"
                     style={{
                       background: activeDays[i]
-                        ? '#C4859A'
+                        ? '#D4A0A0'
                         : isSameDay(d, today)
-                        ? 'rgba(196,133,154,0.3)'
+                        ? 'rgba(212,160,160,0.3)'
                         : 'rgba(59,51,48,0.08)',
-                      border: isSameDay(d, today) ? '1px solid rgba(196,133,154,0.5)' : 'none',
+                      border: isSameDay(d, today) ? '1px solid rgba(212,160,160,0.5)' : 'none',
                     }}
                   />
                   <span className="font-garamond text-[8px] text-taupe/60">
@@ -262,7 +262,7 @@ export default function HomeTab({
             <button
               onClick={onSeeAll}
               className="font-cinzel text-brown/75 text-[11px] tracking-wide px-3 py-1 rounded-lg"
-              style={{ background: 'rgba(196,133,154,0.12)', border: '1px solid rgba(196,133,154,0.4)' }}
+              style={{ background: 'rgba(212,160,160,0.12)', border: '1px solid rgba(212,160,160,0.4)' }}
             >
               See All →
             </button>

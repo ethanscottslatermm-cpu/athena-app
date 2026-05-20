@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 import { useAuth } from '../hooks/useAuth'
@@ -93,9 +93,9 @@ const SKIN_OPTIONS = [
 ]
 
 const THEMES = [
-  { key: 'linen',  name: 'Linen',  swatch: ['#F2EDE8', '#E8E0DA', '#C4859A'] },
+  { key: 'linen',  name: 'Linen',  swatch: ['#F2EDE8', '#E8E0DA', '#D4A0A0'] },
   { key: 'sage',   name: 'Sage',   swatch: ['#F2EDE8', '#8FA58C', '#C4AFA8'] },
-  { key: 'blush',  name: 'Blush',  swatch: ['#F2EDE8', '#C4859A', '#C4AFA8'] },
+  { key: 'blush',  name: 'Blush',  swatch: ['#F2EDE8', '#D4A0A0', '#C4AFA8'] },
   { key: 'greige', name: 'Greige', swatch: ['#F2EDE8', '#8A7E78', '#D6CFC9'] },
 ]
 
@@ -116,7 +116,7 @@ const STEP_TITLES = [
 
 // ─── Small helpers ────────────────────────────────────────────────────────────
 
-const GOLD = '#C4859A'
+const GOLD = '#D4A0A0'
 const IVORY = 'rgba(59,51,48,0.88)'
 const DIM = 'rgba(59,51,48,0.55)'
 
@@ -129,7 +129,7 @@ function toggleArr(arr, val, limit) {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function CornerBrackets() {
-  const b = '1px solid rgba(196,133,154,0.28)'
+  const b = '1px solid rgba(212,160,160,0.28)'
   const size = 18
   const shared = { position: 'absolute', width: size, height: size, pointerEvents: 'none' }
   return (
@@ -166,7 +166,7 @@ function ChipTag({ label, selected, onClick, disabled }) {
         padding: '8px 14px',
         borderRadius: '100px',
         border: `1px solid ${selected ? GOLD : 'rgba(59,51,48,0.18)'}`,
-        background: selected ? 'rgba(196,133,154,0.18)' : 'rgba(59,51,48,0.05)',
+        background: selected ? 'rgba(212,160,160,0.18)' : 'rgba(59,51,48,0.05)',
         color: selected ? GOLD : DIM,
         fontFamily: 'Cormorant Garamond, serif',
         fontSize: '13px',
@@ -192,10 +192,10 @@ function CardOption({ label, sub, selected, onClick }) {
         padding: '14px 16px',
         borderRadius: '14px',
         border: `1px solid ${selected ? GOLD : 'rgba(59,51,48,0.12)'}`,
-        background: selected ? 'rgba(196,133,154,0.14)' : 'rgba(59,51,48,0.05)',
+        background: selected ? 'rgba(212,160,160,0.14)' : 'rgba(59,51,48,0.05)',
         marginBottom: '8px',
         transition: 'all 0.2s',
-        boxShadow: selected ? `0 0 12px rgba(196,133,154,0.15)` : 'none',
+        boxShadow: selected ? `0 0 12px rgba(212,160,160,0.15)` : 'none',
       }}
     >
       <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '14px', color: selected ? IVORY : DIM, margin: 0 }}>
@@ -218,10 +218,10 @@ function EmojiGoalCard({ emoji, label, selected, onClick }) {
         padding: '14px 10px',
         borderRadius: '16px',
         border: `1px solid ${selected ? GOLD : 'rgba(59,51,48,0.12)'}`,
-        background: selected ? 'rgba(196,133,154,0.15)' : 'rgba(59,51,48,0.05)',
+        background: selected ? 'rgba(212,160,160,0.15)' : 'rgba(59,51,48,0.05)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
         transition: 'all 0.2s',
-        boxShadow: selected ? `0 0 14px rgba(196,133,154,0.18)` : 'none',
+        boxShadow: selected ? `0 0 14px rgba(212,160,160,0.18)` : 'none',
       }}
     >
       <span style={{ fontSize: '20px' }}>{emoji}</span>
@@ -270,7 +270,7 @@ function Stepper({ value, min, max, onChange }) {
         onClick={() => onChange(Math.max(min, value - 1))}
         style={{
           width: 44, height: 44, borderRadius: '50%',
-          border: `1px solid rgba(196,133,154,0.3)`,
+          border: `1px solid rgba(212,160,160,0.3)`,
           background: 'transparent', color: GOLD, fontSize: '22px', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
@@ -282,7 +282,7 @@ function Stepper({ value, min, max, onChange }) {
         onClick={() => onChange(Math.min(max, value + 1))}
         style={{
           width: 44, height: 44, borderRadius: '50%',
-          border: `1px solid rgba(196,133,154,0.3)`,
+          border: `1px solid rgba(212,160,160,0.3)`,
           background: 'transparent', color: GOLD, fontSize: '22px', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
@@ -563,7 +563,7 @@ export default function Onboarding() {
           }}>
             <div style={{
               width: '44px', height: '1px',
-              background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.6), transparent)',
+              background: 'linear-gradient(to right, transparent, rgba(212,160,160,0.6), transparent)',
               marginBottom: '16px',
             }} />
             <span style={{
@@ -595,14 +595,14 @@ export default function Onboarding() {
               background: 'rgba(242,237,232,0.08)',
               backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
-              borderTop: '1px solid rgba(196,133,154,0.28)',
+              borderTop: '1px solid rgba(212,160,160,0.28)',
               borderRadius: '28px 28px 0 0',
               animation: 'cardIn 0.35s ease both',
             }}
           >
             {/* Step header */}
             <div style={{ padding: '22px 22px 0', flexShrink: 0 }}>
-              <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.28em', color: 'rgba(196,133,154,0.55)', textTransform: 'uppercase', marginBottom: '4px' }}>
+              <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.28em', color: 'rgba(212,160,160,0.55)', textTransform: 'uppercase', marginBottom: '4px' }}>
                 Step {step + 1} of 5
               </p>
               <h2 style={{ fontFamily: 'Cinzel, serif', fontSize: '18px', color: 'rgba(59,51,48,0.92)', letterSpacing: '0.06em', margin: 0 }}>
@@ -628,7 +628,7 @@ export default function Onboarding() {
                       onChange={e => set('full_name', e.target.value)}
                       style={{
                         width: '100%', background: 'transparent',
-                        border: 'none', borderBottom: `1px solid ${answers.full_name ? 'rgba(196,133,154,0.65)' : 'rgba(59,51,48,0.18)'}`,
+                        border: 'none', borderBottom: `1px solid ${answers.full_name ? 'rgba(212,160,160,0.65)' : 'rgba(59,51,48,0.18)'}`,
                         padding: '8px 0', color: 'rgba(59,51,48,0.9)',
                         fontFamily: 'Cormorant Garamond, serif', fontSize: '15px',
                         outline: 'none', caretColor: GOLD,
@@ -648,7 +648,7 @@ export default function Onboarding() {
                       onChange={e => set('date_of_birth', e.target.value)}
                       style={{
                         width: '100%', background: 'rgba(59,51,48,0.04)',
-                        border: `1px solid ${answers.date_of_birth ? 'rgba(196,133,154,0.5)' : 'rgba(59,51,48,0.12)'}`,
+                        border: `1px solid ${answers.date_of_birth ? 'rgba(212,160,160,0.5)' : 'rgba(59,51,48,0.12)'}`,
                         borderRadius: '12px', padding: '11px 14px',
                         color: 'rgba(59,51,48,0.85)',
                         fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
@@ -660,7 +660,7 @@ export default function Onboarding() {
                   {/* Q3 Goals */}
                   <div>
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '10px' }}>
-                      What brings you to Athena? <span style={{ color: 'rgba(196,133,154,0.4)' }}>(select all that apply)</span>
+                      What brings you to Athena? <span style={{ color: 'rgba(212,160,160,0.4)' }}>(select all that apply)</span>
                     </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                       {GOAL_OPTIONS.map(g => (
@@ -683,7 +683,7 @@ export default function Onboarding() {
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
                       When did your last period start?
                     </p>
-                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(196,133,154,0.45)', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(212,160,160,0.45)', marginBottom: '10px' }}>
                       Required — used to calculate your current phase
                     </p>
                     {!periodUnknown ? (
@@ -694,7 +694,7 @@ export default function Onboarding() {
                           onChange={e => set('last_period_date', e.target.value)}
                           style={{
                             width: '100%', background: 'rgba(59,51,48,0.04)',
-                            border: `1px solid ${answers.last_period_date ? 'rgba(196,133,154,0.5)' : 'rgba(59,51,48,0.12)'}`,
+                            border: `1px solid ${answers.last_period_date ? 'rgba(212,160,160,0.5)' : 'rgba(59,51,48,0.12)'}`,
                             borderRadius: '12px', padding: '11px 14px',
                             color: 'rgba(59,51,48,0.85)',
                             fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
@@ -753,7 +753,7 @@ export default function Onboarding() {
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
                       Symptoms that affect you most
                     </p>
-                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(196,133,154,0.4)', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(212,160,160,0.4)', marginBottom: '10px' }}>
                       Select up to 5
                     </p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -788,7 +788,7 @@ export default function Onboarding() {
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
                       Main movement goals
                     </p>
-                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(196,133,154,0.4)', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(212,160,160,0.4)', marginBottom: '10px' }}>
                       Select up to 3
                     </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -860,7 +860,7 @@ export default function Onboarding() {
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
                       What affects your mood most?
                     </p>
-                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(196,133,154,0.4)', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(212,160,160,0.4)', marginBottom: '10px' }}>
                       Select up to 3
                     </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -930,7 +930,7 @@ export default function Onboarding() {
                         onClick={() => set('notifications_on', !answers.notifications_on)}
                         style={{
                           width: '44px', height: '24px', borderRadius: '12px',
-                          background: answers.notifications_on ? 'rgba(196,133,154,0.7)' : 'rgba(59,51,48,0.1)',
+                          background: answers.notifications_on ? 'rgba(212,160,160,0.7)' : 'rgba(59,51,48,0.1)',
                           border: 'none', cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
                         }}
                       >
@@ -954,7 +954,7 @@ export default function Onboarding() {
                           onChange={e => set('notification_time', e.target.value)}
                           style={{
                             background: 'rgba(59,51,48,0.04)',
-                            border: '1px solid rgba(196,133,154,0.35)',
+                            border: '1px solid rgba(212,160,160,0.35)',
                             borderRadius: '12px', padding: '10px 14px',
                             color: GOLD, fontFamily: 'Cinzel, serif', fontSize: '16px',
                             outline: 'none', colorScheme: 'light',
@@ -978,7 +978,7 @@ export default function Onboarding() {
                             flexShrink: 0, width: '80px',
                             border: `1px solid ${answers.theme === t.key ? GOLD : 'rgba(59,51,48,0.12)'}`,
                             borderRadius: '14px', overflow: 'hidden', background: 'none',
-                            boxShadow: answers.theme === t.key ? `0 0 16px rgba(196,133,154,0.3)` : 'none',
+                            boxShadow: answers.theme === t.key ? `0 0 16px rgba(212,160,160,0.3)` : 'none',
                             cursor: 'pointer', transition: 'all 0.25s',
                           }}
                         >
@@ -1003,7 +1003,7 @@ export default function Onboarding() {
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '9px', letterSpacing: '0.22em', color: DIM, textTransform: 'uppercase', marginBottom: '4px' }}>
                       What's one thing you want to feel in 30 days?
                     </p>
-                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(196,133,154,0.4)', marginBottom: '10px' }}>
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: '11px', color: 'rgba(212,160,160,0.4)', marginBottom: '10px' }}>
                       Optional — but powerful
                     </p>
                     <input
@@ -1013,7 +1013,7 @@ export default function Onboarding() {
                       onChange={e => set('intention', e.target.value)}
                       style={{
                         width: '100%', background: 'transparent',
-                        border: 'none', borderBottom: `1px solid ${answers.intention ? 'rgba(196,133,154,0.5)' : 'rgba(59,51,48,0.18)'}`,
+                        border: 'none', borderBottom: `1px solid ${answers.intention ? 'rgba(212,160,160,0.5)' : 'rgba(59,51,48,0.18)'}`,
                         padding: '8px 0', color: 'rgba(59,51,48,0.85)',
                         fontFamily: 'Cormorant Garamond, serif', fontSize: '14px',
                         outline: 'none', caretColor: GOLD, transition: 'border-color 0.3s',
@@ -1050,7 +1050,7 @@ export default function Onboarding() {
                 style={{
                   width: '100%', padding: '14px',
                   background: 'transparent',
-                  border: '1px solid rgba(196,133,154,0.52)',
+                  border: '1px solid rgba(212,160,160,0.52)',
                   borderRadius: '2px', cursor: 'pointer',
                   marginBottom: '10px',
                   opacity: saving ? 0.6 : 1,

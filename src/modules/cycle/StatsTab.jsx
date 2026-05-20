@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { differenceInDays, format } from 'date-fns'
 
-const MOOD_COLORS  = ['#C4859A', '#C4AFA8', 'rgba(59,51,48,0.4)', '#8FA58C', '#C4859A']
+const MOOD_COLORS  = ['#D4A0A0', '#C4AFA8', 'rgba(59,51,48,0.4)', '#8FA58C', '#D4A0A0']
 const MOOD_LABELS  = ['Low', 'Anxious', 'Neutral', 'Good', 'Great']
 
 // ── SVG bar chart ─────────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ function StatTile({ icon, value, label }) {
   return (
     <div
       className="flex flex-col items-center justify-center py-4 rounded-xl"
-      style={{ background: 'rgba(196,133,154,0.07)', border: '1px solid rgba(196,133,154,0.15)' }}
+      style={{ background: 'rgba(212,160,160,0.07)', border: '1px solid rgba(212,160,160,0.15)' }}
     >
       <span className="text-lg mb-1">{icon}</span>
       <span className="font-cinzel text-rose text-xl leading-none">{value ?? '—'}</span>
@@ -74,7 +74,7 @@ function Shimmer({ className = '' }) {
     <div
       className={`rounded-lg ${className}`}
       style={{
-        background: 'linear-gradient(90deg, rgba(196,133,154,0.06) 25%, rgba(196,133,154,0.12) 50%, rgba(196,133,154,0.06) 75%)',
+        background: 'linear-gradient(90deg, rgba(212,160,160,0.06) 25%, rgba(212,160,160,0.12) 50%, rgba(212,160,160,0.06) 75%)',
         backgroundSize: '200% 100%',
         animation: 'shimmerSlide 1.4s infinite',
       }}
@@ -209,16 +209,16 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
       {/* ── Cycle length chart ───────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(196,133,154,0.06)', border: '1px solid rgba(196,133,154,0.12)' }}
+        style={{ background: 'rgba(212,160,160,0.06)', border: '1px solid rgba(212,160,160,0.12)' }}
       >
         <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-3">Cycle Length</p>
-        <BarChart values={stats.cycleLengths} barColor="rgba(196,133,154,0.75)" />
+        <BarChart values={stats.cycleLengths} barColor="rgba(212,160,160,0.75)" />
       </div>
 
       {/* ── Period length chart ──────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(196,133,154,0.08)', border: '1px solid rgba(196,133,154,0.2)' }}
+        style={{ background: 'rgba(212,160,160,0.08)', border: '1px solid rgba(212,160,160,0.2)' }}
       >
         <p className="font-cinzel text-brown/50 text-[10px] tracking-widest uppercase mb-3">Period Length</p>
         <BarChart values={stats.periodLengths} barColor="rgba(139,26,26,0.7)" />
@@ -241,7 +241,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
                 <div className="h-1.5 rounded-full" style={{ background: 'rgba(59,51,48,0.08)' }}>
                   <div
                     className="h-full rounded-full transition-all"
-                    style={{ width: `${pct}%`, background: 'rgba(196,133,154,0.65)' }}
+                    style={{ width: `${pct}%`, background: 'rgba(212,160,160,0.65)' }}
                   />
                 </div>
               </div>
@@ -320,7 +320,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
                 </button>
 
                 {isOpen && (
-                  <div className="px-4 pb-3" style={{ background: 'rgba(196,133,154,0.04)' }}>
+                  <div className="px-4 pb-3" style={{ background: 'rgba(212,160,160,0.04)' }}>
                     <div className="flex gap-4 mb-2">
                       {len     && <span className="font-garamond text-brown/50 text-xs">Length: {len} days</span>}
                       {avgFlow && <span className="font-garamond text-brown/50 text-xs">Avg flow: {'💧'.repeat(avgFlow)}</span>}
@@ -352,7 +352,7 @@ export default function StatsTab({ profile, phaseData, symptoms, cycles, loading
       {/* ── AI Insight card ──────────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-5"
-        style={{ background: 'rgba(196,133,154,0.07)', border: '1px solid rgba(196,133,154,0.28)' }}
+        style={{ background: 'rgba(212,160,160,0.07)', border: '1px solid rgba(212,160,160,0.28)' }}
       >
         <p className="font-cinzel text-rose tracking-widest text-sm mb-3">Your Pattern</p>
 

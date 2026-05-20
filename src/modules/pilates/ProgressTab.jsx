@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react'
+﻿import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
 import BodyHeatmap from './components/BodyHeatmap'
 
 const PHASE_COLORS = {
-  menstrual: '#C4859A',
+  menstrual: '#D4A0A0',
   follicular: '#8FA58C',
-  ovulation: '#C4859A',
+  ovulation: '#D4A0A0',
   luteal: '#C4AFA8',
 }
 
@@ -13,7 +13,7 @@ function StatTile({ icon, value, label }) {
   return (
     <div
       className="flex flex-col items-center justify-center py-4 rounded-xl"
-      style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,133,154,0.2)' }}
+      style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(212,160,160,0.2)' }}
     >
       <span className="text-lg mb-1">{icon}</span>
       <span className="font-cinzel text-rose text-xl leading-none">{value ?? '—'}</span>
@@ -43,14 +43,14 @@ function WeeklyBarChart({ data }) {
           <g key={i}>
             <rect
               x={x} y={y} width={barW} height={bH}
-              fill={d.minutes > 0 ? '#C4859A' : 'rgba(59,51,48,0.08)'}
+              fill={d.minutes > 0 ? '#D4A0A0' : 'rgba(59,51,48,0.08)'}
               rx={3}
               opacity={isToday ? 1 : 0.75}
             />
             <text
               x={x + barW / 2} y={H + 14}
               textAnchor="middle"
-              fill={isToday ? 'rgba(196,133,154,0.8)' : 'rgba(59,51,48,0.35)'}
+              fill={isToday ? 'rgba(212,160,160,0.8)' : 'rgba(59,51,48,0.35)'}
               fontSize={9}
               fontFamily="Cormorant Garamond, serif"
             >
@@ -144,11 +144,11 @@ function MonthHeatmap({ completions }) {
               className="aspect-square rounded-sm flex items-center justify-center"
               style={{
                 background: count >= 2
-                  ? 'rgba(196,133,154,0.75)'
+                  ? 'rgba(212,160,160,0.75)'
                   : count === 1
-                  ? 'rgba(196,133,154,0.35)'
+                  ? 'rgba(212,160,160,0.35)'
                   : 'rgba(59,51,48,0.06)',
-                border: isToday ? '1px solid rgba(196,133,154,0.5)' : 'none',
+                border: isToday ? '1px solid rgba(212,160,160,0.5)' : 'none',
               }}
             >
               <span
@@ -228,7 +228,7 @@ export default function ProgressTab({
       <div className="space-y-4 pb-4">
         {[1, 2, 3].map(i => (
           <div key={i} className="h-28 rounded-xl"
-            style={{ background: 'rgba(196,133,154,0.07)', animation: 'shimmerSlide 1.4s infinite' }}
+            style={{ background: 'rgba(212,160,160,0.07)', animation: 'shimmerSlide 1.4s infinite' }}
           />
         ))}
       </div>

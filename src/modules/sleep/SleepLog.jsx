@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Check } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -323,7 +323,7 @@ export default function SleepLog({ onLogSaved }) {
       </div>
 
       {error && (
-        <p className="font-garamond text-sm italic mb-3" style={{ color: '#C4859A' }}>{error}</p>
+        <p className="font-garamond text-sm italic mb-3" style={{ color: '#D4A0A0' }}>{error}</p>
       )}
 
       {saved ? (

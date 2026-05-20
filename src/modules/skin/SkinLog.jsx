@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Check } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
 import { usePhase } from '../../hooks/usePhase'
 
-const ROSE = '#C4859A'
+const ROSE = '#D4A0A0'
 
 const CONDITION_OPTIONS = [
   { value: 1, emoji: '🔴', label: 'Flare-Up'  },
@@ -30,8 +30,8 @@ const CONCERN_OPTIONS = [
 function PhaseBanner({ label, dayOfCycle, tip, tipLoading }) {
   return (
     <div style={{
-      background: 'linear-gradient(135deg, rgba(196,133,154,0.2) 0%, rgba(196,133,154,0.05) 100%)',
-      border: '1px solid rgba(196,133,154,0.35)',
+      background: 'linear-gradient(135deg, rgba(212,160,160,0.2) 0%, rgba(212,160,160,0.05) 100%)',
+      border: '1px solid rgba(212,160,160,0.35)',
       borderRadius: 16, padding: '12px 14px', marginBottom: 14,
     }}>
       <p className="font-cinzel text-[9px] tracking-[0.25em] uppercase mb-1.5" style={{ color: ROSE }}>
@@ -53,7 +53,7 @@ function ConditionPicker({ selected, onSelect }) {
       background: 'rgba(255,255,255,0.55)',
       backdropFilter: 'blur(12px)',
       borderRadius: 16,
-      border: '1px solid rgba(196,133,154,0.25)',
+      border: '1px solid rgba(212,160,160,0.25)',
       padding: '12px 14px',
       marginBottom: 12,
     }}>
@@ -70,7 +70,7 @@ function ConditionPicker({ selected, onSelect }) {
               style={{
                 flex: 1, padding: '8px 2px', borderRadius: 12,
                 border: `1px solid ${active ? ROSE : 'rgba(196,175,168,0.35)'}`,
-                background: active ? 'rgba(196,133,154,0.14)' : 'transparent',
+                background: active ? 'rgba(212,160,160,0.14)' : 'transparent',
                 cursor: 'pointer', transition: 'all 0.18s',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
               }}
@@ -116,7 +116,7 @@ function ConcernChips({ selected, onToggle }) {
               style={{
                 padding: '6px 12px', borderRadius: 20,
                 border: `1px solid ${active ? ROSE : 'rgba(196,175,168,0.4)'}`,
-                background: active ? 'rgba(196,133,154,0.14)' : 'transparent',
+                background: active ? 'rgba(212,160,160,0.14)' : 'transparent',
                 cursor: 'pointer', transition: 'all 0.18s',
                 fontFamily: 'Cormorant Garamond, serif', fontSize: 13,
                 color: active ? ROSE : '#7A6A65',
@@ -248,7 +248,7 @@ export default function SkinLog({ onLogSaved }) {
         <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 24 }}>
           <div style={{
             width: 48, height: 48, borderRadius: '50%',
-            background: 'rgba(196,133,154,0.15)',
+            background: 'rgba(212,160,160,0.15)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <Check size={22} color={ROSE} strokeWidth={2} />

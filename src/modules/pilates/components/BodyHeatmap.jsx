@@ -1,4 +1,4 @@
-export default function BodyHeatmap({ completions = [], sessions = [] }) {
+﻿export default function BodyHeatmap({ completions = [], sessions = [] }) {
   const freq = {}
   completions.forEach(c => {
     const s = sessions.find(x => x.id === c.session_id)
@@ -11,7 +11,7 @@ export default function BodyHeatmap({ completions = [], sessions = [] }) {
     const fb = fallbackArea ? (freq[fallbackArea] || 0) * 0.6 : 0
     const effective = Math.max(f, fb)
     if (effective === 0) return 'rgba(59,51,48,0.07)'
-    return `rgba(196,133,154,${Math.min(0.85, 0.15 + (effective / maxF) * 0.7)})`
+    return `rgba(212,160,160,${Math.min(0.85, 0.15 + (effective / maxF) * 0.7)})`
   }
 
   const hasData = Object.keys(freq).length > 0
@@ -77,7 +77,7 @@ export default function BodyHeatmap({ completions = [], sessions = [] }) {
               .slice(0, 5)
               .map(([area, count]) => (
                 <span key={area} className="font-garamond text-[10px] text-brown/50 capitalize">
-                  <span style={{ color: '#C4859A' }}>●</span>{' '}
+                  <span style={{ color: '#D4A0A0' }}>●</span>{' '}
                   {area.replace(/_/g, ' ')} ×{count}
                 </span>
               ))

@@ -1,11 +1,11 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { differenceInDays, format, addDays } from 'date-fns'
 import { supabase } from '../../lib/supabase'
 
 const PHASE_COLORS = {
-  menstrual: '#C4859A',
+  menstrual: '#D4A0A0',
   follicular: '#8FA58C',
-  ovulation: '#C4859A',
+  ovulation: '#D4A0A0',
   luteal: '#C4AFA8',
 }
 
@@ -16,7 +16,7 @@ function Toast({ msg, onDone }) {
       style={{
         top: 'max(env(safe-area-inset-top, 0px), 16px)',
         background: '#C4AFA8',
-        border: '1px solid rgba(196,133,154,0.4)',
+        border: '1px solid rgba(212,160,160,0.4)',
         animation: 'cycleSlideDown 0.3s ease-out',
       }}
     >
@@ -76,7 +76,7 @@ export default function ChallengesTab({
     setJoining(null)
   }
 
-  const pc = PHASE_COLORS[phaseData?.phase] ?? '#C4859A'
+  const pc = PHASE_COLORS[phaseData?.phase] ?? '#D4A0A0'
   const phaseLabel = phaseData?.phase
     ? phaseData.phase.charAt(0).toUpperCase() + phaseData.phase.slice(1)
     : null
@@ -109,7 +109,7 @@ export default function ChallengesTab({
         const pct       = Math.round(
           ((entry.sessions_completed ?? 0) / (challenge.sessions_required ?? 1)) * 100
         )
-        const phaseC    = PHASE_COLORS[challenge.phase] ?? '#C4859A'
+        const phaseC    = PHASE_COLORS[challenge.phase] ?? '#D4A0A0'
 
         return (
           <div
@@ -143,11 +143,11 @@ export default function ChallengesTab({
             <button
               className="w-full py-3 rounded-xl font-cinzel text-xs tracking-widest"
               style={{
-                background: 'linear-gradient(90deg, rgba(196,133,154,0.15) 0%, rgba(196,133,154,0.3) 50%, rgba(196,133,154,0.15) 100%)',
+                background: 'linear-gradient(90deg, rgba(212,160,160,0.15) 0%, rgba(212,160,160,0.3) 50%, rgba(212,160,160,0.15) 100%)',
                 backgroundSize: '200% 100%',
                 animation: 'shimmerSlide 2.5s infinite',
-                border: '1px solid rgba(196,133,154,0.5)',
-                color: '#C4859A',
+                border: '1px solid rgba(212,160,160,0.5)',
+                color: '#D4A0A0',
               }}
             >
               CONTINUE CHALLENGE
@@ -164,7 +164,7 @@ export default function ChallengesTab({
           </p>
           <div className="grid grid-cols-2 gap-3">
             {available.map(c => {
-              const cpc = PHASE_COLORS[c.phase] ?? '#C4859A'
+              const cpc = PHASE_COLORS[c.phase] ?? '#D4A0A0'
               return (
                 <div
                   key={c.id}
@@ -232,8 +232,8 @@ export default function ChallengesTab({
                 className="shrink-0 rounded-xl p-3 flex flex-col items-center gap-1"
                 style={{
                   width: 140,
-                  background: 'rgba(196,133,154,0.1)',
-                  border: '1px solid rgba(196,133,154,0.25)',
+                  background: 'rgba(212,160,160,0.1)',
+                  border: '1px solid rgba(212,160,160,0.25)',
                 }}
               >
                 <span className="text-2xl">🛡</span>

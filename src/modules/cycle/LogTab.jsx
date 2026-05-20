@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { format } from 'date-fns'
 import { supabase } from '../../lib/supabase'
 
@@ -160,14 +160,14 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
       {/* ── Period & Flow ────────────────────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
-        style={{ background: 'rgba(196,133,154,0.1)', border: '1px solid rgba(196,133,154,0.25)' }}
+        style={{ background: 'rgba(212,160,160,0.1)', border: '1px solid rgba(212,160,160,0.25)' }}
       >
         <div className="flex items-center justify-between mb-3">
           <span className="font-cinzel text-brown/80 text-xs tracking-widest">PERIOD TODAY?</span>
           <button
             onClick={() => { setPeriodOn(p => !p); if (!periodOn && flow === 0) setFlow(2) }}
             className="relative w-11 h-6 rounded-full transition-all"
-            style={{ background: periodOn ? '#C4859A' : 'rgba(59,51,48,0.15)' }}
+            style={{ background: periodOn ? '#D4A0A0' : 'rgba(59,51,48,0.15)' }}
           >
             <div
               className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all shadow"
@@ -186,7 +186,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               >
                 <span
                   className="text-xl transition-all"
-                  style={{ color: flow >= i + 1 ? '#C4859A' : 'rgba(59,51,48,0.18)' }}
+                  style={{ color: flow >= i + 1 ? '#D4A0A0' : 'rgba(59,51,48,0.18)' }}
                 >
                   {flow >= i + 1 ? '💧' : '○'}
                 </span>
@@ -213,9 +213,9 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                       onClick={() => toggleSymptom(sym)}
                       className="font-garamond text-xs py-1.5 px-2 rounded-lg text-center transition-all leading-tight"
                       style={{
-                        background: on ? 'rgba(196,133,154,0.18)' : 'transparent',
-                        border: on ? '1px solid rgba(196,133,154,0.6)' : '1px solid rgba(59,51,48,0.18)',
-                        color: on ? '#C4859A' : 'rgba(59,51,48,0.5)',
+                        background: on ? 'rgba(212,160,160,0.18)' : 'transparent',
+                        border: on ? '1px solid rgba(212,160,160,0.6)' : '1px solid rgba(59,51,48,0.18)',
+                        color: on ? '#D4A0A0' : 'rgba(59,51,48,0.5)',
                       }}
                     >
                       {sym}
@@ -241,8 +241,8 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
                 style={{
-                  border: mood === m.value ? '2px solid #C4859A' : '2px solid rgba(59,51,48,0.1)',
-                  background: mood === m.value ? 'rgba(196,133,154,0.12)' : 'rgba(59,51,48,0.05)',
+                  border: mood === m.value ? '2px solid #D4A0A0' : '2px solid rgba(59,51,48,0.1)',
+                  background: mood === m.value ? 'rgba(212,160,160,0.12)' : 'rgba(59,51,48,0.05)',
                 }}
               >
                 <img
@@ -327,7 +327,7 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
                 <button key={i} onClick={() => setWater(i + 1)}>
                   <span
                     className="text-sm transition-all"
-                    style={{ color: i < water ? '#C4859A' : 'rgba(59,51,48,0.18)' }}
+                    style={{ color: i < water ? '#D4A0A0' : 'rgba(59,51,48,0.18)' }}
                   >
                     {i < water ? '💧' : '○'}
                   </span>
@@ -367,9 +367,9 @@ export default function LogTab({ profile, phaseData, user, preselectedDate, symp
         disabled={saving || saved}
         className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm transition-all"
         style={{
-          background: saved ? 'rgba(196,133,154,0.12)' : 'transparent',
-          border: '1px solid rgba(196,133,154,0.55)',
-          color: '#C4859A',
+          background: saved ? 'rgba(212,160,160,0.12)' : 'transparent',
+          border: '1px solid rgba(212,160,160,0.55)',
+          color: '#D4A0A0',
           animation: saved ? 'goldPulse 0.6s ease-out' : undefined,
         }}
       >

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Check, Sun, Moon } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { usePhase } from '../../hooks/usePhase'
 
-const ROSE          = '#C4859A'
+const ROSE          = '#D4A0A0'
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000
 
 const FALLBACK = {
@@ -80,7 +80,7 @@ function StepCard({ step, index, done, onToggle }) {
         background: 'rgba(255,255,255,0.55)',
         backdropFilter: 'blur(12px)',
         borderRadius: 14,
-        border: `1px solid ${done ? 'rgba(196,133,154,0.45)' : 'rgba(196,133,154,0.2)'}`,
+        border: `1px solid ${done ? 'rgba(212,160,160,0.45)' : 'rgba(212,160,160,0.2)'}`,
         padding: '12px 13px',
         marginBottom: 8, textAlign: 'left',
         cursor: 'pointer',
@@ -91,7 +91,7 @@ function StepCard({ step, index, done, onToggle }) {
     >
       <div style={{
         width: 38, height: 38, flexShrink: 0, borderRadius: 10,
-        background: done ? 'rgba(196,133,154,0.18)' : 'rgba(196,133,154,0.1)',
+        background: done ? 'rgba(212,160,160,0.18)' : 'rgba(212,160,160,0.1)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
       }}>
         {done ? <Check size={16} color={ROSE} strokeWidth={2.5} /> : step.emoji}
@@ -105,8 +105,8 @@ function StepCard({ step, index, done, onToggle }) {
           <span style={{
             fontFamily: 'Cinzel, serif', fontSize: 7, letterSpacing: '0.12em',
             textTransform: 'uppercase', color: ROSE,
-            background: 'rgba(196,133,154,0.12)',
-            border: '1px solid rgba(196,133,154,0.28)',
+            background: 'rgba(212,160,160,0.12)',
+            border: '1px solid rgba(212,160,160,0.28)',
             padding: '2px 7px', borderRadius: 7, flexShrink: 0, marginLeft: 8,
           }}>
             {step.duration}
@@ -145,8 +145,8 @@ function RoutineSection({ timeOfDay, phase, label, steps, loading }) {
         {steps.length > 0 && (
           <span style={{
             fontFamily: 'Cinzel, serif', fontSize: 7, color: ROSE,
-            background: 'rgba(196,133,154,0.12)', borderRadius: 6,
-            padding: '1px 7px', border: '1px solid rgba(196,133,154,0.25)',
+            background: 'rgba(212,160,160,0.12)', borderRadius: 6,
+            padding: '1px 7px', border: '1px solid rgba(212,160,160,0.25)',
           }}>
             {done.length}/{steps.length}
           </span>
@@ -238,7 +238,7 @@ export default function SkinRoutine() {
         background: 'rgba(255,255,255,0.55)',
         backdropFilter: 'blur(12px)',
         borderRadius: 14, padding: '10px 14px', marginBottom: 16,
-        border: '1px solid rgba(196,133,154,0.28)',
+        border: '1px solid rgba(212,160,160,0.28)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <p className="font-cinzel text-[9px] tracking-[0.25em] uppercase" style={{ color: ROSE }}>

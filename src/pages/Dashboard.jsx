@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
@@ -81,9 +81,9 @@ function RimSpin({ duration = '3s', delay = 0 }) {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const PHASE_META = {
-  menstrual:  { color: '#C4859A', label: 'Menstrual',  days: 5  },
+  menstrual:  { color: '#D4A0A0', label: 'Menstrual',  days: 5  },
   follicular: { color: '#8FA58C', label: 'Follicular', days: 8  },
-  ovulation:  { color: '#C4859A', label: 'Ovulation',  days: 3  },
+  ovulation:  { color: '#D4A0A0', label: 'Ovulation',  days: 3  },
   luteal:     { color: '#C4AFA8', label: 'Luteal',     days: 12 },
 }
 
@@ -91,7 +91,7 @@ const PHASE_CONTENT = {
   menstrual: {
     headline: 'Rest & Restore',
     sub: 'Honor your body\'s call to slow down.',
-    gradient: 'linear-gradient(135deg, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.10) 100%)',
+    gradient: 'linear-gradient(135deg, rgba(212,160,160,0.28) 0%, rgba(212,160,160,0.10) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'Restorative movement & breathwork', to: '/pilates'   },
       { module: 'Body Fuel', tip: 'Iron-rich foods & warming broths',  to: '/nourish'   },
@@ -113,7 +113,7 @@ const PHASE_CONTENT = {
   ovulation: {
     headline: 'Peak Power',
     sub: 'Radiant and magnetic — your strongest phase.',
-    gradient: 'linear-gradient(135deg, rgba(196,133,154,0.28) 0%, rgba(196,133,154,0.10) 100%)',
+    gradient: 'linear-gradient(135deg, rgba(212,160,160,0.28) 0%, rgba(212,160,160,0.10) 100%)',
     cards: [
       { module: 'Pilates',   tip: 'HIIT, strength training & dance',       to: '/pilates'   },
       { module: 'Body Fuel', tip: 'Antioxidants, zinc & whole foods',      to: '/nourish'   },
@@ -249,7 +249,7 @@ export default function Dashboard() {
   const content = PHASE_CONTENT[phase] ?? null
   const phaseMeta = PHASE_META[phase] ?? null
   const firstName = profile?.full_name?.split(' ')[0] ?? null
-  const activeColor = color ?? '#C4859A'
+  const activeColor = color ?? '#D4A0A0'
 
   useEffect(() => {
     if (!navigator.geolocation) return

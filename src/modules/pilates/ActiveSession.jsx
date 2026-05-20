@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 
 function formatTime(s) {
   const m = Math.floor(s / 60)
@@ -64,11 +64,11 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
   }
 
   const pc = {
-    menstrual: '#C4859A',
+    menstrual: '#D4A0A0',
     follicular: '#8FA58C',
-    ovulation: '#C4859A',
+    ovulation: '#D4A0A0',
     luteal: '#C4AFA8',
-  }[phaseData?.phase] ?? '#C4859A'
+  }[phaseData?.phase] ?? '#D4A0A0'
 
   return (
     <div
@@ -79,7 +79,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
       <div className="h-1 w-full" style={{ background: 'rgba(59,51,48,0.1)' }}>
         <div
           className="h-full transition-all duration-500"
-          style={{ width: `${pct}%`, background: '#C4859A' }}
+          style={{ width: `${pct}%`, background: '#D4A0A0' }}
         />
       </div>
 
@@ -158,21 +158,21 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
             onClick={handlePrev}
             disabled={exIdx === 0 && restSecs === 0}
             className="w-12 h-12 flex items-center justify-center rounded-full text-rose text-2xl"
-            style={{ background: 'rgba(196,133,154,0.12)', opacity: (exIdx === 0 && restSecs === 0) ? 0.35 : 1 }}
+            style={{ background: 'rgba(212,160,160,0.12)', opacity: (exIdx === 0 && restSecs === 0) ? 0.35 : 1 }}
           >
             ←
           </button>
           <button
             onClick={() => setPaused(p => !p)}
             className="w-14 h-14 flex items-center justify-center rounded-full"
-            style={{ background: 'rgba(196,133,154,0.15)', border: '1px solid rgba(196,133,154,0.4)' }}
+            style={{ background: 'rgba(212,160,160,0.15)', border: '1px solid rgba(212,160,160,0.4)' }}
           >
             <span className="font-cinzel text-rose text-lg">{paused ? '▶' : '⏸'}</span>
           </button>
           <button
             onClick={handleNext}
             className="w-12 h-12 flex items-center justify-center rounded-full text-rose text-2xl"
-            style={{ background: 'rgba(196,133,154,0.12)' }}
+            style={{ background: 'rgba(212,160,160,0.12)' }}
           >
             {exIdx >= total - 1 ? '✓' : '→'}
           </button>
@@ -189,9 +189,9 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
                 className="shrink-0 px-3 py-2 rounded-lg font-garamond text-xs text-center"
                 style={{
                   minWidth: 80,
-                  background: isCurrent ? 'rgba(196,133,154,0.18)' : isNext ? 'rgba(59,51,48,0.06)' : 'rgba(196,175,168,0.2)',
-                  border: isCurrent ? '1px solid rgba(196,133,154,0.6)' : isNext ? '1px solid rgba(59,51,48,0.15)' : '1px solid rgba(196,175,168,0.3)',
-                  color: isCurrent ? '#C4859A' : isNext ? 'rgba(59,51,48,0.7)' : 'rgba(59,51,48,0.35)',
+                  background: isCurrent ? 'rgba(212,160,160,0.18)' : isNext ? 'rgba(59,51,48,0.06)' : 'rgba(196,175,168,0.2)',
+                  border: isCurrent ? '1px solid rgba(212,160,160,0.6)' : isNext ? '1px solid rgba(59,51,48,0.15)' : '1px solid rgba(196,175,168,0.3)',
+                  color: isCurrent ? '#D4A0A0' : isNext ? 'rgba(59,51,48,0.7)' : 'rgba(59,51,48,0.35)',
                 }}
               >
                 {ex.name}
@@ -209,7 +209,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
         >
           <div
             className="w-full rounded-2xl p-6 text-center"
-            style={{ background: '#F2EDE8', border: '1px solid rgba(196,133,154,0.3)' }}
+            style={{ background: '#F2EDE8', border: '1px solid rgba(212,160,160,0.3)' }}
           >
             <p className="font-cinzel text-brown text-base mb-2">End Session?</p>
             <p className="font-garamond text-brown/50 text-sm mb-6">Your progress won't be saved.</p>
@@ -224,7 +224,7 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
               <button
                 onClick={onExit}
                 className="flex-1 py-3 rounded-xl font-cinzel text-xs tracking-widest text-rose"
-                style={{ border: '1px solid rgba(196,133,154,0.4)' }}
+                style={{ border: '1px solid rgba(212,160,160,0.4)' }}
               >
                 END
               </button>

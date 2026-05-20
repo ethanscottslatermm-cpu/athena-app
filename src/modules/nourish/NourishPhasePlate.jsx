@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { usePhase } from '../../hooks/usePhase'
 
@@ -15,11 +15,11 @@ const SECTION_CONFIG = {
   },
   anti_inflammatory: {
     label:  'Anti-Inflammatory Picks',
-    accent: '#C4859A',
-    bg:     'rgba(196,133,154,0.12)',
-    border: 'rgba(196,133,154,0.3)',
-    chipBg: 'rgba(196,133,154,0.15)',
-    chipBorder: 'rgba(196,133,154,0.35)',
+    accent: '#D4A0A0',
+    bg:     'rgba(212,160,160,0.12)',
+    border: 'rgba(212,160,160,0.3)',
+    chipBg: 'rgba(212,160,160,0.15)',
+    chipBorder: 'rgba(212,160,160,0.35)',
   },
   gentle_limits: {
     label:  'Gentle Limits',

@@ -1,4 +1,4 @@
-export default function ProgressRing({ value = 0, max = 1, size = 96, strokeWidth = 7, color = '#C4859A' }) {
+﻿export default function ProgressRing({ value = 0, max = 1, size = 96, strokeWidth = 7, color = '#D4A0A0' }) {
   const r = (size - strokeWidth) / 2
   const circ = 2 * Math.PI * r
   const offset = circ * (1 - Math.min(1, max > 0 ? value / max : 0))
