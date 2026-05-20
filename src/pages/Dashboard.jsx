@@ -1,10 +1,12 @@
-﻿import { useState, useEffect } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
 import { ChevronRight } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 import settingsIcon from '../assets/icons/settings-icon.png'
+import exitIcon from '../assets/icons/nav-exit.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
@@ -138,7 +140,6 @@ const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
   { key: 'mood',      label: 'Mood',      icon: moodIcon,      to: '/mood'      },
-  { key: 'nourish',   label: 'Body Fuel', icon: nourishIcon,   to: '/nourish'   },
   { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     to: '/sleep'     },
   { key: 'skin',      label: 'Skin',      icon: skinIcon,      to: '/skin'      },
   { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },
@@ -241,6 +242,29 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const [weather, setWeather] = useState(null)
 
+  // ── Exit / sign-out ──────────────────────────────────────────────────────────
+  const [exiting,   setExiting]   = useState(false)
+  const [fadingOut, setFadingOut] = useState(false)
+  const videoRef = useRef(null)
+  const doneRef  = useRef(false)
+
+  function doSignOut() {
+    if (doneRef.current) return
+    doneRef.current = true
+    supabase.auth.signOut().then(() => navigate('/login', { replace: true }))
+  }
+
+  useEffect(() => {
+    if (!exiting || !videoRef.current) return
+    videoRef.current.muted = true
+    videoRef.current.play().catch(() => doSignOut())
+    const timer = setTimeout(doSignOut, 5000)
+    return () => clearTimeout(timer)
+  }, [exiting])
+
+  function handleSignOut() { setExiting(true) }
+  function handleVideoEnd() { setFadingOut(true); setTimeout(doSignOut, 650) }
+
   const cycleLength = profile?.cycle_length ?? 28
   const dayOfCycle = profile?.last_period_date
     ? ((differenceInDays(new Date(), new Date(profile.last_period_date)) % cycleLength) + 1)
@@ -272,6 +296,22 @@ export default function Dashboard() {
   }, [])
 
   return (
+    <>
+    {/* Exit video overlay */}
+    {exiting && (
+      <div style={{ position: 'fixed', inset: 0, zIndex: 200, backgroundColor: '#F2EDE8', animation: 'exitFadeIn 1.4s ease forwards' }}>
+        <style>{`
+          @keyframes exitFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes exitBlackIn { from { opacity: 0; } to { opacity: 1; } }
+        `}</style>
+        <video ref={videoRef} src="/athena-exit.mp4" playsInline preload="auto"
+          onEnded={handleVideoEnd} onError={handleVideoEnd}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      </div>
+    )}
+    {fadingOut && (
+      <div style={{ position: 'fixed', inset: 0, zIndex: 201, backgroundColor: '#000', animation: 'exitBlackIn 0.65s ease forwards', pointerEvents: 'none' }} />
+    )}
     <div className="flex-1 min-h-0 bg-[#F2EDE8] pb-nav overflow-y-auto">
       <style>{`
         @keyframes dashUp {
@@ -321,16 +361,28 @@ export default function Dashboard() {
             {greeting()}{firstName ? `, ${firstName}` : ''}
           </h1>
         </div>
-        <button onClick={() => navigate('/settings')}
-          className="mt-1 p-2 rounded-xl transition-all"
-          style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
-          <span style={{
-            display: 'block', width: '22px', height: '22px',
-            WebkitMask: `url(${settingsIcon}) no-repeat center / contain`,
-            mask: `url(${settingsIcon}) no-repeat center / contain`,
-            backgroundColor: '#7A6A65',
-          }} />
-        </button>
+        <div className="flex items-center gap-2 mt-1">
+          <button onClick={() => navigate('/settings')}
+            className="p-2 rounded-xl transition-all"
+            style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
+            <span style={{
+              display: 'block', width: '22px', height: '22px',
+              WebkitMask: `url(${settingsIcon}) no-repeat center / contain`,
+              mask: `url(${settingsIcon}) no-repeat center / contain`,
+              backgroundColor: '#7A6A65',
+            }} />
+          </button>
+          <button onClick={handleSignOut}
+            className="p-2 rounded-xl transition-all"
+            style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
+            <span style={{
+              display: 'block', width: '22px', height: '22px',
+              WebkitMask: `url(${exitIcon}) no-repeat center / contain`,
+              mask: `url(${exitIcon}) no-repeat center / contain`,
+              backgroundColor: '#7A6A65',
+            }} />
+          </button>
+        </div>
       </div>
 
       {/* ── Phase Hero ── */}
@@ -517,5 +569,6 @@ export default function Dashboard() {
       </div>
 
     </div>
+    </>
   )
 }

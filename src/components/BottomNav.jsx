@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { NavLink } from 'react-router-dom'
 
 import dashboardIcon from '../assets/icons/nav-dashboard.png'
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import communityIcon from '../assets/icons/nav-community.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
-import exitIcon      from '../assets/icons/nav-exit.png'
+import nourishIcon   from '../assets/icons/nav-nourish.png'
 
 function PngIcon({ src, delay = 0 }) {
   return (
@@ -41,81 +39,12 @@ const navItems = [
   { to: '/community', label: 'Community', png: communityIcon },
   { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
   { to: '/mood',      label: 'Mood',      png: moodIcon      },
+  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon   },
 ]
 
 export default function BottomNav() {
-  const [exiting,   setExiting]   = useState(false)
-  const [fadingOut, setFadingOut] = useState(false)
-  const videoRef = useRef(null)
-  const navigate = useNavigate()
-  const doneRef  = useRef(false)
-
-  function doSignOut() {
-    if (doneRef.current) return
-    doneRef.current = true
-    supabase.auth.signOut().then(() => navigate('/login', { replace: true }))
-  }
-
-  useEffect(() => {
-    if (!exiting || !videoRef.current) return
-    videoRef.current.muted = true
-    videoRef.current.play().catch(() => doSignOut())
-    const timer = setTimeout(doSignOut, 5000)
-    return () => clearTimeout(timer)
-  }, [exiting])
-
-  function handleSignOut() {
-    setExiting(true)
-  }
-
-  function handleVideoEnd() {
-    setFadingOut(true)
-    setTimeout(doSignOut, 650)
-  }
-
   return (
     <>
-      {/* Exit video overlay */}
-      {exiting && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 200,
-            backgroundColor: '#F2EDE8',
-            animation: 'exitFadeIn 1.4s ease forwards',
-          }}
-        >
-          <style>{`
-            @keyframes exitFadeIn  { from { opacity: 0; } to { opacity: 1; } }
-            @keyframes exitBlackIn { from { opacity: 0; } to { opacity: 1; } }
-            @keyframes navShimmer {
-              0%, 42%   { background-position: -250% 0; }
-              78%, 100% { background-position:  250% 0; }
-            }
-          `}</style>
-          <video
-            ref={videoRef}
-            src="/athena-exit.mp4"
-            playsInline
-            preload="auto"
-            onEnded={handleVideoEnd}
-            onError={handleVideoEnd}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
-        </div>
-      )}
-
-      {/* Fade-to-black bridge to login */}
-      {fadingOut && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 201,
-            backgroundColor: '#000',
-            animation: 'exitBlackIn 0.65s ease forwards',
-            pointerEvents: 'none',
-          }}
-        />
-      )}
-
       <style>{`
         @keyframes navShimmer {
           0%, 42%   { background-position: -250% 0; }
@@ -126,14 +55,14 @@ export default function BottomNav() {
         className="fixed bottom-0 left-0 right-0 z-50"
         style={{ backgroundColor: '#8A7E78', paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
-        <div className="flex items-center justify-around h-16 max-w-md mx-auto px-2">
+        <div className="flex items-center justify-around h-16 max-w-md mx-auto px-1">
           {navItems.map(({ to, label, png }, i) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
+                `flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
                   isActive ? 'text-rose' : 'text-linen/70 hover:text-linen'
                 }`
               }
@@ -142,14 +71,6 @@ export default function BottomNav() {
               <span className="text-[10px] font-garamond tracking-wide">{label}</span>
             </NavLink>
           ))}
-
-          <button
-            onClick={handleSignOut}
-            className="flex flex-col items-center gap-1 px-3 py-2 text-linen/70 hover:text-linen transition-colors"
-          >
-            <PngIcon src={exitIcon} />
-            <span className="text-[10px] font-garamond tracking-wide">Exit</span>
-          </button>
         </div>
       </nav>
     </>
