@@ -442,15 +442,21 @@ export default function Dashboard() {
             style={{
               position: 'relative', zIndex: 1,
               display: 'block', width: 'calc(100% - 2px)', margin: 1,
-              background: '#C4AFA8', border: 'none', cursor: 'pointer',
+              backgroundImage: 'url("/images/dashboard/sleep.png")',
+              backgroundSize: 'cover', backgroundPosition: 'center',
+              border: 'none', cursor: 'pointer',
               borderRadius: 15, padding: 16, textAlign: 'left',
+              minHeight: 120,
             }}
           >
-            <ShimmerIcon src={sleepIcon} delay={0.5} />
-            <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2" style={{ color: '#3B3330' }}>Sleep</p>
-            <p className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
-              How did you sleep last night?
-            </p>
+            <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(59,51,48,0.80) 0%, rgba(59,51,48,0.30) 55%, rgba(59,51,48,0.05) 100%)' }} />
+            <div className="relative z-10">
+              <ShimmerIcon src={sleepIcon} delay={0.5} />
+              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2" style={{ color: 'rgba(255,255,255,0.95)' }}>Sleep</p>
+              <p className="font-garamond text-xs" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                How did you sleep last night?
+              </p>
+            </div>
           </button>
         </div>
 
