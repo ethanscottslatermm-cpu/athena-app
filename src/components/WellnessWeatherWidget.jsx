@@ -88,7 +88,7 @@ function LevelDot({ color }) {
   )
 }
 
-function StatTile({ Icon, label, value, levelColor, rimDelay = 0 }) {
+function StatTile({ Icon, label, value, levelColor, rimDelay = 0, image }) {
   return (
     <div style={{ position: 'relative', borderRadius: 12, overflow: 'hidden' }}>
       {/* Rotating rim — keyframe srimRotate defined in Dashboard.jsx style tag */}
@@ -102,23 +102,31 @@ function StatTile({ Icon, label, value, levelColor, rimDelay = 0 }) {
       <div style={{
         position: 'relative', zIndex: 1,
         margin: 1, borderRadius: 11,
-        background: '#C4AFA8',
+        ...(image
+          ? { backgroundImage: `url("${image}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+          : { background: '#C4AFA8' }
+        ),
         padding: '10px 12px',
         display: 'flex', flexDirection: 'column', gap: 5,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Icon size={13} color="#7A6A65" strokeWidth={1.5} />
-          {levelColor && <LevelDot color={levelColor} />}
+        {image && (
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 11, background: 'linear-gradient(to top, rgba(59,51,48,0.82) 0%, rgba(59,51,48,0.35) 55%, rgba(59,51,48,0.05) 100%)' }} />
+        )}
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Icon size={13} color={image ? 'rgba(255,255,255,0.85)' : '#7A6A65'} strokeWidth={1.5} />
+            {levelColor && <LevelDot color={levelColor} />}
+          </div>
+          <p style={{
+            fontFamily: 'Cinzel, serif', fontSize: 15, fontWeight: 600,
+            color: image ? 'rgba(255,255,255,0.95)' : '#3B3330', margin: 0, lineHeight: 1.1,
+          }}>{value}</p>
+          <p style={{
+            fontFamily: 'Cormorant Garamond, serif', fontSize: 10,
+            color: image ? 'rgba(255,255,255,0.75)' : '#7A6A65', letterSpacing: '0.1em',
+            textTransform: 'uppercase', margin: 0,
+          }}>{label}</p>
         </div>
-        <p style={{
-          fontFamily: 'Cinzel, serif', fontSize: 15, fontWeight: 600,
-          color: '#3B3330', margin: 0, lineHeight: 1.1,
-        }}>{value}</p>
-        <p style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: 10,
-          color: '#7A6A65', letterSpacing: '0.1em',
-          textTransform: 'uppercase', margin: 0,
-        }}>{label}</p>
       </div>
     </div>
   )
@@ -196,10 +204,10 @@ export default function WellnessWeatherWidget({ weather, phase }) {
         {tab === 'conditions' && (
           <div key="conditions" style={{ animation: 'wTabFade 0.22s ease both' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <StatTile Icon={Thermometer} label="Temperature" value={`${data.temp}°F`}   rimDelay={0} />
-              <StatTile Icon={Sun}         label="UV Index"    value={`UV ${data.uv}`}     levelColor={uvLvl.color}  rimDelay={0.25} />
-              <StatTile Icon={Wind}        label="Air Quality" value={`AQI ${data.aqi}`}   levelColor={aqiLvl.color} rimDelay={0.5} />
-              <StatTile Icon={Droplets}    label="Humidity"    value={`${data.humidity}%`} rimDelay={0.75} />
+              <StatTile Icon={Thermometer} label="Temperature" value={`${data.temp}°F`}   rimDelay={0}    image="/images/dashboard/temperature.png" />
+              <StatTile Icon={Sun}         label="UV Index"    value={`UV ${data.uv}`}     levelColor={uvLvl.color}  rimDelay={0.25} image="/images/dashboard/uv%20index.png" />
+              <StatTile Icon={Wind}        label="Air Quality" value={`AQI ${data.aqi}`}   levelColor={aqiLvl.color} rimDelay={0.5}  image="/images/dashboard/air%20quality.png" />
+              <StatTile Icon={Droplets}    label="Humidity"    value={`${data.humidity}%`} rimDelay={0.75} image="/images/dashboard/humidity.png" />
             </div>
           </div>
         )}
