@@ -2,11 +2,13 @@
 import SkinLog      from '../modules/skin/SkinLog'
 import SkinRoutine  from '../modules/skin/SkinRoutine'
 import SkinInsights from '../modules/skin/SkinInsights'
+import SkinMirror   from '../modules/skin/SkinMirror'
 
 const TABS = [
   { id: 'log',      label: 'Log'      },
   { id: 'routine',  label: 'Routine'  },
   { id: 'insights', label: 'Insights' },
+  { id: 'mirror',   label: 'Mirror'   },
 ]
 
 const ROSE = '#D4A0A0'
@@ -52,8 +54,8 @@ export default function Skin() {
                 style={{
                   flex: 1, padding: '6px 2px', borderRadius: 18,
                   border: 'none', cursor: 'pointer',
-                  fontFamily: 'Cinzel, serif', fontSize: 7.5,
-                  letterSpacing: '0.13em', textTransform: 'uppercase',
+                  fontFamily: 'Cinzel, serif', fontSize: 7,
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
                   whiteSpace: 'nowrap',
                   background: active ? ROSE : 'transparent',
                   color:      active ? '#F2EDE8' : '#7A6A65',
@@ -88,6 +90,7 @@ export default function Skin() {
                 {tab.id === 'log'      && <SkinLog      key={refreshKey} onLogSaved={onLogSaved} />}
                 {tab.id === 'routine'  && <SkinRoutine  />}
                 {tab.id === 'insights' && <SkinInsights key={refreshKey} />}
+                {tab.id === 'mirror'   && <SkinMirror   />}
               </>
             )}
           </div>
