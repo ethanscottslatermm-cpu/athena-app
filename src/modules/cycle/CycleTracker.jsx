@@ -6,6 +6,22 @@ import { supabase }   from '../../lib/supabase'
 import CalendarTab from './CalendarTab'
 import LogTab      from './LogTab'
 import StatsTab    from './StatsTab'
+import HintBubble  from '../../components/HintBubble'
+
+const CYCLE_HINTS = {
+  calendar: [
+    'Tap any past date to log symptoms retroactively — Athena adjusts your insights automatically.',
+    'Your phase colours on the calendar help you plan workouts, social events, and rest days with intention.',
+  ],
+  log: [
+    'Log your period start date any time your cycle arrives. Athena refines its predictions over time.',
+    'Symptom logging helps surface patterns like mid-cycle pain or luteal fatigue that are easy to overlook.',
+  ],
+  stats: [
+    'Your cycle stats improve in accuracy the longer you log — even two months of data reveals meaningful patterns.',
+    'Average cycle length and variation are shown here: useful context for your overall hormonal health picture.',
+  ],
+}
 
 import calendarIcon from '../../assets/icons/Calendar.png'
 import logIcon      from '../../assets/icons/Log.png'
@@ -205,6 +221,8 @@ export default function CycleTracker() {
           )}
         </div>
       </div>
+
+      <HintBubble hintKey={`cycle-${activeTab}`} hints={CYCLE_HINTS[activeTab] ?? []} />
     </div>
   )
 }

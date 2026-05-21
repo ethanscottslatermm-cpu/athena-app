@@ -24,6 +24,27 @@ function TabIcon({ src, active }) {
   )
 }
 
+import HintBubble    from '../../components/HintBubble'
+
+const PILATES_HINTS = {
+  home: [
+    'Sessions here are matched to your current cycle phase for optimal energy and recovery.',
+    'Tap any session card to preview the full exercise list before you start.',
+  ],
+  library: [
+    'Tap the heart on any session to save it to your Favorites for quick access.',
+    'Browse by duration to find a session that fits exactly how much time you have today.',
+  ],
+  progress: [
+    'Every completed session builds your streak. Consistency is the most powerful form of self-care.',
+    'Scroll your completion history to celebrate how much you have already done.',
+  ],
+  challenges: [
+    'Challenges reset monthly — join one now to build a habit that genuinely sticks.',
+    'Your challenge progress is visible to your Tribe, which keeps you quietly accountable.',
+  ],
+}
+
 import HomeTab        from './HomeTab'
 import LibraryTab     from './LibraryTab'
 import ProgressTab    from './ProgressTab'
@@ -288,6 +309,8 @@ export default function PilatesStudio() {
           onExit={() => { setActiveSession(null); setActiveExercises([]) }}
         />
       )}
+
+      <HintBubble hintKey={`pilates-${activeTab}`} hints={PILATES_HINTS[activeTab] ?? []} />
 
       {/* ── Session Complete overlay ─────────────────────────────────────── */}
       {completedData && (

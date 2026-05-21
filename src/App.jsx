@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useProfile } from './hooks/useProfile'
 
-import BottomNav from './components/BottomNav'
+import BottomNav    from './components/BottomNav'
+import WelcomeFlow  from './components/WelcomeFlow'
 
 import Login        from './pages/Login'
 import SeedPage     from './pages/SeedPage'
@@ -47,6 +48,7 @@ function AppShell({ children }) {
     <>
       {children}
       <BottomNav />
+      <WelcomeFlow />
     </>
   )
 }

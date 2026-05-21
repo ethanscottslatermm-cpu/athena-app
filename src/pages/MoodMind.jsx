@@ -3,6 +3,26 @@ import TodayTab    from '../modules/mood/TodayTab'
 import JournalTab  from '../modules/mood/JournalTab'
 import PatternsTab from '../modules/mood/PatternsTab'
 import MindFeedTab from '../modules/mood/MindFeedTab'
+import HintBubble  from '../components/HintBubble'
+
+const MOOD_HINTS = {
+  today: [
+    'Your mood log connects to your cycle phase — over time, patterns become impossible to miss.',
+    'Be honest even on hard days. Those entries are often the most revealing ones.',
+  ],
+  journal: [
+    'Your journal is private. Write freely — no one else can see these entries.',
+    'Even a two-sentence entry on a good day compounds into something powerful over months.',
+  ],
+  patterns: [
+    'Your mood pattern graph shows which phases tend to feel lighter or heavier for you personally.',
+    'Scroll back through months to see just how much your emotional landscape has shifted.',
+  ],
+  feed: [
+    'The Mind Feed surfaces content curated to your current phase and recent mood history.',
+    'Save any article to revisit it later from your profile.',
+  ],
+}
 
 const TABS = [
   { id: 'today',    label: 'Today'     },
@@ -109,6 +129,8 @@ export default function MoodMind() {
           </div>
         ))}
       </div>
+
+      <HintBubble hintKey={`mood-${activeTab}`} hints={MOOD_HINTS[activeTab] ?? []} />
     </div>
   )
 }

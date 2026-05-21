@@ -3,6 +3,27 @@ import SkinLog      from '../modules/skin/SkinLog'
 import SkinRoutine  from '../modules/skin/SkinRoutine'
 import SkinInsights from '../modules/skin/SkinInsights'
 import SkinMirror   from '../modules/skin/SkinMirror'
+import HintBubble   from '../components/HintBubble'
+
+const SKIN_HINTS = {
+  log: [
+    'Daily skin logs help Athena identify patterns across your cycle phases — even subtle ones.',
+    'Be specific about your concerns. Over time, Athena learns exactly when your skin is most reactive.',
+  ],
+  routine: [
+    'Build your AM and PM routines here so every step is locked in and never forgotten.',
+    'Product-type suggestions adapt to your current cycle phase — lighter actives in follicular, barrier focus in luteal.',
+  ],
+  insights: [
+    'Your 7-day condition chart shows how hormonal shifts affect your skin over time.',
+    'Recurring concerns in the same phase every month are worth bringing up with a dermatologist.',
+  ],
+  mirror: [
+    'Turn on the grid overlay for precise skin checks — ideal for tracking breakout locations over time.',
+    'Freeze a frame to study your skin closely before logging a concern.',
+    'Your saved photos build a visual timeline of your skin health across cycle phases.',
+  ],
+}
 
 const TABS = [
   { id: 'log',      label: 'Log'      },
@@ -96,6 +117,8 @@ export default function Skin() {
           </div>
         ))}
       </div>
+
+      <HintBubble hintKey={`skin-${activeTab}`} hints={SKIN_HINTS[activeTab] ?? []} />
     </div>
   )
 }

@@ -3,6 +3,26 @@ import NourishToday      from '../modules/nourish/NourishToday'
 import NourishSearch     from '../modules/nourish/NourishSearch'
 import NourishPhasePlate from '../modules/nourish/NourishPhasePlate'
 import NourishInsights   from '../modules/nourish/NourishInsights'
+import HintBubble        from '../components/HintBubble'
+
+const NOURISH_HINTS = {
+  today: [
+    'Your daily macro totals update each time you log a meal. Keep the streak going.',
+    'Body Fuel adapts your nutritional targets to your cycle phase — luteal days often call for more complex carbs and magnesium.',
+  ],
+  search: [
+    'Search any food to log it. Athena uses a live nutrition database for accurate macro data.',
+    'Log meals as you eat them — it takes less than ten seconds and compounds into real insight.',
+  ],
+  plate: [
+    'Your Phase Plate highlights foods that are especially beneficial during your current hormonal phase.',
+    'Follicular phase? Reach for lighter proteins and leafy greens. Luteal? Think dark chocolate, nuts, and complex carbs.',
+  ],
+  insights: [
+    'Your nutrition insights reward consistency over perfection. Small daily improvements compound.',
+    'Check your weekly macro averages here to see where you have the most room to grow.',
+  ],
+}
 
 const TABS = [
   { id: 'today',    label: 'Today'        },
@@ -96,6 +116,8 @@ export default function Nourish() {
           </div>
         ))}
       </div>
+
+      <HintBubble hintKey={`nourish-${activeTab}`} hints={NOURISH_HINTS[activeTab] ?? []} />
     </div>
   )
 }

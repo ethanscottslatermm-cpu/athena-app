@@ -3,6 +3,26 @@ import CommunityFeed       from '../modules/community/CommunityFeed'
 import CommunityTribe      from '../modules/community/CommunityTribe'
 import CommunityChallenges from '../modules/community/CommunityChallenges'
 import CommunityProfile    from '../modules/community/CommunityProfile'
+import HintBubble          from '../components/HintBubble'
+
+const COMMUNITY_HINTS = {
+  feed: [
+    'The feed shows posts from women in similar cycle phases — you may have more in common than you expect.',
+    'Tap the heart to support a post. Small gestures build real community.',
+  ],
+  tribe: [
+    'Your Tribe is your inner circle inside Athena — find accountability partners aligned with your goals.',
+    'A small, committed group is more powerful than a large, passive one.',
+  ],
+  challenges: [
+    'Group challenges are more powerful than solo goals. Join one and check in every single day.',
+    'Your challenge progress is visible to your Tribe, which keeps you quietly accountable.',
+  ],
+  profile: [
+    'Your community profile shows your activity, saved posts, and completed challenges all in one place.',
+    'Update your wellness focus areas so the Feed surfaces content most relevant to you.',
+  ],
+}
 
 const SAGE = '#8FA58C'
 
@@ -92,6 +112,8 @@ export default function Community() {
           </div>
         ))}
       </div>
+
+      <HintBubble hintKey={`community-${activeTab}`} hints={COMMUNITY_HINTS[activeTab] ?? []} />
     </div>
   )
 }
