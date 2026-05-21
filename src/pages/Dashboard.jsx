@@ -462,7 +462,7 @@ export default function Dashboard() {
             <div className="flex-1 min-w-0 pl-1">
               {phaseMeta && (
                 <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase px-2 py-1 rounded-full mb-3 inline-block"
-                  style={{ background: `${activeColor}28`, color: activeColor }}>
+                  style={{ background: 'rgba(59,51,48,0.12)', color: '#3B3330' }}>
                   {phaseMeta.label}
                 </span>
               )}
@@ -475,7 +475,7 @@ export default function Dashboard() {
               <button
                 onClick={() => navigate(content ? '/cycle' : '/settings')}
                 className="flex items-center gap-1 mt-3 font-cinzel text-[9px] tracking-[0.25em] uppercase transition-opacity hover:opacity-100"
-                style={{ color: activeColor, opacity: 0.6 }}>
+                style={{ color: '#3B3330', opacity: 0.85 }}>
                 {content ? 'Cycle Guide' : 'Set Up'} <ChevronRight size={10} />
               </button>
             </div>
