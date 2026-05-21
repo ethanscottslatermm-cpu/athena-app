@@ -190,17 +190,6 @@ export default function PilatesStudio() {
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ── Background ───────────────────────────────────────────────────── */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/athena-hero.webp)' }}
-      />
-      <div className="absolute inset-0" style={{
-        background: `
-          linear-gradient(to bottom, rgba(242,237,232,0.5) 0%, rgba(242,237,232,0.1) 30%, rgba(242,237,232,0.04) 50%),
-          radial-gradient(ellipse at 50% 10%, rgba(212,160,160,0.1) 0%, transparent 60%)
-        `,
-      }} />
 
       {/* ── Tab bar ──────────────────────────────────────────────────────── */}
       <div

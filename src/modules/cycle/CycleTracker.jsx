@@ -105,17 +105,6 @@ export default function CycleTracker() {
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ── Background ──────────────────────────────────────────────────────── */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/athena-hero.webp)' }}
-      />
-      <div className="absolute inset-0" style={{
-        background: `
-          linear-gradient(to bottom, rgba(242,237,232,0.5) 0%, rgba(242,237,232,0.1) 35%, rgba(242,237,232,0.04) 55%),
-          radial-gradient(ellipse at 50% 15%, rgba(212,160,160,0.1) 0%, transparent 60%)
-        `,
-      }} />
 
       {/* ── In-app notification banner ──────────────────────────────────────── */}
       {bannerOn && (
