@@ -442,13 +442,20 @@ export default function Dashboard() {
         <div
           className="rounded-2xl overflow-hidden relative"
           style={{
-            background: content?.gradient ?? 'rgba(143,165,140,0.15)',
+            backgroundImage: 'url("/images/dashboard/phase-hero.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 18%',
             border: `1px solid ${activeColor}50`,
           }}
         >
+          {/* Linen wash — keeps dark text legible over the warm light image */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}18 0%, transparent 65%)`,
+            background: 'linear-gradient(to right, rgba(242,237,232,0.38) 0%, rgba(242,237,232,0.62) 55%, rgba(242,237,232,0.72) 100%)',
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}14 0%, transparent 65%)`,
           }} />
           <div className="relative flex items-center gap-2 p-5">
             <PhaseRing phase={phase} day={dayOfCycle} cycleLength={cycleLength} />
