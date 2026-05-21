@@ -19,10 +19,10 @@ import communityIcon from '../assets/icons/nav-community.png'
 
 // Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
-  Pilates:    '/images/dashboard/pilates.webp',
-  'Body Fuel': '/images/dashboard/nourish.webp',
+  Pilates:    '/images/dashboard/pilates.png',
+  'Body Fuel': '/images/dashboard/nourish.png',
   Skin:       '/images/dashboard/skin.webp',
-  Sleep:      '/images/dashboard/sleep.webp',
+  Sleep:      '/images/dashboard/sleep.png',
 }
 
 // ─── Header icon with nav-bar shimmer ────────────────────────────────────────
