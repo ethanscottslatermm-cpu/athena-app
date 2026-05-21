@@ -25,6 +25,34 @@ const MODULE_IMAGES = {
   Sleep:      '/images/dashboard/sleep.png',
 }
 
+// ─── Daily rotation helpers ───────────────────────────────────────────────────
+// Base date = May 20 2026 (day 0). Offset advances by 1 each calendar day.
+function getDayOffset() {
+  const base = new Date(2026, 4, 20)
+  const now  = new Date(); now.setHours(0, 0, 0, 0)
+  return Math.max(0, Math.floor((now - base) / 86400000))
+}
+
+// Today check-in pool — 5 cards, displayed 2 at a time, step-by-2 to avoid day-over-day repeats
+// Day 0: [Mood, Sleep]  Day 1: [Skin, Cycle]  Day 2: [Body Fuel, Mood]  …
+const TODAY_POOL = [
+  { key: 'mood',    label: 'Mood',      sub: 'How are you feeling today?',   icon: moodIcon,    img: '/images/dashboard/mood.png',    to: '/mood'    },
+  { key: 'sleep',   label: 'Sleep',     sub: 'How did you sleep last night?', icon: sleepIcon,   img: '/images/dashboard/sleep.png',   to: '/sleep'   },
+  { key: 'skin',    label: 'Skin',      sub: 'How is your skin today?',       icon: skinIcon,    img: '/images/dashboard/skin.png',    to: '/skin'    },
+  { key: 'cycle',   label: 'Cycle',     sub: 'Log your cycle today',          icon: cycleIcon,   img: null,                            to: '/cycle'   },
+  { key: 'nourish', label: 'Body Fuel', sub: 'Fuel your body today',          icon: nourishIcon, img: '/images/dashboard/nourish.png', to: '/nourish' },
+]
+
+// Phase Guidance rotations — 4 variants picking 3 of 4 phase cards each day.
+// Index refers to position in content.cards: 0=Pilates 1=Body Fuel 2=Skin 3=Sleep
+// Day 0: [0,2,1] = Pilates, Skin, Body Fuel  (required starting order)
+const PHASE_GUIDANCE_ROTATIONS = [
+  [0, 2, 1],  // Pilates · Skin · Body Fuel
+  [1, 3, 2],  // Body Fuel · Sleep · Skin
+  [2, 0, 3],  // Skin · Pilates · Sleep
+  [3, 1, 0],  // Sleep · Body Fuel · Pilates
+]
+
 // ─── Header icon with nav-bar shimmer ────────────────────────────────────────
 
 function HeaderShimmerIcon({ src }) {
@@ -299,6 +327,12 @@ export default function Dashboard() {
   const firstName = profile?.full_name?.split(' ')[0] ?? null
   const activeColor = color ?? '#D4A0A0'
 
+  // ── Daily rotation ───────────────────────────────────────────────────────────
+  const dayOffset     = getDayOffset()
+  const poolSize      = TODAY_POOL.length
+  const todayPair     = [TODAY_POOL[(dayOffset * 2) % poolSize], TODAY_POOL[(dayOffset * 2 + 1) % poolSize]]
+  const phaseRotation = PHASE_GUIDANCE_ROTATIONS[dayOffset % PHASE_GUIDANCE_ROTATIONS.length]
+
   useEffect(() => {
     if (!navigator.geolocation) return
     navigator.geolocation.getCurrentPosition(
@@ -474,71 +508,49 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Today's Check-ins ── */}
+      {/* ── Today's Check-ins (daily rotation) ── */}
       <SectionHeader title="Today" delay={0.17} />
       <div className="grid grid-cols-2 gap-3 px-4 max-w-md mx-auto mb-6" style={anim(0.19)}>
-
-        {/* Mood — shimmer rim wrapper */}
-        <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
-          <RimSpin duration="3.5s" delay={0} />
-          <button
-            onClick={() => navigate('/mood')}
-            style={{
-              position: 'relative', zIndex: 1,
-              display: 'block', width: 'calc(100% - 2px)', margin: 1,
-              backgroundImage: 'url("/images/dashboard/mood.png")',
-              backgroundSize: 'cover', backgroundPosition: 'center',
-              border: 'none', cursor: 'pointer',
-              borderRadius: 15, padding: 16, textAlign: 'left',
-              minHeight: 120,
-            }}
-          >
-            <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(59,51,48,0.80) 0%, rgba(59,51,48,0.30) 55%, rgba(59,51,48,0.05) 100%)' }} />
-            <div className="relative z-10">
-              <ShimmerIcon src={moodIcon} delay={0} />
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2" style={{ color: 'rgba(255,255,255,0.95)' }}>Mood</p>
-              <p className="font-garamond text-xs" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                How are you feeling today?
-              </p>
-            </div>
-          </button>
-        </div>
-
-        {/* Sleep — shimmer rim wrapper */}
-        <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
-          <RimSpin duration="3.5s" delay={0.5} />
-          <button
-            onClick={() => navigate('/sleep')}
-            style={{
-              position: 'relative', zIndex: 1,
-              display: 'block', width: 'calc(100% - 2px)', margin: 1,
-              backgroundImage: 'url("/images/dashboard/sleep.png")',
-              backgroundSize: 'cover', backgroundPosition: 'center',
-              border: 'none', cursor: 'pointer',
-              borderRadius: 15, padding: 16, textAlign: 'left',
-              minHeight: 120,
-            }}
-          >
-            <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(59,51,48,0.80) 0%, rgba(59,51,48,0.30) 55%, rgba(59,51,48,0.05) 100%)' }} />
-            <div className="relative z-10">
-              <ShimmerIcon src={sleepIcon} delay={0.5} />
-              <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2" style={{ color: 'rgba(255,255,255,0.95)' }}>Sleep</p>
-              <p className="font-garamond text-xs" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                How did you sleep last night?
-              </p>
-            </div>
-          </button>
-        </div>
-
+        {todayPair.map(({ key, label, sub, icon, img, to }, i) => (
+          <div key={key} style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
+            <RimSpin duration="3.5s" delay={i * 0.5} />
+            <button
+              onClick={() => navigate(to)}
+              style={{
+                position: 'relative', zIndex: 1,
+                display: 'block', width: 'calc(100% - 2px)', margin: 1,
+                ...(img
+                  ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                  : { background: '#C4AFA8' }
+                ),
+                border: 'none', cursor: 'pointer',
+                borderRadius: 15, padding: 16, textAlign: 'left',
+                minHeight: 120,
+              }}
+            >
+              {img && (
+                <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(59,51,48,0.80) 0%, rgba(59,51,48,0.30) 55%, rgba(59,51,48,0.05) 100%)' }} />
+              )}
+              <div className="relative z-10">
+                <ShimmerIcon src={icon} delay={i * 0.5} />
+                <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2"
+                  style={{ color: img ? 'rgba(255,255,255,0.95)' : '#3B3330' }}>{label}</p>
+                <p className="font-garamond text-xs"
+                  style={{ color: img ? 'rgba(255,255,255,0.75)' : '#7A6A65' }}>{sub}</p>
+              </div>
+            </button>
+          </div>
+        ))}
       </div>
 
-      {/* ── Phase Guidance (horizontal scroll) — images unchanged ── */}
+      {/* ── Phase Guidance (3-card daily rotation) ── */}
       {content && (
         <>
           <SectionHeader title="Phase Guidance" delay={0.21} />
           <div className="module-scroll overflow-x-auto mb-6" style={anim(0.23)}>
             <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-              {content.cards.map(({ module, tip, to }) => {
+              {phaseRotation.map(cardIdx => {
+                const { module, tip, to } = content.cards[cardIdx]
                 const img = MODULE_IMAGES[module]
                 return (
                   <button
