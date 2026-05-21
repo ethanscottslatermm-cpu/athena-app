@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react'
+import { Camera } from 'lucide-react'
 import NourishToday      from '../modules/nourish/NourishToday'
 import NourishSearch     from '../modules/nourish/NourishSearch'
 import NourishPhasePlate from '../modules/nourish/NourishPhasePlate'
 import NourishInsights   from '../modules/nourish/NourishInsights'
+import FoodScanner       from '../modules/nourish/FoodScanner'
 import HintBubble        from '../components/HintBubble'
 
 const NOURISH_HINTS = {
@@ -32,9 +34,10 @@ const TABS = [
 ]
 
 export default function Nourish() {
-  const [activeTab,  setActiveTab]  = useState('today')
-  const [visited,    setVisited]    = useState({ today: true })
-  const [refreshKey, setRefreshKey] = useState(0)
+  const [activeTab,    setActiveTab]    = useState('today')
+  const [visited,      setVisited]      = useState({ today: true })
+  const [refreshKey,   setRefreshKey]   = useState(0)
+  const [scannerOpen,  setScannerOpen]  = useState(false)
 
   function switchTab(id) {
     setVisited(v => ({ ...v, [id]: true }))
@@ -55,13 +58,33 @@ export default function Nourish() {
 
       {/* Header + pill switcher */}
       <div className="flex-shrink-0 px-4 pt-8 pb-3">
-        <h2 className="font-cinzel text-2xl tracking-widest mb-4" style={{ color: '#3B3330' }}>
-          Body Fuel
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <h2 className="font-cinzel text-2xl tracking-widest" style={{ color: '#3B3330' }}>
+            Body Fuel
+          </h2>
+          {/* Scan button */}
+          <button
+            onClick={() => setScannerOpen(true)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '8px 14px', borderRadius: 22,
+              background: 'rgba(143,165,140,0.15)',
+              border: '1px solid rgba(143,165,140,0.4)',
+              cursor: 'pointer',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            <Camera size={14} color="#8FA58C" strokeWidth={1.8} />
+            <span style={{
+              fontFamily: 'Cinzel, serif', fontSize: 8,
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              color: '#8FA58C',
+            }}>Scan</span>
+          </button>
+        </div>
         <div style={{
           display: 'flex', gap: 4, padding: '4px',
-          background: 'rgba(196,175,168,0.2)',
-          borderRadius: 22,
+          background: 'rgba(196,175,168,0.2)', borderRadius: 22,
         }}>
           {TABS.map(tab => {
             const active = activeTab === tab.id
@@ -118,6 +141,14 @@ export default function Nourish() {
       </div>
 
       <HintBubble hintKey={`nourish-${activeTab}`} hints={NOURISH_HINTS[activeTab] ?? []} />
+
+      {scannerOpen && (
+        <FoodScanner
+          onClose={() => setScannerOpen(false)}
+          onLogSaved={() => { setScannerOpen(false); onLogSaved() }}
+          onSearchInstead={() => { setScannerOpen(false); switchTab('search') }}
+        />
+      )}
     </div>
   )
 }
