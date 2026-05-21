@@ -21,7 +21,7 @@ import communityIcon from '../assets/icons/nav-community.png'
 const MODULE_IMAGES = {
   Pilates:    '/images/dashboard/pilates.png',
   'Body Fuel': '/images/dashboard/nourish.png',
-  Skin:       '/images/dashboard/skin.webp',
+  Skin:       '/images/dashboard/skin.png',
   Sleep:      '/images/dashboard/sleep.png',
 }
 
