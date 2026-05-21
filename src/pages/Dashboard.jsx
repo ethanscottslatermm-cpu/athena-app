@@ -25,6 +25,30 @@ const MODULE_IMAGES = {
   Sleep:      '/images/dashboard/sleep.webp',
 }
 
+// ─── Header icon with nav-bar shimmer ────────────────────────────────────────
+
+function HeaderShimmerIcon({ src }) {
+  const maskVal = `url(${src}) no-repeat center / contain`
+  return (
+    <span style={{ position: 'relative', display: 'inline-block', width: 22, height: 22, flexShrink: 0 }}>
+      <span style={{
+        display: 'block', width: '100%', height: '100%',
+        WebkitMask: maskVal, mask: maskVal,
+        backgroundColor: '#7A6A65',
+      }} />
+      <span style={{
+        position: 'absolute', inset: 0,
+        WebkitMask: maskVal, mask: maskVal,
+        background: 'linear-gradient(110deg, transparent 25%, rgba(245,240,225,0.7) 50%, transparent 75%)',
+        backgroundSize: '250% 100%',
+        animation: 'navShimmer 10s ease-in-out infinite',
+        mixBlendMode: 'screen',
+        pointerEvents: 'none',
+      }} />
+    </span>
+  )
+}
+
 // ─── Platinum shimmer icon ────────────────────────────────────────────────────
 // Two stacked mask-spans: base platinum layer + animated sweep overlay
 
@@ -36,8 +60,8 @@ function ShimmerIcon({ src, delay = 0, size = 22 }) {
       <span style={{
         position: 'absolute', inset: 0,
         WebkitMask: maskVal, mask: maskVal,
-        backgroundColor: '#E8E8F0',
-        filter: 'drop-shadow(0 0 4px rgba(220,220,240,0.7))',
+        backgroundColor: '#F0EAE4',
+        filter: 'drop-shadow(0 0 4px rgba(240,234,228,0.8))',
       }} />
       {/* Sweep overlay */}
       <span
@@ -318,6 +342,10 @@ export default function Dashboard() {
           from { opacity: 0; transform: translateY(12px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        @keyframes navShimmer {
+          0%, 42%   { background-position: -250% 0; }
+          78%, 100% { background-position:  250% 0; }
+        }
         @keyframes dashShimmer {
           0%, 42%   { background-position: -250% 0; }
           78%, 100% { background-position:  250% 0; }
@@ -365,22 +393,12 @@ export default function Dashboard() {
           <button onClick={() => navigate('/settings')}
             className="p-2 rounded-xl transition-all"
             style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
-            <span style={{
-              display: 'block', width: '22px', height: '22px',
-              WebkitMask: `url(${settingsIcon}) no-repeat center / contain`,
-              mask: `url(${settingsIcon}) no-repeat center / contain`,
-              backgroundColor: '#7A6A65',
-            }} />
+            <HeaderShimmerIcon src={settingsIcon} />
           </button>
           <button onClick={handleSignOut}
             className="p-2 rounded-xl transition-all"
             style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
-            <span style={{
-              display: 'block', width: '22px', height: '22px',
-              WebkitMask: `url(${exitIcon}) no-repeat center / contain`,
-              mask: `url(${exitIcon}) no-repeat center / contain`,
-              backgroundColor: '#7A6A65',
-            }} />
+            <HeaderShimmerIcon src={exitIcon} />
           </button>
         </div>
       </div>
@@ -442,7 +460,7 @@ export default function Dashboard() {
                 <div style={{
                   position: 'absolute', inset: 1,
                   borderRadius: 15,
-                  background: '#C4AFA8',
+                  background: '#9E8880',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <ShimmerIcon src={icon} delay={i * 0.2} />

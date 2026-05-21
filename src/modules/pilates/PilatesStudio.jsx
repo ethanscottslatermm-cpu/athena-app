@@ -18,7 +18,7 @@ function TabIcon({ src, active }) {
       flexShrink: 0,
       WebkitMask: `url(${src}) no-repeat center / contain`,
       mask: `url(${src}) no-repeat center / contain`,
-      backgroundColor: active ? '#D4A0A0' : 'rgba(59,51,48,0.35)',
+      backgroundColor: active ? '#D4A0A0' : '#5C4A45',
       transition: 'background-color 0.2s',
     }} />
   )
@@ -204,7 +204,7 @@ export default function PilatesStudio() {
               <TabIcon src={tab.icon} active={activeTab === tab.id} />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#D4A0A0' : 'rgba(59,51,48,0.45)' }}
+                style={{ color: activeTab === tab.id ? '#D4A0A0' : '#5C4A45' }}
               >
                 {tab.label.toUpperCase()}
               </span>
