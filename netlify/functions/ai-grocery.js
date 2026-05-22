@@ -11,12 +11,12 @@ exports.handler = async (event) => {
 
     if (type === 'phase_list') {
       const r = await client.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 800,
-        system: 'You are a cycle-aware nutritionist. Return ONLY a valid JSON array with no markdown, no explanation, no prefix text.',
+        model: 'claude-sonnet-4-6',
+        max_tokens: 2500,
+        system: 'You are a cycle-aware nutritionist. Return ONLY a valid JSON array with no markdown, no explanation, no prefix text. The array must be complete and valid JSON.',
         messages: [{
           role: 'user',
-          content: `Return exactly 20 hormone-supportive grocery items for a woman in the ${phase} phase of her menstrual cycle. Each item must have: { "name": string, "category": one of ["Produce","Proteins","Dairy","Pantry","Grains","Other"], "quantity": number, "unit": string (e.g. "bunch","oz","can","cup","lbs","each","bag"), "reason": "one warm encouraging sentence about why this food supports this phase" }. Return ONLY the JSON array, starting with [.`,
+          content: `Return exactly 20 hormone-supportive grocery items for a woman in the ${phase} phase of her menstrual cycle. Each item must have: { "name": string, "category": one of ["Produce","Proteins","Dairy","Pantry","Grains","Other"], "quantity": number, "unit": string (e.g. "bunch","oz","can","cup","lbs","each","bag"), "reason": "one warm encouraging sentence about why this food supports this phase" }. Return ONLY the JSON array starting with [ and ending with ].`,
         }],
       })
       result = safeParseArr(r.content[0].text)
