@@ -327,6 +327,8 @@ export default function Login() {
             <video
               ref={loadVideoRef}
               src="/athena-loading.mp4"
+              autoPlay
+              muted
               playsInline
               preload="auto"
               onEnded={() => {
