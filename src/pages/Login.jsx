@@ -11,10 +11,7 @@ const PETALS = Array.from({ length: 42 }, (_, i) => ({
   duration: 7 + (i % 6) * 1.4,     // 7–14.4s — gentle fall speed
   delay: (i * 0.48) % 12,          // staggered so screen always has petals
   opacity: 0.55 + (i % 4) * 0.1,
-  anim: ['petalFall', 'petalFallL', 'petalFall', 'petalFallR', 'petalFallL'][i % 5],
-  // rotate direction and amount varies per petal
-  rotateStart: (i * 37) % 360,
-  rotateEnd: (i % 2 === 0 ? 1 : -1) * (200 + (i % 3) * 80),
+  anim: ['petalRise', 'petalRiseL', 'petalRise', 'petalRiseWide', 'petalRiseL'][i % 5],
   color: [
     '#F4B8C8',  // soft sakura pink
     '#F9D0DA',  // pale blush
@@ -82,26 +79,32 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @keyframes petalFall {
-          0%   { transform: translateY(-40px) translateX(0px)   rotate(0deg);   opacity: 0; }
-          8%   { opacity: 1; }
-          50%  { transform: translateY(50vh)  translateX(22px)  rotate(160deg); }
-          92%  { opacity: 0.7; }
-          100% { transform: translateY(108vh) translateX(-8px)  rotate(320deg); opacity: 0; }
+        @keyframes petalRise {
+          0%   { transform: translateY(108vh) translateX(0px)   rotate(0deg);   opacity: 0; }
+          6%   { opacity: 0.9; }
+          25%  { transform: translateY(78vh)  translateX(14px)  rotate(22deg);  }
+          50%  { transform: translateY(48vh)  translateX(-8px)  rotate(-8deg);  }
+          75%  { transform: translateY(20vh)  translateX(18px)  rotate(28deg);  }
+          94%  { opacity: 0.6; }
+          100% { transform: translateY(-8vh)  translateX(6px)   rotate(12deg);  opacity: 0; }
         }
-        @keyframes petalFallL {
-          0%   { transform: translateY(-40px) translateX(0px)   rotate(30deg);  opacity: 0; }
-          8%   { opacity: 1; }
-          50%  { transform: translateY(50vh)  translateX(-30px) rotate(-120deg); }
-          92%  { opacity: 0.7; }
-          100% { transform: translateY(108vh) translateX(14px)  rotate(-280deg); opacity: 0; }
+        @keyframes petalRiseL {
+          0%   { transform: translateY(108vh) translateX(0px)   rotate(15deg);  opacity: 0; }
+          6%   { opacity: 0.9; }
+          25%  { transform: translateY(80vh)  translateX(-18px) rotate(-10deg); }
+          50%  { transform: translateY(50vh)  translateX(6px)   rotate(20deg);  }
+          75%  { transform: translateY(22vh)  translateX(-14px) rotate(-5deg);  }
+          94%  { opacity: 0.6; }
+          100% { transform: translateY(-8vh)  translateX(-20px) rotate(15deg);  opacity: 0; }
         }
-        @keyframes petalFallR {
-          0%   { transform: translateY(-40px) translateX(0px)   rotate(-20deg); opacity: 0; }
-          8%   { opacity: 1; }
-          50%  { transform: translateY(50vh)  translateX(36px)  rotate(140deg); }
-          92%  { opacity: 0.7; }
-          100% { transform: translateY(108vh) translateX(18px)  rotate(300deg); opacity: 0; }
+        @keyframes petalRiseWide {
+          0%   { transform: translateY(108vh) translateX(0px)   rotate(-10deg); opacity: 0; }
+          6%   { opacity: 0.9; }
+          25%  { transform: translateY(76vh)  translateX(26px)  rotate(15deg);  }
+          50%  { transform: translateY(46vh)  translateX(-14px) rotate(-18deg); }
+          75%  { transform: translateY(18vh)  translateX(20px)  rotate(10deg);  }
+          94%  { opacity: 0.6; }
+          100% { transform: translateY(-8vh)  translateX(8px)   rotate(-5deg);  opacity: 0; }
         }
         @keyframes mistPulse {
           0%, 100% { opacity: 0; }
@@ -229,23 +232,21 @@ export default function Login() {
         {PETALS.map(p => (
           <div key={p.id} style={{
             position: 'absolute',
-            left: `${p.x}%`, top: '-5%',
+            left: `${p.x}%`, top: 0,
             width: `${p.size}px`, height: `${p.size}px`,
-            opacity: p.opacity,
-            animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
+            animation: `${p.anim} ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            animationFillMode: 'backwards',
             willChange: 'transform',
           }}>
-            {/* Sakura petal — two overlapping ellipses form a realistic petal */}
-            <svg width="100%" height="100%" viewBox="0 0 20 24" fill="none">
-              <ellipse cx="10" cy="12" rx="6" ry="11"
-                fill={p.color} opacity="0.9"
-                transform="rotate(-15 10 12)" />
-              <ellipse cx="10" cy="12" rx="6" ry="11"
-                fill={p.color} opacity="0.6"
-                transform="rotate(15 10 12)" />
-              {/* Petal vein for depth */}
-              <line x1="10" y1="3" x2="10" y2="21"
-                stroke="rgba(255,255,255,0.3)" strokeWidth="0.6" strokeLinecap="round" />
+            {/* Sakura petal — obovate bezier body with notch at apex + veins */}
+            <svg width="100%" height="100%" viewBox="0 0 20 24" fill="none" opacity={p.opacity}>
+              <path
+                d="M10,23 C4,19 0,12 1,6 C2,2 6,0 9,1.5 C9.3,0.4 10,0 10,0 C10,0 10.7,0.4 11,1.5 C14,0 18,2 19,6 C20,12 16,19 10,23 Z"
+                fill={p.color}
+              />
+              <path d="M10,23 C10,16 10,8 10,1" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" fill="none" />
+              <path d="M10,17 C8,14 5,12 3,10" stroke="rgba(255,255,255,0.18)" strokeWidth="0.4" fill="none" />
+              <path d="M10,17 C12,14 15,12 17,10" stroke="rgba(255,255,255,0.18)" strokeWidth="0.4" fill="none" />
             </svg>
           </div>
         ))}
