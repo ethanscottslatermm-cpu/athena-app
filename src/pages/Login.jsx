@@ -210,14 +210,13 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── Login form (right-side, lower) ────────────────────────────── */}
+      {/* ── Login form ────────────────────────────────────────────────── */}
       {phase === 'form' && (
         <div style={{
           position: 'fixed',
           bottom: 'calc(env(safe-area-inset-bottom) + 100px)',
-          right: 0,
-          width: 'min(320px, 55%)',
-          padding: '0 36px 0 16px',
+          left: 0, right: 0,
+          padding: '0 calc(40% + 16px) 0 16px',
           animation: 'fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
           zIndex: 10,
           opacity: authed ? 0 : 1,
@@ -280,15 +279,14 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── ATHENA wordmark (upper right, clear pink area) ────────────── */}
+      {/* ── ATHENA wordmark — centered, nudged slightly left ─────────── */}
       <div
         onClick={handleWordmarkTap}
         style={{
           position: 'fixed',
           top: 'calc(env(safe-area-inset-top) + 52px)',
-          right: 0,
-          width: 'min(340px, 58%)',
-          padding: '0 36px 0 16px',
+          left: 0, right: 0,
+          padding: '0 calc(42% + 12px) 0 16px',
           cursor: phase === 'idle' ? 'pointer' : 'default',
           zIndex: 10,
           opacity: phase === 'form' ? 0.5 : 1,
