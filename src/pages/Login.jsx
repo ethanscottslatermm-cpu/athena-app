@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import loginHero from '../assets/login-hero.png?inline'
+const loginHero = '/login-hero.png'
 
 // ── Particles — gold/cream, slow, visible on pink ─────────────────────────
 const PARTICLES = Array.from({ length: 48 }, (_, i) => ({
@@ -166,15 +166,15 @@ export default function Login() {
           backgroundImage: `url(${loginHero})`,
           backgroundSize: 'cover',
           backgroundPosition: '20% bottom',
-          backgroundColor: '#F0ADAD',
+          backgroundColor: '#B8AABB',
           cursor: phase === 'idle' ? 'pointer' : 'default',
         }}
       />
 
-      {/* Ground shadow */}
+      {/* Ground shadow — matched to grey-mauve palette */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'linear-gradient(to top, rgba(230,130,140,0.92) 0%, rgba(220,120,135,0.55) 8%, rgba(210,110,130,0.15) 18%, transparent 28%)',
+        background: 'linear-gradient(to top, rgba(110,95,110,0.88) 0%, rgba(120,100,115,0.5) 8%, rgba(130,110,120,0.15) 18%, transparent 28%)',
       }} />
 
 
