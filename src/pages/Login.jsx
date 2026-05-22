@@ -20,12 +20,11 @@ export default function Login() {
   useEffect(() => {
     const v = bgVideoRef.current
     if (!v) return
-    v.muted = true
-    v.playbackRate = 0.65
-    const tryPlay = () => { v.playbackRate = 0.65; v.play().catch(() => {}) }
-    v.addEventListener('canplay', tryPlay, { once: true })
-    tryPlay()
-    return () => v.removeEventListener('canplay', tryPlay)
+    // Set playback rate once enough data is buffered — don't call play() manually,
+    // let the autoPlay attribute handle it to stay within iOS gesture policy
+    const onCanPlay = () => { v.playbackRate = 0.65 }
+    v.addEventListener('canplaythrough', onCanPlay, { once: true })
+    return () => v.removeEventListener('canplaythrough', onCanPlay)
   }, [])
 
   useEffect(() => {
@@ -128,7 +127,7 @@ export default function Login() {
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(212,160,160,0.25); border-radius: 2px; }
       `}</style>
 
-      <div className="fixed inset-0 overflow-hidden">
+      <div style={{ position: 'fixed', inset: 0, width: '100%', height: '100%' }}>
 
         {/* Background video */}
         <video
@@ -138,7 +137,11 @@ export default function Login() {
           loop
           muted
           playsInline
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+          }}
         />
 
         {/* Overlays */}
