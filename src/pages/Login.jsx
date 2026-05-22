@@ -156,16 +156,29 @@ export default function Login() {
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(196,133,154,0.3) transparent; }
         .terms-scroll::-webkit-scrollbar { width: 3px; }
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
+
+        /* Mobile: cover + left-bottom anchored so warrior fills portrait screen */
+        .login-hero-bg {
+          background-size: cover;
+          background-position: 20% bottom;
+        }
+        /* Desktop: contain + centered so full figure is visible, bg color fills the rest */
+        @media (min-width: 768px) {
+          .login-hero-bg {
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+          }
+        }
       `}</style>
 
       {/* ── Hero background ───────────────────────────────────────────── */}
       <div
+        className="login-hero-bg"
         onClick={handleScreenTap}
         style={{
           position: 'fixed', inset: 0,
           backgroundImage: `url(${loginHero})`,
-          backgroundSize: 'cover',
-          backgroundPosition: '20% bottom',
           backgroundColor: '#B8AABB',
           cursor: phase === 'idle' ? 'pointer' : 'default',
         }}
