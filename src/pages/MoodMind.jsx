@@ -59,7 +59,15 @@ export default function MoodMind() {
       `}</style>
 
       {/* ── Header + sticky tab switcher ── */}
-      <div className="flex-shrink-0 px-4 pt-8 pb-3">
+      <div className="flex-shrink-0 relative">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/images/dashboard/mood.png)' }}
+        />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to bottom, rgba(242,237,232,0.35) 0%, rgba(242,237,232,0.92) 65%, rgba(242,237,232,1) 100%)',
+        }} />
+        <div className="relative px-4 pt-8 pb-3">
         <h2 className="font-cinzel text-2xl tracking-widest mb-4" style={{ color: '#3B3330' }}>
           Mood & Mind
         </h2>
@@ -91,6 +99,7 @@ export default function MoodMind() {
               </button>
             )
           })}
+        </div>
         </div>
       </div>
 

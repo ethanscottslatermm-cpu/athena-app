@@ -2,6 +2,22 @@ import { useState, useCallback } from 'react'
 import SleepLog      from '../modules/sleep/SleepLog'
 import SleepWindDown from '../modules/sleep/SleepWindDown'
 import SleepPatterns from '../modules/sleep/SleepPatterns'
+import HintBubble    from '../components/HintBubble'
+
+const SLEEP_HINTS = {
+  log: [
+    'Log your sleep as soon as you wake up — even a rough estimate builds meaningful patterns over time.',
+    'Quality matters as much as duration. A restless 8 hours often ranks below a deep 6.',
+  ],
+  winddown: [
+    'A consistent wind-down routine signals to your nervous system that rest is coming.',
+    'Luteal phase sleep can be harder — a magnesium-rich snack and screen cutoff at 9 PM can make a real difference.',
+  ],
+  patterns: [
+    'Your sleep pattern graph reveals which cycle phases tend to disrupt your rest most.',
+    'Notice trends across weeks, not just last night — that is where the real insight lives.',
+  ],
+}
 
 const TABS = [
   { id: 'log',       label: 'Log'        },
@@ -34,7 +50,15 @@ export default function Sleep() {
       `}</style>
 
       {/* Header + pill nav */}
-      <div className="flex-shrink-0 px-4 pt-8 pb-3">
+      <div className="flex-shrink-0 relative">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/images/dashboard/sleep.png)' }}
+        />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to bottom, rgba(242,237,232,0.35) 0%, rgba(242,237,232,0.92) 65%, rgba(242,237,232,1) 100%)',
+        }} />
+        <div className="relative px-4 pt-8 pb-3">
         <h2 className="font-cinzel text-2xl tracking-widest mb-4" style={{ color: '#3B3330' }}>
           Sleep
         </h2>
@@ -65,6 +89,7 @@ export default function Sleep() {
             )
           })}
         </div>
+        </div>
       </div>
 
       {/* Tab panes */}
@@ -93,6 +118,8 @@ export default function Sleep() {
           </div>
         ))}
       </div>
+
+      <HintBubble hintKey={`sleep-${activeTab}`} hints={SLEEP_HINTS[activeTab] ?? []} />
     </div>
   )
 }

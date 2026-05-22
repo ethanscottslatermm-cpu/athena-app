@@ -191,6 +191,15 @@ export default function PilatesStudio() {
       `}</style>
 
 
+      {/* ── Background hero ─────────────────────────────────────────────────── */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: 'url(/images/dashboard/pilates.png)' }}
+      />
+      <div className="absolute inset-0" style={{
+        background: 'linear-gradient(to bottom, rgba(242,237,232,0.18) 0%, rgba(242,237,232,0.08) 20%, rgba(242,237,232,0.72) 55%, rgba(242,237,232,0.97) 75%)',
+      }} />
+
       {/* ── Tab bar ──────────────────────────────────────────────────────── */}
       <div
         className="absolute top-0 left-0 right-0 z-20"
