@@ -40,13 +40,16 @@ export default function Login() {
   const loadVideoRef = useRef(null)
   const navigate = useNavigate()
 
-  // Start background loop
+  // Start background loop — iOS requires autoPlay attr + muted + playsInline
   useEffect(() => {
     const v = bgVideoRef.current
     if (!v) return
     v.muted = true
     v.playbackRate = 0.65
-    v.play().catch(() => {})
+    const tryPlay = () => { v.playbackRate = 0.65; v.play().catch(() => {}) }
+    v.addEventListener('canplay', tryPlay, { once: true })
+    tryPlay()
+    return () => v.removeEventListener('canplay', tryPlay)
   }, [])
 
   // Start loading video on trigger
@@ -247,6 +250,7 @@ export default function Login() {
         <video
           ref={bgVideoRef}
           src="/athena-bg-loop.mp4"
+          autoPlay
           loop
           muted
           playsInline
