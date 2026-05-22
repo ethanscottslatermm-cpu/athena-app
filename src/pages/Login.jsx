@@ -247,21 +247,25 @@ export default function Login() {
       <div className="fixed inset-0 overflow-hidden md:absolute">
 
         {/* ── 1. Background video loop ───────────────────────────────────── */}
-        <video
-          ref={bgVideoRef}
-          src="/athena-bg-loop.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover',
-            animation: 'bgPulse 8s ease-in-out infinite',
-          }}
-        />
+        {/* Wrapper holds the pulse animation — iOS won't render video with opacity anim on the element itself */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          animation: 'bgPulse 8s ease-in-out infinite',
+        }}>
+          <video
+            ref={bgVideoRef}
+            src="/athena-bg-loop.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </div>
 
         {/* ── 2. Cinematic overlays over video ──────────────────────────── */}
         {/* Dark base layer — gives depth and text contrast */}
