@@ -106,6 +106,15 @@ export default function CycleTracker() {
       `}</style>
 
 
+      {/* ── Background hero ─────────────────────────────────────────────────── */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: 'url(/images/dashboard/Cycle.png)' }}
+      />
+      <div className="absolute inset-0" style={{
+        background: 'linear-gradient(to bottom, rgba(242,237,232,0.18) 0%, rgba(242,237,232,0.08) 20%, rgba(242,237,232,0.72) 55%, rgba(242,237,232,0.97) 75%)',
+      }} />
+
       {/* ── In-app notification banner ──────────────────────────────────────── */}
       {bannerOn && (
         <div

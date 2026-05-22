@@ -47,7 +47,7 @@ const TODAY_POOL = [
   { key: 'mood',    label: 'Mood',      sub: 'How are you feeling today?',   icon: moodIcon,    img: '/images/dashboard/mood.png',    to: '/mood'    },
   { key: 'sleep',   label: 'Sleep',     sub: 'How did you sleep last night?', icon: sleepIcon,   img: '/images/dashboard/sleep.png',   to: '/sleep'   },
   { key: 'skin',    label: 'Skin',      sub: 'How is your skin today?',       icon: skinIcon,    img: '/images/dashboard/skin.png',    to: '/skin'    },
-  { key: 'cycle',   label: 'Cycle',     sub: 'Log your cycle today',          icon: cycleIcon,   img: null,                            to: '/cycle'   },
+  { key: 'cycle',   label: 'Cycle',     sub: 'Log your cycle today',          icon: cycleIcon,   img: '/images/dashboard/Cycle.png',   to: '/cycle'   },
   { key: 'nourish', label: 'Body Fuel', sub: 'Fuel your body today',          icon: nourishIcon, img: '/images/dashboard/nourish.png', to: '/nourish' },
 ]
 
