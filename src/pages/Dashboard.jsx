@@ -201,9 +201,9 @@ const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
   { key: 'mood',      label: 'Mood',      icon: moodIcon,      to: '/mood'      },
-  { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   to: '/grocery'   },
   { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     to: '/sleep'     },
   { key: 'skin',      label: 'Skin',      icon: skinIcon,      to: '/skin'      },
+  { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   to: '/grocery'   },
   { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },
 ]
 

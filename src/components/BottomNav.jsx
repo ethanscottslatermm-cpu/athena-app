@@ -37,8 +37,8 @@ function PngIcon({ src, delay = 0 }) {
 const navItems = [
   { to: '/',          label: 'Home',      png: dashboardIcon },
   { to: '/nourish',   label: 'Body Fuel', png: nourishIcon   },
-  { to: '/pilates',   label: 'Pilates',   png: pilatesIcon   },
   { to: '/grocery',   label: 'Grocery',   png: groceryIcon   },
+  { to: '/pilates',   label: 'Pilates',   png: pilatesIcon   },
   { to: '/mood',      label: 'Mood',      png: moodIcon      },
   { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
   { to: '/community', label: 'Community', png: communityIcon },
