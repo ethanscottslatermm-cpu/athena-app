@@ -171,10 +171,10 @@ export default function Login() {
         }}
       />
 
-      {/* Ground shadow — matched to grey-mauve palette */}
+      {/* Ground shadow — grey-mauve to match image background */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'linear-gradient(to top, rgba(110,95,110,0.88) 0%, rgba(120,100,115,0.5) 8%, rgba(130,110,120,0.15) 18%, transparent 28%)',
+        background: 'linear-gradient(to top, rgba(125,112,122,0.9) 0%, rgba(132,118,128,0.52) 8%, rgba(138,124,134,0.18) 18%, transparent 30%)',
       }} />
 
 
