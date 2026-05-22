@@ -3,8 +3,35 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import loginHero from '../assets/login-hero.png?inline'
 
+// ── Particles — gold/cream, slow, visible on pink ─────────────────────────
+const PARTICLES = Array.from({ length: 38 }, (_, i) => ({
+  id: i,
+  x: 3 + (i * 41 + 7) % 72,   // left-biased toward the warrior
+  y: (i * 53 + 11) % 100,
+  size: 0.8 + (i % 5) * 0.38,
+  duration: 7 + (i % 6) * 1.6, // 7–16s — slow drift
+  delay: (i * 0.55) % 11,
+  opacity: 0.55 + (i % 4) * 0.1,
+  anim: ['dustUp', 'dustDriftL', 'dustUp', 'dustDriftR', 'dustUp'][i % 5],
+  color: [
+    'rgba(255,245,190,',  // bright gold
+    'rgba(255,255,220,',  // warm cream
+    'rgba(255,230,140,',  // amber gold
+    'rgba(255,250,210,',  // pale gold
+  ][i % 4],
+}))
+
+// ── Mist clouds — 5 soft opacity-animated radial blobs ────────────────────
+const MIST = [
+  { id: 0, left: '-8%',  bottom: '12%', w: '55%', h: '22%', delay: 0,   dur: 9  },
+  { id: 1, left: '10%',  bottom: '6%',  w: '60%', h: '18%', delay: 2.5, dur: 11 },
+  { id: 2, left: '-5%',  bottom: '20%', w: '45%', h: '16%', delay: 5,   dur: 8  },
+  { id: 3, left: '25%',  bottom: '4%',  w: '50%', h: '14%', delay: 1.5, dur: 13 },
+  { id: 4, left: '5%',   bottom: '28%', w: '38%', h: '12%', delay: 3.5, dur: 10 },
+]
+
 export default function Login() {
-  const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
+  const [phase, setPhase] = useState('idle')
   const [termsChecked, setTermsChecked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -52,6 +79,45 @@ export default function Login() {
   return (
     <>
       <style>{`
+        @keyframes dustUp {
+          0%   { transform: translateY(0)   translateX(0);   opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 0.8; }
+          100% { transform: translateY(-90px) translateX(5px);  opacity: 0; }
+        }
+        @keyframes dustDriftL {
+          0%   { transform: translateY(0)  translateX(0);    opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 0.7; }
+          100% { transform: translateY(-85px) translateX(-18px); opacity: 0; }
+        }
+        @keyframes dustDriftR {
+          0%   { transform: translateY(0)  translateX(0);    opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 0.7; }
+          100% { transform: translateY(-88px) translateX(18px);  opacity: 0; }
+        }
+        @keyframes mistPulse {
+          0%, 100% { opacity: 0; }
+          40%, 60% { opacity: 1; }
+        }
+        @keyframes mistDrift {
+          0%   { transform: translateX(0)   scaleX(1);   opacity: 0; }
+          20%  { opacity: 1; }
+          50%  { transform: translateX(12px) scaleX(1.06); }
+          80%  { opacity: 0.7; }
+          100% { transform: translateX(-6px) scaleX(0.96); opacity: 0; }
+        }
+        @keyframes lightSweep {
+          0%        { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+          5%        { opacity: 1; }
+          35%       { opacity: 0.6; }
+          55%, 100% { transform: translateX(300%) skewX(-18deg); opacity: 0; }
+        }
+        @keyframes ambientPulse {
+          0%, 100% { opacity: 0.12; transform: scale(1); }
+          50%      { opacity: 0.28; transform: scale(1.08); }
+        }
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(60px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -96,7 +162,7 @@ export default function Login() {
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
       `}</style>
 
-      {/* ── Hero background — shifted left + anchored to bottom so feet show ── */}
+      {/* ── Hero background ───────────────────────────────────────────── */}
       <div
         onClick={handleScreenTap}
         style={{
@@ -109,18 +175,67 @@ export default function Login() {
         }}
       />
 
-      {/* Ground shadow — makes feet dissolve into surface instead of hard crop */}
+      {/* Ground shadow */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
         background: 'linear-gradient(to top, rgba(230,130,140,0.92) 0%, rgba(220,120,135,0.55) 8%, rgba(210,110,130,0.15) 18%, transparent 28%)',
       }} />
-
-      {/* Soft radial contact shadow under her feet */}
       <div style={{
         position: 'fixed', bottom: 0, left: 0, right: 0,
         height: '18%', pointerEvents: 'none',
         background: 'radial-gradient(ellipse 55% 60% at 30% 100%, rgba(160,60,80,0.45) 0%, transparent 70%)',
       }} />
+
+      {/* ── Ambient glow behind warrior ───────────────────────────────── */}
+      <div style={{
+        position: 'fixed', pointerEvents: 'none',
+        left: '-10%', top: '15%',
+        width: '70%', height: '65%',
+        background: 'radial-gradient(ellipse at 40% 55%, rgba(255,210,160,0.22) 0%, rgba(255,180,130,0.08) 45%, transparent 70%)',
+        animation: 'ambientPulse 5s ease-in-out infinite',
+      }} />
+
+      {/* ── Light sweep — diagonal gleam across the figure ────────────── */}
+      <div style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: 0, left: 0,
+          width: '18%', height: '100%',
+          background: 'linear-gradient(to right, transparent, rgba(255,248,220,0.12), transparent)',
+          animation: 'lightSweep 10s ease-in-out infinite 2s',
+          willChange: 'transform',
+        }} />
+      </div>
+
+      {/* ── Mist clouds ───────────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}>
+        {MIST.map(m => (
+          <div key={m.id} style={{
+            position: 'absolute',
+            left: m.left, bottom: m.bottom,
+            width: m.w, height: m.h,
+            background: 'radial-gradient(ellipse at center, rgba(255,240,235,0.22) 0%, rgba(255,230,225,0.1) 50%, transparent 100%)',
+            borderRadius: '50%',
+            animation: `mistDrift ${m.dur}s ease-in-out infinite ${m.delay}s`,
+          }} />
+        ))}
+      </div>
+
+      {/* ── Gold dust particles ────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        {PARTICLES.map(p => (
+          <div key={p.id} style={{
+            position: 'absolute',
+            left: `${p.x}%`, top: `${p.y}%`,
+            width: `${p.size}px`, height: `${p.size}px`,
+            borderRadius: '50%',
+            backgroundColor: `${p.color}${p.opacity})`,
+            animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
+            willChange: 'transform',
+          }} />
+        ))}
+      </div>
 
       {/* ── Post-login loading video ──────────────────────────────────── */}
       {showVideo && (
@@ -215,14 +330,12 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── Login form — slides up from bottom on screen tap ──────────── */}
+      {/* ── Login form — slides up from bottom ────────────────────────── */}
       {phase === 'form' && (
         <div style={{
-          position: 'fixed', bottom: 0, left: 0, right: 0,
-          zIndex: 20,
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 20,
           display: 'flex', justifyContent: 'center',
           animation: 'slideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
-          pointerEvents: 'auto',
         }}>
           <div style={{
             width: '100%', maxWidth: '480px',
@@ -249,7 +362,6 @@ export default function Login() {
                   onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
                   disabled={loading} />
               </div>
-
               {loading && (
                 <div style={{ display: 'flex', gap: '7px', marginBottom: '8px' }}>
                   {[0,1,2].map(i => (
