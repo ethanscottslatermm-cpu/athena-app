@@ -6,6 +6,7 @@ import communityIcon from '../assets/icons/nav-community.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
 import nourishIcon   from '../assets/icons/nav-nourish.png'
+import groceryIcon   from '../assets/icons/nav-grocery.svg'
 
 function PngIcon({ src, delay = 0 }) {
   return (
@@ -37,6 +38,7 @@ const navItems = [
   { to: '/',          label: 'Home',      png: dashboardIcon },
   { to: '/nourish',   label: 'Body Fuel', png: nourishIcon   },
   { to: '/pilates',   label: 'Pilates',   png: pilatesIcon   },
+  { to: '/grocery',   label: 'Grocery',   png: groceryIcon   },
   { to: '/mood',      label: 'Mood',      png: moodIcon      },
   { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
   { to: '/community', label: 'Community', png: communityIcon },

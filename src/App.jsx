@@ -22,8 +22,9 @@ import PilatesModule from './modules/pilates'
 import CycleModule   from './modules/cycle'
 import MoodModule    from './modules/mood'
 import NourishModule from './modules/nourish'
-import SleepModule   from './modules/sleep'
-import SkinModule    from './modules/skin'
+import SleepModule    from './modules/sleep'
+import SkinModule     from './modules/skin'
+import GroceryModule  from './modules/grocery/GroceryModule'
 
 function AuthGuard({ children }) {
   const { user, loading } = useAuth()
@@ -100,6 +101,7 @@ export default function App() {
                     <Route path="sleep/*"   element={<SleepModule />} />
                     <Route path="skin"      element={<Skin />} />
                     <Route path="skin/*"    element={<SkinModule />} />
+                    <Route path="grocery"   element={<GroceryModule />} />
                     <Route path="settings"  element={<Settings />} />
                     <Route path="*"         element={<Navigate to="/" replace />} />
                   </Routes>

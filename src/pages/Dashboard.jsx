@@ -24,6 +24,7 @@ import nourishIcon   from '../assets/icons/nav-nourish.png'
 import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
 import communityIcon from '../assets/icons/nav-community.png'
+import groceryIcon   from '../assets/icons/nav-grocery.svg'
 
 // Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
@@ -200,6 +201,7 @@ const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
   { key: 'mood',      label: 'Mood',      icon: moodIcon,      to: '/mood'      },
+  { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   to: '/grocery'   },
   { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     to: '/sleep'     },
   { key: 'skin',      label: 'Skin',      icon: skinIcon,      to: '/skin'      },
   { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },
