@@ -861,9 +861,7 @@ export default function Login() {
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100,
             backgroundColor: '#F2EDE8',
-            animation: videoFading
-              ? 'videoFadeOut 0.7s ease forwards'
-              : 'videoFadeIn 0.9s ease forwards',
+            animation: videoFading ? 'videoFadeOut 0.7s ease forwards' : 'none',
           }}>
             <video
               ref={videoRef}
@@ -875,7 +873,10 @@ export default function Login() {
                 setTimeout(() => navigate(navDest.current, { replace: true }), 700)
               }}
               onError={() => navigate(navDest.current, { replace: true })}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              style={{
+                width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+                animation: 'videoFadeIn 0.9s ease forwards',
+              }}
             />
           </div>
         )}
