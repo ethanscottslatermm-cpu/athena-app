@@ -13,9 +13,11 @@ const GOLD_COLORS = [
   'rgba(242,225,158,',
 ]
 
-const PARTICLES = Array.from({ length: 140 }, (_, i) => ({
+const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+const PARTICLE_COUNT = isMobile ? 30 : 140
+const PARTICLES = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
   id: i,
-  x: i < 90 ? 22 + (i * 41 + 7) % 54 : (i * 37 + 13) % 100,
+  x: i < Math.floor(PARTICLE_COUNT * 0.65) ? 22 + (i * 41 + 7) % 54 : (i * 37 + 13) % 100,
   y: (i * 53 + 7) % 100,
   size: 0.6 + (i % 5) * 0.4,
   duration: 3.0 + (i % 7) * 0.85,
@@ -299,10 +301,10 @@ export default function Login() {
               width: `${p.size}px`, height: `${p.size}px`,
               borderRadius: '50%',
               backgroundColor: `${p.color}${p.opacity})`,
-              boxShadow: p.size >= 2.5
-                ? `0 0 ${p.size * 3}px ${p.color}${p.opacity * 0.8}), 0 0 ${p.size * 6}px ${p.color}${p.opacity * 0.35})`
-                : `0 0 ${p.size * 2}px ${p.color}${p.opacity * 0.5})`,
+              ...(!isMobile && p.size >= 2.5 && { boxShadow: `0 0 ${p.size * 3}px ${p.color}${p.opacity * 0.8}), 0 0 ${p.size * 6}px ${p.color}${p.opacity * 0.35})` }),
+              ...(!isMobile && p.size < 2.5 && { boxShadow: `0 0 ${p.size * 2}px ${p.color}${p.opacity * 0.5})` }),
               animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
+              willChange: 'transform, opacity',
             }} />
           ))}
         </div>
