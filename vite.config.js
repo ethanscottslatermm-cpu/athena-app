@@ -25,10 +25,10 @@ export default defineConfig({
           },
           {
             urlPattern: /\/images\/dashboard\/.+\.(png|webp|jpg)$/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'dashboard-images-v1',
-              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheName: 'dashboard-images-v2',
+              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 7 },
             },
           },
         ],

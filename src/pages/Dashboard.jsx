@@ -527,19 +527,18 @@ export default function Dashboard() {
       <SectionHeader title="Today" delay={0.17} />
       <div className="grid grid-cols-2 gap-3 px-4 max-w-md mx-auto mb-6" style={anim(0.19)}>
         {todayPair.map(({ key, label, sub, icon, img, to }, i) => (
-          <div key={key} style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
-            <RimSpin duration="3.5s" delay={i * 0.5} />
+          <div key={key} style={{ borderRadius: 16, overflow: 'hidden' }}>
             <button
               onClick={() => navigate(to)}
               style={{
-                position: 'relative', zIndex: 1,
-                display: 'block', width: 'calc(100% - 2px)', margin: 1,
+                position: 'relative',
+                display: 'block', width: '100%',
                 ...(img
                   ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
                   : { background: '#C4AFA8' }
                 ),
                 border: 'none', cursor: 'pointer',
-                borderRadius: 15, padding: 16, textAlign: 'left',
+                borderRadius: 16, padding: 16, textAlign: 'left',
                 minHeight: 120,
               }}
             >
