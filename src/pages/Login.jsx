@@ -4,15 +4,16 @@ import { supabase } from '../lib/supabase'
 const loginHero = '/login-hero.png'
 
 // ── Sakura petals — pink tones, fall + rotate through air ────────────────
-const PETALS = Array.from({ length: 42 }, (_, i) => ({
+const PETALS = Array.from({ length: 30 }, (_, i) => ({
   id: i,
-  x: (i * 37 + 5) % 100,           // spread full width
-  size: 14 + (i % 5) * 4,          // 14–30px — larger so vein detail reads
-  duration: 7 + (i % 6) * 1.4,     // 7–14.4s — gentle fall speed
-  delay: (i * 0.48) % 12,          // staggered so screen always has petals
-  opacity: 0.55 + (i % 4) * 0.1,
-  anim: ['petalRise', 'petalRiseL', 'petalRise', 'petalRiseWide', 'petalRiseL'][i % 5],
-  color: ['#A8C4A2', '#B8CEB4', '#8FA58C', '#C5D5B8', '#D0DCCA'][i % 5],
+  x: (i * 37 + 5) % 96,            // spread full width with edge margin
+  y: (i * 23 + 8) % 75 + 10,       // 10–85% vertical spread so screen is always populated
+  size: 10 + (i % 5) * 3,          // 10–22px
+  duration: 9 + (i % 6) * 1.5,     // 9–17.5s — languid float cycle
+  delay: (i * 0.6) % 14,           // staggered so no two leaves are in sync
+  opacity: 0.5 + (i % 4) * 0.1,
+  anim: ['leafFloat', 'leafFloatL', 'leafFloat', 'leafFloatWide', 'leafFloatL'][i % 5],
+  color: ['#F2C4CF', '#EDB8C6', '#F5D5DC', '#E8A5B8', '#FAE0E6'][i % 5],
 }))
 
 // ── Mist clouds — 5 soft opacity-animated radial blobs ────────────────────
@@ -73,32 +74,26 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @keyframes petalRise {
-          0%   { transform: translateY(108vh) translateX(0px)   rotate(0deg);   opacity: 0; }
-          6%   { opacity: 0.9; }
-          25%  { transform: translateY(78vh)  translateX(14px)  rotate(22deg);  }
-          50%  { transform: translateY(48vh)  translateX(-8px)  rotate(-8deg);  }
-          75%  { transform: translateY(20vh)  translateX(18px)  rotate(28deg);  }
-          94%  { opacity: 0.6; }
-          100% { transform: translateY(-8vh)  translateX(6px)   rotate(12deg);  opacity: 0; }
+        @keyframes leafFloat {
+          0%   { transform: translateY(20px)  translateX(0px)   rotate(-4deg); }
+          28%  { transform: translateY(-55px) translateX(10px)  rotate(6deg);  }
+          55%  { transform: translateY(-80px) translateX(-6px)  rotate(-2deg); }
+          78%  { transform: translateY(-45px) translateX(12px)  rotate(7deg);  }
+          100% { transform: translateY(20px)  translateX(0px)   rotate(-4deg); }
         }
-        @keyframes petalRiseL {
-          0%   { transform: translateY(108vh) translateX(0px)   rotate(15deg);  opacity: 0; }
-          6%   { opacity: 0.9; }
-          25%  { transform: translateY(80vh)  translateX(-18px) rotate(-10deg); }
-          50%  { transform: translateY(50vh)  translateX(6px)   rotate(20deg);  }
-          75%  { transform: translateY(22vh)  translateX(-14px) rotate(-5deg);  }
-          94%  { opacity: 0.6; }
-          100% { transform: translateY(-8vh)  translateX(-20px) rotate(15deg);  opacity: 0; }
+        @keyframes leafFloatL {
+          0%   { transform: translateY(15px)  translateX(0px)   rotate(5deg);  }
+          30%  { transform: translateY(-60px) translateX(-14px) rotate(-6deg); }
+          58%  { transform: translateY(-75px) translateX(5px)   rotate(3deg);  }
+          80%  { transform: translateY(-40px) translateX(-10px) rotate(-8deg); }
+          100% { transform: translateY(15px)  translateX(0px)   rotate(5deg);  }
         }
-        @keyframes petalRiseWide {
-          0%   { transform: translateY(108vh) translateX(0px)   rotate(-10deg); opacity: 0; }
-          6%   { opacity: 0.9; }
-          25%  { transform: translateY(76vh)  translateX(26px)  rotate(15deg);  }
-          50%  { transform: translateY(46vh)  translateX(-14px) rotate(-18deg); }
-          75%  { transform: translateY(18vh)  translateX(20px)  rotate(10deg);  }
-          94%  { opacity: 0.6; }
-          100% { transform: translateY(-8vh)  translateX(8px)   rotate(-5deg);  opacity: 0; }
+        @keyframes leafFloatWide {
+          0%   { transform: translateY(22px)  translateX(0px)   rotate(-6deg); }
+          25%  { transform: translateY(-42px) translateX(22px)  rotate(4deg);  }
+          52%  { transform: translateY(-72px) translateX(-14px) rotate(-9deg); }
+          78%  { transform: translateY(-30px) translateX(18px)  rotate(5deg);  }
+          100% { transform: translateY(22px)  translateX(0px)   rotate(-6deg); }
         }
         @keyframes mistPulse {
           0%, 100% { opacity: 0; }
@@ -226,10 +221,10 @@ export default function Login() {
         {PETALS.map(p => (
           <div key={p.id} style={{
             position: 'absolute',
-            left: `${p.x}%`, top: 0,
+            left: `${p.x}%`, top: `${p.y}%`,
             width: `${p.size}px`, height: `${p.size}px`,
+            opacity: p.opacity,
             animation: `${p.anim} ${p.duration}s ease-in-out ${p.delay}s infinite`,
-            animationFillMode: 'backwards',
             willChange: 'transform',
           }}>
             {/* Botanical leaf from SVG Repo — body + vein detail paths */}
