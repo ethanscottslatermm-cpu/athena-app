@@ -96,23 +96,30 @@ export default function Login() {
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
       `}</style>
 
-      {/* ── Hero background — shifted left so cape hugs left, spear shows right ── */}
+      {/* ── Hero background — shifted left + anchored to bottom so feet show ── */}
       <div
         onClick={handleScreenTap}
         style={{
           position: 'fixed', inset: 0,
           backgroundImage: `url(${loginHero})`,
           backgroundSize: 'cover',
-          backgroundPosition: '20% center',
+          backgroundPosition: '20% bottom',
           backgroundColor: '#F0ADAD',
           cursor: phase === 'idle' ? 'pointer' : 'default',
         }}
       />
 
-      {/* Bottom vignette — depth behind the form */}
+      {/* Ground shadow — makes feet dissolve into surface instead of hard crop */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'linear-gradient(to top, rgba(110,35,55,0.72) 0%, rgba(110,35,55,0.2) 40%, transparent 65%)',
+        background: 'linear-gradient(to top, rgba(230,130,140,0.92) 0%, rgba(220,120,135,0.55) 8%, rgba(210,110,130,0.15) 18%, transparent 28%)',
+      }} />
+
+      {/* Soft radial contact shadow under her feet */}
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0,
+        height: '18%', pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 55% 60% at 30% 100%, rgba(160,60,80,0.45) 0%, transparent 70%)',
       }} />
 
       {/* ── Post-login loading video ──────────────────────────────────── */}
