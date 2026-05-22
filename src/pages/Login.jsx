@@ -4,20 +4,20 @@ import { supabase } from '../lib/supabase'
 import loginHero from '../assets/login-hero.png?inline'
 
 // ── Particles — gold/cream, slow, visible on pink ─────────────────────────
-const PARTICLES = Array.from({ length: 38 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 48 }, (_, i) => ({
   id: i,
-  x: 3 + (i * 41 + 7) % 72,   // left-biased toward the warrior
+  x: 3 + (i * 41 + 7) % 72,
   y: (i * 53 + 11) % 100,
   size: 0.8 + (i % 5) * 0.38,
-  duration: 7 + (i % 6) * 1.6, // 7–16s — slow drift
-  delay: (i * 0.55) % 11,
-  opacity: 0.55 + (i % 4) * 0.1,
+  duration: 4 + (i % 5) * 1.1, // 4–9s — noticeably livelier
+  delay: (i * 0.32) % 7,       // tighter delays = more visible at once
+  opacity: 0.6 + (i % 4) * 0.1,
   anim: ['dustUp', 'dustDriftL', 'dustUp', 'dustDriftR', 'dustUp'][i % 5],
   color: [
-    'rgba(255,245,190,',  // bright gold
-    'rgba(255,255,220,',  // warm cream
-    'rgba(255,230,140,',  // amber gold
-    'rgba(255,250,210,',  // pale gold
+    'rgba(255,245,190,',
+    'rgba(255,255,220,',
+    'rgba(255,230,140,',
+    'rgba(255,250,210,',
   ][i % 4],
 }))
 
@@ -186,14 +186,6 @@ export default function Login() {
         background: 'radial-gradient(ellipse 55% 60% at 30% 100%, rgba(160,60,80,0.45) 0%, transparent 70%)',
       }} />
 
-      {/* ── Ambient glow behind warrior ───────────────────────────────── */}
-      <div style={{
-        position: 'fixed', pointerEvents: 'none',
-        left: '-10%', top: '15%',
-        width: '70%', height: '65%',
-        background: 'radial-gradient(ellipse at 40% 55%, rgba(255,210,160,0.22) 0%, rgba(255,180,130,0.08) 45%, transparent 70%)',
-        animation: 'ambientPulse 5s ease-in-out infinite',
-      }} />
 
       {/* ── Light sweep — diagonal gleam across the figure ────────────── */}
       <div style={{
