@@ -24,7 +24,7 @@ import nourishIcon   from '../assets/icons/nav-nourish.png'
 import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
 import communityIcon from '../assets/icons/nav-community.png'
-import groceryIcon   from '../assets/icons/nav-grocery.svg'
+import groceryIcon   from '../assets/icons/nav-grocery.png'
 
 // Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
