@@ -3,22 +3,25 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 const loginHero = '/login-hero.png'
 
-// ── Particles — gold/cream, slow, visible on pink ─────────────────────────
-const PARTICLES = Array.from({ length: 48 }, (_, i) => ({
+// ── Sakura petals — pink tones, fall + rotate through air ────────────────
+const PETALS = Array.from({ length: 42 }, (_, i) => ({
   id: i,
-  x: 3 + (i * 41 + 7) % 72,
-  y: (i * 53 + 11) % 100,
-  size: 0.8 + (i % 5) * 0.38,
-  duration: 4 + (i % 5) * 1.1, // 4–9s — noticeably livelier
-  delay: (i * 0.32) % 7,       // tighter delays = more visible at once
-  opacity: 0.6 + (i % 4) * 0.1,
-  anim: ['dustUp', 'dustDriftL', 'dustUp', 'dustDriftR', 'dustUp'][i % 5],
+  x: (i * 37 + 5) % 100,           // spread full width
+  size: 8 + (i % 5) * 3,           // 8–20px — varied petal sizes
+  duration: 7 + (i % 6) * 1.4,     // 7–14.4s — gentle fall speed
+  delay: (i * 0.48) % 12,          // staggered so screen always has petals
+  opacity: 0.55 + (i % 4) * 0.1,
+  anim: ['petalFall', 'petalFallL', 'petalFall', 'petalFallR', 'petalFallL'][i % 5],
+  // rotate direction and amount varies per petal
+  rotateStart: (i * 37) % 360,
+  rotateEnd: (i % 2 === 0 ? 1 : -1) * (200 + (i % 3) * 80),
   color: [
-    'rgba(255,245,190,',
-    'rgba(255,255,220,',
-    'rgba(255,230,140,',
-    'rgba(255,250,210,',
-  ][i % 4],
+    '#F4B8C8',  // soft sakura pink
+    '#F9D0DA',  // pale blush
+    '#EFA0B8',  // deeper rose petal
+    '#FDE8EE',  // near-white petal tip
+    '#F2C4CF',  // mid pink
+  ][i % 5],
 }))
 
 // ── Mist clouds — 5 soft opacity-animated radial blobs ────────────────────
@@ -79,23 +82,26 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @keyframes dustUp {
-          0%   { transform: translateY(0)   translateX(0);   opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 0.8; }
-          100% { transform: translateY(-90px) translateX(5px);  opacity: 0; }
+        @keyframes petalFall {
+          0%   { transform: translateY(-40px) translateX(0px)   rotate(0deg);   opacity: 0; }
+          8%   { opacity: 1; }
+          50%  { transform: translateY(50vh)  translateX(22px)  rotate(160deg); }
+          92%  { opacity: 0.7; }
+          100% { transform: translateY(108vh) translateX(-8px)  rotate(320deg); opacity: 0; }
         }
-        @keyframes dustDriftL {
-          0%   { transform: translateY(0)  translateX(0);    opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 0.7; }
-          100% { transform: translateY(-85px) translateX(-18px); opacity: 0; }
+        @keyframes petalFallL {
+          0%   { transform: translateY(-40px) translateX(0px)   rotate(30deg);  opacity: 0; }
+          8%   { opacity: 1; }
+          50%  { transform: translateY(50vh)  translateX(-30px) rotate(-120deg); }
+          92%  { opacity: 0.7; }
+          100% { transform: translateY(108vh) translateX(14px)  rotate(-280deg); opacity: 0; }
         }
-        @keyframes dustDriftR {
-          0%   { transform: translateY(0)  translateX(0);    opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 0.7; }
-          100% { transform: translateY(-88px) translateX(18px);  opacity: 0; }
+        @keyframes petalFallR {
+          0%   { transform: translateY(-40px) translateX(0px)   rotate(-20deg); opacity: 0; }
+          8%   { opacity: 1; }
+          50%  { transform: translateY(50vh)  translateX(36px)  rotate(140deg); }
+          92%  { opacity: 0.7; }
+          100% { transform: translateY(108vh) translateX(18px)  rotate(300deg); opacity: 0; }
         }
         @keyframes mistPulse {
           0%, 100% { opacity: 0; }
@@ -218,18 +224,30 @@ export default function Login() {
         ))}
       </div>
 
-      {/* ── Gold dust particles ────────────────────────────────────────── */}
+      {/* ── Sakura petals ─────────────────────────────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-        {PARTICLES.map(p => (
+        {PETALS.map(p => (
           <div key={p.id} style={{
             position: 'absolute',
-            left: `${p.x}%`, top: `${p.y}%`,
+            left: `${p.x}%`, top: '-5%',
             width: `${p.size}px`, height: `${p.size}px`,
-            borderRadius: '50%',
-            backgroundColor: `${p.color}${p.opacity})`,
+            opacity: p.opacity,
             animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
             willChange: 'transform',
-          }} />
+          }}>
+            {/* Sakura petal — two overlapping ellipses form a realistic petal */}
+            <svg width="100%" height="100%" viewBox="0 0 20 24" fill="none">
+              <ellipse cx="10" cy="12" rx="6" ry="11"
+                fill={p.color} opacity="0.9"
+                transform="rotate(-15 10 12)" />
+              <ellipse cx="10" cy="12" rx="6" ry="11"
+                fill={p.color} opacity="0.6"
+                transform="rotate(15 10 12)" />
+              {/* Petal vein for depth */}
+              <line x1="10" y1="3" x2="10" y2="21"
+                stroke="rgba(255,255,255,0.3)" strokeWidth="0.6" strokeLinecap="round" />
+            </svg>
+          </div>
         ))}
       </div>
 
