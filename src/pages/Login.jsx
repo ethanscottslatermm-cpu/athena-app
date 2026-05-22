@@ -23,11 +23,11 @@ const PARTICLES = Array.from({ length: 48 }, (_, i) => ({
 
 // ── Mist clouds — 5 soft opacity-animated radial blobs ────────────────────
 const MIST = [
-  { id: 0, left: '-8%',  bottom: '12%', w: '55%', h: '22%', delay: 0,   dur: 9  },
-  { id: 1, left: '10%',  bottom: '6%',  w: '60%', h: '18%', delay: 2.5, dur: 11 },
-  { id: 2, left: '-5%',  bottom: '20%', w: '45%', h: '16%', delay: 5,   dur: 8  },
-  { id: 3, left: '25%',  bottom: '4%',  w: '50%', h: '14%', delay: 1.5, dur: 13 },
-  { id: 4, left: '5%',   bottom: '28%', w: '38%', h: '12%', delay: 3.5, dur: 10 },
+  { id: 0, left: '-8%',  bottom: '2%',  w: '55%', h: '10%', delay: 0,   dur: 9  },
+  { id: 1, left: '10%',  bottom: '0%',  w: '60%', h: '8%',  delay: 2.5, dur: 11 },
+  { id: 2, left: '-5%',  bottom: '5%',  w: '45%', h: '8%',  delay: 5,   dur: 8  },
+  { id: 3, left: '25%',  bottom: '1%',  w: '50%', h: '7%',  delay: 1.5, dur: 13 },
+  { id: 4, left: '5%',   bottom: '3%',  w: '38%', h: '6%',  delay: 3.5, dur: 10 },
 ]
 
 export default function Login() {
@@ -114,10 +114,6 @@ export default function Login() {
           35%       { opacity: 0.6; }
           55%, 100% { transform: translateX(300%) skewX(-18deg); opacity: 0; }
         }
-        @keyframes ambientPulse {
-          0%, 100% { opacity: 0.12; transform: scale(1); }
-          50%      { opacity: 0.28; transform: scale(1.08); }
-        }
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(60px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -179,11 +175,6 @@ export default function Login() {
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
         background: 'linear-gradient(to top, rgba(230,130,140,0.92) 0%, rgba(220,120,135,0.55) 8%, rgba(210,110,130,0.15) 18%, transparent 28%)',
-      }} />
-      <div style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0,
-        height: '18%', pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 55% 60% at 30% 100%, rgba(160,60,80,0.45) 0%, transparent 70%)',
       }} />
 
 
