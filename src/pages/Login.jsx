@@ -40,6 +40,7 @@ export default function Login() {
   const [error, setError] = useState('')
   const [authed, setAuthed] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
+  const [videoFading, setVideoFading] = useState(false)
   const navDest = useRef('/')
   const videoRef = useRef(null)
   const navigate = useNavigate()
@@ -347,6 +348,10 @@ export default function Login() {
         @keyframes videoFadeIn {
           from { opacity: 0; }
           to   { opacity: 1; }
+        }
+        @keyframes videoFadeOut {
+          from { opacity: 1; }
+          to   { opacity: 0; }
         }
       `}</style>
 
@@ -851,19 +856,24 @@ export default function Login() {
         )}
 
 
-        {/* ── Loading video — fades in slowly after ACCESS tap ── */}
+        {/* ── Loading video — plays once after ACCESS tap, fades to linen ── */}
         {showVideo && (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100,
             backgroundColor: '#F2EDE8',
-            animation: 'videoFadeIn 1.4s ease forwards',
+            animation: videoFading
+              ? 'videoFadeOut 0.7s ease forwards'
+              : 'videoFadeIn 0.9s ease forwards',
           }}>
             <video
               ref={videoRef}
               src="/athena-loading.mp4"
               playsInline
               preload="auto"
-              onEnded={() => navigate(navDest.current, { replace: true })}
+              onEnded={() => {
+                setVideoFading(true)
+                setTimeout(() => navigate(navDest.current, { replace: true }), 700)
+              }}
               onError={() => navigate(navDest.current, { replace: true })}
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
