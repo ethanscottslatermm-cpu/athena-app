@@ -1,31 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import knightIcon from '../assets/knight-icon.png'
 import { supabase } from '../lib/supabase'
-
-const ANIM_TYPES  = ['dustUp', 'dustUp', 'dustDriftL', 'dustUp', 'dustDriftR', 'dustUp']
-const GOLD_COLORS = [
-  'rgba(255,252,225,',
-  'rgba(245,232,170,',
-  'rgba(255,245,195,',
-  'rgba(238,220,150,',
-  'rgba(255,250,210,',
-  'rgba(242,225,158,',
-]
-
-const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
-const PARTICLE_COUNT = isMobile ? 30 : 140
-const PARTICLES = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
-  id: i,
-  x: i < Math.floor(PARTICLE_COUNT * 0.65) ? 22 + (i * 41 + 7) % 54 : (i * 37 + 13) % 100,
-  y: (i * 53 + 7) % 100,
-  size: 0.6 + (i % 5) * 0.4,
-  duration: 3.0 + (i % 7) * 0.85,
-  delay: (i * 0.22) % 8,
-  opacity: 0.25 + (i % 6) * 0.09,
-  anim: ANIM_TYPES[i % ANIM_TYPES.length],
-  color: GOLD_COLORS[i % GOLD_COLORS.length],
-}))
 
 export default function Login() {
   const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
@@ -42,7 +17,6 @@ export default function Login() {
   const loadVideoRef = useRef(null)
   const navigate = useNavigate()
 
-  // Start background loop — iOS requires autoPlay attr + muted + playsInline
   useEffect(() => {
     const v = bgVideoRef.current
     if (!v) return
@@ -54,13 +28,10 @@ export default function Login() {
     return () => v.removeEventListener('canplay', tryPlay)
   }, [])
 
-  // Start loading video on trigger
   useEffect(() => {
     if (showVideo && loadVideoRef.current) {
       loadVideoRef.current.muted = true
-      loadVideoRef.current.play().catch(() => {
-        navigate(navDest.current, { replace: true })
-      })
+      loadVideoRef.current.play().catch(() => navigate(navDest.current, { replace: true }))
     }
   }, [showVideo])
 
@@ -106,125 +77,45 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.cdnfonts.com/css/the-seasons');
-
-        @keyframes dustUp {
-          0%   { transform: translateY(0px)   translateX(0px);   opacity: 0; }
-          12%  { opacity: 1; }
-          88%  { opacity: 1; }
-          100% { transform: translateY(-80px)  translateX(6px);   opacity: 0; }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes dustDriftL {
-          0%   { transform: translateY(0px)  translateX(0px);   opacity: 0; }
-          12%  { opacity: 1; }
-          88%  { opacity: 1; }
-          100% { transform: translateY(-82px) translateX(-14px); opacity: 0; }
-        }
-        @keyframes dustDriftR {
-          0%   { transform: translateY(0px)  translateX(0px);   opacity: 0; }
-          12%  { opacity: 1; }
-          88%  { opacity: 1; }
-          100% { transform: translateY(-78px) translateX(14px);  opacity: 0; }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
         }
         @keyframes shimmer {
           0%   { background-position: 0% center; }
           100% { background-position: 200% center; }
         }
-        @keyframes wordmarkIn {
-          from { opacity: 0; transform: translateY(12px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes wordmarkPulse {
-          0%,100% { opacity: 0.82; }
-          50%     { opacity: 1; }
-        }
-        @keyframes formIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes overlayIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-        @keyframes loadingDot {
+        @keyframes dotPulse {
           0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
           40%            { opacity: 1;   transform: scale(1.15); }
         }
-        @keyframes checkboxGlow {
-          0%   { box-shadow: 0 0 0px rgba(212,160,160,0); }
-          50%  { box-shadow: 0 0 14px rgba(212,160,160,0.5); }
-          100% { box-shadow: 0 0 4px rgba(212,160,160,0.2); }
-        }
-        @keyframes goldSuccessPulse {
-          0%   { box-shadow: 0 0 0px rgba(212,160,160,0); border-color: rgba(212,160,160,0.52); }
-          40%  { box-shadow: 0 0 28px rgba(212,160,160,0.55), 0 0 60px rgba(212,160,160,0.22); border-color: rgba(212,160,160,0.95); }
-          100% { box-shadow: 0 0 8px rgba(212,160,160,0.18); border-color: rgba(212,160,160,0.52); }
-        }
-        @keyframes placeholderPulse {
-          0%, 25%   { color: rgba(215,210,232,0.65); }
-          50%       { color: rgba(240,237,252,1); }
-          75%, 100% { color: rgba(215,210,232,0.65); }
-        }
-        @keyframes accessWordPulse {
-          0%, 100% { opacity: 0.68; }
-          50%      { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,0.95)); }
-        }
-        @keyframes inputIconShimmer {
-          0%, 35%   { background-position: -250% 0; }
-          65%, 100% { background-position:  250% 0; }
-        }
-        @keyframes videoFadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-        @keyframes videoFadeOut {
-          from { opacity: 1; }
-          to   { opacity: 0; }
-        }
-        @keyframes bgPulse {
-          0%,100% { opacity: 0.88; }
-          50%     { opacity: 1; }
-        }
-
-        .iw {
-          position: relative;
-          margin-bottom: 20px;
-          width: 100%;
-        }
-        .iw input { padding: 14px 16px 14px 42px; }
-
-        .input-icon-wrap {
-          position: absolute;
-          left: 12px; top: 50%;
-          transform: translateY(-50%);
-          width: 20px; height: 20px;
-          pointer-events: none;
-        }
+        @keyframes videoFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes videoFadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         .athena-input {
-          background: rgba(255,255,255,0.06);
+          background: transparent;
           border: none;
           border-bottom: 1px solid rgba(235,215,140,0.42);
           outline: none;
           color: rgba(242,237,232,0.92);
           font-family: 'Cormorant Garamond', serif;
-          font-size: 12px;
+          font-size: 13px;
           letter-spacing: 0.22em;
-          padding: 10px 0 10px 6px;
+          padding: 10px 0;
           width: 100%;
           caret-color: rgba(255,230,120,0.9);
           -webkit-appearance: none;
           transition: border-bottom-color 0.3s;
         }
         .athena-input::placeholder {
-          font-family: 'Cormorant Garamond', serif;
-          font-weight: 500;
+          color: rgba(242,237,232,0.35);
           letter-spacing: 0.24em;
-          animation: placeholderPulse 2.5s ease-in-out infinite;
         }
-        .athena-input:focus {
-          border-bottom-color: rgba(255,230,120,0.85);
-        }
+        .athena-input:focus { border-bottom-color: rgba(255,230,120,0.72); }
         .athena-input:-webkit-autofill,
         .athena-input:-webkit-autofill:focus {
           -webkit-text-fill-color: rgba(242,237,232,0.88);
@@ -235,101 +126,48 @@ export default function Login() {
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(212,160,160,0.25) transparent; }
         .terms-scroll::-webkit-scrollbar { width: 3px; }
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(212,160,160,0.25); border-radius: 2px; }
-
-        .access-btn {
-          padding: 13px 36px;
-          background: transparent;
-          border: 1px solid rgba(212,160,160,0.52);
-          border-radius: 2px;
-          cursor: pointer;
-          -webkit-appearance: none;
-        }
       `}</style>
 
-      <div className="fixed inset-0 overflow-hidden md:absolute">
+      <div className="fixed inset-0 overflow-hidden">
 
-        {/* ── 1. Background video loop ───────────────────────────────────── */}
-        {/* Wrapper holds the pulse animation — iOS won't render video with opacity anim on the element itself */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          animation: 'bgPulse 8s ease-in-out infinite',
-        }}>
-          <video
-            ref={bgVideoRef}
-            src="/athena-bg-loop.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-            }}
-          />
-        </div>
+        {/* Background video */}
+        <video
+          ref={bgVideoRef}
+          src="/athena-bg-loop.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
 
-        {/* ── 2. Cinematic overlays over video ──────────────────────────── */}
-        {/* Dark base layer — gives depth and text contrast */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'linear-gradient(to bottom, rgba(15,10,8,0.38) 0%, rgba(15,10,8,0.18) 40%, rgba(15,10,8,0.55) 100%)',
-        }} />
-        {/* Warm linen tint — keeps Athena's palette alive over any video */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 100% 80% at 50% 60%, rgba(242,237,232,0.12) 0%, transparent 70%)',
-        }} />
-        {/* Rose bloom */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(212,160,160,0.14) 0%, transparent 65%)',
-          mixBlendMode: 'screen',
-        }} />
-        {/* Bottom vignette — grounds the wordmark */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'linear-gradient(to top, rgba(10,6,4,0.72) 0%, rgba(10,6,4,0.32) 28%, transparent 55%)',
-        }} />
+        {/* Overlays */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'linear-gradient(to bottom, rgba(15,10,8,0.38) 0%, rgba(15,10,8,0.18) 40%, rgba(15,10,8,0.55) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 100% 80% at 50% 60%, rgba(242,237,232,0.1) 0%, transparent 70%)' }} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'linear-gradient(to top, rgba(10,6,4,0.72) 0%, rgba(10,6,4,0.28) 30%, transparent 55%)' }} />
 
-        {/* ── 3. Dust particles ─────────────────────────────────────────── */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {PARTICLES.map(p => (
-            <div key={p.id} style={{
-              position: 'absolute',
-              left: `${p.x}%`, top: `${p.y}%`,
-              width: `${p.size}px`, height: `${p.size}px`,
-              borderRadius: '50%',
-              backgroundColor: `${p.color}${p.opacity})`,
-              ...(!isMobile && p.size >= 2.5 && { boxShadow: `0 0 ${p.size * 3}px ${p.color}${p.opacity * 0.8}), 0 0 ${p.size * 6}px ${p.color}${p.opacity * 0.35})` }),
-              ...(!isMobile && p.size < 2.5 && { boxShadow: `0 0 ${p.size * 2}px ${p.color}${p.opacity * 0.5})` }),
-              animation: `${p.anim} ${p.duration}s ease-in-out infinite ${p.delay}s`,
-              willChange: 'transform, opacity',
-            }} />
-          ))}
-        </div>
-
-        {/* ── T&C Overlay ───────────────────────────────────────────────── */}
+        {/* T&C overlay */}
         {phase === 'terms' && (
           <div style={{
-            position: 'absolute', inset: 0,
+            position: 'absolute', inset: 0, zIndex: 30,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            animation: 'overlayIn 0.35s ease',
-            zIndex: 30, padding: '28px 20px',
+            padding: '28px 20px',
+            animation: 'fadeIn 0.3s ease',
           }}>
             <div style={{
               width: '100%', maxWidth: '360px', maxHeight: '80vh',
-              background: 'rgba(10,6,4,0.55)',
-              backdropFilter: 'blur(28px)',
-              WebkitBackdropFilter: 'blur(28px)',
-              border: '1px solid rgba(212,160,160,0.22)',
+              background: 'rgba(10,6,4,0.6)',
+              backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid rgba(212,160,160,0.2)',
               borderRadius: '10px',
               display: 'flex', flexDirection: 'column', overflow: 'hidden',
-              boxShadow: '0 8px 48px rgba(0,0,0,0.4)',
             }}>
-              <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(212,160,160,0.18)', flexShrink: 0 }}>
+              <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(212,160,160,0.15)', flexShrink: 0 }}>
                 <p style={{ fontFamily: "'Cinzel', serif", fontSize: '9px', letterSpacing: '0.3em',
-                  color: 'rgba(212,160,160,0.7)', marginBottom: '7px' }}>ATHENA</p>
+                  color: 'rgba(212,160,160,0.6)', marginBottom: '7px' }}>ATHENA</p>
                 <h2 style={{ fontFamily: "'Cinzel', serif", fontSize: '16px', fontWeight: 400,
                   color: 'rgba(242,237,232,0.88)', letterSpacing: '0.1em', margin: 0 }}>
                   Terms & Conditions
@@ -337,8 +175,8 @@ export default function Login() {
               </div>
 
               <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
-                <div style={{ fontFamily: "'The Seasons', 'Cormorant Garamond', serif", fontSize: '13px',
-                  lineHeight: 1.8, color: 'rgba(242,237,232,0.65)', letterSpacing: '0.02em' }}>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '13px',
+                  lineHeight: 1.8, color: 'rgba(242,237,232,0.6)', letterSpacing: '0.02em' }}>
                   <p style={{ marginBottom: '14px' }}>
                     Welcome to Athena. By accessing or using our platform, you agree to be bound by these Terms &amp; Conditions and our Privacy Policy.
                   </p>
@@ -351,14 +189,14 @@ export default function Login() {
                   ].map(([title, body]) => (
                     <div key={title}>
                       <p style={{ fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.18em',
-                        color: 'rgba(212,160,160,0.65)', marginBottom: '6px', marginTop: '18px' }}>{title}</p>
+                        color: 'rgba(212,160,160,0.6)', marginBottom: '6px', marginTop: '18px' }}>{title}</p>
                       <p style={{ marginBottom: '4px' }}>{body}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div style={{ padding: '14px 22px 22px', borderTop: '1px solid rgba(212,160,160,0.18)', flexShrink: 0 }}>
+              <div style={{ padding: '14px 22px 22px', borderTop: '1px solid rgba(212,160,160,0.15)', flexShrink: 0 }}>
                 <label style={{ display: 'flex', alignItems: 'flex-start', gap: '11px',
                   cursor: 'pointer', marginBottom: '16px' }}
                   onClick={() => setTermsChecked(v => !v)}>
@@ -369,7 +207,6 @@ export default function Login() {
                     background: termsChecked ? 'rgba(212,160,160,0.15)' : 'transparent',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.2s',
-                    animation: termsChecked ? 'checkboxGlow 0.6s ease' : 'none',
                   }}>
                     {termsChecked && (
                       <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
@@ -377,21 +214,20 @@ export default function Login() {
                       </svg>
                     )}
                   </div>
-                  <span style={{ fontFamily: "'The Seasons', 'Cormorant Garamond', serif",
-                    fontSize: '12px', lineHeight: 1.55, color: 'rgba(242,237,232,0.55)',
+                  <span style={{ fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: '12px', lineHeight: 1.55, color: 'rgba(242,237,232,0.5)',
                     letterSpacing: '0.02em', userSelect: 'none' }}>
                     I agree to the Terms &amp; Conditions and Privacy Policy
                   </span>
                 </label>
-                <button onClick={handleAcceptTerms} disabled={!termsChecked}
-                  style={{
-                    width: '100%', padding: '12px', background: 'transparent',
-                    border: `1px solid ${termsChecked ? 'rgba(212,160,160,0.55)' : 'rgba(212,160,160,0.18)'}`,
-                    borderRadius: '3px',
-                    color: termsChecked ? 'rgba(242,237,232,0.88)' : 'rgba(242,237,232,0.28)',
-                    fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.32em',
-                    cursor: termsChecked ? 'pointer' : 'not-allowed', transition: 'all 0.25s',
-                  }}>
+                <button onClick={handleAcceptTerms} disabled={!termsChecked} style={{
+                  width: '100%', padding: '12px', background: 'transparent',
+                  border: `1px solid ${termsChecked ? 'rgba(212,160,160,0.55)' : 'rgba(212,160,160,0.18)'}`,
+                  borderRadius: '3px',
+                  color: termsChecked ? 'rgba(242,237,232,0.88)' : 'rgba(242,237,232,0.28)',
+                  fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.32em',
+                  cursor: termsChecked ? 'pointer' : 'not-allowed', transition: 'all 0.25s',
+                }}>
                   CONTINUE
                 </button>
               </div>
@@ -399,64 +235,27 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── Login form ────────────────────────────────────────────────── */}
+        {/* Login form */}
         {phase === 'form' && (
           <div style={{
             position: 'absolute',
-            bottom: 'calc(env(safe-area-inset-bottom) + 116px)',
+            bottom: 'calc(env(safe-area-inset-bottom) + 110px)',
             left: 0, right: 0,
             padding: '0 40px',
-            animation: 'formIn 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+            animation: 'fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
             zIndex: 10,
             opacity: authed ? 0 : 1,
             transition: 'opacity 0.4s ease',
             pointerEvents: authed ? 'none' : 'auto',
           }}>
             <form onSubmit={handleSubmit} noValidate>
-              {/* Email */}
-              <div className="iw">
-                <span className="input-icon-wrap" style={{ color: 'rgba(215,210,232,0.65)' }}>
-                  <span style={{
-                    display: 'block', width: '100%', height: '100%',
-                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
-                    mask: `url(${knightIcon}) no-repeat center / contain`,
-                    backgroundColor: 'currentColor',
-                  }} />
-                  <span style={{
-                    position: 'absolute', inset: 0,
-                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
-                    mask: `url(${knightIcon}) no-repeat center / contain`,
-                    background: 'linear-gradient(110deg, transparent 25%, rgba(250,248,255,0.85) 50%, transparent 75%)',
-                    backgroundSize: '250% 100%',
-                    animation: 'inputIconShimmer 4s ease-in-out infinite',
-                    mixBlendMode: 'screen',
-                  }} />
-                </span>
+              <div style={{ marginBottom: '20px' }}>
                 <input className="athena-input" type="email" placeholder="EMAIL"
                   value={email} onChange={e => setEmail(e.target.value)}
                   autoComplete="email" autoCapitalize="none" autoCorrect="off"
                   spellCheck={false} enterKeyHint="next" disabled={loading} />
               </div>
-
-              {/* Password */}
-              <div className="iw">
-                <span className="input-icon-wrap" style={{ color: 'rgba(215,210,232,0.65)' }}>
-                  <span style={{
-                    display: 'block', width: '100%', height: '100%',
-                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
-                    mask: `url(${knightIcon}) no-repeat center / contain`,
-                    backgroundColor: 'currentColor',
-                  }} />
-                  <span style={{
-                    position: 'absolute', inset: 0,
-                    WebkitMask: `url(${knightIcon}) no-repeat center / contain`,
-                    mask: `url(${knightIcon}) no-repeat center / contain`,
-                    background: 'linear-gradient(110deg, transparent 25%, rgba(250,248,255,0.85) 50%, transparent 75%)',
-                    backgroundSize: '250% 100%',
-                    animation: 'inputIconShimmer 4s ease-in-out infinite 0.6s',
-                    mixBlendMode: 'screen',
-                  }} />
-                </span>
+              <div style={{ marginBottom: '20px' }}>
                 <input className="athena-input" type="password" placeholder="PASSWORD"
                   value={password} onChange={e => setPassword(e.target.value)}
                   autoComplete="current-password" enterKeyHint="go"
@@ -465,12 +264,12 @@ export default function Login() {
               </div>
 
               {loading && (
-                <div style={{ display: 'flex', gap: '7px', paddingLeft: '6px', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', gap: '7px', marginBottom: '6px' }}>
                   {[0, 1, 2].map(i => (
                     <div key={i} style={{
                       width: '5px', height: '5px', borderRadius: '50%',
                       backgroundColor: 'rgba(212,160,160,0.75)',
-                      animation: `loadingDot 1.1s ease-in-out infinite ${i * 0.18}s`,
+                      animation: `dotPulse 1.1s ease-in-out infinite ${i * 0.18}s`,
                     }} />
                   ))}
                 </div>
@@ -489,23 +288,27 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── ACCESS button ─────────────────────────────────────────────── */}
+        {/* ACCESS button — shown after successful auth */}
         {authed && !showVideo && (
           <div style={{
-            position: 'absolute', inset: 0,
+            position: 'absolute', inset: 0, zIndex: 11,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 11, animation: 'formIn 0.4s ease',
+            animation: 'fadeIn 0.4s ease',
           }}>
-            <button onClick={() => setShowVideo(true)} className="access-btn"
-              style={{ animation: 'goldSuccessPulse 1s ease 0.4s both' }}>
+            <button onClick={() => setShowVideo(true)} style={{
+              padding: '13px 40px', background: 'transparent',
+              border: '1px solid rgba(212,160,160,0.5)',
+              borderRadius: '2px', cursor: 'pointer',
+              WebkitAppearance: 'none',
+            }}>
               <span style={{
                 fontFamily: "'Cinzel', serif", fontSize: '12px', fontWeight: 500,
                 letterSpacing: '0.38em',
-                backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(205,198,186,0.82) 30%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 70%, rgba(205,198,186,0.82) 100%)',
+                backgroundImage: 'linear-gradient(90deg, rgba(205,198,186,0.82) 0%, rgba(255,255,255,1) 50%, rgba(205,198,186,0.82) 100%)',
                 backgroundSize: '200% 100%',
                 WebkitBackgroundClip: 'text', backgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                animation: 'shimmer 5s linear infinite, accessWordPulse 2.5s ease-in-out infinite',
+                animation: 'shimmer 3s linear infinite',
                 display: 'inline-block',
               }}>
                 ACCESS
@@ -514,7 +317,7 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── Post-login loading video ───────────────────────────────────── */}
+        {/* Post-login loading video */}
         {showVideo && (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100,
@@ -539,7 +342,7 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── ATHENA wordmark ───────────────────────────────────────────── */}
+        {/* ATHENA wordmark */}
         <div
           onClick={handleWordmarkTap}
           style={{
@@ -550,14 +353,14 @@ export default function Login() {
             padding: '0 24px',
             cursor: phase === 'idle' ? 'pointer' : 'default',
             zIndex: 10,
+            opacity: phase === 'form' ? 0.4 : 1,
             transition: 'opacity 0.5s ease',
-            opacity: phase === 'form' ? 0.45 : 1,
-            animation: 'wordmarkIn 1.2s cubic-bezier(0.22,1,0.36,1) both, wordmarkPulse 3.5s ease-in-out 1.4s infinite',
+            animation: 'fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) both',
           }}
         >
           <div style={{
             width: '36px', height: '1px',
-            background: 'linear-gradient(to right, transparent, rgba(212,160,160,0.45), transparent)',
+            background: 'linear-gradient(to right, transparent, rgba(212,160,160,0.4), transparent)',
             margin: '0 auto 12px',
           }} />
           <span style={{
@@ -568,11 +371,10 @@ export default function Login() {
             letterSpacing: '0.26em',
             lineHeight: 1,
             transform: 'scaleX(0.84)',
-            backgroundImage: 'linear-gradient(90deg, rgba(212,208,232,0.82) 0%, rgba(212,208,232,0.82) 30%, rgba(240,237,252,0.95) 44%, rgba(248,246,255,1) 50%, rgba(240,237,252,0.95) 56%, rgba(212,208,232,0.82) 70%, rgba(212,208,232,0.82) 100%)',
+            backgroundImage: 'linear-gradient(90deg, rgba(212,208,232,0.82) 0%, rgba(248,246,255,1) 50%, rgba(212,208,232,0.82) 100%)',
             backgroundSize: '200% 100%',
             WebkitBackgroundClip: 'text', backgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 0 3px rgba(238,234,255,0.55)) drop-shadow(0 0 10px rgba(222,218,248,0.38)) drop-shadow(0 0 22px rgba(210,206,242,0.2))',
             animation: 'shimmer 5s linear infinite',
           }}>
             ATHENA
@@ -581,9 +383,8 @@ export default function Login() {
             <p style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: '11px', letterSpacing: '0.22em',
-              color: 'rgba(242,237,232,0.45)',
+              color: 'rgba(242,237,232,0.4)',
               marginTop: '10px',
-              animation: 'wordmarkPulse 3s ease-in-out infinite 0.5s',
             }}>
               tap to enter
             </p>
