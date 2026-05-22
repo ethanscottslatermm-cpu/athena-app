@@ -4,15 +4,15 @@ import { supabase } from '../lib/supabase'
 const loginHero = '/login-hero.png'
 
 // ── Sakura petals — pink tones, fall + rotate through air ────────────────
-const PETALS = Array.from({ length: 30 }, (_, i) => ({
+const PETALS = Array.from({ length: 36 }, (_, i) => ({
   id: i,
-  x: (i * 37 + 5) % 96,            // spread full width with edge margin
-  y: (i * 23 + 8) % 75 + 10,       // 10–85% vertical spread so screen is always populated
+  x: (i * 37 + 5) % 96,
+  y: (i * 23 + 8) % 75 + 10,
   size: 10 + (i % 5) * 3,          // 10–22px
-  duration: 9 + (i % 6) * 1.5,     // 9–17.5s — languid float cycle
-  delay: (i * 0.6) % 14,           // staggered so no two leaves are in sync
+  duration: 4 + (i % 6) * 1.1,     // 4–9.5s — faster
+  delay: (i * 0.45) % 10,
   opacity: 0.5 + (i % 4) * 0.1,
-  anim: ['leafFloat', 'leafFloatL', 'leafFloat', 'leafFloatWide', 'leafFloatL'][i % 5],
+  anim: ['leafFly', 'leafFlyL', 'leafFlyDiag', 'leafFlyErratic', 'leafFlyL', 'leafFly'][i % 6],
   color: ['#F2C4CF', '#EDB8C6', '#F5D5DC', '#E8A5B8', '#FAE0E6'][i % 5],
 }))
 
@@ -74,26 +74,37 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @keyframes leafFloat {
-          0%   { transform: translateY(20px)  translateX(0px)   rotate(-4deg); }
-          28%  { transform: translateY(-55px) translateX(10px)  rotate(6deg);  }
-          55%  { transform: translateY(-80px) translateX(-6px)  rotate(-2deg); }
-          78%  { transform: translateY(-45px) translateX(12px)  rotate(7deg);  }
-          100% { transform: translateY(20px)  translateX(0px)   rotate(-4deg); }
+        @keyframes leafFly {
+          0%   { transform: translateY(0px)    translateX(0px)    rotate(-5deg);  }
+          15%  { transform: translateY(-45px)  translateX(70px)   rotate(22deg);  }
+          38%  { transform: translateY(-85px)  translateX(120px)  rotate(-12deg); }
+          62%  { transform: translateY(-55px)  translateX(90px)   rotate(28deg);  }
+          82%  { transform: translateY(-20px)  translateX(40px)   rotate(-6deg);  }
+          100% { transform: translateY(0px)    translateX(0px)    rotate(-5deg);  }
         }
-        @keyframes leafFloatL {
-          0%   { transform: translateY(15px)  translateX(0px)   rotate(5deg);  }
-          30%  { transform: translateY(-60px) translateX(-14px) rotate(-6deg); }
-          58%  { transform: translateY(-75px) translateX(5px)   rotate(3deg);  }
-          80%  { transform: translateY(-40px) translateX(-10px) rotate(-8deg); }
-          100% { transform: translateY(15px)  translateX(0px)   rotate(5deg);  }
+        @keyframes leafFlyL {
+          0%   { transform: translateY(0px)    translateX(0px)    rotate(8deg);   }
+          18%  { transform: translateY(-55px)  translateX(-75px)  rotate(-18deg); }
+          42%  { transform: translateY(-35px)  translateX(-130px) rotate(22deg);  }
+          65%  { transform: translateY(-75px)  translateX(-85px)  rotate(-8deg);  }
+          85%  { transform: translateY(-25px)  translateX(-35px)  rotate(14deg);  }
+          100% { transform: translateY(0px)    translateX(0px)    rotate(8deg);   }
         }
-        @keyframes leafFloatWide {
-          0%   { transform: translateY(22px)  translateX(0px)   rotate(-6deg); }
-          25%  { transform: translateY(-42px) translateX(22px)  rotate(4deg);  }
-          52%  { transform: translateY(-72px) translateX(-14px) rotate(-9deg); }
-          78%  { transform: translateY(-30px) translateX(18px)  rotate(5deg);  }
-          100% { transform: translateY(22px)  translateX(0px)   rotate(-6deg); }
+        @keyframes leafFlyDiag {
+          0%   { transform: translateY(0px)    translateX(0px)    rotate(-3deg);  }
+          22%  { transform: translateY(-95px)  translateX(55px)   rotate(20deg);  }
+          48%  { transform: translateY(-60px)  translateX(-40px)  rotate(-16deg); }
+          72%  { transform: translateY(-110px) translateX(80px)   rotate(25deg);  }
+          100% { transform: translateY(0px)    translateX(0px)    rotate(-3deg);  }
+        }
+        @keyframes leafFlyErratic {
+          0%   { transform: translateY(0px)    translateX(0px)    rotate(0deg);   }
+          12%  { transform: translateY(-35px)  translateX(55px)   rotate(18deg);  }
+          28%  { transform: translateY(-90px)  translateX(-25px)  rotate(-22deg); }
+          50%  { transform: translateY(-50px)  translateX(110px)  rotate(14deg);  }
+          68%  { transform: translateY(-105px) translateX(65px)   rotate(-18deg); }
+          84%  { transform: translateY(-40px)  translateX(20px)   rotate(26deg);  }
+          100% { transform: translateY(0px)    translateX(0px)    rotate(0deg);   }
         }
         @keyframes mistPulse {
           0%, 100% { opacity: 0; }
