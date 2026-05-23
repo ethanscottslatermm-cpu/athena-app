@@ -13,100 +13,26 @@ export default function Login() {
   const [showVideo, setShowVideo] = useState(false)
   const [videoFading, setVideoFading] = useState(false)
 
-  const navDest       = useRef('/')
-  const loadVideoRef  = useRef(null)
-  const heroVideoRef  = useRef(null)
-  const idleTimerRef  = useRef(null)
-  const loginTimerRef = useRef(null)
-  const navigate = useNavigate()
+  const navDest     = useRef('/')
+  const loadVideoRef = useRef(null)
+  const navigate    = useNavigate()
 
-  // ── Video play — promise-safe with touch-unlock fallback ────────────────
-  function playHeroVideo() {
-    const v = heroVideoRef.current
-    if (!v) return
-    v.muted = true
-    v.currentTime = 0
-    const p = v.play()
-    if (p !== undefined) {
-      p.catch(() => {
-        // Last resort: play on next user touch (older iOS edge case)
-        const unlock = () => {
-          v.currentTime = 0
-          v.play().catch(() => {})
-        }
-        document.addEventListener('touchstart', unlock, { once: true, passive: true })
-        document.addEventListener('click',      unlock, { once: true })
-      })
-    }
-  }
-
-  function clearIdleTimer() {
-    clearTimeout(idleTimerRef.current)
-    idleTimerRef.current = null
-  }
-
-  function clearLoginTimer() {
-    clearTimeout(loginTimerRef.current)
-    loginTimerRef.current = null
-  }
-
-  function startIdleTimer() {
-    clearTimeout(idleTimerRef.current)
-    idleTimerRef.current = setTimeout(() => {
-      playHeroVideo()
-      startIdleTimer()
-    }, 20000)
-  }
-
-  function startLoginTimer() {
-    clearTimeout(loginTimerRef.current)
-    loginTimerRef.current = setTimeout(() => {
-      setPhase('idle')
-      playHeroVideo()
-      startIdleTimer()
-    }, 15000)
-  }
-
-  // ── Mount ─────────────────────────────────────────────────────────────────
-  // Do NOT call pause() here — it cancels iOS's autoplay initialization and
-  // subsequent play() calls get blocked even for muted video.
-  // Let autoPlay handle the initial start; just wire the idle cycle.
-  useEffect(() => {
-    const v = heroVideoRef.current
-    if (v) {
-      v.setAttribute('webkit-playsinline', '')
-      v.muted = true
-    }
-    startIdleTimer()
-    return () => {
-      clearIdleTimer()
-      clearLoginTimer()
-    }
-  }, [])
-
-  // ── Post-login loading video ──────────────────────────────────────────────
   useEffect(() => {
     if (showVideo && loadVideoRef.current) {
       loadVideoRef.current.play().catch(() => navigate(navDest.current, { replace: true }))
     }
   }, [showVideo])
 
-  // ── Tap handler ───────────────────────────────────────────────────────────
-  function handleScreenTap() {
+  function handleTap() {
     if (phase !== 'idle') return
-    clearIdleTimer()
-    const target = localStorage.getItem('athena_terms_accepted') ? 'form' : 'terms'
-    setPhase(target)
-    if (target === 'form') startLoginTimer()
+    localStorage.getItem('athena_terms_accepted') ? setPhase('form') : setPhase('terms')
   }
 
   function handleAcceptTerms() {
     localStorage.setItem('athena_terms_accepted', '1')
     setPhase('form')
-    startLoginTimer()
   }
 
-  // ── Auth ──────────────────────────────────────────────────────────────────
   async function doAuth() {
     if (!email.trim() || !password.trim() || loading || authed) return
     setLoading(true)
@@ -117,8 +43,6 @@ export default function Login() {
       setError(authError.message)
       setLoading(false)
     } else {
-      clearIdleTimer()
-      clearLoginTimer()
       const { data: prof } = await supabase
         .from('profiles').select('preferences').eq('id', authUser.id).single()
       navDest.current = prof?.preferences?.onboarding_done ? '/' : '/onboarding'
@@ -130,11 +54,20 @@ export default function Login() {
   return (
     <>
       <style>{`
-        /* Suppress Safari's native video controls and play-button overlay */
-        video::-webkit-media-controls            { display: none !important; }
-        video::-webkit-media-controls-panel      { display: none !important; }
-        video::-webkit-media-controls-start-playback-button { display: none !important; }
-
+        @keyframes glowBreath {
+          0%, 100% { opacity: 0.4;  transform: translate(-50%, -58%) scale(1);    }
+          50%       { opacity: 0.72; transform: translate(-50%, -58%) scale(1.1);  }
+        }
+        @keyframes logoGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 10px rgba(196,133,154,0.28))
+                    drop-shadow(0 0 28px rgba(196,133,154,0.12));
+          }
+          50% {
+            filter: drop-shadow(0 0 22px rgba(196,133,154,0.55))
+                    drop-shadow(0 0 55px rgba(196,133,154,0.22));
+          }
+        }
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(60px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -144,7 +77,7 @@ export default function Login() {
           to   { opacity: 1; }
         }
         @keyframes dotPulse {
-          0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
+          0%, 80%, 100% { opacity: 0.25; transform: scale(0.8);  }
           40%           { opacity: 1;   transform: scale(1.15); }
         }
         @keyframes videoFadeIn  { from { opacity: 0; } to { opacity: 1; } }
@@ -153,23 +86,23 @@ export default function Login() {
         .login-input {
           background: transparent;
           border: none;
-          border-bottom: 1.5px solid rgba(255,255,255,0.45);
+          border-bottom: 1.5px solid rgba(196,133,154,0.5);
           outline: none;
-          color: #fff;
+          color: #3B3330;
           font-family: 'Cormorant Garamond', serif;
           font-size: 15px;
           letter-spacing: 0.2em;
           padding: 12px 0;
           width: 100%;
-          caret-color: #fff;
+          caret-color: #C4859A;
           -webkit-appearance: none;
           transition: border-bottom-color 0.3s;
         }
-        .login-input::placeholder { color: rgba(255,255,255,0.45); letter-spacing: 0.24em; }
-        .login-input:focus { border-bottom-color: rgba(255,255,255,0.9); }
+        .login-input::placeholder { color: rgba(122,106,101,0.5); letter-spacing: 0.24em; }
+        .login-input:focus { border-bottom-color: #C4859A; }
         .login-input:-webkit-autofill,
         .login-input:-webkit-autofill:focus {
-          -webkit-text-fill-color: #fff;
+          -webkit-text-fill-color: #3B3330;
           -webkit-box-shadow: 0 0 0 1000px transparent inset;
           transition: background-color 5000s ease-in-out 0s;
         }
@@ -178,35 +111,44 @@ export default function Login() {
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
       `}</style>
 
-      {/* ── Background colour (while video buffers) ───────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#0D0B0A', zIndex: 0 }} />
-
-      {/* ── Hero video — pointer-events off so Safari can't show overlay ──── */}
-      <video
-        ref={heroVideoRef}
-        src="/athena-splash.mp4"
-        autoPlay
-        muted
-        playsInline
-        preload="auto"
+      {/* ── Full-screen splash ────────────────────────────────────────────── */}
+      <div
+        onClick={handleTap}
         style={{
-          position: 'fixed', inset: 0, zIndex: 1,
-          width: '100%', height: '100%',
-          objectFit: 'cover',
-          pointerEvents: 'none',
+          position: 'fixed', inset: 0,
+          backgroundColor: '#F9EBF0',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: phase === 'idle' ? 'pointer' : 'default',
+          overflow: 'hidden',
         }}
-      />
+      >
+        {/* Radial glow layer — sits behind the logo, pulses with it */}
+        <div style={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          width: '72%', paddingBottom: '72%',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse at center, rgba(196,133,154,0.38) 0%, rgba(220,170,185,0.14) 45%, transparent 70%)',
+          animation: 'glowBreath 4s ease-in-out infinite',
+          pointerEvents: 'none',
+        }} />
 
-      {/* ── Transparent tap target above video (only active in idle/terms) ── */}
-      {phase !== 'form' && (
-        <div
-          onClick={handleScreenTap}
+        {/* Logo — drop-shadow glow follows the PNG alpha (figure + wordmark) */}
+        <img
+          src="/athena-logo.png"
+          alt="Athena"
+          draggable={false}
           style={{
-            position: 'fixed', inset: 0, zIndex: 2,
-            cursor: phase === 'idle' ? 'pointer' : 'default',
+            position: 'relative', zIndex: 1,
+            width: '78%',
+            maxWidth: '400px',
+            minWidth: '240px',
+            animation: 'logoGlow 4s ease-in-out infinite',
+            userSelect: 'none',
+            pointerEvents: 'none',
           }}
         />
-      )}
+      </div>
 
       {/* ── Post-login loading video ──────────────────────────────────────── */}
       {showVideo && (
@@ -238,7 +180,7 @@ export default function Login() {
           position: 'fixed', inset: 0, zIndex: 30,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '28px 20px',
-          background: 'rgba(0,0,0,0.6)',
+          background: 'rgba(59,51,48,0.35)',
           backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
           animation: 'fadeIn 0.3s ease',
         }}>
@@ -248,7 +190,7 @@ export default function Login() {
             border: '1px solid rgba(196,133,154,0.2)',
             borderRadius: '12px',
             display: 'flex', flexDirection: 'column', overflow: 'hidden',
-            boxShadow: '0 8px 48px rgba(0,0,0,0.4)',
+            boxShadow: '0 8px 48px rgba(196,133,154,0.2)',
           }}>
             <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(196,133,154,0.15)', flexShrink: 0 }}>
               <p style={{ fontFamily: "'Cinzel', serif", fontSize: '9px', letterSpacing: '0.3em', color: '#C4859A', marginBottom: '7px' }}>ATHENA</p>
@@ -316,9 +258,9 @@ export default function Login() {
         }}>
           <div style={{
             width: '100%', maxWidth: '480px',
-            background: 'rgba(10,6,4,0.65)',
+            background: 'rgba(249,235,240,0.82)',
             backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-            borderTop: '1px solid rgba(255,255,255,0.1)',
+            borderTop: '1px solid rgba(196,133,154,0.25)',
             borderRadius: '20px 20px 0 0',
             padding: '36px 36px calc(env(safe-area-inset-bottom) + 36px)',
             opacity: authed ? 0 : 1,
@@ -332,9 +274,7 @@ export default function Login() {
                   type="email"
                   placeholder="EMAIL"
                   value={email}
-                  onChange={e => { setEmail(e.target.value); startLoginTimer() }}
-                  onFocus={startLoginTimer}
-                  onKeyDown={startLoginTimer}
+                  onChange={e => setEmail(e.target.value)}
                   autoComplete="email" autoCapitalize="none" autoCorrect="off"
                   spellCheck={false} enterKeyHint="next" disabled={loading}
                 />
@@ -345,9 +285,7 @@ export default function Login() {
                   type="password"
                   placeholder="PASSWORD"
                   value={password}
-                  onChange={e => { setPassword(e.target.value); startLoginTimer() }}
-                  onFocus={startLoginTimer}
-                  onKeyDown={startLoginTimer}
+                  onChange={e => setPassword(e.target.value)}
                   autoComplete="current-password" enterKeyHint="go"
                   onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
                   disabled={loading}
@@ -358,7 +296,7 @@ export default function Login() {
                   {[0, 1, 2].map(i => (
                     <div key={i} style={{
                       width: '5px', height: '5px', borderRadius: '50%',
-                      backgroundColor: 'rgba(255,255,255,0.75)',
+                      backgroundColor: '#C4859A',
                       animation: `dotPulse 1.1s ease-in-out infinite ${i * 0.18}s`,
                     }} />
                   ))}
@@ -367,8 +305,7 @@ export default function Login() {
               {error && (
                 <p style={{
                   fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic',
-                  fontSize: '13px', color: 'rgba(255,200,200,0.95)',
-                  marginBottom: '14px', lineHeight: 1.4,
+                  fontSize: '13px', color: '#C4859A', marginBottom: '14px', lineHeight: 1.4,
                 }}>
                   {error}
                 </p>
@@ -385,13 +322,15 @@ export default function Login() {
           position: 'fixed', inset: 0, zIndex: 50,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           animation: 'fadeIn 0.4s ease',
+          backgroundColor: 'rgba(249,235,240,0.6)',
+          backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
         }}>
           <button onClick={() => setShowVideo(true)} style={{
             padding: '13px 40px', background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.6)',
+            border: '1px solid rgba(196,133,154,0.7)',
             borderRadius: '2px', cursor: 'pointer', WebkitAppearance: 'none',
           }}>
-            <span style={{ fontFamily: "'Cinzel', serif", fontSize: '12px', letterSpacing: '0.38em', color: '#fff' }}>
+            <span style={{ fontFamily: "'Cinzel', serif", fontSize: '12px', letterSpacing: '0.38em', color: '#3B3330' }}>
               ACCESS
             </span>
           </button>

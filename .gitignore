@@ -43,6 +43,7 @@ Thumbs.db
 # Root-level design screenshots
 Athena*.png
 Athena*.jpg
+!public/athena-logo.png
 
 # Duplicate asset staging folders
 Pilate Exercise Card Slots/
