@@ -34,9 +34,11 @@ dist-ssr
 desktop.ini
 Thumbs.db
 
-# Video/design reference files
+# Video/design reference files (root-level only — public/ videos are tracked)
 *.mp4
 *.mov
+!public/*.mp4
+!public/*.mov
 
 # Root-level design screenshots
 Athena*.png

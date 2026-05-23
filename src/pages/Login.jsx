@@ -1,22 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-const loginHero = '/login-hero.png'
 
-// ── Sakura petals — pink tones, fall + rotate through air ────────────────
+// ── Leaf particles ────────────────────────────────────────────────────────────
 const PETALS = Array.from({ length: 36 }, (_, i) => ({
   id: i,
   x: (i * 37 + 5) % 96,
   y: (i * 23 + 8) % 75 + 10,
-  size: 10 + (i % 5) * 3,          // 10–22px
-  duration: 6 + (i % 6) * 1.0,     // 6–11s — slightly eased back
+  size: 10 + (i % 5) * 3,
+  duration: 6 + (i % 6) * 1.0,
   delay: (i * 0.45) % 10,
   opacity: 0.5 + (i % 4) * 0.1,
   anim: ['leafBlow', 'leafBlowL', 'leafDrop', 'leafGusts', 'leafDropL', 'leafBlow'][i % 6],
   color: ['#F2C4CF', '#EDB8C6', '#F5D5DC', '#E8A5B8', '#FAE0E6'][i % 5],
 }))
 
-// ── Mist clouds — 5 soft opacity-animated radial blobs ────────────────────
+// ── Mist clouds ───────────────────────────────────────────────────────────────
 const MIST = [
   { id: 0, left: '-8%',  bottom: '2%',  w: '55%', h: '10%', delay: 0,   dur: 9  },
   { id: 1, left: '10%',  bottom: '0%',  w: '60%', h: '8%',  delay: 2.5, dur: 11 },
@@ -26,7 +25,7 @@ const MIST = [
 ]
 
 export default function Login() {
-  const [phase, setPhase] = useState('idle')
+  const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
   const [termsChecked, setTermsChecked] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -35,36 +34,111 @@ export default function Login() {
   const [authed, setAuthed] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
   const [videoFading, setVideoFading] = useState(false)
-  const navDest = useRef('/')
-  const loadVideoRef = useRef(null)
+
+  const navDest      = useRef('/')
+  const loadVideoRef = useRef(null)   // post-login transition video
+  const heroVideoRef = useRef(null)   // splash background video
+  const idleTimerRef  = useRef(null)  // 7s idle re-animation
+  const loginTimerRef = useRef(null)  // 15s login inactivity dismiss
   const navigate = useNavigate()
 
+  // ── Video helpers (ref-only, safe across re-renders) ─────────────────────
+  function playHeroVideo() {
+    const v = heroVideoRef.current
+    if (!v) return
+    v.currentTime = 0
+    v.play().catch(() => {})
+  }
+
+  function clearIdleTimer() {
+    clearTimeout(idleTimerRef.current)
+    idleTimerRef.current = null
+  }
+
+  function clearLoginTimer() {
+    clearTimeout(loginTimerRef.current)
+    loginTimerRef.current = null
+  }
+
+  function startIdleTimer() {
+    clearTimeout(idleTimerRef.current)
+    idleTimerRef.current = setTimeout(() => {
+      playHeroVideo()
+      startIdleTimer()
+    }, 7000)
+  }
+
+  function startLoginTimer() {
+    clearTimeout(loginTimerRef.current)
+    loginTimerRef.current = setTimeout(() => {
+      // 15s of inactivity on login fields → dismiss and return to splash
+      setPhase('idle')
+      playHeroVideo()
+      startIdleTimer()
+    }, 15000)
+  }
+
+  // ── Mount: play video after 1s, start idle cycle ─────────────────────────
+  useEffect(() => {
+    const initial = setTimeout(() => {
+      playHeroVideo()
+      startIdleTimer()
+    }, 1000)
+    return () => {
+      clearTimeout(initial)
+      clearIdleTimer()
+      clearLoginTimer()
+    }
+  }, [])
+
+  // ── Post-login loading video play ─────────────────────────────────────────
   useEffect(() => {
     if (showVideo && loadVideoRef.current) {
       loadVideoRef.current.play().catch(() => navigate(navDest.current, { replace: true }))
     }
   }, [showVideo])
 
+  // ── Screen tap — opens form or terms, switches timer regime ──────────────
   function handleScreenTap() {
     if (phase !== 'idle') return
-    localStorage.getItem('athena_terms_accepted') ? setPhase('form') : setPhase('terms')
+    clearIdleTimer()
+    const target = localStorage.getItem('athena_terms_accepted') ? 'form' : 'terms'
+    setPhase(target)
+    if (target === 'form') startLoginTimer()
   }
 
   function handleAcceptTerms() {
     localStorage.setItem('athena_terms_accepted', '1')
     setPhase('form')
+    startLoginTimer()
   }
 
+  // Resets the 15s login inactivity timer on any field interaction
+  function resetLoginTimer() {
+    clearTimeout(loginTimerRef.current)
+    loginTimerRef.current = setTimeout(() => {
+      setPhase('idle')
+      playHeroVideo()
+      startIdleTimer()
+    }, 15000)
+  }
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
   async function doAuth() {
     if (!email.trim() || !password.trim() || loading || authed) return
     setLoading(true)
     setError('')
-    const { data: { user: authUser }, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: { user: authUser }, error: authError } =
+      await supabase.auth.signInWithPassword({ email, password })
     if (authError) {
       setError(authError.message)
       setLoading(false)
     } else {
-      const { data: prof } = await supabase.from('profiles').select('preferences').eq('id', authUser.id).single()
+      // Successful login — kill all timers
+      clearIdleTimer()
+      clearLoginTimer()
+      const { data: prof } = await supabase
+        .from('profiles').select('preferences').eq('id', authUser.id).single()
       navDest.current = prof?.preferences?.onboarding_done ? '/' : '/onboarding'
       setLoading(false)
       setAuthed(true)
@@ -120,12 +194,8 @@ export default function Login() {
           84%  { transform: translateY(-28px) translateX(-22px)  rotate(-8deg);  }
           100% { transform: translateY(0px)   translateX(0px)    rotate(0deg);   }
         }
-        @keyframes mistPulse {
-          0%, 100% { opacity: 0; }
-          40%, 60% { opacity: 1; }
-        }
         @keyframes mistDrift {
-          0%   { transform: translateX(0)   scaleX(1);   opacity: 0; }
+          0%   { transform: translateX(0)    scaleX(1);    opacity: 0; }
           20%  { opacity: 1; }
           50%  { transform: translateX(12px) scaleX(1.06); }
           80%  { opacity: 0.7; }
@@ -175,49 +245,38 @@ export default function Login() {
           -webkit-box-shadow: 0 0 0 1000px transparent inset;
           transition: background-color 5000s ease-in-out 0s;
         }
-
         .terms-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(196,133,154,0.3) transparent; }
         .terms-scroll::-webkit-scrollbar { width: 3px; }
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
-
-        /* Mobile: cover + left-bottom anchored so warrior fills portrait screen */
-        .login-hero-bg {
-          background-size: cover;
-          background-position: 20% bottom;
-        }
-        /* Desktop: contain + centered so full figure is visible, bg color fills the rest */
-        @media (min-width: 768px) {
-          .login-hero-bg {
-            background-size: contain;
-            background-position: center center;
-            background-repeat: no-repeat;
-          }
-        }
       `}</style>
 
-      {/* ── Hero background ───────────────────────────────────────────── */}
-      <div
-        className="login-hero-bg"
+      {/* ── Background colour (visible while video loads) ─────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#B8AABB', zIndex: 0 }} />
+
+      {/* ── Hero video background ─────────────────────────────────────────── */}
+      <video
+        ref={heroVideoRef}
+        src="/athena-splash.mp4"
+        muted
+        playsInline
+        preload="auto"
         onClick={handleScreenTap}
         style={{
-          position: 'fixed', inset: 0,
-          backgroundImage: `url(${loginHero})`,
-          backgroundColor: '#B8AABB',
+          position: 'fixed', inset: 0, zIndex: 1,
+          width: '100%', height: '100%',
+          objectFit: 'cover',
           cursor: phase === 'idle' ? 'pointer' : 'default',
         }}
       />
 
-      {/* Ground shadow — grey-mauve to match image background */}
+      {/* ── Ground shadow ─────────────────────────────────────────────────── */}
       <div style={{
-        position: 'fixed', inset: 0, pointerEvents: 'none',
+        position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none',
         background: 'linear-gradient(to top, rgba(125,112,122,0.9) 0%, rgba(132,118,128,0.52) 8%, rgba(138,124,134,0.18) 18%, transparent 30%)',
       }} />
 
-
-      {/* ── Light sweep — diagonal gleam across the figure ────────────── */}
-      <div style={{
-        position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden',
-      }}>
+      {/* ── Light sweep ───────────────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', top: 0, left: 0,
           width: '18%', height: '100%',
@@ -227,13 +286,12 @@ export default function Login() {
         }} />
       </div>
 
-      {/* ── Mist clouds ───────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}>
+      {/* ── Mist clouds ───────────────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
         {MIST.map(m => (
           <div key={m.id} style={{
             position: 'absolute',
-            left: m.left, bottom: m.bottom,
-            width: m.w, height: m.h,
+            left: m.left, bottom: m.bottom, width: m.w, height: m.h,
             background: 'radial-gradient(ellipse at center, rgba(255,240,235,0.22) 0%, rgba(255,230,225,0.1) 50%, transparent 100%)',
             borderRadius: '50%',
             animation: `mistDrift ${m.dur}s ease-in-out infinite ${m.delay}s`,
@@ -241,8 +299,8 @@ export default function Login() {
         ))}
       </div>
 
-      {/* ── Sakura petals ─────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {/* ── Leaf particles ────────────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
         {PETALS.map(p => (
           <div key={p.id} style={{
             position: 'absolute',
@@ -252,7 +310,6 @@ export default function Login() {
             animation: `${p.anim} ${p.duration}s ease-in-out ${p.delay}s infinite`,
             willChange: 'transform',
           }}>
-            {/* Botanical leaf — solid filled body + vein texture overlay */}
             <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none">
               <path
                 d="M60.893,1.549c-0.136-0.269-0.386-0.462-0.679-0.525c-2.98-0.652-6.97-0.982-11.856-0.982c-4.922,0-10.564,0.353-15.481,0.967C17.641,2.912,7,13.601,7,27v18.678L3.103,60.225c-0.428,1.598,0.523,3.244,2.122,3.674c1.598,0.426,3.245-0.525,3.673-2.121L11.25,53H31c14.337,0,26-11.663,26-26c0-6.663,0-15.788,3.914-24.594C61.036,2.132,61.028,1.816,60.893,1.549z M6.966,61.26c-0.143,0.532-0.691,0.849-1.224,0.707c-0.534-0.145-0.851-0.691-0.708-1.225l2.552-9.686c0.405,0.672,0.998,1.212,1.712,1.55L6.966,61.26z M55,27c0,13.233-10.767,24-24,24H11c-1.104,0-2-0.896-2-2v-1V27C9,14.641,18.92,4.769,33.124,2.992c4.839-0.604,10.391-0.951,15.233-0.951c4.048,0,7.553,0.242,10.238,0.705C55,11.565,55,20.443,55,27z"
@@ -267,7 +324,7 @@ export default function Login() {
         ))}
       </div>
 
-      {/* ── Post-login loading video ──────────────────────────────────── */}
+      {/* ── Post-login loading video ──────────────────────────────────────── */}
       {showVideo && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 100,
@@ -278,14 +335,20 @@ export default function Login() {
             ref={loadVideoRef}
             src="/athena-loading.mp4"
             autoPlay muted playsInline preload="auto"
-            onEnded={() => { setVideoFading(true); setTimeout(() => navigate(navDest.current, { replace: true }), 700) }}
+            onEnded={() => {
+              setVideoFading(true)
+              setTimeout(() => navigate(navDest.current, { replace: true }), 700)
+            }}
             onError={() => navigate(navDest.current, { replace: true })}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', animation: 'videoFadeIn 0.9s ease forwards' }}
+            style={{
+              width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+              animation: 'videoFadeIn 0.9s ease forwards',
+            }}
           />
         </div>
       )}
 
-      {/* ── T&C overlay ───────────────────────────────────────────────── */}
+      {/* ── T&C overlay ───────────────────────────────────────────────────── */}
       {phase === 'terms' && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 30,
@@ -360,7 +423,7 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── Login form — slides up from bottom ────────────────────────── */}
+      {/* ── Login form — slides up from bottom ────────────────────────────── */}
       {phase === 'form' && (
         <div style={{
           position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 20,
@@ -380,17 +443,31 @@ export default function Login() {
           }}>
             <form onSubmit={e => { e.preventDefault(); doAuth() }} noValidate>
               <div style={{ marginBottom: '24px' }}>
-                <input className="login-input" type="email" placeholder="EMAIL"
-                  value={email} onChange={e => setEmail(e.target.value)}
+                <input
+                  className="login-input"
+                  type="email"
+                  placeholder="EMAIL"
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); resetLoginTimer() }}
+                  onFocus={resetLoginTimer}
+                  onKeyDown={resetLoginTimer}
                   autoComplete="email" autoCapitalize="none" autoCorrect="off"
-                  spellCheck={false} enterKeyHint="next" disabled={loading} />
+                  spellCheck={false} enterKeyHint="next" disabled={loading}
+                />
               </div>
               <div style={{ marginBottom: '28px' }}>
-                <input className="login-input" type="password" placeholder="PASSWORD"
-                  value={password} onChange={e => setPassword(e.target.value)}
+                <input
+                  className="login-input"
+                  type="password"
+                  placeholder="PASSWORD"
+                  value={password}
+                  onChange={e => { setPassword(e.target.value); resetLoginTimer() }}
+                  onFocus={resetLoginTimer}
+                  onKeyDown={resetLoginTimer}
                   autoComplete="current-password" enterKeyHint="go"
                   onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
-                  disabled={loading} />
+                  disabled={loading}
+                />
               </div>
               {loading && (
                 <div style={{ display: 'flex', gap: '7px', marginBottom: '8px' }}>
@@ -404,8 +481,10 @@ export default function Login() {
                 </div>
               )}
               {error && (
-                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic',
-                  fontSize: '13px', color: 'rgba(255,200,200,0.95)', marginBottom: '14px', lineHeight: 1.4 }}>
+                <p style={{
+                  fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic',
+                  fontSize: '13px', color: 'rgba(255,200,200,0.95)', marginBottom: '14px', lineHeight: 1.4,
+                }}>
                   {error}
                 </p>
               )}
@@ -415,7 +494,7 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── ACCESS button ─────────────────────────────────────────────── */}
+      {/* ── ACCESS button ─────────────────────────────────────────────────── */}
       {authed && !showVideo && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 50,
