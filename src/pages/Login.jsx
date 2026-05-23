@@ -20,16 +20,22 @@ export default function Login() {
   const loginTimerRef = useRef(null)
   const navigate = useNavigate()
 
-  // ── Video play — promise-safe, forces muted if Safari blocks ─────────────
+  // ── Video play — promise-safe with touch-unlock fallback ────────────────
   function playHeroVideo() {
     const v = heroVideoRef.current
     if (!v) return
+    v.muted = true
     v.currentTime = 0
     const p = v.play()
     if (p !== undefined) {
       p.catch(() => {
-        v.muted = true
-        v.play().catch(() => {})
+        // Last resort: play on next user touch (older iOS edge case)
+        const unlock = () => {
+          v.currentTime = 0
+          v.play().catch(() => {})
+        }
+        document.addEventListener('touchstart', unlock, { once: true, passive: true })
+        document.addEventListener('click',      unlock, { once: true })
       })
     }
   }
@@ -62,22 +68,17 @@ export default function Login() {
   }
 
   // ── Mount ─────────────────────────────────────────────────────────────────
+  // Do NOT call pause() here — it cancels iOS's autoplay initialization and
+  // subsequent play() calls get blocked even for muted video.
+  // Let autoPlay handle the initial start; just wire the idle cycle.
   useEffect(() => {
     const v = heroVideoRef.current
     if (v) {
-      // webkit-playsinline required for pre-iOS10 Safari
       v.setAttribute('webkit-playsinline', '')
-      v.setAttribute('playsinline', '')
       v.muted = true
-      v.pause()
-      v.currentTime = 0
     }
-    const initial = setTimeout(() => {
-      playHeroVideo()
-      startIdleTimer()
-    }, 1000)
+    startIdleTimer()
     return () => {
-      clearTimeout(initial)
       clearIdleTimer()
       clearLoginTimer()
     }
