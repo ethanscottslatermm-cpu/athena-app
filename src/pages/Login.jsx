@@ -14,18 +14,24 @@ export default function Login() {
   const [videoFading, setVideoFading] = useState(false)
 
   const navDest       = useRef('/')
-  const loadVideoRef  = useRef(null)  // post-login transition video
-  const heroVideoRef  = useRef(null)  // splash background video
-  const idleTimerRef  = useRef(null)  // 20s idle re-animation
-  const loginTimerRef = useRef(null)  // 15s login inactivity dismiss
+  const loadVideoRef  = useRef(null)
+  const heroVideoRef  = useRef(null)
+  const idleTimerRef  = useRef(null)
+  const loginTimerRef = useRef(null)
   const navigate = useNavigate()
 
-  // ── Video helpers ─────────────────────────────────────────────────────────
+  // ── Video play — promise-safe, forces muted if Safari blocks ─────────────
   function playHeroVideo() {
     const v = heroVideoRef.current
     if (!v) return
     v.currentTime = 0
-    v.play().catch(() => {})
+    const p = v.play()
+    if (p !== undefined) {
+      p.catch(() => {
+        v.muted = true
+        v.play().catch(() => {})
+      })
+    }
   }
 
   function clearIdleTimer() {
@@ -38,7 +44,6 @@ export default function Login() {
     loginTimerRef.current = null
   }
 
-  // 20s idle: replays video then schedules itself again
   function startIdleTimer() {
     clearTimeout(idleTimerRef.current)
     idleTimerRef.current = setTimeout(() => {
@@ -47,7 +52,6 @@ export default function Login() {
     }, 20000)
   }
 
-  // 15s login inactivity: dismisses form, returns to idle splash
   function startLoginTimer() {
     clearTimeout(loginTimerRef.current)
     loginTimerRef.current = setTimeout(() => {
@@ -57,12 +61,17 @@ export default function Login() {
     }, 15000)
   }
 
-  // ── Mount: pause at frame 0, play after 1s, begin idle cycle ─────────────
-  // autoPlay on the element grants iOS permission for programmatic play().
-  // We immediately pause so the video holds on frame 0 until the delay fires.
+  // ── Mount ─────────────────────────────────────────────────────────────────
   useEffect(() => {
     const v = heroVideoRef.current
-    if (v) { v.pause(); v.currentTime = 0 }
+    if (v) {
+      // webkit-playsinline required for pre-iOS10 Safari
+      v.setAttribute('webkit-playsinline', '')
+      v.setAttribute('playsinline', '')
+      v.muted = true
+      v.pause()
+      v.currentTime = 0
+    }
     const initial = setTimeout(() => {
       playHeroVideo()
       startIdleTimer()
@@ -81,7 +90,7 @@ export default function Login() {
     }
   }, [showVideo])
 
-  // ── Tap handler — switches from idle to form/terms, swaps timers ─────────
+  // ── Tap handler ───────────────────────────────────────────────────────────
   function handleScreenTap() {
     if (phase !== 'idle') return
     clearIdleTimer()
@@ -120,6 +129,11 @@ export default function Login() {
   return (
     <>
       <style>{`
+        /* Suppress Safari's native video controls and play-button overlay */
+        video::-webkit-media-controls            { display: none !important; }
+        video::-webkit-media-controls-panel      { display: none !important; }
+        video::-webkit-media-controls-start-playback-button { display: none !important; }
+
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(60px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -127,10 +141,6 @@ export default function Login() {
         @keyframes fadeIn {
           from { opacity: 0; }
           to   { opacity: 1; }
-        }
-        @keyframes wordmarkFadeIn {
-          from { opacity: 0; transform: translate(-50%, -44%); }
-          to   { opacity: 1; transform: translate(-50%, -50%); }
         }
         @keyframes dotPulse {
           0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
@@ -167,10 +177,10 @@ export default function Login() {
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
       `}</style>
 
-      {/* ── Background colour — visible while video buffers ───────────────── */}
+      {/* ── Background colour (while video buffers) ───────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, backgroundColor: '#0D0B0A', zIndex: 0 }} />
 
-      {/* ── Hero video ────────────────────────────────────────────────────── */}
+      {/* ── Hero video — pointer-events off so Safari can't show overlay ──── */}
       <video
         ref={heroVideoRef}
         src="/athena-splash.mp4"
@@ -178,42 +188,23 @@ export default function Login() {
         muted
         playsInline
         preload="auto"
-        onClick={handleScreenTap}
         style={{
           position: 'fixed', inset: 0, zIndex: 1,
           width: '100%', height: '100%',
           objectFit: 'cover',
-          cursor: phase === 'idle' ? 'pointer' : 'default',
+          pointerEvents: 'none',
         }}
       />
 
-      {/* ── ATHENA wordmark — always visible except when form is open ─────── */}
+      {/* ── Transparent tap target above video (only active in idle/terms) ── */}
       {phase !== 'form' && (
         <div
           onClick={handleScreenTap}
           style={{
-            position: 'fixed',
-            top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 10,
-            textAlign: 'center',
-            animation: 'wordmarkFadeIn 1.2s cubic-bezier(0.22,1,0.36,1) 0.4s both',
+            position: 'fixed', inset: 0, zIndex: 2,
             cursor: phase === 'idle' ? 'pointer' : 'default',
           }}
-        >
-          <p style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: 'clamp(24px, 6vw, 40px)',
-            fontWeight: 400,
-            letterSpacing: '0.6em',
-            color: 'rgba(255,255,255,0.92)',
-            margin: 0,
-            textShadow: '0 2px 32px rgba(0,0,0,0.5)',
-            userSelect: 'none',
-          }}>
-            ATHENA
-          </p>
-        </div>
+        />
       )}
 
       {/* ── Post-login loading video ──────────────────────────────────────── */}
@@ -387,7 +378,7 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── ACCESS button — shown after successful auth ───────────────────── */}
+      {/* ── ACCESS button ─────────────────────────────────────────────────── */}
       {authed && !showVideo && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 50,
