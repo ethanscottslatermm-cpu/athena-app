@@ -134,7 +134,7 @@ export default function Login() {
           zIndex: 1,
         }} />
 
-        {/* Hero image — fills width, natural height, centered */}
+        {/* Hero image — covers full screen, no distortion */}
         <img
           src="/athena-logo.png"
           alt="Athena"
@@ -142,8 +142,8 @@ export default function Login() {
           style={{
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
-            objectFit: 'contain',
-            objectPosition: 'center',
+            objectFit: 'cover',
+            objectPosition: 'center top',
             animation: 'logoGlow 4s ease-in-out infinite',
             userSelect: 'none',
             pointerEvents: 'none',
