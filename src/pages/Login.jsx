@@ -78,8 +78,12 @@ export default function Login() {
     }, 15000)
   }
 
-  // ── Mount: play video after 1s, start idle cycle ─────────────────────────
+  // ── Mount: pause immediately (frame 0), then play after 1s ──────────────
+  // autoPlay on the element grants iOS permission for later programmatic play.
+  // We pause right away so the video holds on frame 0 until the 1s delay fires.
   useEffect(() => {
+    const v = heroVideoRef.current
+    if (v) { v.pause(); v.currentTime = 0 }
     const initial = setTimeout(() => {
       playHeroVideo()
       startIdleTimer()
@@ -257,6 +261,7 @@ export default function Login() {
       <video
         ref={heroVideoRef}
         src="/athena-splash.mp4"
+        autoPlay
         muted
         playsInline
         preload="auto"
