@@ -122,27 +122,28 @@ export default function Login() {
           overflow: 'hidden',
         }}
       >
-        {/* Radial glow layer — sits behind the logo, pulses with it */}
+        {/* Radial glow layer — pulses over the image center */}
         <div style={{
           position: 'absolute',
           top: '50%', left: '50%',
           width: '72%', paddingBottom: '72%',
           borderRadius: '50%',
-          background: 'radial-gradient(ellipse at center, rgba(196,133,154,0.38) 0%, rgba(220,170,185,0.14) 45%, transparent 70%)',
+          background: 'radial-gradient(ellipse at center, rgba(196,133,154,0.28) 0%, rgba(220,170,185,0.10) 45%, transparent 70%)',
           animation: 'glowBreath 4s ease-in-out infinite',
           pointerEvents: 'none',
+          zIndex: 1,
         }} />
 
-        {/* Logo — drop-shadow glow follows the PNG alpha (figure + wordmark) */}
+        {/* Full-screen hero image — covers the splash entirely */}
         <img
           src="/athena-logo.png"
           alt="Athena"
           draggable={false}
           style={{
-            position: 'relative', zIndex: 1,
-            width: '78%',
-            maxWidth: '400px',
-            minWidth: '240px',
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
             animation: 'logoGlow 4s ease-in-out infinite',
             userSelect: 'none',
             pointerEvents: 'none',
