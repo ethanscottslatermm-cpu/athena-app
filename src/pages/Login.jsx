@@ -2,28 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-// ── Leaf particles ────────────────────────────────────────────────────────────
-const PETALS = Array.from({ length: 36 }, (_, i) => ({
-  id: i,
-  x: (i * 37 + 5) % 96,
-  y: (i * 23 + 8) % 75 + 10,
-  size: 10 + (i % 5) * 3,
-  duration: 6 + (i % 6) * 1.0,
-  delay: (i * 0.45) % 10,
-  opacity: 0.5 + (i % 4) * 0.1,
-  anim: ['leafBlow', 'leafBlowL', 'leafDrop', 'leafGusts', 'leafDropL', 'leafBlow'][i % 6],
-  color: ['#F2C4CF', '#EDB8C6', '#F5D5DC', '#E8A5B8', '#FAE0E6'][i % 5],
-}))
-
-// ── Mist clouds ───────────────────────────────────────────────────────────────
-const MIST = [
-  { id: 0, left: '-8%',  bottom: '2%',  w: '55%', h: '10%', delay: 0,   dur: 9  },
-  { id: 1, left: '10%',  bottom: '0%',  w: '60%', h: '8%',  delay: 2.5, dur: 11 },
-  { id: 2, left: '-5%',  bottom: '5%',  w: '45%', h: '8%',  delay: 5,   dur: 8  },
-  { id: 3, left: '25%',  bottom: '1%',  w: '50%', h: '7%',  delay: 1.5, dur: 13 },
-  { id: 4, left: '5%',   bottom: '3%',  w: '38%', h: '6%',  delay: 3.5, dur: 10 },
-]
-
 export default function Login() {
   const [phase, setPhase] = useState('idle') // 'idle' | 'terms' | 'form'
   const [termsChecked, setTermsChecked] = useState(false)
@@ -35,14 +13,14 @@ export default function Login() {
   const [showVideo, setShowVideo] = useState(false)
   const [videoFading, setVideoFading] = useState(false)
 
-  const navDest      = useRef('/')
-  const loadVideoRef = useRef(null)   // post-login transition video
-  const heroVideoRef = useRef(null)   // splash background video
-  const idleTimerRef  = useRef(null)  // 7s idle re-animation
+  const navDest       = useRef('/')
+  const loadVideoRef  = useRef(null)  // post-login transition video
+  const heroVideoRef  = useRef(null)  // splash background video
+  const idleTimerRef  = useRef(null)  // 20s idle re-animation
   const loginTimerRef = useRef(null)  // 15s login inactivity dismiss
   const navigate = useNavigate()
 
-  // ── Video helpers (ref-only, safe across re-renders) ─────────────────────
+  // ── Video helpers ─────────────────────────────────────────────────────────
   function playHeroVideo() {
     const v = heroVideoRef.current
     if (!v) return
@@ -60,27 +38,28 @@ export default function Login() {
     loginTimerRef.current = null
   }
 
+  // 20s idle: replays video then schedules itself again
   function startIdleTimer() {
     clearTimeout(idleTimerRef.current)
     idleTimerRef.current = setTimeout(() => {
       playHeroVideo()
       startIdleTimer()
-    }, 7000)
+    }, 20000)
   }
 
+  // 15s login inactivity: dismisses form, returns to idle splash
   function startLoginTimer() {
     clearTimeout(loginTimerRef.current)
     loginTimerRef.current = setTimeout(() => {
-      // 15s of inactivity on login fields → dismiss and return to splash
       setPhase('idle')
       playHeroVideo()
       startIdleTimer()
     }, 15000)
   }
 
-  // ── Mount: pause immediately (frame 0), then play after 1s ──────────────
-  // autoPlay on the element grants iOS permission for later programmatic play.
-  // We pause right away so the video holds on frame 0 until the 1s delay fires.
+  // ── Mount: pause at frame 0, play after 1s, begin idle cycle ─────────────
+  // autoPlay on the element grants iOS permission for programmatic play().
+  // We immediately pause so the video holds on frame 0 until the delay fires.
   useEffect(() => {
     const v = heroVideoRef.current
     if (v) { v.pause(); v.currentTime = 0 }
@@ -95,14 +74,14 @@ export default function Login() {
     }
   }, [])
 
-  // ── Post-login loading video play ─────────────────────────────────────────
+  // ── Post-login loading video ──────────────────────────────────────────────
   useEffect(() => {
     if (showVideo && loadVideoRef.current) {
       loadVideoRef.current.play().catch(() => navigate(navDest.current, { replace: true }))
     }
   }, [showVideo])
 
-  // ── Screen tap — opens form or terms, switches timer regime ──────────────
+  // ── Tap handler — switches from idle to form/terms, swaps timers ─────────
   function handleScreenTap() {
     if (phase !== 'idle') return
     clearIdleTimer()
@@ -117,16 +96,6 @@ export default function Login() {
     startLoginTimer()
   }
 
-  // Resets the 15s login inactivity timer on any field interaction
-  function resetLoginTimer() {
-    clearTimeout(loginTimerRef.current)
-    loginTimerRef.current = setTimeout(() => {
-      setPhase('idle')
-      playHeroVideo()
-      startIdleTimer()
-    }, 15000)
-  }
-
   // ── Auth ──────────────────────────────────────────────────────────────────
   async function doAuth() {
     if (!email.trim() || !password.trim() || loading || authed) return
@@ -138,7 +107,6 @@ export default function Login() {
       setError(authError.message)
       setLoading(false)
     } else {
-      // Successful login — kill all timers
       clearIdleTimer()
       clearLoginTimer()
       const { data: prof } = await supabase
@@ -152,65 +120,6 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @keyframes leafBlow {
-          0%   { transform: translateY(0px)   translateX(0px)    rotate(-5deg);  }
-          20%  { transform: translateY(-30px) translateX(85px)   rotate(18deg);  }
-          40%  { transform: translateY(28px)  translateX(115px)  rotate(-14deg); }
-          60%  { transform: translateY(-42px) translateX(72px)   rotate(22deg);  }
-          82%  { transform: translateY(-10px) translateX(28px)   rotate(-4deg);  }
-          100% { transform: translateY(0px)   translateX(0px)    rotate(-5deg);  }
-        }
-        @keyframes leafBlowL {
-          0%   { transform: translateY(0px)   translateX(0px)    rotate(6deg);   }
-          20%  { transform: translateY(-22px) translateX(-92px)  rotate(-20deg); }
-          42%  { transform: translateY(32px)  translateX(-125px) rotate(16deg);  }
-          62%  { transform: translateY(-38px) translateX(-78px)  rotate(-24deg); }
-          82%  { transform: translateY(-8px)  translateX(-28px)  rotate(7deg);   }
-          100% { transform: translateY(0px)   translateX(0px)    rotate(6deg);   }
-        }
-        @keyframes leafDrop {
-          0%   { transform: translateY(0px)   translateX(0px)    rotate(0deg);   }
-          12%  { transform: translateY(-18px) translateX(42px)   rotate(14deg);  }
-          32%  { transform: translateY(100px) translateX(58px)   rotate(-38deg); }
-          48%  { transform: translateY(155px) translateX(22px)   rotate(-58deg); }
-          62%  { transform: translateY(78px)  translateX(-32px)  rotate(22deg);  }
-          80%  { transform: translateY(-32px) translateX(-68px)  rotate(-10deg); }
-          92%  { transform: translateY(-12px) translateX(-18px)  rotate(5deg);   }
-          100% { transform: translateY(0px)   translateX(0px)    rotate(0deg);   }
-        }
-        @keyframes leafDropL {
-          0%   { transform: translateY(0px)   translateX(0px)    rotate(5deg);   }
-          14%  { transform: translateY(-14px) translateX(-52px)  rotate(-16deg); }
-          34%  { transform: translateY(108px) translateX(-62px)  rotate(40deg);  }
-          50%  { transform: translateY(158px) translateX(-28px)  rotate(58deg);  }
-          65%  { transform: translateY(68px)  translateX(38px)   rotate(-20deg); }
-          80%  { transform: translateY(-38px) translateX(72px)   rotate(10deg);  }
-          92%  { transform: translateY(-10px) translateX(24px)   rotate(-4deg);  }
-          100% { transform: translateY(0px)   translateX(0px)    rotate(5deg);   }
-        }
-        @keyframes leafGusts {
-          0%   { transform: translateY(0px)   translateX(0px)    rotate(0deg);   }
-          12%  { transform: translateY(-32px) translateX(62px)   rotate(20deg);  }
-          26%  { transform: translateY(42px)  translateX(92px)   rotate(-18deg); }
-          42%  { transform: translateY(-55px) translateX(38px)   rotate(28deg);  }
-          56%  { transform: translateY(18px)  translateX(-45px)  rotate(-22deg); }
-          70%  { transform: translateY(-70px) translateX(-78px)  rotate(16deg);  }
-          84%  { transform: translateY(-28px) translateX(-22px)  rotate(-8deg);  }
-          100% { transform: translateY(0px)   translateX(0px)    rotate(0deg);   }
-        }
-        @keyframes mistDrift {
-          0%   { transform: translateX(0)    scaleX(1);    opacity: 0; }
-          20%  { opacity: 1; }
-          50%  { transform: translateX(12px) scaleX(1.06); }
-          80%  { opacity: 0.7; }
-          100% { transform: translateX(-6px) scaleX(0.96); opacity: 0; }
-        }
-        @keyframes lightSweep {
-          0%        { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
-          5%        { opacity: 1; }
-          35%       { opacity: 0.6; }
-          55%, 100% { transform: translateX(300%) skewX(-18deg); opacity: 0; }
-        }
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(60px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -218,6 +127,10 @@ export default function Login() {
         @keyframes fadeIn {
           from { opacity: 0; }
           to   { opacity: 1; }
+        }
+        @keyframes wordmarkFadeIn {
+          from { opacity: 0; transform: translate(-50%, -44%); }
+          to   { opacity: 1; transform: translate(-50%, -50%); }
         }
         @keyframes dotPulse {
           0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
@@ -254,10 +167,10 @@ export default function Login() {
         .terms-scroll::-webkit-scrollbar-thumb { background: rgba(196,133,154,0.3); border-radius: 2px; }
       `}</style>
 
-      {/* ── Background colour (visible while video loads) ─────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#B8AABB', zIndex: 0 }} />
+      {/* ── Background colour — visible while video buffers ───────────────── */}
+      <div style={{ position: 'fixed', inset: 0, backgroundColor: '#0D0B0A', zIndex: 0 }} />
 
-      {/* ── Hero video background ─────────────────────────────────────────── */}
+      {/* ── Hero video ────────────────────────────────────────────────────── */}
       <video
         ref={heroVideoRef}
         src="/athena-splash.mp4"
@@ -274,60 +187,34 @@ export default function Login() {
         }}
       />
 
-      {/* ── Ground shadow ─────────────────────────────────────────────────── */}
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none',
-        background: 'linear-gradient(to top, rgba(125,112,122,0.9) 0%, rgba(132,118,128,0.52) 8%, rgba(138,124,134,0.18) 18%, transparent 30%)',
-      }} />
-
-      {/* ── Light sweep ───────────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', top: 0, left: 0,
-          width: '18%', height: '100%',
-          background: 'linear-gradient(to right, transparent, rgba(255,248,220,0.12), transparent)',
-          animation: 'lightSweep 10s ease-in-out infinite 2s',
-          willChange: 'transform',
-        }} />
-      </div>
-
-      {/* ── Mist clouds ───────────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
-        {MIST.map(m => (
-          <div key={m.id} style={{
-            position: 'absolute',
-            left: m.left, bottom: m.bottom, width: m.w, height: m.h,
-            background: 'radial-gradient(ellipse at center, rgba(255,240,235,0.22) 0%, rgba(255,230,225,0.1) 50%, transparent 100%)',
-            borderRadius: '50%',
-            animation: `mistDrift ${m.dur}s ease-in-out infinite ${m.delay}s`,
-          }} />
-        ))}
-      </div>
-
-      {/* ── Leaf particles ────────────────────────────────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none', overflow: 'hidden' }}>
-        {PETALS.map(p => (
-          <div key={p.id} style={{
-            position: 'absolute',
-            left: `${p.x}%`, top: `${p.y}%`,
-            width: `${p.size}px`, height: `${p.size}px`,
-            opacity: p.opacity,
-            animation: `${p.anim} ${p.duration}s ease-in-out ${p.delay}s infinite`,
-            willChange: 'transform',
+      {/* ── ATHENA wordmark — always visible except when form is open ─────── */}
+      {phase !== 'form' && (
+        <div
+          onClick={handleScreenTap}
+          style={{
+            position: 'fixed',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 10,
+            textAlign: 'center',
+            animation: 'wordmarkFadeIn 1.2s cubic-bezier(0.22,1,0.36,1) 0.4s both',
+            cursor: phase === 'idle' ? 'pointer' : 'default',
+          }}
+        >
+          <p style={{
+            fontFamily: "'Cinzel', serif",
+            fontSize: 'clamp(24px, 6vw, 40px)',
+            fontWeight: 400,
+            letterSpacing: '0.6em',
+            color: 'rgba(255,255,255,0.92)',
+            margin: 0,
+            textShadow: '0 2px 32px rgba(0,0,0,0.5)',
+            userSelect: 'none',
           }}>
-            <svg width="100%" height="100%" viewBox="0 0 64 64" fill="none">
-              <path
-                d="M60.893,1.549c-0.136-0.269-0.386-0.462-0.679-0.525c-2.98-0.652-6.97-0.982-11.856-0.982c-4.922,0-10.564,0.353-15.481,0.967C17.641,2.912,7,13.601,7,27v18.678L3.103,60.225c-0.428,1.598,0.523,3.244,2.122,3.674c1.598,0.426,3.245-0.525,3.673-2.121L11.25,53H31c14.337,0,26-11.663,26-26c0-6.663,0-15.788,3.914-24.594C61.036,2.132,61.028,1.816,60.893,1.549z M6.966,61.26c-0.143,0.532-0.691,0.849-1.224,0.707c-0.534-0.145-0.851-0.691-0.708-1.225l2.552-9.686c0.405,0.672,0.998,1.212,1.712,1.55L6.966,61.26z M55,27c0,13.233-10.767,24-24,24H11c-1.104,0-2-0.896-2-2v-1V27C9,14.641,18.92,4.769,33.124,2.992c4.839-0.604,10.391-0.951,15.233-0.951c4.048,0,7.553,0.242,10.238,0.705C55,11.565,55,20.443,55,27z"
-                fill={p.color}
-              />
-              <path
-                d="M34.929,7.629c-0.205-0.513-0.787-0.763-1.297-0.557c-0.513,0.203-0.764,0.784-0.562,1.297c0.019,0.047,1.84,4.804-0.032,11.356c0,0-0.001,0.007-0.001,0.011c-1.215,1.103-2.459,2.271-3.744,3.557c-1.357,1.357-2.591,2.671-3.745,3.948c0.998-9.183-0.498-16.128-0.571-16.458c-0.12-0.539-0.654-0.876-1.193-0.76c-0.539,0.12-0.879,0.654-0.76,1.193c0.019,0.086,1.823,8.469,0.13,18.763c-2.26,2.695-4.05,5.14-5.464,7.261c0.709-7.9-0.644-14.145-0.713-14.457c-0.12-0.539-0.65-0.886-1.193-0.759c-0.539,0.119-0.879,0.653-0.76,1.192c0.02,0.087,1.885,8.75,0.048,18.297c-1.383,2.488-1.953,3.988-2.01,4.141c-0.19,0.518,0.074,1.092,0.592,1.283C13.768,46.979,13.885,47,14,47c0.406,0,0.788-0.25,0.938-0.653c0.013-0.034,0.5-1.302,1.684-3.468c10.438-2.726,19.995,0.051,20.092,0.079C36.809,42.986,36.905,43,37,43c0.431,0,0.828-0.28,0.958-0.714c0.158-0.528-0.142-1.085-0.671-1.244C36.897,40.924,28.2,38.391,18,40.506c1.416-2.316,3.406-5.218,6.108-8.52c0.052-0.006,0.104-0.008,0.154-0.021c10.595-2.889,21.367-0.029,21.475,0C45.825,31.988,45.913,32,46,32c0.44,0,0.844-0.292,0.965-0.737c0.145-0.533-0.169-1.082-0.702-1.228c-0.425-0.116-9.801-2.598-20.012-0.576c1.341-1.524,2.814-3.109,4.456-4.752c1.41-1.41,2.777-2.693,4.103-3.88c6.452-1.649,12.852,0.116,12.916,0.135C47.817,20.987,47.909,21,48,21c0.436,0,0.836-0.287,0.961-0.727c0.151-0.53-0.155-1.083-0.687-1.235c-0.239-0.067-4.9-1.367-10.473-0.779c8.531-7.021,14.472-9.294,14.545-9.321c0.518-0.191,0.782-0.767,0.591-1.284c-0.191-0.519-0.766-0.779-1.283-0.592c-0.326,0.12-6.805,2.58-16.068,10.431C36.527,11.735,35.004,7.816,34.929,7.629z"
-                fill="rgba(255,255,255,0.22)"
-              />
-            </svg>
-          </div>
-        ))}
-      </div>
+            ATHENA
+          </p>
+        </div>
+      )}
 
       {/* ── Post-login loading video ──────────────────────────────────────── */}
       {showVideo && (
@@ -359,8 +246,8 @@ export default function Login() {
           position: 'fixed', inset: 0, zIndex: 30,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '28px 20px',
-          background: 'rgba(90,30,40,0.5)',
-          backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+          background: 'rgba(0,0,0,0.6)',
+          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
           animation: 'fadeIn 0.3s ease',
         }}>
           <div style={{
@@ -369,7 +256,7 @@ export default function Login() {
             border: '1px solid rgba(196,133,154,0.2)',
             borderRadius: '12px',
             display: 'flex', flexDirection: 'column', overflow: 'hidden',
-            boxShadow: '0 8px 48px rgba(90,30,40,0.25)',
+            boxShadow: '0 8px 48px rgba(0,0,0,0.4)',
           }}>
             <div style={{ padding: '22px 22px 14px', borderBottom: '1px solid rgba(196,133,154,0.15)', flexShrink: 0 }}>
               <p style={{ fontFamily: "'Cinzel', serif", fontSize: '9px', letterSpacing: '0.3em', color: '#C4859A', marginBottom: '7px' }}>ATHENA</p>
@@ -437,11 +324,11 @@ export default function Login() {
         }}>
           <div style={{
             width: '100%', maxWidth: '480px',
-            background: 'rgba(90,30,45,0.55)',
-            backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-            borderTop: '1px solid rgba(255,255,255,0.15)',
+            background: 'rgba(10,6,4,0.65)',
+            backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '20px 20px 0 0',
-            padding: '32px 36px calc(env(safe-area-inset-bottom) + 36px)',
+            padding: '36px 36px calc(env(safe-area-inset-bottom) + 36px)',
             opacity: authed ? 0 : 1,
             transition: 'opacity 0.4s ease',
             pointerEvents: authed ? 'none' : 'auto',
@@ -453,9 +340,9 @@ export default function Login() {
                   type="email"
                   placeholder="EMAIL"
                   value={email}
-                  onChange={e => { setEmail(e.target.value); resetLoginTimer() }}
-                  onFocus={resetLoginTimer}
-                  onKeyDown={resetLoginTimer}
+                  onChange={e => { setEmail(e.target.value); startLoginTimer() }}
+                  onFocus={startLoginTimer}
+                  onKeyDown={startLoginTimer}
                   autoComplete="email" autoCapitalize="none" autoCorrect="off"
                   spellCheck={false} enterKeyHint="next" disabled={loading}
                 />
@@ -466,9 +353,9 @@ export default function Login() {
                   type="password"
                   placeholder="PASSWORD"
                   value={password}
-                  onChange={e => { setPassword(e.target.value); resetLoginTimer() }}
-                  onFocus={resetLoginTimer}
-                  onKeyDown={resetLoginTimer}
+                  onChange={e => { setPassword(e.target.value); startLoginTimer() }}
+                  onFocus={startLoginTimer}
+                  onKeyDown={startLoginTimer}
                   autoComplete="current-password" enterKeyHint="go"
                   onBlur={() => { if (email.trim() && password.trim()) doAuth() }}
                   disabled={loading}
@@ -476,7 +363,7 @@ export default function Login() {
               </div>
               {loading && (
                 <div style={{ display: 'flex', gap: '7px', marginBottom: '8px' }}>
-                  {[0,1,2].map(i => (
+                  {[0, 1, 2].map(i => (
                     <div key={i} style={{
                       width: '5px', height: '5px', borderRadius: '50%',
                       backgroundColor: 'rgba(255,255,255,0.75)',
@@ -488,7 +375,8 @@ export default function Login() {
               {error && (
                 <p style={{
                   fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic',
-                  fontSize: '13px', color: 'rgba(255,200,200,0.95)', marginBottom: '14px', lineHeight: 1.4,
+                  fontSize: '13px', color: 'rgba(255,200,200,0.95)',
+                  marginBottom: '14px', lineHeight: 1.4,
                 }}>
                   {error}
                 </p>
@@ -499,7 +387,7 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── ACCESS button ─────────────────────────────────────────────────── */}
+      {/* ── ACCESS button — shown after successful auth ───────────────────── */}
       {authed && !showVideo && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 50,
