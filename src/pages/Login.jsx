@@ -134,7 +134,7 @@ export default function Login() {
           zIndex: 1,
         }} />
 
-        {/* Full-screen hero image — covers the splash entirely */}
+        {/* Hero image — fills width, natural height, centered */}
         <img
           src="/athena-logo.png"
           alt="Athena"
@@ -142,7 +142,7 @@ export default function Login() {
           style={{
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
-            objectFit: 'cover',
+            objectFit: 'contain',
             objectPosition: 'center',
             animation: 'logoGlow 4s ease-in-out infinite',
             userSelect: 'none',
