@@ -39,6 +39,7 @@ Thumbs.db
 *.mov
 !public/*.mp4
 !public/*.mov
+!public/videos/**
 
 # Root-level design screenshots
 Athena*.png
