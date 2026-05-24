@@ -43,7 +43,7 @@ export default function Sleep() {
   }, [])
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[#F5E4E1] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#F3EAE7] overflow-hidden">
       <style>{`
         .sl-pane { scrollbar-width: none; }
         .sl-pane::-webkit-scrollbar { display: none; }

@@ -16,7 +16,7 @@ function CycleInsights() {
 
 function ModuleShell({ title }) {
   return (
-    <div className="min-h-screen bg-[#F5E4E1] pb-nav px-4 pt-8 max-w-md mx-auto">
+    <div className="min-h-screen bg-[#F3EAE7] pb-nav px-4 pt-8 max-w-md mx-auto">
       <p className="font-cinzel text-rose tracking-widest text-xs uppercase mb-2">Cycle</p>
       <h3 className="font-cinzel text-2xl text-brown tracking-wide mb-6">{title}</h3>
       <p className="font-garamond text-brown/30 text-sm">— design this section —</p>

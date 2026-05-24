@@ -474,7 +474,7 @@ export default function Settings() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#F5E4E1] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F3EAE7] flex items-center justify-center">
         <span className="font-cinzel text-[10px] tracking-[0.3em] text-rose/40">LOADING</span>
       </div>
     )
@@ -486,7 +486,7 @@ export default function Settings() {
   const notifOn     = d.notifications_on ?? true
 
   return (
-    <div className="relative h-[100svh] overflow-y-auto bg-[#F5E4E1]">
+    <div className="relative h-[100svh] overflow-y-auto bg-[#F3EAE7]">
       <style>{`
         @keyframes sheetUp {
           from { transform: translateY(60px); opacity: 0 }
@@ -547,7 +547,7 @@ export default function Settings() {
                 : <User size={30} style={{ color: 'rgba(212,160,160,0.4)' }} />
               }
               {uploading && (
-                <div className="absolute inset-0 bg-[#F5E4E1]/60 flex items-center justify-center">
+                <div className="absolute inset-0 bg-[#F3EAE7]/60 flex items-center justify-center">
                   <span className="font-cinzel text-[8px] text-rose">···</span>
                 </div>
               )}

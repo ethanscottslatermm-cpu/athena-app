@@ -55,7 +55,13 @@ export default function BottomNav() {
       `}</style>
       <nav
         className="fixed bottom-0 left-0 right-0 z-50"
-        style={{ backgroundColor: '#8A7E78', paddingBottom: 'env(safe-area-inset-bottom)' }}
+        style={{
+          background: 'rgba(196, 184, 176, 0.92)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderTop: '1px solid rgba(255, 255, 255, 0.32)',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-1">
           {navItems.map(({ to, label, png }, i) => (
@@ -63,11 +69,10 @@ export default function BottomNav() {
               key={to}
               to={to}
               end={to === '/'}
-              className={({ isActive }) =>
-                `flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
-                  isActive ? 'text-rose' : 'text-linen/70 hover:text-linen'
-                }`
-              }
+              className="flex flex-col items-center gap-1 px-2 py-2 transition-colors"
+              style={({ isActive }) => ({
+                color: isActive ? '#3B3330' : '#7A6A65',
+              })}
             >
               <PngIcon src={png} delay={i * 0.7} />
               <span className="text-[10px] font-garamond tracking-wide">{label}</span>
