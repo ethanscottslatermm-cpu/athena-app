@@ -229,70 +229,80 @@ export default function Login() {
       <div
         style={{
           position: 'fixed', inset: 0, zIndex: 10,
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'space-between',
-          paddingBottom: 'calc(env(safe-area-inset-bottom) + 52px)',
-          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1)',
           opacity: authed ? 0 : 1,
           transition: 'opacity 0.4s ease',
           pointerEvents: authed ? 'none' : 'auto',
         }}
       >
-        {/* ── Wordmark ──────────────────────────────────── */}
+        {/* ── WELLNESS + ATHENA — anchored to upper screen ─────────────────── */}
         <div style={{
+          position: 'absolute', top: '7vh', left: 0, right: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
-          paddingTop: '20vh',
-          gap: 0,
+          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1)',
         }}>
-          {/* Eye of providence / ornamental mark */}
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" style={{ marginBottom: '14px', animation: 'eyeGlow 5s ease-in-out infinite' }}>
-            <ellipse cx="9" cy="6" rx="8.5" ry="5.5" stroke="rgba(196,133,154,0.6)" strokeWidth="0.75"/>
-            <circle cx="9" cy="6" r="2" stroke="rgba(196,133,154,0.6)" strokeWidth="0.75"/>
-            <circle cx="9" cy="6" r="0.75" fill="rgba(196,133,154,0.6)"/>
+          <svg width="16" height="10" viewBox="0 0 18 12" fill="none" style={{ marginBottom: '10px', animation: 'eyeGlow 5s ease-in-out infinite' }}>
+            <ellipse cx="9" cy="6" rx="8.5" ry="5.5" stroke="rgba(196,133,154,0.7)" strokeWidth="0.75"/>
+            <circle cx="9" cy="6" r="2" stroke="rgba(196,133,154,0.7)" strokeWidth="0.75"/>
+            <circle cx="9" cy="6" r="0.75" fill="rgba(196,133,154,0.7)"/>
           </svg>
 
           <p style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: '9px', letterSpacing: '0.52em',
-            color: 'rgba(196,133,154,0.7)',
-            margin: '0 0 12px',
+            fontSize: '11px', letterSpacing: '0.55em',
+            color: 'rgba(255,240,228,0.92)',
+            margin: '0 0 10px',
             textTransform: 'uppercase',
+            textShadow: '0 1px 12px rgba(0,0,0,0.75), 0 0 24px rgba(196,133,154,0.3)',
             animation: 'wellnessPulse 5s ease-in-out infinite 0.8s',
           }}>WELLNESS</p>
 
           <h1 style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: '40px', fontWeight: 300,
+            fontSize: '46px', fontWeight: 300,
             letterSpacing: '0.48em',
-            color: 'rgba(255,246,240,0.96)',
-            margin: '0 0 16px',
+            color: 'rgba(255,248,242,0.98)',
+            margin: 0,
             lineHeight: 1,
+            textShadow: '0 2px 24px rgba(0,0,0,0.65), 0 0 48px rgba(196,133,154,0.18)',
             animation: 'wordmarkPulse 6s ease-in-out infinite',
           }}>ATHENA</h1>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '32px', height: '0.5px',
-              background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.55))',
-              animation: 'dividerGlow 4s ease-in-out infinite',
-            }} />
-            <p style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: 'italic', fontSize: '13px',
-              letterSpacing: '0.14em',
-              color: 'rgba(255,246,240,0.38)',
-              margin: 0,
-              animation: 'taglinePulse 7s ease-in-out infinite 2.5s',
-            }}>your sacred space</p>
-            <div style={{
-              width: '32px', height: '0.5px',
-              background: 'linear-gradient(to left, transparent, rgba(196,133,154,0.55))',
-              animation: 'dividerGlow 4s ease-in-out infinite',
-            }} />
-          </div>
         </div>
 
-        {/* ── Form ──────────────────────────────────────── */}
+        {/* ── Tagline — floats just above the helmet ────────────────────────── */}
+        <div style={{
+          position: 'absolute', top: '39vh', left: 0, right: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: '12px',
+          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both',
+        }}>
+          <div style={{
+            width: '28px', height: '0.5px',
+            background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.6))',
+            animation: 'dividerGlow 4s ease-in-out infinite',
+          }} />
+          <p style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic', fontSize: '15px',
+            letterSpacing: '0.16em',
+            color: 'rgba(255,246,240,0.88)',
+            margin: 0,
+            textShadow: '0 1px 10px rgba(0,0,0,0.8), 0 0 20px rgba(196,133,154,0.2)',
+            animation: 'taglinePulse 7s ease-in-out infinite 2.5s',
+          }}>your sacred space</p>
+          <div style={{
+            width: '28px', height: '0.5px',
+            background: 'linear-gradient(to left, transparent, rgba(196,133,154,0.6))',
+            animation: 'dividerGlow 4s ease-in-out infinite',
+          }} />
+        </div>
+
+        {/* ── Form — anchored to bottom ─────────────────────────────────────── */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          display: 'flex', justifyContent: 'center',
+          paddingBottom: 'calc(env(safe-area-inset-bottom) + 52px)',
+          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both',
+        }}>
         <div style={{ width: '100%', maxWidth: '480px', padding: '0 44px' }}>
           <form onSubmit={handleSubmit} noValidate>
             <div className="a-input-wrap" style={{ marginBottom: '20px' }}>
@@ -391,6 +401,7 @@ export default function Login() {
               }}
             >Terms &amp; Conditions</span>
           </p>
+        </div>
         </div>
       </div>
 
