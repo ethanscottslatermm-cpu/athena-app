@@ -305,8 +305,9 @@ export default function Dashboard() {
   const [weather, setWeather] = useState(null)
 
   // ── Exit / sign-out ──────────────────────────────────────────────────────────
-  const [exiting,   setExiting]   = useState(false)
-  const [fadingOut, setFadingOut] = useState(false)
+  const [exiting,        setExiting]        = useState(false)
+  const [fadingOut,      setFadingOut]      = useState(false)
+  const [showSignOutHint, setShowSignOutHint] = useState(false)
   const videoRef = useRef(null)
   const doneRef  = useRef(false)
 
@@ -326,6 +327,16 @@ export default function Dashboard() {
 
   function handleSignOut() { setExiting(true) }
   function handleVideoEnd() { setFadingOut(true); setTimeout(doSignOut, 650) }
+
+  useEffect(() => {
+    function showHint() {
+      setShowSignOutHint(true)
+      setTimeout(() => setShowSignOutHint(false), 4500)
+    }
+    const t = setTimeout(showHint, 1800)
+    const interval = setInterval(showHint, 8 * 60 * 1000)
+    return () => { clearTimeout(t); clearInterval(interval) }
+  }, [])
 
   const cycleLength = profile?.cycle_length ?? 28
   const dayOfCycle = profile?.last_period_date
@@ -380,7 +391,7 @@ export default function Dashboard() {
     {fadingOut && (
       <div style={{ position: 'fixed', inset: 0, zIndex: 201, backgroundColor: '#140E0C', animation: 'exitDarkIn 0.65s ease forwards', pointerEvents: 'none' }} />
     )}
-    <div className="flex-1 min-h-0 bg-[#F2EDE8] pb-nav overflow-y-auto">
+    <div className="flex-1 min-h-0 pb-nav overflow-y-auto" style={{ backgroundColor: '#F4E3D0' }}>
       <style>{`
         @keyframes dashUp {
           from { opacity: 0; transform: translateY(12px); }
@@ -414,6 +425,10 @@ export default function Dashboard() {
           animation: dashShimmer 10s ease-in-out infinite;
         }
         /* Reduced-motion overrides */
+        @keyframes hintFadeIn {
+          from { opacity: 0; transform: translateY(-4px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
         @media (prefers-reduced-motion: reduce) {
           .srim-spin-el  { animation: none !important; }
           .icon-sweep-el { animation: none !important; }
@@ -422,7 +437,7 @@ export default function Dashboard() {
       `}</style>
 
       {/* ── Header ── */}
-      <div className="flex items-start justify-between px-5 pt-10 pb-4 max-w-md mx-auto" style={anim(0)}>
+      <div className="flex items-start justify-between px-5 pb-4 max-w-md mx-auto" style={{ ...anim(0), paddingTop: 'calc(2.5rem + env(safe-area-inset-top))' }}>
         <div>
           <p className="font-garamond text-[11px] font-medium tracking-[0.2em] uppercase header-shimmer"
             style={{ backgroundImage: 'linear-gradient(110deg, rgba(112,98,94,0.9) 0%, rgba(112,98,94,0.9) 25%, rgba(188,178,205,0.95) 44%, rgba(232,224,248,1) 50%, rgba(188,178,205,0.95) 56%, rgba(112,98,94,0.9) 75%, rgba(112,98,94,0.9) 100%)' }}>
@@ -439,11 +454,33 @@ export default function Dashboard() {
             style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
             <HeaderShimmerIcon src={settingsIcon} />
           </button>
-          <button onClick={handleSignOut}
-            className="p-2 rounded-xl transition-all"
-            style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
-            <HeaderShimmerIcon src={exitIcon} />
-          </button>
+          <div style={{ position: 'relative' }}>
+            <button onClick={handleSignOut}
+              className="p-2 rounded-xl transition-all"
+              style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
+              <HeaderShimmerIcon src={exitIcon} />
+            </button>
+            {showSignOutHint && (
+              <div style={{
+                position: 'absolute', top: 'calc(100% + 6px)', right: 0,
+                whiteSpace: 'nowrap',
+                background: 'rgba(42,32,28,0.82)',
+                border: '1px solid rgba(196,133,154,0.32)',
+                borderRadius: 8,
+                padding: '5px 10px',
+                fontFamily: "'Cormorant Garamond', serif",
+                fontStyle: 'italic',
+                fontSize: 11,
+                letterSpacing: '0.06em',
+                color: 'rgba(232,213,176,0.88)',
+                pointerEvents: 'none',
+                zIndex: 50,
+                animation: 'hintFadeIn 0.35s ease forwards',
+              }}>
+                Remember to sign out
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
