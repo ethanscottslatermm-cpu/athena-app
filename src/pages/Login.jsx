@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import birdIcon from '../assets/icons/bird-icon.png'
 
 export default function Login() {
   const [phase, setPhase] = useState('form') // 'form' | 'terms'
@@ -65,33 +64,32 @@ export default function Login() {
   return (
     <>
       <style>{`
-        @keyframes loginEnter {
-          from { opacity: 0; transform: translateY(22px); }
+        @keyframes riseIn {
+          from { opacity: 0; transform: translateY(16px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes wordmarkPulse {
+        @keyframes floatIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes athenaPulse {
           0%, 100% {
-            text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 0 28px rgba(232,213,176,0.18), 0 0 60px rgba(232,213,176,0.06);
-            letter-spacing: 0.48em;
+            text-shadow:
+              0 2px 32px rgba(0,0,0,0.85),
+              0 0 48px rgba(255,252,244,0.06);
+            letter-spacing: 0.52em;
           }
           50% {
-            text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 0 30px rgba(245,232,204,0.6), 0 0 60px rgba(232,213,176,0.3), 0 0 100px rgba(232,213,176,0.1);
-            letter-spacing: 0.50em;
+            text-shadow:
+              0 2px 32px rgba(0,0,0,0.85),
+              0 0 60px rgba(255,252,244,0.22),
+              0 0 110px rgba(255,248,235,0.08);
+            letter-spacing: 0.54em;
           }
         }
-        @keyframes wellnessPulse {
-          0%, 100% { opacity: 0.78; text-shadow: 0 1px 12px rgba(0,0,0,0.75); }
-          50%       { opacity: 0.96; text-shadow: 0 1px 12px rgba(0,0,0,0.75), 0 0 16px rgba(245,232,204,0.5); }
-        }
-        @keyframes birdGlow {
-          0%, 100% {
-            opacity: 0.62;
-            filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(340deg) brightness(1.1);
-          }
-          50% {
-            opacity: 0.88;
-            filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(340deg) brightness(1.2) drop-shadow(0 0 10px rgba(232,213,176,0.65));
-          }
+        @keyframes rulePulse {
+          0%, 100% { opacity: 0.18; }
+          50%       { opacity: 0.42; }
         }
         @keyframes lineBreath {
           0%, 100% {
@@ -116,7 +114,7 @@ export default function Login() {
           50%       { box-shadow: 0 0 14px rgba(232,213,176,0.35), 0 0 30px rgba(232,213,176,0.12); border-color: rgba(232,213,176,0.8); }
         }
         @keyframes dotPulse {
-          0%, 80%, 100% { opacity: 0.25; transform: scale(0.8);  }
+          0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
           40%           { opacity: 1;    transform: scale(1.15); }
         }
         @keyframes videoFadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -140,10 +138,9 @@ export default function Login() {
           -webkit-appearance: none;
         }
         .a-input::placeholder {
-          color: rgba(232,213,176,0.55);
+          color: rgba(232,213,176,0.45);
           letter-spacing: 0.32em;
           font-size: 11px;
-          text-shadow: 0 0 8px rgba(232,213,176,0.2);
         }
         .a-input:-webkit-autofill,
         .a-input:-webkit-autofill:focus {
@@ -151,16 +148,13 @@ export default function Login() {
           -webkit-box-shadow: 0 0 0 1000px transparent inset;
           transition: background-color 5000s ease-in-out 0s;
         }
-        .a-input-wrap {
-          position: relative;
-        }
+        .a-input-wrap { position: relative; }
         .a-input-wrap::after {
           content: '';
           position: absolute;
           bottom: 0; left: 0; right: 0;
           height: 1px;
           background: rgba(196,133,154,0.28);
-          box-shadow: 0 0 0px rgba(196,133,154,0);
           animation: lineBreath 5s ease-in-out infinite;
           transition: background 0.35s, box-shadow 0.35s;
           pointer-events: none;
@@ -170,12 +164,8 @@ export default function Login() {
           box-shadow: 0 0 10px 1px rgba(196,133,154,0.42), 0 0 22px 2px rgba(196,133,154,0.18) !important;
           animation: none !important;
         }
-        .a-input-wrap--pw::after {
-          animation-delay: 1.4s;
-        }
-        .a-btn {
-          animation: btnBreath 6s ease-in-out infinite 1s;
-        }
+        .a-input-wrap--pw::after { animation-delay: 1.4s; }
+        .a-btn { animation: btnBreath 6s ease-in-out infinite 1s; }
         .a-btn:hover {
           box-shadow: 0 0 18px rgba(196,133,154,0.38), 0 0 36px rgba(196,133,154,0.15) !important;
           animation: none !important;
@@ -199,7 +189,7 @@ export default function Login() {
       {/* ── Background ─────────────────────────────────────────────────────── */}
       <div style={{
         position: 'fixed', inset: 0,
-        backgroundColor: '#140E0C',
+        backgroundColor: '#0E0A08',
         overflow: 'hidden',
         zIndex: 0,
       }}>
@@ -212,26 +202,35 @@ export default function Login() {
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
             objectFit: 'cover',
-            objectPosition: '18% 12%',
-            opacity: 0.78,
-            filter: 'contrast(1.12) brightness(1.08) saturate(1.15)',
+            objectPosition: '22% 8%',
+            opacity: 0.72,
+            filter: 'contrast(1.08) brightness(1.04) saturate(1.1)',
             userSelect: 'none',
             pointerEvents: 'none',
           }}
         />
+        {/* Light top — warrior fully visible */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '28%',
-          background: 'linear-gradient(to bottom, rgba(16,10,8,0.38) 0%, transparent 100%)',
+          position: 'absolute', top: 0, left: 0, right: 0, height: '22%',
+          background: 'linear-gradient(to bottom, rgba(10,7,5,0.22) 0%, transparent 100%)',
           pointerEvents: 'none',
         }} />
+        {/* Mid-band — frames the wordmark zone */}
         <div style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: '42%',
-          background: 'linear-gradient(to left, rgba(16,10,8,0.72) 0%, transparent 100%)',
+          position: 'absolute', top: '30%', left: 0, right: 0, height: '30%',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(8,5,3,0.52) 40%, rgba(8,5,3,0.52) 60%, transparent 100%)',
           pointerEvents: 'none',
         }} />
+        {/* Right edge */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%',
-          background: 'linear-gradient(to top, rgba(16,10,8,0.96) 0%, rgba(16,10,8,0.72) 28%, rgba(16,10,8,0.18) 65%, transparent 100%)',
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: '38%',
+          background: 'linear-gradient(to left, rgba(10,7,5,0.68) 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Bottom — form zone */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '52%',
+          background: 'linear-gradient(to top, rgba(10,7,5,0.97) 0%, rgba(10,7,5,0.75) 30%, rgba(10,7,5,0.12) 68%, transparent 100%)',
           pointerEvents: 'none',
         }} />
       </div>
@@ -239,45 +238,53 @@ export default function Login() {
       {/* ── Content ────────────────────────────────────────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 10 }}>
 
-        {/* ── WELLNESS + ATHENA — anchored to upper screen ─────────────────── */}
+        {/* ── WELLNESS — whisper label at top ──────────────────────────────── */}
         <div style={{
-          position: 'absolute', top: '11vh', left: 0, right: 0,
+          position: 'absolute', top: '5.5vh', left: 0, right: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
-          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1)',
+          animation: 'floatIn 2s ease 0.4s both',
         }}>
-          <img
-            src={birdIcon}
-            alt=""
-            aria-hidden
-            draggable={false}
-            style={{
-              height: '38px', width: 'auto',
-              marginBottom: '10px',
-              animation: 'birdGlow 5s ease-in-out infinite',
-              userSelect: 'none',
-              pointerEvents: 'none',
-            }}
-          />
-
           <p style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: '11px', letterSpacing: '0.55em',
-            color: 'rgba(240,222,187,0.95)',
-            margin: '0 0 5px',
+            fontSize: '9px', letterSpacing: '0.62em',
+            color: 'rgba(255,250,242,0.28)',
+            margin: 0,
             textTransform: 'uppercase',
-            textShadow: '0 1px 12px rgba(0,0,0,0.75), 0 0 16px rgba(245,232,204,0.5)',
-            animation: 'wellnessPulse 5s ease-in-out infinite 0.8s',
           }}>WELLNESS</p>
+        </div>
+
+        {/* ── ATHENA — centered gateway wordmark ───────────────────────────── */}
+        <div style={{
+          position: 'absolute', top: '40vh', left: 0, right: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          gap: 0,
+          animation: 'riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both',
+        }}>
+          {/* Top rule */}
+          <div style={{
+            width: '48px', height: '0.5px',
+            background: 'rgba(255,248,236,1)',
+            marginBottom: '14px',
+            animation: 'rulePulse 6s ease-in-out infinite',
+          }} />
 
           <h1 style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: '46px', fontWeight: 300,
-            letterSpacing: '0.48em',
-            color: 'rgba(245,232,204,0.98)',
-            margin: 0,
+            fontSize: 'clamp(46px, 11.5vw, 58px)',
+            fontWeight: 300,
+            letterSpacing: '0.52em',
+            color: 'rgba(252,248,242,0.97)',
+            margin: '0 0 14px',
             lineHeight: 1,
-            animation: 'wordmarkPulse 6s ease-in-out infinite',
+            animation: 'athenaPulse 7s ease-in-out infinite',
           }}>ATHENA</h1>
+
+          {/* Bottom rule */}
+          <div style={{
+            width: '48px', height: '0.5px',
+            background: 'rgba(255,248,236,1)',
+            animation: 'rulePulse 6s ease-in-out infinite 0.5s',
+          }} />
         </div>
 
         {/* ── Form — anchored to bottom ─────────────────────────────────────── */}
@@ -285,11 +292,10 @@ export default function Login() {
           position: 'absolute', bottom: 0, left: 0, right: 0,
           display: 'flex', justifyContent: 'center',
           paddingBottom: 'calc(env(safe-area-inset-bottom) + 52px)',
-          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both',
+          animation: 'riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both',
         }}>
           <div style={{ width: '100%', maxWidth: '480px', padding: '0 44px' }}>
 
-            {/* Form inputs + ENTER — shown when not yet authed */}
             {!authed && (
               <>
                 <form onSubmit={handleSubmit} noValidate>
@@ -361,9 +367,7 @@ export default function Login() {
                       WebkitAppearance: 'none',
                       transition: 'all 0.3s ease',
                     }}
-                  >
-                    ENTER
-                  </button>
+                  >ENTER</button>
                 </form>
 
                 <p style={{
@@ -388,7 +392,6 @@ export default function Login() {
               </>
             )}
 
-            {/* ACCESS button — shown after auth, before video */}
             {authed && !showVideo && (
               <button
                 onClick={() => setShowVideo(true)}
@@ -407,15 +410,13 @@ export default function Login() {
                   WebkitAppearance: 'none',
                   transition: 'background 0.3s ease',
                 }}
-              >
-                ACCESS
-              </button>
+              >ACCESS</button>
             )}
           </div>
         </div>
       </div>
 
-      {/* ── Linen cover — prevents hero bleed during video render gap ───────── */}
+      {/* ── Linen cover ─────────────────────────────────────────────────────── */}
       {showVideo && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 5, backgroundColor: '#F2EDE8' }} />
       )}
@@ -459,7 +460,6 @@ export default function Login() {
             boxShadow: '0 0 40px rgba(232,213,176,0.07), 0 16px 72px rgba(0,0,0,0.65)',
             animation: 'termsIn 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           }}>
-            {/* Header */}
             <div style={{
               padding: '20px 22px 14px',
               borderBottom: '1px solid rgba(232,213,176,0.15)',
@@ -468,7 +468,7 @@ export default function Login() {
               <p style={{
                 fontFamily: "'Cinzel', serif", fontSize: '9px',
                 letterSpacing: '0.3em', color: 'rgba(232,213,176,0.55)',
-                marginBottom: '6px', margin: '0 0 6px',
+                margin: '0 0 6px',
               }}>ATHENA</p>
               <h2 style={{
                 fontFamily: "'Cinzel', serif", fontSize: '16px',
@@ -491,7 +491,6 @@ export default function Login() {
               >✕</button>
             </div>
 
-            {/* Body */}
             <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -519,7 +518,6 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Footer */}
             <div style={{
               padding: '14px 22px 22px',
               borderTop: '1px solid rgba(232,213,176,0.15)',
