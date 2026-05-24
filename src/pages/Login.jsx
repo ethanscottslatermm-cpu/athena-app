@@ -198,22 +198,29 @@ export default function Login() {
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
             objectFit: 'cover',
-            objectPosition: 'center 20%',
-            opacity: 0.5,
+            objectPosition: '18% 12%',
+            opacity: 0.78,
+            filter: 'contrast(1.12) brightness(1.08) saturate(1.15)',
             userSelect: 'none',
             pointerEvents: 'none',
           }}
         />
-        {/* Top vignette */}
+        {/* Top vignette — light, just anchors the sky */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '35%',
-          background: 'linear-gradient(to bottom, rgba(16,10,8,0.55) 0%, transparent 100%)',
+          position: 'absolute', top: 0, left: 0, right: 0, height: '28%',
+          background: 'linear-gradient(to bottom, rgba(16,10,8,0.38) 0%, transparent 100%)',
           pointerEvents: 'none',
         }} />
-        {/* Bottom vignette — deepens toward form area */}
+        {/* Right-side vignette — fades the empty mauve background edge */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '70%',
-          background: 'linear-gradient(to top, rgba(16,10,8,0.95) 0%, rgba(16,10,8,0.7) 40%, transparent 100%)',
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: '42%',
+          background: 'linear-gradient(to left, rgba(16,10,8,0.72) 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Bottom vignette — deep only in the form zone, lets figure breathe above */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%',
+          background: 'linear-gradient(to top, rgba(16,10,8,0.96) 0%, rgba(16,10,8,0.72) 28%, rgba(16,10,8,0.18) 65%, transparent 100%)',
           pointerEvents: 'none',
         }} />
       </div>
