@@ -367,10 +367,10 @@ export default function Dashboard() {
     <>
     {/* Exit video overlay */}
     {exiting && (
-      <div style={{ position: 'fixed', inset: 0, zIndex: 200, backgroundColor: '#F2EDE8', animation: 'exitFadeIn 1.4s ease forwards' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 200, backgroundColor: '#140E0C', animation: 'exitFadeIn 0.35s ease forwards' }}>
         <style>{`
           @keyframes exitFadeIn  { from { opacity: 0; } to { opacity: 1; } }
-          @keyframes exitBlackIn { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes exitDarkIn  { from { opacity: 0; } to { opacity: 1; } }
         `}</style>
         <video ref={videoRef} src="/athena-exit.mp4" playsInline preload="auto"
           onEnded={handleVideoEnd} onError={handleVideoEnd}
@@ -378,7 +378,7 @@ export default function Dashboard() {
       </div>
     )}
     {fadingOut && (
-      <div style={{ position: 'fixed', inset: 0, zIndex: 201, backgroundColor: '#000', animation: 'exitBlackIn 0.65s ease forwards', pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 201, backgroundColor: '#140E0C', animation: 'exitDarkIn 0.65s ease forwards', pointerEvents: 'none' }} />
     )}
     <div className="flex-1 min-h-0 bg-[#F2EDE8] pb-nav overflow-y-auto">
       <style>{`
