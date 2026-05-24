@@ -236,7 +236,7 @@ export default function Login() {
       >
         {/* ── WELLNESS + ATHENA + tagline — anchored to upper screen ──────────── */}
         <div style={{
-          position: 'absolute', top: '12vh', left: 0, right: 0,
+          position: 'absolute', top: '11vh', left: 0, right: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
           animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1)',
         }}>
