@@ -1,4 +1,14 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { ChevronLeft } from 'lucide-react'
+
+const EXERCISE_SLUGS = {
+  'Pelvic Tilt':            'pelvic-tilt',
+  'Knee Fold Single Leg':   'knee-fold-single-leg',
+  'Hundred Prep':           'hundred-prep',
+  'Roll Up':                'roll-up',
+  'Single Leg Stretch':     'single-leg-stetch',   // matches filename on disk
+  'Criss Cross':            'criss-cross',
+}
 
 function formatTime(s) {
   const m = Math.floor(s / 60)
@@ -6,225 +16,263 @@ function formatTime(s) {
 }
 
 export default function ActiveSession({ session, exercises = [], phaseData, onComplete, onExit }) {
-  const [exIdx,          setExIdx]          = useState(0)
-  const [elapsed,        setElapsed]        = useState(0)
-  const [paused,         setPaused]         = useState(false)
-  const [restSecs,       setRestSecs]       = useState(0)   // 0 = not resting
-  const [showExitModal,  setShowExitModal]  = useState(false)
+  const [exIdx,         setExIdx]         = useState(0)
+  const [elapsed,       setElapsed]       = useState(0)
+  const [videoVisible,  setVideoVisible]  = useState(true)
+  const [showExitModal, setShowExitModal] = useState(false)
+  const touchStartX = useRef(null)
 
   const current = exercises[exIdx]
   const total   = exercises.length
-  const pct     = total > 0 ? (exIdx / total) * 100 : 0
+  const isLast  = exIdx >= total - 1
+  const pct     = total > 0 ? ((exIdx + 1) / total) * 100 : 0
 
-  // ── Elapsed timer ────────────────────────────────────────────────────────
   useEffect(() => {
-    if (paused || restSecs > 0) return
     const t = setInterval(() => setElapsed(e => e + 1), 1000)
     return () => clearInterval(t)
-  }, [paused, restSecs])
+  }, [])
 
-  // ── Rest countdown (chains via useState-triggered re-render) ─────────────
-  useEffect(() => {
-    if (restSecs <= 0) return
-    const t = setTimeout(() => {
-      setRestSecs(s => {
-        if (s <= 1) {
-          // advance to next exercise
-          setExIdx(i => i + 1)
-          return 0
-        }
-        return s - 1
-      })
-    }, 1000)
-    return () => clearTimeout(t)
-  }, [restSecs])
-
-  function handleNext() {
-    if (exIdx >= total - 1) {
-      // Session complete
+  function advance() {
+    if (isLast) {
       onComplete?.({ session, exercises, elapsed })
       return
     }
-    const rest = current?.rest_sec ?? 30
-    if (rest > 0) {
-      setRestSecs(rest)
-    } else {
+    setVideoVisible(false)
+    setTimeout(() => {
       setExIdx(i => i + 1)
-    }
+      setVideoVisible(true)
+    }, 200)
   }
 
-  function handlePrev() {
-    if (restSecs > 0) { setRestSecs(0); return }
-    setExIdx(i => Math.max(0, i - 1))
+  function handleTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX
+  }
+  function handleTouchEnd(e) {
+    if (touchStartX.current === null) return
+    const dx = touchStartX.current - e.changedTouches[0].clientX
+    if (dx > 50) advance()
+    touchStartX.current = null
   }
 
-  function skipRest() {
-    setRestSecs(0)
-    setExIdx(i => Math.min(total - 1, i + 1))
-  }
-
-  const pc = {
-    menstrual: '#D4A0A0',
-    follicular: '#8FA58C',
-    ovulation: '#D4A0A0',
-    luteal: '#C4AFA8',
-  }[phaseData?.phase] ?? '#D4A0A0'
+  const slug    = EXERCISE_SLUGS[current?.name]
+  const videoSrc = slug ? `/videos/Exercises/${slug}.mp4.mp4` : null
 
   return (
     <div
       className="fixed inset-0 z-[60] flex flex-col"
-      style={{ background: '#F2EDE8' }}
+      style={{ background: '#F3EAE7' }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      {/* ── Top progress bar ────────────────────────────────────────────── */}
-      <div className="h-1 w-full" style={{ background: 'rgba(59,51,48,0.1)' }}>
+      {/* Progress bar */}
+      <div className="h-0.5 w-full" style={{ background: 'rgba(59,51,48,0.1)' }}>
         <div
           className="h-full transition-all duration-500"
           style={{ width: `${pct}%`, background: '#D4A0A0' }}
         />
       </div>
 
-      {/* ── Header ──────────────────────────────────────────────────────── */}
+      {/* Header */}
       <div
-        className="flex items-center justify-between px-4 py-3 shrink-0"
-        style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}
+        className="flex items-center justify-between px-3 shrink-0"
+        style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)', paddingBottom: 10 }}
       >
         <button
           onClick={() => setShowExitModal(true)}
-          className="w-10 h-10 flex items-center justify-center text-brown/50 text-xl"
+          className="w-10 h-10 flex items-center justify-center"
+          style={{ color: '#7A6A65' }}
         >
-          ×
+          <ChevronLeft size={22} strokeWidth={1.5} />
         </button>
-        <span className="font-garamond text-brown/45 text-sm flex-1 text-center truncate px-2">
-          {session?.title}
-        </span>
-        <span className="font-cinzel text-rose text-base w-14 text-right">
+
+        <div className="flex flex-col items-center flex-1 px-2 min-w-0">
+          <span
+            className="font-garamond text-sm truncate w-full text-center"
+            style={{ color: 'rgba(59,51,48,0.5)' }}
+          >
+            {session?.title}
+          </span>
+          <span
+            className="font-cinzel tracking-widest"
+            style={{ fontSize: 8.5, color: 'rgba(59,51,48,0.3)' }}
+          >
+            EXERCISE {exIdx + 1} OF {total}
+          </span>
+        </div>
+
+        <span
+          className="font-cinzel text-sm w-14 text-right"
+          style={{ color: '#D4A0A0' }}
+        >
           {formatTime(elapsed)}
         </span>
       </div>
 
-      <p className="font-cinzel text-brown/30 text-[10px] tracking-widest text-center pb-2">
-        EXERCISE {exIdx + 1} OF {total}
-      </p>
+      {/* Video card */}
+      <div className="flex flex-col items-center px-5 shrink-0">
+        <div
+          style={{
+            width: '85%',
+            aspectRatio: '16 / 9',
+            borderRadius: 16,
+            overflow: 'hidden',
+            background: 'rgba(196,175,168,0.18)',
+            border: '1px solid rgba(196,175,168,0.3)',
+            opacity: videoVisible ? 1 : 0,
+            transition: 'opacity 0.2s ease',
+          }}
+        >
+          {videoSrc ? (
+            <video
+              key={videoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </video>
+          ) : (
+            <div
+              className="w-full h-full flex flex-col items-center justify-center gap-2"
+            >
+              <span style={{ fontSize: 26, opacity: 0.35 }}>🧘</span>
+              <span
+                className="font-cinzel tracking-widest"
+                style={{ fontSize: 9, color: 'rgba(59,51,48,0.28)' }}
+              >
+                {current?.name?.toUpperCase()}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
 
-      {/* ── Main exercise display ────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-        {restSecs > 0 ? (
-          // Rest mode
-          <>
-            <p className="font-cinzel text-brown/40 text-xs tracking-widest uppercase mb-3">REST</p>
-            <span
-              className="font-cinzel text-rose leading-none mb-4"
-              style={{ fontSize: 88 }}
-            >
-              {restSecs}
-            </span>
-            <button
-              onClick={skipRest}
-              className="font-garamond text-brown/40 text-sm underline underline-offset-2"
-            >
-              Skip rest
-            </button>
-            <p className="font-garamond italic text-brown/25 text-sm mt-6">
-              Up next: {exercises[exIdx + 1]?.name ?? '—'}
-            </p>
-          </>
-        ) : (
-          // Exercise mode
-          <>
-            <h2 className="font-cinzel text-brown text-2xl leading-tight mb-3">
-              {current?.name ?? '—'}
-            </h2>
-            <p
-              className="font-cinzel text-rose mb-4"
-              style={{ fontSize: 40, lineHeight: 1 }}
-            >
-              {current?.duration_sec
-                ? `${current.duration_sec}s`
-                : `${current?.sets ?? 1} × ${current?.reps ?? 0}`}
-            </p>
-            {current?.form_cue && (
-              <p className="font-garamond italic text-brown/45 text-sm leading-relaxed max-w-xs">
-                {current.form_cue}
-              </p>
-            )}
-          </>
+      {/* Exercise info */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-3">
+        <h2
+          className="font-cinzel leading-tight mb-2"
+          style={{ fontSize: 20, color: '#3B3330' }}
+        >
+          {current?.name ?? '—'}
+        </h2>
+        <p
+          className="font-cinzel mb-3"
+          style={{ fontSize: 34, color: '#D4A0A0', lineHeight: 1 }}
+        >
+          {current?.duration_sec
+            ? `${current.duration_sec}s`
+            : `${current?.sets ?? 1} × ${current?.reps ?? 0}`}
+        </p>
+        {current?.form_cue && (
+          <p
+            className="font-garamond italic text-sm leading-relaxed"
+            style={{ color: 'rgba(59,51,48,0.48)', maxWidth: 280 }}
+          >
+            {current.form_cue}
+          </p>
         )}
       </div>
 
-      {/* ── Controls ────────────────────────────────────────────────────── */}
-      <div className="shrink-0 px-4 pb-4">
-        <div className="flex items-center justify-center gap-10 mb-4">
-          <button
-            onClick={handlePrev}
-            disabled={exIdx === 0 && restSecs === 0}
-            className="w-12 h-12 flex items-center justify-center rounded-full text-rose text-2xl"
-            style={{ background: 'rgba(212,160,160,0.12)', opacity: (exIdx === 0 && restSecs === 0) ? 0.35 : 1 }}
-          >
-            ←
-          </button>
-          <button
-            onClick={() => setPaused(p => !p)}
-            className="w-14 h-14 flex items-center justify-center rounded-full"
-            style={{ background: 'rgba(212,160,160,0.15)', border: '1px solid rgba(212,160,160,0.4)' }}
-          >
-            <span className="font-cinzel text-rose text-lg">{paused ? '▶' : '⏸'}</span>
-          </button>
-          <button
-            onClick={handleNext}
-            className="w-12 h-12 flex items-center justify-center rounded-full text-rose text-2xl"
-            style={{ background: 'rgba(212,160,160,0.12)' }}
-          >
-            {exIdx >= total - 1 ? '✓' : '→'}
-          </button>
+      {/* Bottom controls */}
+      <div
+        className="shrink-0 px-5"
+        style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 20px)' }}
+      >
+        {/* Exercise queue strip */}
+        <div
+          className="flex gap-2 overflow-x-auto mb-3 pb-1"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {exercises.map((ex, i) => (
+            <div
+              key={ex.id ?? i}
+              className="shrink-0 rounded-lg font-garamond text-xs text-center"
+              style={{
+                minWidth: 72,
+                padding: '6px 10px',
+                background: i === exIdx
+                  ? 'rgba(212,160,160,0.18)'
+                  : 'rgba(196,175,168,0.12)',
+                border: i === exIdx
+                  ? '1px solid rgba(212,160,160,0.5)'
+                  : '1px solid rgba(196,175,168,0.2)',
+                color: i === exIdx
+                  ? '#D4A0A0'
+                  : i < exIdx
+                    ? 'rgba(59,51,48,0.22)'
+                    : 'rgba(59,51,48,0.42)',
+              }}
+            >
+              {ex.name}
+            </div>
+          ))}
         </div>
 
-        {/* Exercise queue strip */}
-        <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar justify-start px-1">
-          {exercises.map((ex, i) => {
-            const isCurrent = i === exIdx && restSecs === 0
-            const isNext    = restSecs > 0 && i === exIdx + 1
-            return (
-              <div
-                key={ex.id ?? i}
-                className="shrink-0 px-3 py-2 rounded-lg font-garamond text-xs text-center"
-                style={{
-                  minWidth: 80,
-                  background: isCurrent ? 'rgba(212,160,160,0.18)' : isNext ? 'rgba(59,51,48,0.06)' : 'rgba(196,175,168,0.2)',
-                  border: isCurrent ? '1px solid rgba(212,160,160,0.6)' : isNext ? '1px solid rgba(59,51,48,0.15)' : '1px solid rgba(196,175,168,0.3)',
-                  color: isCurrent ? '#D4A0A0' : isNext ? 'rgba(59,51,48,0.7)' : 'rgba(59,51,48,0.35)',
-                }}
-              >
-                {ex.name}
-              </div>
-            )
-          })}
-        </div>
+        {/* Next / Complete button */}
+        <button
+          onClick={advance}
+          style={{
+            width: '100%',
+            padding: '15px',
+            borderRadius: 18,
+            fontFamily: 'Cinzel, serif',
+            fontSize: 10,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            border: isLast
+              ? '1px solid transparent'
+              : '1px solid rgba(212,160,160,0.45)',
+            background: isLast
+              ? 'rgba(212,160,160,0.88)'
+              : 'rgba(212,160,160,0.12)',
+            color: isLast ? '#F3EAE7' : '#D4A0A0',
+            transition: 'all 0.2s',
+          }}
+        >
+          {isLast ? 'Complete Session' : 'Next Exercise →'}
+        </button>
       </div>
 
-      {/* ── Exit modal ──────────────────────────────────────────────────── */}
+      {/* Exit confirmation modal */}
       {showExitModal && (
         <div
           className="absolute inset-0 z-10 flex items-center justify-center px-8"
-          style={{ background: 'rgba(59,51,48,0.55)' }}
+          style={{ background: 'rgba(59,51,48,0.5)' }}
         >
           <div
             className="w-full rounded-2xl p-6 text-center"
-            style={{ background: '#F2EDE8', border: '1px solid rgba(212,160,160,0.3)' }}
+            style={{ background: '#F3EAE7', border: '1px solid rgba(212,160,160,0.3)' }}
           >
-            <p className="font-cinzel text-brown text-base mb-2">End Session?</p>
-            <p className="font-garamond text-brown/50 text-sm mb-6">Your progress won't be saved.</p>
+            <p className="font-cinzel text-sm mb-2" style={{ color: '#3B3330' }}>
+              End Session?
+            </p>
+            <p
+              className="font-garamond text-sm mb-6"
+              style={{ color: 'rgba(59,51,48,0.45)' }}
+            >
+              Your progress won't be saved.
+            </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowExitModal(false)}
-                className="flex-1 py-3 rounded-xl font-garamond text-sm text-brown/60"
-                style={{ border: '1px solid rgba(59,51,48,0.2)' }}
+                className="flex-1 py-3 rounded-xl font-garamond text-sm"
+                style={{
+                  border: '1px solid rgba(59,51,48,0.2)',
+                  color: 'rgba(59,51,48,0.6)',
+                }}
               >
                 Keep Going
               </button>
               <button
                 onClick={onExit}
-                className="flex-1 py-3 rounded-xl font-cinzel text-xs tracking-widest text-rose"
-                style={{ border: '1px solid rgba(212,160,160,0.4)' }}
+                className="flex-1 py-3 rounded-xl font-cinzel text-xs tracking-widest"
+                style={{
+                  border: '1px solid rgba(212,160,160,0.4)',
+                  color: '#D4A0A0',
+                }}
               >
                 END
               </button>

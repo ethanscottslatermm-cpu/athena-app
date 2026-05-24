@@ -18,7 +18,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
     <div
       className="fixed inset-0 z-[60] flex flex-col items-center justify-between px-6 py-safe text-center"
       style={{
-        background: '#F2EDE8',
+        background: '#F3EAE7',
         paddingTop: 'max(env(safe-area-inset-top, 0px), 48px)',
         paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 32px)',
       }}
@@ -42,7 +42,10 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
           <p className="font-cinzel text-brown/40 text-xs tracking-widest uppercase mb-1">
             Session Complete
           </p>
-          <h2 className="font-cinzel text-brown text-2xl leading-tight">{session?.title}</h2>
+          <h2 className="font-cinzel text-brown text-2xl leading-tight mb-2">{session?.title}</h2>
+          <p className="font-garamond italic text-sm" style={{ color: 'rgba(59,51,48,0.4)' }}>
+            Well done. Your body thanks you.
+          </p>
         </div>
 
         {/* Stats */}
@@ -106,7 +109,7 @@ export default function SessionComplete({ session, elapsed, phaseData, onBack, o
             border: '1px solid rgba(212,160,160,0.55)',
           }}
         >
-          BACK TO STUDIO
+          RETURN TO STUDIO
         </button>
       </div>
     </div>
