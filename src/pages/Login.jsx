@@ -234,7 +234,7 @@ export default function Login() {
           pointerEvents: authed ? 'none' : 'auto',
         }}
       >
-        {/* ── WELLNESS + ATHENA — anchored to upper screen ─────────────────── */}
+        {/* ── WELLNESS + ATHENA + tagline — anchored to upper screen ──────────── */}
         <div style={{
           position: 'absolute', top: '7vh', left: 0, right: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -261,39 +261,36 @@ export default function Login() {
             fontSize: '46px', fontWeight: 300,
             letterSpacing: '0.48em',
             color: 'rgba(255,248,242,0.98)',
-            margin: 0,
+            margin: '0 0 16px',
             lineHeight: 1,
             textShadow: '0 2px 24px rgba(0,0,0,0.65), 0 0 48px rgba(196,133,154,0.18)',
             animation: 'wordmarkPulse 6s ease-in-out infinite',
           }}>ATHENA</h1>
-        </div>
 
-        {/* ── Tagline — floats just above the helmet ────────────────────────── */}
-        <div style={{
-          position: 'absolute', top: '39vh', left: 0, right: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: '12px',
-          animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both',
-        }}>
+          {/* Tagline — sits directly below ATHENA, above the helmet */}
           <div style={{
-            width: '28px', height: '0.5px',
-            background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.6))',
-            animation: 'dividerGlow 4s ease-in-out infinite',
-          }} />
-          <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: 'italic', fontSize: '15px',
-            letterSpacing: '0.16em',
-            color: 'rgba(255,246,240,0.88)',
-            margin: 0,
-            textShadow: '0 1px 10px rgba(0,0,0,0.8), 0 0 20px rgba(196,133,154,0.2)',
-            animation: 'taglinePulse 7s ease-in-out infinite 2.5s',
-          }}>your sacred space</p>
-          <div style={{
-            width: '28px', height: '0.5px',
-            background: 'linear-gradient(to left, transparent, rgba(196,133,154,0.6))',
-            animation: 'dividerGlow 4s ease-in-out infinite',
-          }} />
+            display: 'flex', alignItems: 'center', gap: '12px',
+          }}>
+            <div style={{
+              width: '28px', height: '0.5px',
+              background: 'linear-gradient(to right, transparent, rgba(196,133,154,0.6))',
+              animation: 'dividerGlow 4s ease-in-out infinite',
+            }} />
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontStyle: 'italic', fontSize: '15px',
+              letterSpacing: '0.16em',
+              color: 'rgba(255,246,240,0.88)',
+              margin: 0,
+              textShadow: '0 1px 10px rgba(0,0,0,0.8), 0 0 20px rgba(196,133,154,0.2)',
+              animation: 'taglinePulse 7s ease-in-out infinite 2.5s',
+            }}>your sacred space</p>
+            <div style={{
+              width: '28px', height: '0.5px',
+              background: 'linear-gradient(to left, transparent, rgba(196,133,154,0.6))',
+              animation: 'dividerGlow 4s ease-in-out infinite',
+            }} />
+          </div>
         </div>
 
         {/* ── Form — anchored to bottom ─────────────────────────────────────── */}
