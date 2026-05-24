@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useProfile } from './hooks/useProfile'
@@ -44,6 +45,57 @@ function Splash() {
   return <div className="min-h-[100svh] bg-[#F2EDE8]" />
 }
 
+function WelcomeOverlay() {
+  const [visible, setVisible] = useState(() => !!sessionStorage.getItem('athena_welcome'))
+  const [fading, setFading] = useState(false)
+
+  useEffect(() => {
+    if (!visible) return
+    sessionStorage.removeItem('athena_welcome')
+    const t1 = setTimeout(() => setFading(true), 1600)
+    const t2 = setTimeout(() => setVisible(false), 2350)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [])
+
+  if (!visible) return null
+
+  return (
+    <>
+      <style>{`
+        @keyframes wFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes wFadeOut { from { opacity: 1; } to { opacity: 0; } }
+        @keyframes wWordIn  {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 200,
+        backgroundColor: '#FFFAF6',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        gap: '10px',
+        animation: fading ? 'wFadeOut 0.75s ease forwards' : 'wFadeIn 0.6s ease forwards',
+        pointerEvents: 'none',
+      }}>
+        <p style={{
+          fontFamily: "'Cinzel', serif",
+          fontSize: '20px', fontWeight: 300,
+          letterSpacing: '0.38em',
+          color: '#3B3330',
+          margin: 0,
+          animation: 'wWordIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both',
+        }}>Welcome In</p>
+        <div style={{
+          width: '32px', height: '0.5px',
+          background: 'rgba(196,133,154,0.45)',
+          animation: 'wWordIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both',
+        }} />
+      </div>
+    </>
+  )
+}
+
 function AppShell({ children }) {
   return (
     <>
@@ -62,6 +114,7 @@ function PhoneFrame({ children }) {
     <div className="min-h-[100svh] bg-[#F2EDE8] flex items-stretch justify-center">
       <div className="relative w-full md:max-w-sm bg-[#F2EDE8] h-[100svh] flex flex-col overflow-hidden">
         {children}
+        <WelcomeOverlay />
       </div>
     </div>
   )

@@ -413,7 +413,10 @@ export default function Login() {
             ref={loadVideoRef}
             src="/athena-loading.mp4"
             autoPlay muted playsInline preload="auto"
-            onEnded={() => navigate(navDest.current, { replace: true })}
+            onEnded={() => {
+              sessionStorage.setItem('athena_welcome', '1')
+              navigate(navDest.current, { replace: true })
+            }}
             onError={() => navigate(navDest.current, { replace: true })}
             style={{
               width: '100%', height: '100%', objectFit: 'cover', display: 'block',
