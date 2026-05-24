@@ -115,15 +115,17 @@ export default function Login() {
         @keyframes athenaPulse {
           0%, 100% {
             text-shadow:
-              0 2px 32px rgba(0,0,0,0.85),
-              0 0 48px rgba(255,252,244,0.06);
+              0 2px 28px rgba(0,0,0,0.8),
+              0 0 18px rgba(248,232,175,0.14),
+              0 0 40px rgba(248,232,175,0.05);
             letter-spacing: 0.52em;
           }
           50% {
             text-shadow:
-              0 2px 32px rgba(0,0,0,0.85),
-              0 0 60px rgba(255,252,244,0.22),
-              0 0 110px rgba(255,248,235,0.08);
+              0 2px 28px rgba(0,0,0,0.72),
+              0 0 18px rgba(248,232,175,0.58),
+              0 0 48px rgba(248,232,175,0.26),
+              0 0 88px rgba(248,232,175,0.09);
             letter-spacing: 0.54em;
           }
         }
@@ -373,7 +375,7 @@ export default function Login() {
             fontSize: 'clamp(46px, 11.5vw, 58px)',
             fontWeight: 300,
             letterSpacing: '0.52em',
-            color: 'rgba(252,248,242,0.97)',
+            color: 'rgba(248,243,220,0.97)',
             margin: '0 0 14px',
             lineHeight: 1,
             animation: 'athenaPulse 7s ease-in-out infinite',
