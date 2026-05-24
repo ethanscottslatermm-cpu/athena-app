@@ -40,10 +40,10 @@ export default function Login() {
 
     const COUNT = 38
     const particles = Array.from({ length: COUNT }, () => ({
-      x:       Math.random(),
-      y:       Math.random(),
-      r:       Math.random() * 1.2 + 0.4,
-      speed:   Math.random() * 0.28 + 0.1,
+      x:    Math.random(),
+      y:    Math.random(),
+      r:    Math.random() * 1.2 + 0.4,
+      speed: Math.random() * 0.28 + 0.1,
       opacity: Math.random() * 0.28 + 0.06,
     }))
 
@@ -236,10 +236,35 @@ export default function Login() {
           caret-color: #C4859A;
           -webkit-appearance: none;
         }
+        .a-field-icon {
+          position: absolute;
+          right: 2px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 15px;
+          height: 15px;
+          object-fit: contain;
+          pointer-events: none;
+          user-select: none;
+          animation: iconBreath 5s ease-in-out infinite;
+        }
+        .a-field-icon--pw { animation-delay: 1.4s; }
+        .a-input-wrap:focus-within .a-field-icon {
+          opacity: 0.88 !important;
+          filter: brightness(0) invert(1) sepia(0.4) saturate(3) hue-rotate(300deg) brightness(1.1)
+                  drop-shadow(0 0 6px rgba(196,133,154,0.8)) drop-shadow(0 0 16px rgba(196,133,154,0.35)) !important;
+          animation: none !important;
+        }
         .a-input::placeholder {
           color: rgba(232,213,176,0.72);
           letter-spacing: 0.32em;
           font-size: 11px;
+        }
+        .a-link {
+          cursor: pointer;
+          border-bottom: 1px solid rgba(196,133,154,0.28);
+          padding-bottom: 1px;
+          animation: linkBreath 5s ease-in-out infinite 3.2s;
         }
         .a-input:-webkit-autofill,
         .a-input:-webkit-autofill:focus {
@@ -264,24 +289,6 @@ export default function Login() {
           animation: none !important;
         }
         .a-input-wrap--pw::after { animation-delay: 1.4s; }
-        .a-field-icon {
-          position: absolute;
-          right: 2px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 15px; height: 15px;
-          object-fit: contain;
-          pointer-events: none;
-          user-select: none;
-          animation: iconBreath 5s ease-in-out infinite;
-        }
-        .a-field-icon--pw { animation-delay: 1.4s; }
-        .a-input-wrap:focus-within .a-field-icon {
-          opacity: 0.88 !important;
-          filter: brightness(0) invert(1) sepia(0.4) saturate(3) hue-rotate(300deg) brightness(1.1)
-                  drop-shadow(0 0 6px rgba(196,133,154,0.8)) drop-shadow(0 0 16px rgba(196,133,154,0.35)) !important;
-          animation: none !important;
-        }
         .a-btn { animation: btnBreath 6s ease-in-out infinite 1s; }
         .a-btn:hover {
           box-shadow: 0 0 18px rgba(196,133,154,0.38), 0 0 36px rgba(196,133,154,0.15) !important;
@@ -290,12 +297,6 @@ export default function Login() {
         .a-access {
           animation: accessSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both,
                      borderPulse 2s ease-in-out infinite 0.8s;
-        }
-        .a-link {
-          cursor: pointer;
-          border-bottom: 1px solid rgba(196,133,154,0.28);
-          padding-bottom: 1px;
-          animation: linkBreath 5s ease-in-out infinite 3.2s;
         }
         .terms-scroll {
           overflow-y: auto;
@@ -307,119 +308,110 @@ export default function Login() {
           background: rgba(232,213,176,0.3);
           border-radius: 2px;
         }
-
-        /* Desktop edge vignettes — frame the centred column */
-        .login-vig-l, .login-vig-r {
-          position: fixed;
-          top: 0; bottom: 0;
-          width: 20%;
-          pointer-events: none;
-          z-index: 3;
-        }
-        .login-vig-l { left:  0; background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 100%); }
-        .login-vig-r { right: 0; background: linear-gradient(to left,  rgba(0,0,0,0.5) 0%, transparent 100%); }
-        @media (max-width: 640px) {
-          .login-vig-l, .login-vig-r { display: none; }
-        }
       `}</style>
 
-      {/* ── Desktop vignettes ──────────────────────────────────────────────── */}
-      <div className="login-vig-l" />
-      <div className="login-vig-r" />
-
-      {/* ── Main shell — flex column, fills PhoneFrame ─────────────────────── */}
+      {/* ── Background ─────────────────────────────────────────────────────── */}
       <div style={{
-        position: 'relative',
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
+        position: 'fixed', inset: 0,
         backgroundColor: '#0E0A08',
+        overflow: 'hidden',
+        zIndex: 0,
       }}>
-
-        {/* ── Background — absolute, clipped by PhoneFrame overflow:hidden ─── */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-          <img
-            src="/login-hero.png"
-            alt="" aria-hidden draggable={false}
-            style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center',
-              opacity: 0.72,
-              filter: 'contrast(1.08) brightness(1.04) saturate(1.1)',
-              userSelect: 'none', pointerEvents: 'none',
-            }}
-          />
-          {/* Flat dark overlay per spec */}
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,8,6,0.55)', pointerEvents: 'none' }} />
-          {/* Extra depth at bottom for form legibility */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: '42%',
-            background: 'linear-gradient(to top, rgba(8,5,3,0.65) 0%, transparent 100%)',
-            pointerEvents: 'none',
-          }} />
-        </div>
-
-        {/* ── Particles ────────────────────────────────────────────────────── */}
-        <canvas
-          ref={canvasRef}
+        <img
+          src="/login-hero.png"
+          alt=""
+          aria-hidden
+          draggable={false}
           style={{
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
-            zIndex: 1, pointerEvents: 'none',
+            objectFit: 'cover',
+            objectPosition: '22% 8%',
+            opacity: 0.72,
+            filter: 'contrast(1.08) brightness(1.04) saturate(1.1)',
+            userSelect: 'none',
+            pointerEvents: 'none',
           }}
         />
-
-        {/* ── Content column — single vertical stack ───────────────────────── */}
+        {/* Light top — warrior fully visible */}
         <div style={{
-          position: 'relative',
-          zIndex: 2,
-          width: '100%',
-          maxWidth: '420px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '8vh 44px calc(env(safe-area-inset-bottom) + 52px)',
-        }}>
+          position: 'absolute', top: 0, left: 0, right: 0, height: '22%',
+          background: 'linear-gradient(to bottom, rgba(10,7,5,0.22) 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Mid-band — frames the wordmark zone */}
+        <div style={{
+          position: 'absolute', top: '30%', left: 0, right: 0, height: '30%',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(8,5,3,0.52) 40%, rgba(8,5,3,0.52) 60%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Right edge */}
+        <div style={{
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: '38%',
+          background: 'linear-gradient(to left, rgba(10,7,5,0.68) 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Bottom — form zone */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '52%',
+          background: 'linear-gradient(to top, rgba(10,7,5,0.97) 0%, rgba(10,7,5,0.75) 30%, rgba(10,7,5,0.12) 68%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+      </div>
 
-          {/* 1. Eye icon */}
+      {/* ── Particles ──────────────────────────────────────────────────────── */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed', inset: 0,
+          width: '100%', height: '100%',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* ── Content ────────────────────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 10 }}>
+
+        {/* ── Eye + WELLNESS — top group ───────────────────────────────────── */}
+        <div style={{
+          position: 'absolute', top: '5vh', left: 0, right: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '9px',
+          animation: 'floatIn 2s ease 0.4s both',
+        }}>
           <svg
             width="22" height="14" viewBox="0 0 22 14" fill="none"
             aria-hidden
-            style={{
-              marginBottom: '9px',
-              animation: 'eyeGlow 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite',
-              flexShrink: 0,
-            }}
+            style={{ animation: 'eyeGlow 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite' }}
           >
             <ellipse cx="11" cy="7" rx="10.5" ry="6.5" stroke="rgba(232,213,176,0.78)" strokeWidth="0.8"/>
-            <circle  cx="11" cy="7" r="2.5"           stroke="rgba(232,213,176,0.78)" strokeWidth="0.8"/>
-            <circle  cx="11" cy="7" r="1"             fill="rgba(232,213,176,0.78)"/>
+            <circle cx="11" cy="7" r="2.5" stroke="rgba(232,213,176,0.78)" strokeWidth="0.8"/>
+            <circle cx="11" cy="7" r="1" fill="rgba(232,213,176,0.78)"/>
           </svg>
-
-          {/* 2. WELLNESS */}
           <p style={{
             fontFamily: "'Cinzel', serif",
             fontSize: '9px', letterSpacing: '0.62em',
             color: 'rgba(255,250,242,0.32)',
-            margin: '0 0 28px',
+            margin: 0,
             textTransform: 'uppercase',
-            animation: 'floatIn 2s ease 0.4s both',
           }}>WELLNESS</p>
+        </div>
 
+        {/* ── ATHENA — centered gateway wordmark ───────────────────────────── */}
+        <div style={{
+          position: 'absolute', top: '40vh', left: 0, right: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          gap: 0,
+          animation: 'riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both',
+        }}>
           {/* Top rule */}
           <div style={{
             width: '48px', height: '0.5px',
             background: 'rgba(255,248,236,1)',
             marginBottom: '14px',
             animation: 'rulePulse 6s ease-in-out infinite',
-            flexShrink: 0,
           }} />
 
-          {/* 3. ATHENA */}
           <h1 style={{
             fontFamily: "'Cinzel', serif",
             fontSize: 'clamp(46px, 11.5vw, 58px)',
@@ -428,26 +420,29 @@ export default function Login() {
             color: 'rgba(248,243,220,0.97)',
             margin: '0 0 14px',
             lineHeight: 1,
-            animation: 'athenaPulse 7s ease-in-out infinite, riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both',
+            animation: 'athenaPulse 7s ease-in-out infinite',
           }}>ATHENA</h1>
 
           {/* Bottom rule */}
           <div style={{
             width: '48px', height: '0.5px',
             background: 'rgba(255,248,236,1)',
-            marginBottom: '44px',
             animation: 'rulePulse 6s ease-in-out infinite 0.5s',
-            flexShrink: 0,
           }} />
+        </div>
 
-          {/* 4-7. Form block */}
-          <div
-            style={{ width: '100%', animation: 'riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both' }}
-          >
+        {/* ── Form — anchored to bottom ─────────────────────────────────────── */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          display: 'flex', justifyContent: 'center',
+          paddingBottom: 'calc(env(safe-area-inset-bottom) + 52px)',
+          animation: 'riseIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both',
+        }}>
+          <div style={{ width: '100%', maxWidth: '480px', padding: '0 44px' }}>
+
             {!authed && (
               <>
                 <form onSubmit={handleSubmit} noValidate>
-                  {/* 4. Email */}
                   <div className="a-input-wrap" style={{ marginBottom: '20px' }}>
                     <input
                       className="a-input"
@@ -465,7 +460,6 @@ export default function Login() {
                     <img src={keyIcon} alt="" aria-hidden draggable={false} className="a-field-icon" />
                   </div>
 
-                  {/* 5. Password */}
                   <div className="a-input-wrap a-input-wrap--pw" style={{ marginBottom: '36px' }}>
                     <input
                       className="a-input"
@@ -501,7 +495,6 @@ export default function Login() {
                     }}>{error}</p>
                   )}
 
-                  {/* 6. ENTER */}
                   <button
                     type="submit"
                     disabled={loading}
@@ -523,7 +516,6 @@ export default function Login() {
                   >ENTER</button>
                 </form>
 
-                {/* 7. Terms & Conditions */}
                 <p style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: '11px', letterSpacing: '0.05em',
@@ -564,12 +556,12 @@ export default function Login() {
         </div>
       </div>
 
-      {/* ── Linen cover (fixed — covers viewport during video transition) ──── */}
+      {/* ── Linen cover ─────────────────────────────────────────────────────── */}
       {showVideo && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 5, backgroundColor: '#F2EDE8' }} />
       )}
 
-      {/* ── Post-login loading video (fixed) ─────────────────────────────── */}
+      {/* ── Post-login loading video ──────────────────────────────────────── */}
       {showVideo && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#F2EDE8' }}>
           <video
@@ -589,7 +581,7 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── T&C overlay (fixed) ───────────────────────────────────────────── */}
+      {/* ── T&C overlay ───────────────────────────────────────────────────── */}
       {phase === 'terms' && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 30,
@@ -607,6 +599,7 @@ export default function Login() {
             display: 'flex', flexDirection: 'column', overflow: 'hidden',
             animation: 'termsIn 0.4s cubic-bezier(0.22, 1, 0.36, 1), modalBreath 5s ease-in-out infinite 0.5s',
           }}>
+            {/* Header */}
             <div style={{
               padding: '20px 22px 14px',
               borderBottom: '1px solid rgba(196,133,154,0.18)',
@@ -632,13 +625,15 @@ export default function Login() {
                   cursor: 'pointer', padding: '4px',
                   color: 'rgba(196,133,154,0.55)',
                   fontSize: '16px', lineHeight: 1,
-                  WebkitAppearance: 'none', transition: 'color 0.2s',
+                  WebkitAppearance: 'none',
+                  transition: 'color 0.2s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.color = 'rgba(196,133,154,0.95)' }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'rgba(196,133,154,0.55)' }}
               >✕</button>
             </div>
 
+            {/* Body */}
             <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -669,6 +664,7 @@ export default function Login() {
               </div>
             </div>
 
+            {/* Footer */}
             <div style={{
               padding: '14px 22px 22px',
               borderTop: '1px solid rgba(196,133,154,0.18)',
@@ -684,7 +680,8 @@ export default function Login() {
                   color: 'rgba(255,246,238,0.95)',
                   fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.38em',
                   cursor: 'pointer',
-                  WebkitAppearance: 'none', transition: 'all 0.25s',
+                  WebkitAppearance: 'none',
+                  transition: 'all 0.25s',
                   textShadow: '0 1px 8px rgba(0,0,0,0.8)',
                 }}
                 onMouseEnter={e => {
