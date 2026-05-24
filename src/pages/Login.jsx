@@ -87,6 +87,28 @@ export default function Login() {
             letter-spacing: 0.54em;
           }
         }
+        @keyframes eyeGlow {
+          0% {
+            opacity: 0.28;
+            filter: drop-shadow(0 0 0px rgba(232,213,176,0));
+            transform: scale(1);
+          }
+          42% {
+            opacity: 0.92;
+            filter: drop-shadow(0 0 7px rgba(232,213,176,0.85)) drop-shadow(0 0 18px rgba(232,213,176,0.4)) drop-shadow(0 0 32px rgba(232,213,176,0.15));
+            transform: scale(1.14);
+          }
+          58% {
+            opacity: 0.92;
+            filter: drop-shadow(0 0 7px rgba(232,213,176,0.85)) drop-shadow(0 0 18px rgba(232,213,176,0.4)) drop-shadow(0 0 32px rgba(232,213,176,0.15));
+            transform: scale(1.14);
+          }
+          100% {
+            opacity: 0.28;
+            filter: drop-shadow(0 0 0px rgba(232,213,176,0));
+            transform: scale(1);
+          }
+        }
         @keyframes rulePulse {
           0%, 100% { opacity: 0.18; }
           50%       { opacity: 0.42; }
@@ -238,16 +260,25 @@ export default function Login() {
       {/* ── Content ────────────────────────────────────────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 10 }}>
 
-        {/* ── WELLNESS — whisper label at top ──────────────────────────────── */}
+        {/* ── Eye + WELLNESS — top group ───────────────────────────────────── */}
         <div style={{
-          position: 'absolute', top: '5.5vh', left: 0, right: 0,
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          position: 'absolute', top: '5vh', left: 0, right: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '9px',
           animation: 'floatIn 2s ease 0.4s both',
         }}>
+          <svg
+            width="22" height="14" viewBox="0 0 22 14" fill="none"
+            aria-hidden
+            style={{ animation: 'eyeGlow 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite' }}
+          >
+            <ellipse cx="11" cy="7" rx="10.5" ry="6.5" stroke="rgba(232,213,176,0.78)" strokeWidth="0.8"/>
+            <circle cx="11" cy="7" r="2.5" stroke="rgba(232,213,176,0.78)" strokeWidth="0.8"/>
+            <circle cx="11" cy="7" r="1" fill="rgba(232,213,176,0.78)"/>
+          </svg>
           <p style={{
             fontFamily: "'Cinzel', serif",
             fontSize: '9px', letterSpacing: '0.62em',
-            color: 'rgba(255,250,242,0.28)',
+            color: 'rgba(255,250,242,0.32)',
             margin: 0,
             textTransform: 'uppercase',
           }}>WELLNESS</p>
