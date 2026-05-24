@@ -391,7 +391,7 @@ export default function Dashboard() {
     {fadingOut && (
       <div style={{ position: 'fixed', inset: 0, zIndex: 201, backgroundColor: '#140E0C', animation: 'exitDarkIn 0.65s ease forwards', pointerEvents: 'none' }} />
     )}
-    <div className="flex-1 min-h-0 pb-nav overflow-y-auto" style={{ backgroundColor: '#F4E3D0' }}>
+    <div className="flex-1 min-h-0 pb-nav overflow-y-auto" style={{ backgroundColor: '#F5E4E1' }}>
       <style>{`
         @keyframes dashUp {
           from { opacity: 0; transform: translateY(12px); }

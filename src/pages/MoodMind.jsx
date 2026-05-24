@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import TodayTab    from '../modules/mood/TodayTab'
 import JournalTab  from '../modules/mood/JournalTab'
 import PatternsTab from '../modules/mood/PatternsTab'
@@ -52,7 +52,7 @@ export default function MoodMind() {
   }
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[#F2EDE8] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#F5E4E1] overflow-hidden">
       <style>{`
         .mm-tab-pane { scrollbar-width: none; }
         .mm-tab-pane::-webkit-scrollbar { display: none; }

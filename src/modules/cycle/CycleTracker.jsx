@@ -83,7 +83,7 @@ export default function CycleTracker() {
   }
 
   return (
-    <div className="relative min-h-[100svh] overflow-hidden bg-[#F2EDE8]">
+    <div className="relative min-h-[100svh] overflow-hidden bg-[#F5E4E1]">
       <style>{`
         @keyframes cycleSlideDown {
           from { opacity: 0; transform: translateY(-100%); }

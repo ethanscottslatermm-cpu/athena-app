@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Minus, Plus, Check, RotateCcw, Search } from 'lucide-react'
+import { X, Minus, Plus, Check, RotateCcw, Search, ShoppingCart } from 'lucide-react'
 import { BrowserMultiFormatReader } from '@zxing/browser'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
@@ -43,14 +43,16 @@ export default function FoodScanner({ onClose, onLogSaved, onSearchInstead }) {
   const readerRef  = useRef(null)
   const scannedRef = useRef(false)
 
-  const [status,   setStatus]   = useState('scanning') // scanning | loading | found | not_found | error
-  const [food,     setFood]     = useState(null)
-  const [serving,  setServing]  = useState(1)
-  const [mealType, setMealType] = useState('lunch')
-  const [logging,  setLogging]  = useState(false)
-  const [success,  setSuccess]  = useState(false)
-  const [torchOn,  setTorchOn]  = useState(false)
-  const [stream,   setStream]   = useState(null)
+  const [status,      setStatus]      = useState('scanning') // scanning | loading | found | not_found | error
+  const [food,        setFood]        = useState(null)
+  const [serving,     setServing]     = useState(1)
+  const [mealType,    setMealType]    = useState('lunch')
+  const [logging,     setLogging]     = useState(false)
+  const [success,     setSuccess]     = useState(false)
+  const [torchOn,     setTorchOn]     = useState(false)
+  const [stream,      setStream]      = useState(null)
+  const [cartAdded,   setCartAdded]   = useState(false)
+  const [cartLoading, setCartLoading] = useState(false)
 
   // ── Start scanner ───────────────────────────────────────────────────────────
 
@@ -165,6 +167,43 @@ export default function FoodScanner({ onClose, onLogSaved, onSearchInstead }) {
     setSuccess(true)
     try { navigator.vibrate?.(40) } catch {}
     setTimeout(() => { onLogSaved?.(); onClose() }, 900)
+  }
+
+  // ── Add to grocery list ─────────────────────────────────────────────────────
+
+  async function handleAddToGrocery() {
+    if (!user || !food || cartLoading) return
+    setCartLoading(true)
+    try {
+      const { data: lists } = await supabase
+        .from('grocery_lists')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('is_template', false)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      let listId = lists?.[0]?.id
+      if (!listId) {
+        const { data: newList } = await supabase
+          .from('grocery_lists')
+          .insert({ user_id: user.id, title: 'My List', is_template: false })
+          .select().single()
+        listId = newList?.id
+      }
+
+      if (listId) {
+        await supabase.from('grocery_items').insert({
+          list_id: listId, user_id: user.id,
+          name: food.food_name, category: 'Other',
+          quantity: 1, unit: '', is_checked: false,
+        })
+        setCartAdded(true)
+        try { navigator.vibrate?.(30) } catch {}
+        setTimeout(() => setCartAdded(false), 2500)
+      }
+    } catch {}
+    setCartLoading(false)
   }
 
   // ── Scaled macros for display ────────────────────────────────────────────────
@@ -395,11 +434,29 @@ export default function FoodScanner({ onClose, onLogSaved, onSearchInstead }) {
               cursor: 'pointer',
               fontFamily: 'Cinzel, serif', fontSize: 10,
               letterSpacing: '0.22em', textTransform: 'uppercase',
-              color: '#F2EDE8',
+              color: '#F5E4E1',
               opacity: logging ? 0.6 : 1,
               transition: 'opacity 0.18s',
+              marginBottom: 8,
             }}>
               {logging ? 'Logging…' : 'Log It'}
+            </button>
+
+            {/* Add to grocery list */}
+            <button onClick={handleAddToGrocery} disabled={cartLoading || cartAdded} style={{
+              width: '100%', padding: '11px',
+              background: cartAdded ? 'rgba(143,165,140,0.14)' : 'transparent',
+              border: `1px solid ${cartAdded ? SAGE : 'rgba(196,175,168,0.5)'}`,
+              borderRadius: 12, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+              fontFamily: 'Cinzel, serif', fontSize: 8.5,
+              letterSpacing: '0.16em', textTransform: 'uppercase',
+              color: cartAdded ? SAGE : '#7A6A65',
+              transition: 'all 0.22s',
+              opacity: cartLoading ? 0.5 : 1,
+            }}>
+              <ShoppingCart size={13} strokeWidth={1.6} color={cartAdded ? SAGE : '#7A6A65'} />
+              {cartAdded ? 'Added to Cart' : 'Add to Grocery List'}
             </button>
           </div>
         )}

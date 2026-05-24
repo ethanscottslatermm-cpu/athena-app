@@ -8,15 +8,15 @@ export default function HintBubble({ hintKey, hints = [] }) {
     <>
       <style>{`
         @keyframes hintUp {
-          from { opacity: 0; transform: translateX(-50%) translateY(14px); }
-          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+          from { opacity: 0; transform: translate(-50%, -50%) scale(0.94); }
+          to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
       `}</style>
       <div style={{
         position: 'fixed',
-        bottom: 84,
+        top: '50%',
         left: '50%',
-        transform: 'translateX(-50%)',
+        transform: 'translate(-50%, -50%)',
         width: 'calc(100% - 32px)',
         maxWidth: 380,
         zIndex: 45,

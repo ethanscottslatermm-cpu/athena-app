@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+﻿import { useState, useCallback } from 'react'
 import CommunityFeed       from '../modules/community/CommunityFeed'
 import CommunityTribe      from '../modules/community/CommunityTribe'
 import CommunityChallenges from '../modules/community/CommunityChallenges'
@@ -43,7 +43,7 @@ export default function Community() {
   }
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[#F2EDE8] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#F5E4E1] overflow-hidden">
       <style>{`
         .cm-pane { scrollbar-width: none; }
         .cm-pane::-webkit-scrollbar { display: none; }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+﻿import { useState, useCallback } from 'react'
 import { Camera } from 'lucide-react'
 import NourishToday      from '../modules/nourish/NourishToday'
 import NourishSearch     from '../modules/nourish/NourishSearch'
@@ -50,7 +50,7 @@ export default function Nourish() {
   }, [])
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[#F2EDE8] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#F5E4E1] overflow-hidden">
       <style>{`
         .nr-pane { scrollbar-width: none; }
         .nr-pane::-webkit-scrollbar { display: none; }
@@ -140,7 +140,7 @@ export default function Nourish() {
                 {tab.id === 'today'    && (
                   <NourishToday key={refreshKey} onOpenSearch={() => switchTab('search')} />
                 )}
-                {tab.id === 'search'   && <NourishSearch   onLogSaved={onLogSaved} />}
+                {tab.id === 'search'   && <NourishSearch   onLogSaved={onLogSaved} onScanRequest={() => setScannerOpen(true)} />}
                 {tab.id === 'plate'    && <NourishPhasePlate />}
                 {tab.id === 'insights' && <NourishInsights />}
               </>

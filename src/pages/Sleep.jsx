@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+﻿import { useState, useCallback } from 'react'
 import SleepLog      from '../modules/sleep/SleepLog'
 import SleepWindDown from '../modules/sleep/SleepWindDown'
 import SleepPatterns from '../modules/sleep/SleepPatterns'
@@ -43,7 +43,7 @@ export default function Sleep() {
   }, [])
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[#F2EDE8] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#F5E4E1] overflow-hidden">
       <style>{`
         .sl-pane { scrollbar-width: none; }
         .sl-pane::-webkit-scrollbar { display: none; }

@@ -1,5 +1,5 @@
-﻿import { useState } from 'react'
-import { Search, Minus, Plus, Check } from 'lucide-react'
+import { useState } from 'react'
+import { Search, Minus, Plus, Check, Camera, Clock, X } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../hooks/useAuth'
 
@@ -14,6 +14,20 @@ const FALLBACK_FOODS = {
   apple:   { food_name: 'Apple (medium)', calories: 95,  protein_g: 0.5, carbs_g: 25,  fat_g: 0.3, serving_size: 1,   serving_unit: 'medium' },
   chicken: { food_name: 'Chicken Breast', calories: 165, protein_g: 31,  carbs_g: 0,   fat_g: 3.6, serving_size: 100, serving_unit: 'g'      },
   rice:    { food_name: 'White Rice',     calories: 206, protein_g: 4.3, carbs_g: 45,  fat_g: 0.4, serving_size: 1,   serving_unit: 'cup'    },
+}
+
+const RECENTS_KEY = 'athena_food_recents'
+function getRecents() {
+  try { return JSON.parse(localStorage.getItem(RECENTS_KEY) || '[]') } catch { return [] }
+}
+function saveRecent(q) {
+  const list = getRecents().filter(r => r !== q)
+  list.unshift(q)
+  localStorage.setItem(RECENTS_KEY, JSON.stringify(list.slice(0, 7)))
+}
+function removeRecent(q) {
+  const list = getRecents().filter(r => r !== q)
+  localStorage.setItem(RECENTS_KEY, JSON.stringify(list))
 }
 
 // ── Nutrition label card ──────────────────────────────────────────────────────
@@ -38,7 +52,6 @@ function NutritionCard({ food, serving }) {
         {food.serving_size} {food.serving_unit} per serving
       </p>
 
-      {/* Macro grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, marginBottom: 14 }}>
         {[
           { label: 'Cal',     value: Math.round((food.calories || 0) * serving), color: '#3B3330', bg: 'rgba(196,175,168,0.2)' },
@@ -65,7 +78,7 @@ function NutritionCard({ food, serving }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function NourishSearch({ onLogSaved }) {
+export default function NourishSearch({ onLogSaved, onScanRequest }) {
   const { user } = useAuth()
 
   const [query,    setQuery]    = useState('')
@@ -76,10 +89,10 @@ export default function NourishSearch({ onLogSaved }) {
   const [mealType, setMealType] = useState('breakfast')
   const [logging,  setLogging]  = useState(false)
   const [success,  setSuccess]  = useState(false)
+  const [recents,  setRecents]  = useState(() => getRecents())
 
-  async function handleSearch(e) {
-    e.preventDefault()
-    if (!query.trim()) return
+  async function runSearch(q) {
+    if (!q.trim()) return
     setLoading(true)
     setResult(null)
     setError('')
@@ -88,18 +101,40 @@ export default function NourishSearch({ onLogSaved }) {
     try {
       const r = await fetch('/.netlify/functions/ai-nourish', {
         method: 'POST',
-        body: JSON.stringify({ type: 'food_search', query: query.trim() }),
+        body: JSON.stringify({ type: 'food_search', query: q.trim() }),
       })
       const d = await r.json()
       if (d.error) throw new Error(d.error)
       setResult(d)
+      saveRecent(q.trim())
+      setRecents(getRecents())
     } catch {
-      // Use a simple fallback if query matches
-      const key = Object.keys(FALLBACK_FOODS).find(k => query.toLowerCase().includes(k))
-      if (key) setResult(FALLBACK_FOODS[key])
-      else setError('Couldn\'t find that food. Try a different search.')
+      const key = Object.keys(FALLBACK_FOODS).find(k => q.toLowerCase().includes(k))
+      if (key) {
+        setResult(FALLBACK_FOODS[key])
+        saveRecent(q.trim())
+        setRecents(getRecents())
+      } else {
+        setError('Couldn\'t find that food. Try a different search.')
+      }
     }
     setLoading(false)
+  }
+
+  function handleSearch(e) {
+    e.preventDefault()
+    runSearch(query)
+  }
+
+  function handleRecent(r) {
+    setQuery(r)
+    runSearch(r)
+  }
+
+  function handleDeleteRecent(e, r) {
+    e.stopPropagation()
+    removeRecent(r)
+    setRecents(getRecents())
   }
 
   async function handleLog() {
@@ -131,6 +166,8 @@ export default function NourishSearch({ onLogSaved }) {
     setLogging(false)
   }
 
+  const showRecents = !query && !result && !loading && recents.length > 0
+
   return (
     <>
       <style>{`
@@ -138,7 +175,7 @@ export default function NourishSearch({ onLogSaved }) {
       `}</style>
 
       {/* Search form */}
-      <form onSubmit={handleSearch} style={{ marginBottom: 14 }}>
+      <form onSubmit={handleSearch} style={{ marginBottom: 10 }}>
         <div style={{
           display: 'flex', gap: 8,
           background: 'rgba(255,255,255,0.55)',
@@ -167,7 +204,7 @@ export default function NourishSearch({ onLogSaved }) {
               padding: '8px 14px', cursor: 'pointer',
               fontFamily: 'Cinzel, serif', fontSize: 8,
               letterSpacing: '0.18em', textTransform: 'uppercase',
-              color: '#F2EDE8',
+              color: '#F5E4E1',
               opacity: (!query.trim() || loading) ? 0.45 : 1,
               transition: 'opacity 0.2s',
             }}
@@ -176,6 +213,73 @@ export default function NourishSearch({ onLogSaved }) {
           </button>
         </div>
       </form>
+
+      {/* Scan barcode shortcut */}
+      {onScanRequest && !result && !loading && (
+        <button
+          onClick={onScanRequest}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 7,
+            width: '100%',
+            background: 'rgba(143,165,140,0.1)',
+            border: '1px solid rgba(143,165,140,0.3)',
+            borderRadius: 12, padding: '10px 14px',
+            cursor: 'pointer', marginBottom: 16,
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <Camera size={14} color="#8FA58C" strokeWidth={1.8} />
+          <span style={{
+            fontFamily: 'Cinzel, serif', fontSize: 8.5,
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: '#8FA58C',
+          }}>Scan a Barcode Instead</span>
+        </button>
+      )}
+
+      {/* Recently searched */}
+      {showRecents && (
+        <div style={{ marginBottom: 18, animation: 'nrFadeUp 0.28s ease both' }}>
+          <p style={{
+            fontFamily: 'Cinzel, serif', fontSize: 8,
+            letterSpacing: '0.22em', textTransform: 'uppercase',
+            color: '#7A6A65', marginBottom: 9,
+            display: 'flex', alignItems: 'center', gap: 6,
+          }}>
+            <Clock size={10} strokeWidth={1.5} color="#7A6A65" /> Recently Searched
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {recents.map(r => (
+              <div
+                key={r}
+                onClick={() => handleRecent(r)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 5,
+                  background: 'rgba(255,255,255,0.6)',
+                  border: '1px solid rgba(196,175,168,0.45)',
+                  borderRadius: 20, padding: '5px 10px 5px 11px',
+                  cursor: 'pointer',
+                }}
+              >
+                <span style={{
+                  fontFamily: 'Cormorant Garamond, serif', fontSize: 13,
+                  color: '#3B3330',
+                }}>{r}</span>
+                <button
+                  onClick={e => handleDeleteRecent(e, r)}
+                  style={{
+                    background: 'none', border: 'none', padding: 0,
+                    cursor: 'pointer', display: 'flex', alignItems: 'center',
+                    opacity: 0.45,
+                  }}
+                >
+                  <X size={10} strokeWidth={2} color="#3B3330" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {error && (
         <p className="font-garamond text-sm italic mb-3" style={{ color: '#D4A0A0' }}>{error}</p>
@@ -270,7 +374,7 @@ export default function NourishSearch({ onLogSaved }) {
               cursor: 'pointer',
               fontFamily: 'Cinzel, serif', fontSize: 10,
               letterSpacing: '0.22em', textTransform: 'uppercase',
-              color: '#F2EDE8',
+              color: '#F5E4E1',
               opacity: logging ? 0.6 : 1,
               transition: 'opacity 0.2s',
               marginBottom: 24,
@@ -298,7 +402,7 @@ export default function NourishSearch({ onLogSaved }) {
         </div>
       )}
 
-      {!result && !loading && !error && (
+      {!result && !loading && !error && !showRecents && (
         <div style={{ paddingTop: 24, textAlign: 'center' }}>
           <p className="font-garamond text-sm italic" style={{ color: 'rgba(59,51,48,0.35)' }}>
             Search for any food to see its nutrition breakdown

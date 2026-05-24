@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useProfile } from './hooks/useProfile'
@@ -42,7 +42,7 @@ function OnboardingGuard({ children }) {
 }
 
 function Splash() {
-  return <div className="min-h-[100svh] bg-[#F2EDE8]" />
+  return <div className="min-h-[100svh] bg-[#F5E4E1]" />
 }
 
 function WelcomeOverlay() {
@@ -119,8 +119,8 @@ function AppShell({ children }) {
    On desktop → centered phone-width column, pure-black surround, no chrome */
 function PhoneFrame({ children }) {
   return (
-    <div className="min-h-[100svh] bg-[#F2EDE8] flex items-stretch justify-center">
-      <div className="relative w-full md:max-w-sm bg-[#F2EDE8] h-[100svh] flex flex-col overflow-hidden">
+    <div className="min-h-[100svh] bg-[#F5E4E1] flex items-stretch justify-center">
+      <div className="relative w-full md:max-w-sm bg-[#F5E4E1] h-[100svh] flex flex-col overflow-hidden">
         {children}
         <WelcomeOverlay />
       </div>

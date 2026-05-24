@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+﻿import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAuth }    from '../../hooks/useAuth'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
@@ -264,7 +264,7 @@ export default function GroceryModule() {
   const pg = PHASE_GROCERY[phase] ?? PHASE_GROCERY.follicular
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col bg-[#F2EDE8] overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#F5E4E1] overflow-hidden">
       <style>{`
         .gr-pane { scrollbar-width: none; }
         .gr-pane::-webkit-scrollbar { display: none; }
