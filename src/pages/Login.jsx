@@ -70,8 +70,40 @@ export default function Login() {
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes wordmarkPulse {
-          0%, 100% { text-shadow: 0 0 32px rgba(196,133,154,0.18); }
-          50%       { text-shadow: 0 0 56px rgba(196,133,154,0.38), 0 0 120px rgba(196,133,154,0.12); }
+          0%, 100% {
+            text-shadow: 0 0 28px rgba(196,133,154,0.14), 0 0 60px rgba(196,133,154,0.06);
+            letter-spacing: 0.48em;
+          }
+          50% {
+            text-shadow: 0 0 48px rgba(196,133,154,0.52), 0 0 100px rgba(196,133,154,0.22), 0 0 180px rgba(196,133,154,0.08);
+            letter-spacing: 0.50em;
+          }
+        }
+        @keyframes wellnessPulse {
+          0%, 100% { opacity: 0.55; text-shadow: none; }
+          50%       { opacity: 0.9;  text-shadow: 0 0 10px rgba(196,133,154,0.55), 0 0 22px rgba(196,133,154,0.25); }
+        }
+        @keyframes taglinePulse {
+          0%, 100% { opacity: 0.32; text-shadow: none; }
+          50%       { opacity: 0.58; text-shadow: 0 0 12px rgba(255,246,240,0.18), 0 0 28px rgba(196,133,154,0.12); }
+        }
+        @keyframes eyeGlow {
+          0%, 100% { opacity: 0.42; filter: drop-shadow(0 0 0px rgba(196,133,154,0)); }
+          50%       { opacity: 0.72; filter: drop-shadow(0 0 5px rgba(196,133,154,0.55)); }
+        }
+        @keyframes lineBreath {
+          0%, 100% {
+            background: rgba(196,133,154,0.28);
+            box-shadow: 0 0 0px rgba(196,133,154,0);
+          }
+          50% {
+            background: rgba(196,133,154,0.62);
+            box-shadow: 0 0 8px 1px rgba(196,133,154,0.32), 0 0 18px 2px rgba(196,133,154,0.13);
+          }
+        }
+        @keyframes btnBreath {
+          0%, 100% { box-shadow: 0 0 0px rgba(196,133,154,0); }
+          50%       { box-shadow: 0 0 14px rgba(196,133,154,0.24), 0 0 28px rgba(196,133,154,0.09); }
         }
         @keyframes dividerGlow {
           0%, 100% { opacity: 0.35; }
@@ -88,7 +120,6 @@ export default function Login() {
         .a-input {
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(255,246,240,0.22);
           outline: none;
           color: rgba(255,246,240,0.9);
           font-family: 'Cormorant Garamond', serif;
@@ -98,21 +129,46 @@ export default function Login() {
           width: 100%;
           caret-color: #C4859A;
           -webkit-appearance: none;
-          transition: border-bottom-color 0.35s;
         }
         .a-input::placeholder {
           color: rgba(255,246,240,0.28);
           letter-spacing: 0.32em;
           font-size: 11px;
         }
-        .a-input:focus {
-          border-bottom-color: rgba(196,133,154,0.65);
-        }
         .a-input:-webkit-autofill,
         .a-input:-webkit-autofill:focus {
           -webkit-text-fill-color: rgba(255,246,240,0.9);
           -webkit-box-shadow: 0 0 0 1000px transparent inset;
           transition: background-color 5000s ease-in-out 0s;
+        }
+        .a-input-wrap {
+          position: relative;
+        }
+        .a-input-wrap::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          height: 1px;
+          background: rgba(196,133,154,0.28);
+          box-shadow: 0 0 0px rgba(196,133,154,0);
+          animation: lineBreath 5s ease-in-out infinite;
+          transition: background 0.35s, box-shadow 0.35s;
+          pointer-events: none;
+        }
+        .a-input-wrap:focus-within::after {
+          background: rgba(196,133,154,0.85) !important;
+          box-shadow: 0 0 10px 1px rgba(196,133,154,0.42), 0 0 22px 2px rgba(196,133,154,0.18) !important;
+          animation: none !important;
+        }
+        .a-input-wrap--pw::after {
+          animation-delay: 1.4s;
+        }
+        .a-btn {
+          animation: btnBreath 6s ease-in-out infinite 1s;
+        }
+        .a-btn:hover {
+          box-shadow: 0 0 18px rgba(196,133,154,0.38), 0 0 36px rgba(196,133,154,0.15) !important;
+          animation: none !important;
         }
         .terms-scroll {
           overflow-y: auto;
@@ -182,7 +238,7 @@ export default function Login() {
           gap: 0,
         }}>
           {/* Eye of providence / ornamental mark */}
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" style={{ marginBottom: '14px', opacity: 0.55 }}>
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" style={{ marginBottom: '14px', animation: 'eyeGlow 5s ease-in-out infinite' }}>
             <ellipse cx="9" cy="6" rx="8.5" ry="5.5" stroke="rgba(196,133,154,0.6)" strokeWidth="0.75"/>
             <circle cx="9" cy="6" r="2" stroke="rgba(196,133,154,0.6)" strokeWidth="0.75"/>
             <circle cx="9" cy="6" r="0.75" fill="rgba(196,133,154,0.6)"/>
@@ -191,9 +247,10 @@ export default function Login() {
           <p style={{
             fontFamily: "'Cinzel', serif",
             fontSize: '9px', letterSpacing: '0.52em',
-            color: 'rgba(196,133,154,0.6)',
+            color: 'rgba(196,133,154,0.7)',
             margin: '0 0 12px',
             textTransform: 'uppercase',
+            animation: 'wellnessPulse 5s ease-in-out infinite 0.8s',
           }}>WELLNESS</p>
 
           <h1 style={{
@@ -218,6 +275,7 @@ export default function Login() {
               letterSpacing: '0.14em',
               color: 'rgba(255,246,240,0.38)',
               margin: 0,
+              animation: 'taglinePulse 7s ease-in-out infinite 2.5s',
             }}>your sacred space</p>
             <div style={{
               width: '32px', height: '0.5px',
@@ -230,7 +288,7 @@ export default function Login() {
         {/* ── Form ──────────────────────────────────────── */}
         <div style={{ width: '100%', maxWidth: '480px', padding: '0 44px' }}>
           <form onSubmit={handleSubmit} noValidate>
-            <div style={{ marginBottom: '20px' }}>
+            <div className="a-input-wrap" style={{ marginBottom: '20px' }}>
               <input
                 className="a-input"
                 type="email"
@@ -246,7 +304,7 @@ export default function Login() {
               />
             </div>
 
-            <div style={{ marginBottom: '36px' }}>
+            <div className="a-input-wrap a-input-wrap--pw" style={{ marginBottom: '36px' }}>
               <input
                 className="a-input"
                 type="password"
@@ -288,10 +346,11 @@ export default function Login() {
               disabled={loading}
               onMouseEnter={() => setBtnHover(true)}
               onMouseLeave={() => setBtnHover(false)}
+              className="a-btn"
               style={{
                 width: '100%', padding: '16px 0',
                 background: btnHover ? 'rgba(196,133,154,0.08)' : 'transparent',
-                border: `1px solid ${btnHover ? 'rgba(196,133,154,0.7)' : 'rgba(196,133,154,0.38)'}`,
+                border: `1px solid ${btnHover ? 'rgba(196,133,154,0.72)' : 'rgba(196,133,154,0.38)'}`,
                 borderRadius: '2px',
                 cursor: loading ? 'default' : 'pointer',
                 fontFamily: "'Cinzel', serif",
