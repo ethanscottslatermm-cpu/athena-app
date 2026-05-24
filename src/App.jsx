@@ -46,16 +46,24 @@ function Splash() {
 }
 
 function WelcomeOverlay() {
-  const [visible, setVisible] = useState(() => !!sessionStorage.getItem('athena_welcome'))
+  const [visible, setVisible] = useState(false)
   const [fading, setFading] = useState(false)
 
   useEffect(() => {
+    function show() {
+      setFading(false)
+      setVisible(true)
+    }
+    window.addEventListener('athena:welcome', show)
+    return () => window.removeEventListener('athena:welcome', show)
+  }, [])
+
+  useEffect(() => {
     if (!visible) return
-    sessionStorage.removeItem('athena_welcome')
     const t1 = setTimeout(() => setFading(true), 1600)
     const t2 = setTimeout(() => setVisible(false), 2350)
     return () => { clearTimeout(t1); clearTimeout(t2) }
-  }, [])
+  }, [visible])
 
   if (!visible) return null
 

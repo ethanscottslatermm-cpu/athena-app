@@ -414,7 +414,7 @@ export default function Login() {
             src="/athena-loading.mp4"
             autoPlay muted playsInline preload="auto"
             onEnded={() => {
-              sessionStorage.setItem('athena_welcome', '1')
+              window.dispatchEvent(new CustomEvent('athena:welcome'))
               navigate(navDest.current, { replace: true })
             }}
             onError={() => navigate(navDest.current, { replace: true })}
