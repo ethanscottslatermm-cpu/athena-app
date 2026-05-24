@@ -236,11 +236,11 @@ export default function Login() {
       >
         {/* ── WELLNESS + ATHENA + tagline — anchored to upper screen ──────────── */}
         <div style={{
-          position: 'absolute', top: '7vh', left: 0, right: 0,
+          position: 'absolute', top: '12vh', left: 0, right: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
           animation: 'loginEnter 1s cubic-bezier(0.22, 1, 0.36, 1)',
         }}>
-          <svg width="16" height="10" viewBox="0 0 18 12" fill="none" style={{ marginBottom: '10px', animation: 'eyeGlow 5s ease-in-out infinite' }}>
+          <svg width="16" height="10" viewBox="0 0 18 12" fill="none" style={{ marginBottom: '8px', animation: 'eyeGlow 5s ease-in-out infinite' }}>
             <ellipse cx="9" cy="6" rx="8.5" ry="5.5" stroke="rgba(196,133,154,0.7)" strokeWidth="0.75"/>
             <circle cx="9" cy="6" r="2" stroke="rgba(196,133,154,0.7)" strokeWidth="0.75"/>
             <circle cx="9" cy="6" r="0.75" fill="rgba(196,133,154,0.7)"/>
@@ -250,7 +250,7 @@ export default function Login() {
             fontFamily: "'Cinzel', serif",
             fontSize: '11px', letterSpacing: '0.55em',
             color: 'rgba(255,240,228,0.92)',
-            margin: '0 0 10px',
+            margin: '0 0 5px',
             textTransform: 'uppercase',
             textShadow: '0 1px 12px rgba(0,0,0,0.75), 0 0 24px rgba(196,133,154,0.3)',
             animation: 'wellnessPulse 5s ease-in-out infinite 0.8s',
@@ -261,7 +261,7 @@ export default function Login() {
             fontSize: '46px', fontWeight: 300,
             letterSpacing: '0.48em',
             color: 'rgba(255,248,242,0.98)',
-            margin: '0 0 16px',
+            margin: '0 0 20px',
             lineHeight: 1,
             textShadow: '0 2px 24px rgba(0,0,0,0.65), 0 0 48px rgba(196,133,154,0.18)',
             animation: 'wordmarkPulse 6s ease-in-out infinite',
