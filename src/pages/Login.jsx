@@ -12,7 +12,6 @@ export default function Login() {
   const [error, setError] = useState('')
   const [authed, setAuthed] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
-  const [videoFading, setVideoFading] = useState(false)
   const [btnHover, setBtnHover] = useState(false)
 
   const navDest = useRef('/')
@@ -113,8 +112,7 @@ export default function Login() {
           0%, 80%, 100% { opacity: 0.25; transform: scale(0.8);  }
           40%           { opacity: 1;    transform: scale(1.15); }
         }
-        @keyframes videoFadeIn  { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes videoFadeOut { from { opacity: 1; } to { opacity: 0; } }
+        @keyframes videoFadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .a-input {
@@ -402,21 +400,20 @@ export default function Login() {
         </div>
       </div>
 
+      {/* ── Linen cover — sits above the hero bg, below the video ───────────
+           Prevents the warrior image bleeding through during any render gap   */}
+      {showVideo && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 5, backgroundColor: '#F2EDE8' }} />
+      )}
+
       {/* ── Post-login loading video ──────────────────────────────────────── */}
       {showVideo && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 100,
-          backgroundColor: '#F2EDE8',
-          animation: videoFading ? 'videoFadeOut 0.7s ease forwards' : 'none',
-        }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#F2EDE8' }}>
           <video
             ref={loadVideoRef}
             src="/athena-loading.mp4"
             autoPlay muted playsInline preload="auto"
-            onEnded={() => {
-              setVideoFading(true)
-              setTimeout(() => navigate(navDest.current, { replace: true }), 700)
-            }}
+            onEnded={() => navigate(navDest.current, { replace: true })}
             onError={() => navigate(navDest.current, { replace: true })}
             style={{
               width: '100%', height: '100%', objectFit: 'cover', display: 'block',
