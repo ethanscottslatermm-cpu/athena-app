@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import keyIcon from '../assets/icons/key-icon.png'
 
 export default function Login() {
   const [phase, setPhase] = useState('form') // 'form' | 'terms'
@@ -181,6 +182,28 @@ export default function Login() {
           0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
           40%           { opacity: 1;    transform: scale(1.15); }
         }
+        @keyframes iconBreath {
+          0%, 100% {
+            opacity: 0.38;
+            filter: brightness(0) invert(1) sepia(0.4) saturate(3) hue-rotate(300deg) brightness(1.1)
+                    drop-shadow(0 0 0px rgba(196,133,154,0));
+          }
+          50% {
+            opacity: 0.82;
+            filter: brightness(0) invert(1) sepia(0.4) saturate(3) hue-rotate(300deg) brightness(1.1)
+                    drop-shadow(0 0 5px rgba(196,133,154,0.7)) drop-shadow(0 0 14px rgba(196,133,154,0.3));
+          }
+        }
+        @keyframes modalBreath {
+          0%, 100% {
+            border-color: rgba(196,133,154,0.28);
+            box-shadow: 0 0 0px rgba(196,133,154,0);
+          }
+          50% {
+            border-color: rgba(196,133,154,0.68);
+            box-shadow: 0 0 12px rgba(196,133,154,0.22), 0 0 28px rgba(196,133,154,0.1);
+          }
+        }
         @keyframes linkBreath {
           0%, 100% {
             color: rgba(196,133,154,0.62);
@@ -208,10 +231,29 @@ export default function Login() {
           font-family: 'Cormorant Garamond', serif;
           font-size: 15px;
           letter-spacing: 0.2em;
-          padding: 13px 0;
+          padding: 13px 26px 13px 0;
           width: 100%;
           caret-color: #C4859A;
           -webkit-appearance: none;
+        }
+        .a-field-icon {
+          position: absolute;
+          right: 2px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 15px;
+          height: 15px;
+          object-fit: contain;
+          pointer-events: none;
+          user-select: none;
+          animation: iconBreath 5s ease-in-out infinite;
+        }
+        .a-field-icon--pw { animation-delay: 1.4s; }
+        .a-input-wrap:focus-within .a-field-icon {
+          opacity: 0.88 !important;
+          filter: brightness(0) invert(1) sepia(0.4) saturate(3) hue-rotate(300deg) brightness(1.1)
+                  drop-shadow(0 0 6px rgba(196,133,154,0.8)) drop-shadow(0 0 16px rgba(196,133,154,0.35)) !important;
+          animation: none !important;
         }
         .a-input::placeholder {
           color: rgba(232,213,176,0.72);
@@ -415,6 +457,7 @@ export default function Login() {
                       enterKeyHint="next"
                       disabled={loading}
                     />
+                    <img src={keyIcon} alt="" aria-hidden draggable={false} className="a-field-icon" />
                   </div>
 
                   <div className="a-input-wrap a-input-wrap--pw" style={{ marginBottom: '36px' }}>
@@ -428,6 +471,7 @@ export default function Login() {
                       enterKeyHint="go"
                       disabled={loading}
                     />
+                    <img src={keyIcon} alt="" aria-hidden draggable={false} className="a-field-icon a-field-icon--pw" />
                   </div>
 
                   {loading && (
@@ -543,33 +587,35 @@ export default function Login() {
           position: 'fixed', inset: 0, zIndex: 30,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '28px 20px',
-          background: 'rgba(10,8,6,0.85)',
-          backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+          background: 'rgba(6,4,2,0.45)',
+          backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)',
           animation: 'fadeIn 0.3s ease',
         }}>
           <div style={{
             width: '100%', maxWidth: '360px', maxHeight: '80vh',
             background: 'transparent',
-            border: '1px solid rgba(232,213,176,0.35)',
+            border: '1px solid rgba(196,133,154,0.28)',
             borderRadius: '10px',
             display: 'flex', flexDirection: 'column', overflow: 'hidden',
-            boxShadow: '0 0 40px rgba(232,213,176,0.07), 0 16px 72px rgba(0,0,0,0.65)',
-            animation: 'termsIn 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+            animation: 'termsIn 0.4s cubic-bezier(0.22, 1, 0.36, 1), modalBreath 5s ease-in-out infinite 0.5s',
           }}>
+            {/* Header */}
             <div style={{
               padding: '20px 22px 14px',
-              borderBottom: '1px solid rgba(232,213,176,0.15)',
+              borderBottom: '1px solid rgba(196,133,154,0.18)',
               flexShrink: 0, position: 'relative',
             }}>
               <p style={{
                 fontFamily: "'Cinzel', serif", fontSize: '9px',
-                letterSpacing: '0.3em', color: 'rgba(232,213,176,0.55)',
+                letterSpacing: '0.3em', color: 'rgba(196,133,154,0.65)',
                 margin: '0 0 6px',
+                textShadow: '0 1px 8px rgba(0,0,0,0.9)',
               }}>ATHENA</p>
               <h2 style={{
                 fontFamily: "'Cinzel', serif", fontSize: '16px',
-                fontWeight: 400, color: '#e8d5b0',
+                fontWeight: 400, color: 'rgba(255,246,238,0.95)',
                 letterSpacing: '0.1em', margin: 0,
+                textShadow: '0 1px 12px rgba(0,0,0,0.95)',
               }}>Terms &amp; Conditions</h2>
               <button
                 onClick={() => setPhase('form')}
@@ -577,22 +623,25 @@ export default function Login() {
                   position: 'absolute', top: '16px', right: '18px',
                   background: 'transparent', border: 'none',
                   cursor: 'pointer', padding: '4px',
-                  color: 'rgba(232,213,176,0.45)',
+                  color: 'rgba(196,133,154,0.55)',
                   fontSize: '16px', lineHeight: 1,
                   WebkitAppearance: 'none',
                   transition: 'color 0.2s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'rgba(232,213,176,0.9)' }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(232,213,176,0.45)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'rgba(196,133,154,0.95)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(196,133,154,0.55)' }}
               >✕</button>
             </div>
 
+            {/* Body */}
             <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '13px', lineHeight: 1.8, color: '#e8d5b0',
+                fontSize: '13.5px', lineHeight: 1.85,
+                color: 'rgba(255,246,238,0.95)',
+                textShadow: '0 1px 10px rgba(0,0,0,0.92)',
               }}>
-                <p style={{ marginBottom: '14px', opacity: 0.72 }}>
+                <p style={{ marginBottom: '14px' }}>
                   Welcome to Athena. By accessing or using our platform, you agree to be bound by these Terms &amp; Conditions and our Privacy Policy.
                 </p>
                 {[
@@ -605,18 +654,20 @@ export default function Login() {
                   <div key={title}>
                     <p style={{
                       fontFamily: "'Cinzel', serif", fontSize: '10px',
-                      letterSpacing: '0.18em', color: 'rgba(232,213,176,0.85)',
+                      letterSpacing: '0.18em', color: 'rgba(196,133,154,0.92)',
                       marginBottom: '6px', marginTop: '18px',
+                      textShadow: '0 0 10px rgba(196,133,154,0.3), 0 1px 8px rgba(0,0,0,0.9)',
                     }}>{title}</p>
-                    <p style={{ opacity: 0.72 }}>{body}</p>
+                    <p>{body}</p>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Footer */}
             <div style={{
               padding: '14px 22px 22px',
-              borderTop: '1px solid rgba(232,213,176,0.15)',
+              borderTop: '1px solid rgba(196,133,154,0.18)',
               flexShrink: 0,
             }}>
               <button
@@ -624,20 +675,21 @@ export default function Login() {
                 style={{
                   width: '100%', padding: '13px',
                   background: 'transparent',
-                  border: '1px solid rgba(232,213,176,0.5)',
+                  border: '1px solid rgba(196,133,154,0.45)',
                   borderRadius: '3px',
-                  color: '#e8d5b0',
+                  color: 'rgba(255,246,238,0.95)',
                   fontFamily: "'Cinzel', serif", fontSize: '10px', letterSpacing: '0.38em',
                   cursor: 'pointer',
                   WebkitAppearance: 'none',
                   transition: 'all 0.25s',
+                  textShadow: '0 1px 8px rgba(0,0,0,0.8)',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(232,213,176,0.85)'
-                  e.currentTarget.style.boxShadow = '0 0 14px rgba(232,213,176,0.2)'
+                  e.currentTarget.style.borderColor = 'rgba(196,133,154,0.85)'
+                  e.currentTarget.style.boxShadow = '0 0 12px rgba(196,133,154,0.25)'
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(232,213,176,0.5)'
+                  e.currentTarget.style.borderColor = 'rgba(196,133,154,0.45)'
                   e.currentTarget.style.boxShadow = 'none'
                 }}
               >I AGREE</button>
