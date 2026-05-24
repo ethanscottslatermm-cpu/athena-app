@@ -16,6 +16,7 @@ export default function Login() {
 
   const navDest = useRef('/')
   const loadVideoRef = useRef(null)
+  const canvasRef = useRef(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,6 +24,45 @@ export default function Login() {
       loadVideoRef.current.play().catch(() => navigate(navDest.current, { replace: true }))
     }
   }, [showVideo])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+
+    function resize() {
+      canvas.width  = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const COUNT = 38
+    const particles = Array.from({ length: COUNT }, () => ({
+      x:    Math.random(),
+      y:    Math.random(),
+      r:    Math.random() * 1.2 + 0.4,
+      speed: Math.random() * 0.28 + 0.1,
+      opacity: Math.random() * 0.28 + 0.06,
+    }))
+
+    let raf
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for (const p of particles) {
+        p.y -= p.speed / canvas.height
+        if (p.y < 0) { p.y = 1; p.x = Math.random() }
+        ctx.beginPath()
+        ctx.arc(p.x * canvas.width, p.y * canvas.height, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(232,213,176,${p.opacity})`
+        ctx.fill()
+      }
+      raf = requestAnimationFrame(draw)
+    }
+    draw()
+
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize) }
+  }, [])
 
   async function doAuth() {
     if (!email.trim() || !password.trim() || loading || authed) return
@@ -139,6 +179,18 @@ export default function Login() {
           0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
           40%           { opacity: 1;    transform: scale(1.15); }
         }
+        @keyframes linkBreath {
+          0%, 100% {
+            color: rgba(196,133,154,0.62);
+            text-shadow: none;
+            border-color: rgba(196,133,154,0.28);
+          }
+          50% {
+            color: rgba(196,133,154,0.98);
+            text-shadow: 0 0 8px rgba(196,133,154,0.55), 0 0 20px rgba(196,133,154,0.24);
+            border-color: rgba(196,133,154,0.75);
+          }
+        }
         @keyframes videoFadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes termsIn {
@@ -160,9 +212,15 @@ export default function Login() {
           -webkit-appearance: none;
         }
         .a-input::placeholder {
-          color: rgba(232,213,176,0.45);
+          color: rgba(232,213,176,0.72);
           letter-spacing: 0.32em;
           font-size: 11px;
+        }
+        .a-link {
+          cursor: pointer;
+          border-bottom: 1px solid rgba(196,133,154,0.28);
+          padding-bottom: 1px;
+          animation: linkBreath 5s ease-in-out infinite 3.2s;
         }
         .a-input:-webkit-autofill,
         .a-input:-webkit-autofill:focus {
@@ -256,6 +314,17 @@ export default function Login() {
           pointerEvents: 'none',
         }} />
       </div>
+
+      {/* ── Particles ──────────────────────────────────────────────────────── */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed', inset: 0,
+          width: '100%', height: '100%',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
 
       {/* ── Content ────────────────────────────────────────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 10 }}>
@@ -410,14 +479,8 @@ export default function Login() {
                 }}>
                   By continuing you agree to our{' '}
                   <span
+                    className="a-link"
                     onClick={() => { setPendingSubmit(false); setPhase('terms') }}
-                    style={{
-                      color: 'rgba(196,133,154,0.55)',
-                      cursor: 'pointer',
-                      textDecoration: 'underline',
-                      textUnderlineOffset: '3px',
-                      textDecorationColor: 'rgba(196,133,154,0.35)',
-                    }}
                   >Terms &amp; Conditions</span>
                 </p>
               </>
