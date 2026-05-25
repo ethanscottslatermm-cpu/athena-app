@@ -6,8 +6,9 @@ import {
   Sparkles, Users, Bell, Palette, Shield, Info, BedDouble,
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
-import { useAuth } from '../hooks/useAuth'
-import athenaHero from '../assets/athena-hero.webp'
+import { useAuth }  from '../hooks/useAuth'
+import { useAdmin } from '../hooks/useAdmin'
+import athenaHero   from '../assets/athena-hero.webp'
 
 // ─── Section → field map ──────────────────────────────────────────────────────
 
@@ -320,8 +321,9 @@ function Brackets() {
 // ─── Settings ─────────────────────────────────────────────────────────────────
 
 export default function Settings() {
-  const { user }   = useAuth()
-  const navigate   = useNavigate()
+  const { user }       = useAuth()
+  const { isAdmin }    = useAdmin()
+  const navigate       = useNavigate()
   const fileRef    = useRef(null)
 
   const [profile,   setProfile]   = useState(null)
@@ -915,6 +917,24 @@ export default function Settings() {
             <a href="/terms"   className="font-garamond text-xs" style={{ color: '#7A6A65' }}>Terms of service</a>
           </div>
         </Section>
+
+        {/* ── Admin ── (only visible to admin account) */}
+        {isAdmin && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="w-full flex items-center justify-between px-4 py-3.5 mb-3 rounded-2xl"
+            style={{
+              background: 'rgba(212,160,160,0.08)',
+              border: '1px solid rgba(212,160,160,0.35)',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <Shield size={15} style={{ color: '#D4A0A0' }} />
+              <span className="font-cinzel text-[10px] tracking-[0.25em] uppercase" style={{ color: '#D4A0A0' }}>Admin Panel</span>
+            </div>
+            <span style={{ color: 'rgba(212,160,160,0.5)', fontSize: 18 }}>›</span>
+          </button>
+        )}
 
         {/* ── 12. App Info ── */}
         <Section

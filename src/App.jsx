@@ -6,6 +6,7 @@ import { useProfile } from './hooks/useProfile'
 import BottomNav    from './components/BottomNav'
 import WelcomeFlow  from './components/WelcomeFlow'
 import { useSwipeNav } from './hooks/useSwipeNav'
+import { useAdmin }    from './hooks/useAdmin'
 import SwipeHint       from './components/SwipeHint'
 
 import Login        from './pages/Login'
@@ -20,6 +21,7 @@ import Nourish      from './pages/Nourish'
 import Sleep        from './pages/Sleep'
 import Skin         from './pages/Skin'
 import Settings     from './pages/Settings'
+import AdminPanel   from './pages/AdminPanel'
 
 import PilatesModule from './modules/pilates'
 import CycleModule   from './modules/cycle'
@@ -33,6 +35,13 @@ function AuthGuard({ children }) {
   const { user, loading } = useAuth()
   if (loading) return <Splash />
   if (!user) return <Navigate to="/login" replace />
+  return children
+}
+
+function AdminGuard({ children }) {
+  const { isAdmin, loading } = useAdmin()
+  if (loading) return <Splash />
+  if (!isAdmin) return <Navigate to="/" replace />
   return children
 }
 
@@ -139,7 +148,6 @@ export default function App() {
         <Routes>
           {/* Public */}
           <Route path="/login" element={<Login />} />
-          <Route path="/seed"  element={<SeedPage />} />
 
           {/* Onboarding */}
           <Route path="/onboarding" element={
@@ -168,6 +176,8 @@ export default function App() {
                     <Route path="skin/*"    element={<SkinModule />} />
                     <Route path="grocery"   element={<GroceryModule />} />
                     <Route path="settings"  element={<Settings />} />
+                    <Route path="admin"     element={<AdminGuard><AdminPanel /></AdminGuard>} />
+                    <Route path="seed"      element={<AdminGuard><SeedPage /></AdminGuard>} />
                     <Route path="*"         element={<Navigate to="/" replace />} />
                   </Routes>
                 </AppShell>
