@@ -543,13 +543,10 @@ export default function Dashboard() {
               className="flex flex-col items-center gap-2"
               style={{ minWidth: '72px' }}
             >
-              {/* Shimmer rim tile */}
               <div style={{ position: 'relative', width: 72, height: 88, borderRadius: 18, overflow: 'hidden' }}>
-                <RimSpin duration="3s" delay={i * 0.2} />
-                {/* Inner tile — inset 1px so rim shows */}
                 <div style={{
-                  position: 'absolute', inset: 1,
-                  borderRadius: 17,
+                  position: 'absolute', inset: 0,
+                  borderRadius: 18,
                   overflow: 'hidden',
                   backgroundImage: `url("${img}")`,
                   backgroundSize: 'cover',
