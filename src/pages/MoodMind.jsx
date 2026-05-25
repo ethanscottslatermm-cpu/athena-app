@@ -108,8 +108,7 @@ export default function MoodMind() {
         {TABS.map(tab => (
           <div
             key={tab.id}
-            className="mm-tab-pane"
-            className="pb-nav"
+            className="mm-tab-pane pb-nav"
             style={{
               position: 'absolute', inset: 0,
               overflowY: 'auto',
