@@ -17,9 +17,9 @@ const DASHBOARD_HINTS = [
   'Use the rotating Today cards to stay consistent. Each pair changes daily to keep your routine fresh.',
 ]
 
-import pilatesIcon   from '../assets/icons/nav-pilates.png'
-import cycleIcon     from '../assets/icons/nav-cycle.png'
-import moodIcon      from '../assets/icons/nav-mood.png'
+import pilatesIcon   from '../assets/icons/nav-pilates-new.svg'
+import cycleIcon     from '../assets/icons/nav-cycle-new.svg'
+import moodIcon      from '../assets/icons/nav-mood-new.svg'
 import nourishIcon   from '../assets/icons/nav-nourish.png'
 import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
