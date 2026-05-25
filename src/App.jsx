@@ -6,6 +6,7 @@ import { useProfile } from './hooks/useProfile'
 import BottomNav    from './components/BottomNav'
 import WelcomeFlow  from './components/WelcomeFlow'
 import { useSwipeNav } from './hooks/useSwipeNav'
+import SwipeHint       from './components/SwipeHint'
 
 import Login        from './pages/Login'
 import SeedPage     from './pages/SeedPage'
@@ -112,6 +113,7 @@ function AppShell({ children }) {
       {children}
       <BottomNav />
       <WelcomeFlow />
+      <SwipeHint />
     </>
   )
 }
