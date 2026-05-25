@@ -600,7 +600,6 @@ export default function Dashboard() {
                 <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(30,18,12,0.75) 0%, rgba(30,18,12,0.30) 55%, transparent 100%)' }} />
               )}
               <div className="relative z-10">
-                <ShimmerIcon src={icon} delay={i * 0.5} />
                 {img ? (
                   <span style={{
                     display: 'inline-block',
