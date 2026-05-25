@@ -5,6 +5,7 @@ import { useProfile } from './hooks/useProfile'
 
 import BottomNav    from './components/BottomNav'
 import WelcomeFlow  from './components/WelcomeFlow'
+import { useSwipeNav } from './hooks/useSwipeNav'
 
 import Login        from './pages/Login'
 import SeedPage     from './pages/SeedPage'
@@ -105,6 +106,7 @@ function WelcomeOverlay() {
 }
 
 function AppShell({ children }) {
+  useSwipeNav()
   return (
     <>
       {children}
