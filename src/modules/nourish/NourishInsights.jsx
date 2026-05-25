@@ -40,7 +40,7 @@ function CalorieChart({ days, dayData }) {
       border: '1px solid rgba(196,175,168,0.35)',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Daily Calories — 7 Days
       </p>
 
@@ -179,7 +179,7 @@ function MacroAverages({ dayData, days }) {
       border: '1px solid rgba(196,175,168,0.35)',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         7-Day Averages
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 6 }}>
@@ -219,7 +219,7 @@ function HydrationStreak({ days, waterData }) {
       marginBottom: 12,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           Hydration Streak
         </p>
         <Droplets size={13} color="#8FA58C" strokeWidth={1.5} />

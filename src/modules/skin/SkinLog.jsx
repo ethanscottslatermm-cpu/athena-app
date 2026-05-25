@@ -57,7 +57,7 @@ function ConditionPicker({ selected, onSelect }) {
       padding: '12px 14px',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Today's Skin
       </p>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -103,7 +103,7 @@ function ConcernChips({ selected, onToggle }) {
       padding: '12px 14px',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Any Concerns?
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
@@ -224,7 +224,7 @@ export default function SkinLog({ onLogSaved }) {
         padding: '12px 14px',
         marginBottom: 16,
       }}>
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           Skin Notes
         </p>
         <textarea

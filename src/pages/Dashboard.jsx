@@ -289,11 +289,11 @@ function PhaseRing({ phase, day, cycleLength }) {
 function SectionHeader({ title, delay }) {
   return (
     <div className="flex items-center gap-3 px-5 mb-3" style={anim(delay)}>
-      <span className="font-cinzel text-[9px] tracking-[0.28em] uppercase whitespace-nowrap"
-        style={{ color: '#7A6A65' }}>
+      <span className="font-cinzel text-[9px] uppercase whitespace-nowrap"
+        style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         {title}
       </span>
-      <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, rgba(122,106,101,0.25), transparent)' }} />
+      <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, rgba(107,82,72,0.35), transparent)' }} />
     </div>
   )
 }
@@ -555,7 +555,7 @@ export default function Dashboard() {
                   {/* Bottom gradient for label legibility */}
                   <div style={{
                     position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to bottom, transparent 40%, rgba(42,28,20,0.72) 100%)',
+                    background: 'linear-gradient(to bottom, transparent 40%, rgba(30,18,12,0.70) 100%)',
                   }} />
                   {/* Module label pinned to bottom */}
                   <span style={{
@@ -563,10 +563,11 @@ export default function Dashboard() {
                     textAlign: 'center',
                     fontFamily: 'Cinzel, serif',
                     fontSize: 7.5,
+                    fontWeight: 500,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
                     color: '#F5EDE3',
-                    textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                    textShadow: '0 1px 4px rgba(0,0,0,0.6)',
                   }}>
                     {label}
                   </span>
@@ -597,7 +598,7 @@ export default function Dashboard() {
               }}
             >
               {img && (
-                <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(59,51,48,0.80) 0%, rgba(59,51,48,0.30) 55%, rgba(59,51,48,0.05) 100%)' }} />
+                <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(30,18,12,0.75) 0%, rgba(30,18,12,0.30) 55%, transparent 100%)' }} />
               )}
               <div className="relative z-10">
                 <ShimmerIcon src={icon} delay={i * 0.5} />
@@ -651,7 +652,7 @@ export default function Dashboard() {
                     }}
                   >
                     {img && (
-                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(59,51,48,0.82) 0%, rgba(59,51,48,0.35) 55%, rgba(59,51,48,0.05) 100%)' }} />
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(30,18,12,0.75) 0%, rgba(30,18,12,0.32) 55%, transparent 100%)' }} />
                     )}
                     <div className="relative z-10 p-4 flex flex-col h-full">
                       {img ? (

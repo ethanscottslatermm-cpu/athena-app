@@ -110,20 +110,20 @@ function StatTile({ Icon, label, value, levelColor, rimDelay = 0, image }) {
         display: 'flex', flexDirection: 'column', gap: 5,
       }}>
         {image && (
-          <div style={{ position: 'absolute', inset: 0, borderRadius: 11, background: 'linear-gradient(to top, rgba(59,51,48,0.82) 0%, rgba(59,51,48,0.35) 55%, rgba(59,51,48,0.05) 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 11, background: 'linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 100%)' }} />
         )}
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Icon size={13} color={image ? 'rgba(255,255,255,0.85)' : '#7A6A65'} strokeWidth={1.5} />
+            <Icon size={13} color="#6B5248" strokeWidth={1.5} />
             {levelColor && <LevelDot color={levelColor} />}
           </div>
           <p style={{
-            fontFamily: 'Cinzel, serif', fontSize: 15, fontWeight: 600,
-            color: image ? 'rgba(255,255,255,0.95)' : '#3B3330', margin: 0, lineHeight: 1.1,
+            fontFamily: 'Cinzel, serif', fontSize: '1.2rem', fontWeight: 700,
+            color: '#2A1C14', margin: 0, lineHeight: 1.1,
           }}>{value}</p>
           <p style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: 10,
-            color: image ? 'rgba(255,255,255,0.75)' : '#7A6A65', letterSpacing: '0.1em',
+            fontFamily: 'Cormorant Garamond, serif', fontSize: 10, fontWeight: 500,
+            color: '#6B5248', letterSpacing: '0.1em',
             textTransform: 'uppercase', margin: 0,
           }}>{label}</p>
         </div>

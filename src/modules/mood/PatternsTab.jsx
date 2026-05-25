@@ -97,7 +97,7 @@ function MonthCalendar({ logs, showPhase, profile }) {
 
   return (
     <div className="mb-6">
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-4" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-4" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         {monthName}
       </p>
 
@@ -297,7 +297,7 @@ function BubbleChart({ monthLogs }) {
 
   return (
     <div className="mb-6">
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Emotion Frequency
       </p>
       <div style={{ background: '#F2EDE8', borderRadius: 14, overflow: 'hidden' }}>
@@ -418,7 +418,7 @@ export default function PatternsTab() {
       {/* Insight cards */}
       {insights.length > 0 && (
         <div className="mb-6">
-          <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
             What I'm noticing
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

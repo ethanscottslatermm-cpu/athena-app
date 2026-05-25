@@ -56,7 +56,7 @@ function SleepChart({ days, dayData }) {
       border: `1px solid rgba(155,151,196,0.3)`,
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Hours Per Night — 7 Days
       </p>
 
@@ -161,7 +161,7 @@ function StreakCard({ streak }) {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
       <div>
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-1" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase mb-1" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           Logging Streak
         </p>
         <p className="font-garamond text-xs italic" style={{ color: '#7A6A65' }}>
@@ -374,7 +374,7 @@ export default function SleepPatterns() {
       {/* Tag insights */}
       {topTags.length > 0 && (
         <>
-          <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3 mt-2" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[9px] uppercase mb-3 mt-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
             Recurring This {label || 'Phase'}
           </p>
           {topTags.map(([tag, count]) => (

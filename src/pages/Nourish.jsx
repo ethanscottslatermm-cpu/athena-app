@@ -67,7 +67,7 @@ export default function Nourish() {
         }} />
         <div className="relative px-4 pt-8 pb-3">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <h2 className="font-cinzel text-2xl tracking-widest" style={{ color: '#3B3330' }}>
+          <h2 className="font-cinzel text-2xl tracking-widest" style={{ color: '#2A1C14', fontWeight: 600, textShadow: '0 1px 6px rgba(0,0,0,0.25)' }}>
             Body Fuel
           </h2>
           {/* Scan button */}

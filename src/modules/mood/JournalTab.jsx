@@ -19,7 +19,7 @@ function getMoonPhase(date) {
 
 function SL({ children }) {
   return (
-    <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-2" style={{ color: '#7A6A65' }}>
+    <p className="font-cinzel text-[9px] uppercase mb-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
       {children}
     </p>
   )
@@ -93,19 +93,19 @@ function EntryOverlay({ entry, onClose }) {
 
       {entry.responses?.how && (
         <div className="mb-5">
-          <p className="font-cinzel text-[8px] tracking-[0.28em] uppercase mb-2" style={{ color: '#7A6A65' }}>How today felt</p>
+          <p className="font-cinzel text-[8px] uppercase mb-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>How today felt</p>
           <p className="font-garamond text-sm leading-relaxed" style={{ color: '#3B3330' }}>{entry.responses.how}</p>
         </div>
       )}
       {entry.responses?.drained && (
         <div className="mb-5">
-          <p className="font-cinzel text-[8px] tracking-[0.28em] uppercase mb-2" style={{ color: '#7A6A65' }}>What drained you</p>
+          <p className="font-cinzel text-[8px] uppercase mb-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>What drained you</p>
           <p className="font-garamond text-sm leading-relaxed" style={{ color: '#3B3330' }}>{entry.responses.drained}</p>
         </div>
       )}
       {entry.responses?.holding && (
         <div className="mb-5">
-          <p className="font-cinzel text-[8px] tracking-[0.28em] uppercase mb-2" style={{ color: '#7A6A65' }}>What you were holding onto</p>
+          <p className="font-cinzel text-[8px] uppercase mb-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>What you were holding onto</p>
           <p className="font-garamond text-sm leading-relaxed" style={{ color: '#3B3330' }}>{entry.responses.holding}</p>
         </div>
       )}
@@ -320,7 +320,7 @@ export default function JournalTab({ todayEmotions, todayMoodWeather }) {
       {/* Past entries */}
       {pastEntries.length > 0 && (
         <div className="mt-9 mb-4">
-          <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-4" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[9px] uppercase mb-4" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
             Previous Entries
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -62,7 +62,7 @@ function ConditionChart({ days, dayData }) {
       border: '1px solid rgba(212,160,160,0.25)',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Skin Condition — 7 Days
       </p>
 
@@ -151,7 +151,7 @@ function StreakCard({ streak, avgRating }) {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
       <div>
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-1" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase mb-1" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           Logging Streak
         </p>
         {avgLabel && (
@@ -350,7 +350,7 @@ export default function SkinInsights() {
 
       {topConcerns.length > 0 && (
         <>
-          <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3 mt-2" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[9px] uppercase mb-3 mt-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
             Recurring This {label || 'Phase'}
           </p>
           {topConcerns.map(([concern, count]) => (

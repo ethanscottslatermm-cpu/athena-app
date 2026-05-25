@@ -104,15 +104,18 @@ export default function SessionCard({
         </button>
 
         <div className="absolute inset-0 flex flex-col justify-end p-4 z-10">
-          <h3 className="font-cinzel text-white text-lg leading-tight mb-1">{session.title}</h3>
+          <h3 className="font-cinzel text-white text-lg leading-tight mb-1" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)', fontWeight: 500 }}>{session.title}</h3>
           {session.description && (
             <p
-              className="font-garamond italic text-white/70 text-xs leading-snug mb-2"
+              className="font-garamond italic text-xs leading-snug mb-2"
               style={{
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
+                color: '#FFFFFF',
+                fontWeight: 400,
+                textShadow: '0 1px 8px rgba(0,0,0,0.65)',
               }}
             >
               {session.description}
@@ -157,21 +160,24 @@ export default function SessionCard({
         </button>
 
         <div className="absolute inset-0 flex flex-col justify-end p-3 z-10">
-          <h4 className="font-cinzel text-white text-[13px] leading-tight mb-1">{session.title}</h4>
+          <h4 className="font-cinzel text-white text-[13px] leading-tight mb-1" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)', fontWeight: 500 }}>{session.title}</h4>
           {session.description && (
             <p
-              className="font-garamond italic text-ivory/50 text-[11px] leading-snug mb-1.5"
+              className="font-garamond italic text-[11px] leading-snug mb-1.5"
               style={{
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
+                color: '#FFFFFF',
+                fontWeight: 400,
+                textShadow: '0 1px 8px rgba(0,0,0,0.65)',
               }}
             >
               {session.description}
             </p>
           )}
-          <p className="font-garamond text-ivory/50 text-xs capitalize">
+          <p className="font-garamond text-xs capitalize" style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
             {session.duration_min} min · {(session.focus_area ?? '').replace(/_/g, ' ')}
           </p>
         </div>

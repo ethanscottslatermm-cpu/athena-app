@@ -71,11 +71,16 @@ export default function BottomNav() {
               end={to === '/'}
               className="flex flex-col items-center gap-1 px-2 py-2 transition-colors"
               style={({ isActive }) => ({
-                color: isActive ? '#3B3330' : '#7A6A65',
+                color: isActive ? '#2A1C14' : '#6B5248',
               })}
             >
               <PngIcon src={png} delay={i * 0.7} />
-              <span className="text-[10px] font-garamond tracking-wide">{label}</span>
+              <span style={{
+                fontFamily: 'Cormorant Garamond, serif',
+                fontSize: '0.65rem',
+                fontWeight: 500,
+                letterSpacing: '0.03em',
+              }}>{label}</span>
             </NavLink>
           ))}
         </div>

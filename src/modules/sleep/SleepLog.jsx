@@ -73,7 +73,7 @@ function TimeCard({ bedtime, wakeTime, onBedtime, onWakeTime, totalHours }) {
           { label: 'Wake Time', value: wakeTime,  onChange: onWakeTime  },
         ].map(({ label, value, onChange }) => (
           <div key={label}>
-            <p className="font-cinzel text-[8px] tracking-[0.22em] uppercase mb-2" style={{ color: '#7A6A65' }}>
+            <p className="font-cinzel text-[8px] uppercase mb-2" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
               {label}
             </p>
             <input
@@ -120,7 +120,7 @@ function QualityRow({ selected, onSelect }) {
       padding: '12px 14px',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Sleep Quality
       </p>
       <div style={{ display: 'flex', gap: 6 }}>
@@ -166,7 +166,7 @@ function TagChips({ selected, onToggle }) {
       padding: '12px 14px',
       marginBottom: 12,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         How Did It Feel?
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
@@ -306,7 +306,7 @@ export default function SleepLog({ onLogSaved }) {
         padding: '12px 14px',
         marginBottom: 16,
       }}>
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           Dream Notes
         </p>
         <textarea

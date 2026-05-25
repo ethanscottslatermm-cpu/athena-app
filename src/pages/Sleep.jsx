@@ -59,7 +59,7 @@ export default function Sleep() {
           background: 'linear-gradient(to bottom, rgba(242,237,232,0.35) 0%, rgba(242,237,232,0.92) 65%, rgba(242,237,232,1) 100%)',
         }} />
         <div className="relative px-4 pt-8 pb-3">
-        <h2 className="font-cinzel text-2xl tracking-widest mb-4" style={{ color: '#3B3330' }}>
+        <h2 className="font-cinzel text-2xl tracking-widest mb-4" style={{ color: '#2A1C14', fontWeight: 600, textShadow: '0 1px 6px rgba(0,0,0,0.25)' }}>
           Sleep
         </h2>
         <div style={{

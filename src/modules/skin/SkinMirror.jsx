@@ -479,7 +479,7 @@ export default function SkinMirror() {
       {/* ── Photo gallery ─────────────────────────────────────────────────── */}
       {photos.length > 0 && (
         <div style={{ marginTop: 16 }}>
-          <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
             Skin Photos
           </p>
           <div

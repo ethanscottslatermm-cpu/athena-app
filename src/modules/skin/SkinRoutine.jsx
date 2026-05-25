@@ -139,7 +139,7 @@ function RoutineSection({ timeOfDay, phase, label, steps, loading }) {
         {isAM
           ? <Sun  size={14} color={ROSE} strokeWidth={1.5} />
           : <Moon size={14} color={ROSE} strokeWidth={1.5} />}
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           {isAM ? 'Morning Routine' : 'Evening Routine'}
         </p>
         {steps.length > 0 && (

@@ -258,7 +258,7 @@ export default function MindFeedTab({ todayEmotions }) {
       {/* Saved reads */}
       {savedCards.length > 0 && (
         <div className="mt-4 mb-4">
-          <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-4" style={{ color: '#7A6A65' }}>
+          <p className="font-cinzel text-[9px] uppercase mb-4" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
             Saved Reads
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

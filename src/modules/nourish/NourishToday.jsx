@@ -25,7 +25,7 @@ function MacroRing({ totalCal, protein, carbs, fat }) {
       border: '1px solid rgba(196,175,168,0.35)',
       marginBottom: 14,
     }}>
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Today's Macros
       </p>
 
@@ -204,7 +204,7 @@ function HydrationRow({ glasses, onTap }) {
       marginBottom: 14,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase" style={{ color: '#7A6A65' }}>
+        <p className="font-cinzel text-[9px] uppercase" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
           Hydration
         </p>
         <span className="font-garamond text-xs" style={{ color: '#7A6A65' }}>
@@ -321,7 +321,7 @@ export default function NourishToday({ onOpenSearch }) {
       <HydrationRow glasses={glasses} onTap={handleWaterTap} />
 
       {/* Meal sections */}
-      <p className="font-cinzel text-[9px] tracking-[0.28em] uppercase mb-3" style={{ color: '#7A6A65' }}>
+      <p className="font-cinzel text-[9px] uppercase mb-3" style={{ color: '#6B5248', fontWeight: 600, letterSpacing: '0.12em' }}>
         Meals
       </p>
       {MEAL_TYPES.map(type => (
