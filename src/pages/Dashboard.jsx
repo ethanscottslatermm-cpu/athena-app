@@ -555,7 +555,7 @@ export default function Dashboard() {
                   {/* Bottom gradient for label legibility */}
                   <div style={{
                     position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(30,20,16,0.72) 0%, rgba(30,20,16,0.18) 55%, transparent 100%)',
+                    background: 'linear-gradient(to bottom, transparent 40%, rgba(42,28,20,0.72) 100%)',
                   }} />
                   {/* Module label pinned to bottom */}
                   <span style={{
@@ -565,7 +565,8 @@ export default function Dashboard() {
                     fontSize: 7.5,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    color: 'rgba(255,248,242,0.92)',
+                    color: '#F5EDE3',
+                    textShadow: '0 1px 4px rgba(0,0,0,0.5)',
                   }}>
                     {label}
                   </span>
@@ -600,10 +601,26 @@ export default function Dashboard() {
               )}
               <div className="relative z-10">
                 <ShimmerIcon src={icon} delay={i * 0.5} />
-                <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2"
-                  style={{ color: img ? 'rgba(255,255,255,0.95)' : '#3B3330' }}>{label}</p>
+                {img ? (
+                  <span style={{
+                    display: 'inline-block',
+                    background: 'rgba(42,28,20,0.55)',
+                    backdropFilter: 'blur(4px)',
+                    borderRadius: 20,
+                    padding: '2px 10px',
+                    color: '#F5EDE3',
+                    fontSize: '0.65rem',
+                    letterSpacing: '0.1em',
+                    fontFamily: 'Cinzel, serif',
+                    textTransform: 'uppercase',
+                    marginBottom: 4, marginTop: 8,
+                  }}>{label}</span>
+                ) : (
+                  <p className="font-cinzel text-[10px] tracking-widest uppercase mb-1 mt-2"
+                    style={{ color: '#3B3330' }}>{label}</p>
+                )}
                 <p className="font-garamond text-xs"
-                  style={{ color: img ? 'rgba(255,255,255,0.75)' : '#7A6A65' }}>{sub}</p>
+                  style={{ color: img ? '#FFFFFF' : '#7A6A65', textShadow: img ? '0 1px 6px rgba(0,0,0,0.6)' : 'none' }}>{sub}</p>
               </div>
             </button>
           </div>
@@ -637,12 +654,28 @@ export default function Dashboard() {
                       <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(59,51,48,0.82) 0%, rgba(59,51,48,0.35) 55%, rgba(59,51,48,0.05) 100%)' }} />
                     )}
                     <div className="relative z-10 p-4 flex flex-col h-full">
-                      <p className="font-cinzel text-[10px] tracking-widest uppercase mb-2"
-                        style={{ color: activeColor, opacity: 0.9 }}>
-                        {module}
-                      </p>
+                      {img ? (
+                        <span style={{
+                          display: 'inline-block',
+                          background: 'rgba(42,28,20,0.55)',
+                          backdropFilter: 'blur(4px)',
+                          borderRadius: 20,
+                          padding: '2px 10px',
+                          color: '#F5EDE3',
+                          fontSize: '0.65rem',
+                          letterSpacing: '0.1em',
+                          fontFamily: 'Cinzel, serif',
+                          textTransform: 'uppercase',
+                          marginBottom: 8,
+                        }}>{module}</span>
+                      ) : (
+                        <p className="font-cinzel text-[10px] tracking-widest uppercase mb-2"
+                          style={{ color: activeColor, opacity: 0.9 }}>
+                          {module}
+                        </p>
+                      )}
                       <p className="font-garamond text-sm leading-snug flex-1"
-                        style={{ color: 'rgba(255,255,255,0.9)' }}>
+                        style={{ color: '#FFFFFF', textShadow: '0 1px 6px rgba(0,0,0,0.6)' }}>
                         {tip}
                       </p>
                       <div className="flex items-center gap-1 mt-3"
