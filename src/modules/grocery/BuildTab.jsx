@@ -11,7 +11,7 @@ export default function BuildTab({ phase, phaseLabel, listId, onItemsAdded, auto
   const { user } = useAuth()
 
   // AI Phase Build state
-  const [aiState, setAiState] = useState('idle') // idle | loading | preview | saved
+  const [aiState, setAiState] = useState('idle') // idle | loading | preview | saving | saved
   const [aiItems, setAiItems] = useState([])
   const [removedIds, setRemovedIds] = useState(new Set())
   const [aiError, setAiError] = useState(null)
@@ -56,36 +56,52 @@ export default function BuildTab({ phase, phaseLabel, listId, onItemsAdded, auto
   }
 
   async function handleSaveAiItems() {
-    if (!user) return
+    if (!user || aiState === 'saving') return
     const toSave = aiItems.filter(i => !removedIds.has(i._id))
     if (toSave.length === 0) return
 
-    // Create new list if none exists
-    let targetListId = listId
-    if (!targetListId) {
-      const { data: newList } = await supabase
-        .from('grocery_lists')
-        .insert({ user_id: user.id, title: `${phaseLabel} Phase List`, phase_name: phase, is_template: false })
-        .select()
-        .single()
-      targetListId = newList?.id
+    setAiState('saving')
+    setAiError(null)
+
+    try {
+      let targetListId = listId
+      if (!targetListId) {
+        const { data: newList, error: listErr } = await supabase
+          .from('grocery_lists')
+          .insert({ user_id: user.id, title: `${phaseLabel} Phase List`, phase_name: phase, is_template: false })
+          .select()
+          .single()
+        if (listErr || !newList?.id) {
+          setAiError('Could not create your list — please try again.')
+          setAiState('preview')
+          return
+        }
+        targetListId = newList.id
+      }
+
+      const rows = toSave.map(item => ({
+        list_id: targetListId,
+        user_id: user.id,
+        name: item.name,
+        category: item.category ?? 'Other',
+        quantity: item.quantity ?? 1,
+        unit: item.unit ?? '',
+        is_checked: false,
+      }))
+
+      const { error: insertErr } = await supabase.from('grocery_items').insert(rows)
+      if (insertErr) {
+        setAiError('Could not save items — please try again.')
+        setAiState('preview')
+        return
+      }
+
+      setAiState('saved')
+      onItemsAdded(targetListId)
+    } catch {
+      setAiError('Something went wrong — please try again.')
+      setAiState('preview')
     }
-
-    if (!targetListId) return
-
-    const rows = toSave.map(item => ({
-      list_id: targetListId,
-      user_id: user.id,
-      name: item.name,
-      category: item.category ?? 'Other',
-      quantity: item.quantity ?? 1,
-      unit: item.unit ?? '',
-      is_checked: false,
-    }))
-
-    await supabase.from('grocery_items').insert(rows)
-    setAiState('saved')
-    onItemsAdded(targetListId)
   }
 
   async function handleManualAdd() {
@@ -295,14 +311,17 @@ export default function BuildTab({ phase, phaseLabel, listId, onItemsAdded, auto
 
           <button
             onClick={handleSaveAiItems}
+            disabled={aiState === 'saving'}
             style={{
-              width: '100%', padding: '12px 0', borderRadius: 22, background: '#8FA58C',
+              width: '100%', padding: '12px 0', borderRadius: 22,
+              background: aiState === 'saving' ? 'rgba(143,165,140,0.5)' : '#8FA58C',
               border: 'none', color: '#F2EDE8', fontFamily: 'Cinzel, serif', fontSize: 10,
-              letterSpacing: '0.2em', textTransform: 'uppercase', cursor: 'pointer',
+              letterSpacing: '0.2em', textTransform: 'uppercase',
+              cursor: aiState === 'saving' ? 'default' : 'pointer',
               marginTop: 12,
             }}
           >
-            Save to My List
+            {aiState === 'saving' ? 'Saving…' : 'Save to My List'}
           </button>
         </div>
       )}
