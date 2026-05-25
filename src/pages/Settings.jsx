@@ -348,7 +348,17 @@ export default function Settings() {
     if (!user) return
     supabase.from('profiles').select('*').eq('id', user.id).single()
       .then(({ data }) => {
-        if (data) { setProfile(data); setDraft(data); setAvatar(data.avatar_url) }
+        if (!data) return
+        setProfile(data)
+        setDraft(data)
+        setAvatar(data.avatar_url)
+        // Auto-open cycle section when last period date is not set
+        const hasDate = data.last_period_date
+          ?? data.preferences?.last_period_date
+          ?? null
+        if (!hasDate) {
+          setOpenSections(p => p.includes('cycle') ? p : [...p, 'cycle'])
+        }
       })
   }, [user?.id])
 
@@ -588,6 +598,19 @@ export default function Settings() {
 
         {/* ── 2. Cycle Preferences ── */}
         <Section {...sec('cycle', 'Cycle Preferences', <Moon size={15} />)}>
+          {!d.last_period_date && (
+            <div style={{
+              background: 'rgba(196,133,154,0.12)',
+              border: '1px solid rgba(196,133,154,0.3)',
+              borderRadius: 10,
+              padding: '8px 12px',
+              marginBottom: 8,
+            }}>
+              <p className="font-garamond text-xs" style={{ color: 'rgba(196,133,154,0.9)', lineHeight: 1.5 }}>
+                Set your last period date to activate phase tracking across the app.
+              </p>
+            </div>
+          )}
           <SettingRow label="Last period date">
             <input
               type="date" value={d.last_period_date ?? ''} max={new Date().toISOString().split('T')[0]}

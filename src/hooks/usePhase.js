@@ -5,14 +5,19 @@ import { getCurrentPhase, phaseLabels, phaseColors, phaseDays } from '../lib/pha
 export function usePhase() {
   const { profile } = useProfile()
 
+  const lastPeriodDate = profile?.last_period_date
+    ?? profile?.preferences?.last_period_date
+    ?? null
+
   const data = useMemo(() => {
-    if (!profile?.last_period_date) return null
+    if (!lastPeriodDate) return null
     return getCurrentPhase(
-      profile.last_period_date,
-      profile.cycle_length    ?? 28,
-      profile.period_duration ?? 5,
+      lastPeriodDate,
+      profile?.cycle_length    ?? profile?.preferences?.cycle_length    ?? 28,
+      profile?.period_duration ?? profile?.preferences?.period_duration ?? 5,
     )
-  }, [profile?.last_period_date, profile?.cycle_length, profile?.period_duration])
+  }, [lastPeriodDate, profile?.cycle_length, profile?.period_duration,
+      profile?.preferences?.cycle_length, profile?.preferences?.period_duration])
 
   if (!data) return { phase: null, label: null, color: null, days: null }
 

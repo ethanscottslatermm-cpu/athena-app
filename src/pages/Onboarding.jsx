@@ -430,6 +430,10 @@ export default function Onboarding() {
       id: uid,
       email,
       preferences: prefs,
+      // Mirror critical phase fields to direct columns so usePhase can read them
+      last_period_date:  answers.last_period_date  || null,
+      cycle_length:      answers.cycle_length      || 28,
+      period_duration:   answers.period_duration   || 5,
       updated_at: new Date().toISOString(),
     })
     if (error) {
