@@ -5,7 +5,7 @@ import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import communityIcon from '../assets/icons/nav-community.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
-import nourishIcon   from '../assets/icons/nav-nourish.png'
+import nourishIcon   from '../assets/icons/nav-nourish.svg'
 import groceryIcon   from '../assets/icons/nav-grocery.png'
 
 function PngIcon({ src, delay = 0 }) {
