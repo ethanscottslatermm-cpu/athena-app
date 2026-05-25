@@ -9,14 +9,6 @@ import settingsIcon from '../assets/icons/settings-icon.png'
 import exitIcon from '../assets/icons/nav-exit.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 import HintBubble            from '../components/HintBubble'
-
-const DASHBOARD_HINTS = [
-  'Tap any module card to jump straight in. Your cycle, skin, and mood are always one tap away.',
-  'Your Phase Guidance card updates automatically as you move through your cycle — set up your cycle in Settings to unlock it.',
-  'The Wellness Weather widget adapts your skin-care tips to today\'s UV index and humidity in real time.',
-  'Use the rotating Today cards to stay consistent. Each pair changes daily to keep your routine fresh.',
-]
-
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
@@ -25,6 +17,13 @@ import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
 import communityIcon from '../assets/icons/nav-community.png'
 import groceryIcon   from '../assets/icons/nav-grocery.png'
+
+const DASHBOARD_HINTS = [
+  'Tap any module card to jump straight in. Your cycle, skin, and mood are always one tap away.',
+  'Your Phase Guidance card updates automatically as you move through your cycle — set up your cycle in Settings to unlock it.',
+  'The Wellness Weather widget adapts your skin-care tips to today\'s UV index and humidity in real time.',
+  'Use the rotating Today cards to stay consistent. Each pair changes daily to keep your routine fresh.',
+]
 
 // Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
