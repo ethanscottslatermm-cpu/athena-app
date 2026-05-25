@@ -197,14 +197,16 @@ const PHASE_CONTENT = {
   },
 }
 
+const MM = (name) => `/images/My%20Modules/${name}.png`
+
 const MODULE_NAV = [
-  { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   to: '/pilates'   },
-  { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     to: '/cycle'     },
-  { key: 'mood',      label: 'Mood',      icon: moodIcon,      to: '/mood'      },
-  { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     to: '/sleep'     },
-  { key: 'skin',      label: 'Skin',      icon: skinIcon,      to: '/skin'      },
-  { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   to: '/grocery'   },
-  { key: 'community', label: 'Community', icon: communityIcon, to: '/community' },
+  { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   img: MM('Pilates'),   to: '/pilates'   },
+  { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     img: MM('Cycle'),     to: '/cycle'     },
+  { key: 'mood',      label: 'Mood',      icon: moodIcon,      img: MM('Mood'),      to: '/mood'      },
+  { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     img: MM('Sleep'),     to: '/sleep'     },
+  { key: 'skin',      label: 'Skin',      icon: skinIcon,      img: MM('Skin'),      to: '/skin'      },
+  { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   img: MM('Grocery'),   to: '/grocery'   },
+  { key: 'community', label: 'Community', icon: communityIcon, img: MM('Community'), to: '/community' },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -533,30 +535,45 @@ export default function Dashboard() {
       {/* ── My Modules (horizontal scroll) ── */}
       <SectionHeader title="My Modules" delay={0.12} />
       <div className="module-scroll overflow-x-auto mb-6" style={anim(0.15)}>
-        <div className="flex gap-4 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-          {MODULE_NAV.map(({ key, label, icon, to }, i) => (
+        <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
+          {MODULE_NAV.map(({ key, label, icon, img, to }, i) => (
             <button
               key={key}
               onClick={() => navigate(to)}
               className="flex flex-col items-center gap-2"
-              style={{ minWidth: '56px' }}
+              style={{ minWidth: '72px' }}
             >
-              {/* Shimmer rim tile — overflow:hidden clips the rotating gradient */}
-              <div style={{ position: 'relative', width: 56, height: 56, borderRadius: 16, overflow: 'hidden' }}>
+              {/* Shimmer rim tile */}
+              <div style={{ position: 'relative', width: 72, height: 88, borderRadius: 18, overflow: 'hidden' }}>
                 <RimSpin duration="3s" delay={i * 0.2} />
-                {/* Inner tile — inset 1px so 1px of rim shows */}
+                {/* Inner tile — inset 1px so rim shows */}
                 <div style={{
                   position: 'absolute', inset: 1,
-                  borderRadius: 15,
-                  background: '#9E8880',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  borderRadius: 17,
+                  overflow: 'hidden',
+                  backgroundImage: `url("${img}")`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                 }}>
-                  <ShimmerIcon src={icon} delay={i * 0.2} />
+                  {/* Bottom gradient for label legibility */}
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: 'linear-gradient(to top, rgba(30,20,16,0.72) 0%, rgba(30,20,16,0.18) 55%, transparent 100%)',
+                  }} />
+                  {/* Module label pinned to bottom */}
+                  <span style={{
+                    position: 'absolute', bottom: 7, left: 0, right: 0,
+                    textAlign: 'center',
+                    fontFamily: 'Cinzel, serif',
+                    fontSize: 7.5,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255,248,242,0.92)',
+                  }}>
+                    {label}
+                  </span>
                 </div>
               </div>
-              <span className="font-garamond text-[10px] tracking-wide" style={{ color: '#7A6A65' }}>
-                {label}
-              </span>
             </button>
           ))}
         </div>

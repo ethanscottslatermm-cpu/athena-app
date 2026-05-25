@@ -13,7 +13,7 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
-        globIgnores: ['**/Themes/**', '**/favicon*', '**/images/dashboard/**'],
+        globIgnores: ['**/Themes/**', '**/favicon*', '**/images/dashboard/**', '**/My Modules/**'],
         runtimeCaching: [
           {
             urlPattern: /\/images\/sessions\/.+\.webp$/i,
@@ -29,6 +29,14 @@ export default defineConfig({
             options: {
               cacheName: 'dashboard-images-v2',
               expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 7 },
+            },
+          },
+          {
+            urlPattern: /\/images\/My%20Modules\/.+\.png$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'module-images-v1',
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
         ],
