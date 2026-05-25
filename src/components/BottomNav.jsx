@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 
 import dashboardIcon from '../assets/icons/nav-dashboard.png'
-import pilatesIcon   from '../assets/icons/nav-pilates.png'
+import pilatesIcon   from '../assets/icons/nav-pilates.svg'
 import communityIcon from '../assets/icons/nav-community.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
