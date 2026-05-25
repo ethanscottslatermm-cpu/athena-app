@@ -29,11 +29,11 @@ const phaseDescriptions = {
 }
 
 export function phaseFromDayOfCycle(dayOfCycle, cycleLength = 28, periodDuration = 5) {
-  const ovDay = cycleLength - 14
-  if (dayOfCycle <= periodDuration) return 'menstrual'
-  if (dayOfCycle < ovDay - 1)       return 'follicular'
-  if (dayOfCycle <= ovDay + 1)      return 'ovulation'
-  return 'luteal'
+  const ovDay = cycleLength - 14          // day 14 for a 28-day cycle
+  if (dayOfCycle <= periodDuration) return 'menstrual'   // days 1–5
+  if (dayOfCycle < ovDay)           return 'follicular'  // days 6–13
+  if (dayOfCycle <= ovDay + 2)      return 'ovulation'   // days 14–16
+  return 'luteal'                                         // days 17–28
 }
 
 // Day of cycle for any date — handles past and future cycles via modulo
@@ -50,7 +50,7 @@ export function getPhaseForDate(date, lastPeriodDate, cycleLength = 28, periodDu
 export function isFertileWindow(date, lastPeriodDate, cycleLength = 28) {
   const day = getDayOfCycleForDate(date, lastPeriodDate, cycleLength)
   const ovDay = cycleLength - 14
-  return day >= ovDay - 5 && day <= ovDay + 1
+  return day >= ovDay - 5 && day <= ovDay + 2
 }
 
 export function isOvulationDay(date, lastPeriodDate, cycleLength = 28) {
