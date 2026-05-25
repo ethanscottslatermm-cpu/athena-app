@@ -4,10 +4,10 @@ import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
 
-import homeIcon       from '../../assets/icons/home.png'
-import libraryIcon    from '../../assets/icons/Library.png'
-import progressIcon   from '../../assets/icons/Progress.png'
-import challengesIcon from '../../assets/icons/challenges.png'
+import homeIcon       from '../../assets/icons/pilates-studio.svg'
+import libraryIcon    from '../../assets/icons/pilates-sessions.svg'
+import progressIcon   from '../../assets/icons/pilates-progress.svg'
+import challengesIcon from '../../assets/icons/pilates-challenges.svg'
 
 function TabIcon({ src, active }) {
   return (
@@ -18,7 +18,7 @@ function TabIcon({ src, active }) {
       flexShrink: 0,
       WebkitMask: `url(${src}) no-repeat center / contain`,
       mask: `url(${src}) no-repeat center / contain`,
-      backgroundColor: active ? '#D4A0A0' : '#5C4A45',
+      backgroundColor: active ? '#2A1C14' : '#6B5248',
       transition: 'background-color 0.2s',
     }} />
   )
@@ -216,14 +216,18 @@ export default function PilatesStudio() {
               className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-all"
               style={{
                 borderBottom: activeTab === tab.id
-                  ? '2px solid #D4A0A0'
+                  ? '2px solid #6B5248'
                   : '2px solid transparent',
               }}
             >
               <TabIcon src={tab.icon} active={activeTab === tab.id} />
               <span
-                className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#D4A0A0' : '#5C4A45' }}
+                className="font-cinzel text-[9px]"
+                style={{
+                  color: activeTab === tab.id ? '#2A1C14' : '#6B5248',
+                  fontWeight: activeTab === tab.id ? 600 : 500,
+                  letterSpacing: '0.12em',
+                }}
               >
                 {tab.label.toUpperCase()}
               </span>
