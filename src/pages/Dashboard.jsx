@@ -17,14 +17,29 @@ const DASHBOARD_HINTS = [
   'Use the rotating Today cards to stay consistent. Each pair changes daily to keep your routine fresh.',
 ]
 
-import pilatesIcon   from '../assets/icons/nav-pilates-new.svg'
-import cycleIcon     from '../assets/icons/nav-cycle-new.svg'
-import moodIcon      from '../assets/icons/nav-mood-new.svg'
 import nourishIcon   from '../assets/icons/nav-nourish.png'
 import sleepIcon     from '../assets/icons/nav-sleep.png'
 import skinIcon      from '../assets/icons/nav-skin.png'
 import communityIcon from '../assets/icons/nav-community.png'
 import groceryIcon   from '../assets/icons/nav-grocery.png'
+
+function IconMood({ color = '#6B5248', size = 22 }) {
+  return (
+    <svg viewBox="0 0 512 512" width={size} height={size} xmlns="http://www.w3.org/2000/svg">
+      <path fill={color} d="M230.32,105.666c-7.017-7.196-8.387-18.749-2.104-26.593c7.145-8.922,20.021-9.403,27.784-1.442c7.763-7.96,20.64-7.479,27.784,1.442c6.283,7.845,4.913,19.397-2.104,26.593l-19.952,20.46c-3.14,3.22-8.315,3.22-11.455,0L230.32,105.666z M436.88,313.44l-24.16-50.8l-40.24-84.48c-2.48-5.2-6.32-9.68-11.12-12.88l-21.04-14c-7.52-5.04-17.28-5.36-25.2-0.88l-44.64,25.44c-4.08,2.08-6.88,5.6-8.16,9.68l2.16,2.16c5.04,5.04,12.88,6.16,19.12,2.64l21.68-12.08c5.92-3.28,12.64-5.04,19.44-5.04c9.84,0,19.28,3.6,26.64,10.16l53.092,68.597L340.72,195.28c-7.6-6.72-18.72-8-27.6-3.04l-40.64,22.64C262.32,220.48,256,231.2,256,242.8c0-11.6-6.32-22.32-16.48-27.92l-40.64-22.64c-8.88-4.96-20-3.68-27.6,3.04l-63.731,56.677l53.092-68.597c7.36-6.56,16.8-10.16,26.64-10.16c6.8,0,13.52,1.76,19.44,5.04l21.68,12.08c6.645,3.748,13.659,2.821,21.28-4.8c-1.28-4.08-4.08-7.6-8.16-9.68l-44.64-25.44c-7.92-4.48-17.68-4.16-25.2,0.88l-21.04,14c-4.8,3.2-8.64,7.68-11.12,12.88l-40.24,84.48l-24.16,50.8c-2.08,4.32-3.12,9.04-3.12,13.76V408h88v-8c-8,0-15.44-1.76-22-5.12l-10.88-5.44c-7.84-3.92-11.04-13.52-7.12-21.44l25.28,12.64c4.4,2.24,9.28,3.36,14.24,3.36h46.16c1.52,0,2.96,0.48,4.24,1.28l11.2,7.44c6.32,4.24,14.8,3.36,20.16-2l3.44-3.44c6.24-6.24,6.24-16.32,0-22.56l-16.4-16.4c-2.88-2.88-6.24-5.12-10-6.72l-45.44-19.52c-2.96-1.28-4.88-4.16-4.88-7.44v-47.36c0-2.08,0.8-4.08,2.32-5.6l18.16-18.16c2.08-2.08,5.28-2.88,8.16-1.92l13.92,4.56c3.2,1.12,5.44,4.16,5.44,7.6V256c0,8.8,7.2,16,16,16h8c8.8,0,16-7.2,16-16c0,8.8,7.2,16,16,16h8c8.8,0,16-7.2,16-16v-2.24c0-3.44,2.24-6.48,5.44-7.6l13.92-4.56c2.88-0.96,6.08-0.16,8.16,1.92l18.16,18.16c1.52,1.52,2.32,3.52,2.32,5.6v47.36c0,3.28-1.92,6.16-4.88,7.44l-45.44,19.52c-3.76,1.6-7.12,3.84-10,6.72l-16.4,16.4c-6.24,6.24-6.24,16.32,0,22.56l3.44,3.44c5.36,5.36,13.84,6.24,20.16,2l11.2-7.44c1.28-0.8,2.72-1.28,4.24-1.28h46.16c4.96,0,9.84-1.12,14.24-3.36L392,368c3.92,7.92,0.72,17.52-7.12,21.44L374,394.88c-6.56,3.36-14,5.12-22,5.12v8h88v-80.8C440,322.48,438.96,317.76,436.88,313.44z M368,440h56c8.836,0,16-7.164,16-16h-88C352,432.836,359.164,440,368,440z M88,440h56c8.836,0,16-7.164,16-16H72C72,432.836,79.164,440,88,440z"/>
+    </svg>
+  )
+}
+
+function IconCycle({ color = '#6B5248', size = 22 }) {
+  return (
+    <svg viewBox="0 0 64 64" width={size} height={size} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <path fill={color} d="M42.89 28.385c.866-4.964 1.013-12.085-2.587-19.319C36.947 2.317 31.43 2.79 31.43 2.79c-6.854-3.082-14.316 3.595-15.717 7.369c-2.02 5.447.683 8.565 2.768 9.684c-.343.509-.867 1.335-.217 2.41c.205.339.618.741 1.432.789c-.26.507-.258 1.05.006 1.499c.283.482.812.754 1.369.906c-.17.679-.149 1.453.332 2.149c.23.335.664.733 1.411.733c.144 0 .276-.015.396-.033c.309.77.939 1.873 2.392 1.873c1.315 0 3.139-.997 5.866-3.199c-.272 4.64-10.369 6.84-10.369 10.57c0 2.702 2.523 3.449 2.523 3.449s-4.185 1.59-6.446 5.729c-.104.092-.216.171-.305.282c-.282.35-.568.912-.541 1.708a11.998 11.998 0 0 0-.571 3.679c0 6.689 5.32 9.613 11.607 9.613h10.27s.699-2.042-.629-9.146c-.062-.325-.108-.633-.156-.941l.008-.004l-.141-.987c-.008-.073-.018-.148-.025-.221c5.624-1.52 11.631-3.796 12.219-6.695c.809-3.985-4.183-12.617-6.022-15.621m-6.587-3.622a7.77 7.77 0 0 0-.156 2.325l-4.459-.295l.043-.035a24 24 0 0 1 1.016-.778c2.123-1.57 3.298-2.717 1.991-7.214c.429-.373.761-.864.983-1.431c.695 1.449 1.364 3.91.582 7.428m-5.205 1.221c-2.88 2.357-4.51 3.184-5.497 3.184c-.937 0-1.297-.742-1.601-1.623c-.085-.243-.24-.31-.43-.31c-.202 0-.443.068-.68.083c-.966-.558-.283-2.117.316-3.017c-.887.074-2.07.188-2.545-.943c.336-.604.565-.986.246-1.371c-.021-.023-.064-.032-.127-.032c-.195 0-.569.09-.923.09c-.304 0-.592-.066-.739-.312c-.697-1.151 1.09-1.449.844-3.607c-.133-1.186-2.345-1.411-2.772-5.726c-.09-.917.698-1.352 1.8-1.352c1.395 0 3.293.695 4.557 1.992c3.278 3.373 5.059 3.951 5.895 3.951c.435 0 .613-.157.613-.157l.018-.01a5.215 5.215 0 0 1-.641-1.444c-.547-2.031.227-3.935 1.73-4.247c.143-.03.287-.044.431-.044c1.377 0 2.786 1.316 3.282 3.156c.496 1.833-.09 3.549-1.313 4.099c1.768 5.476.077 5.562-2.464 7.64M20.279 46.719c.053 0 .082.002.082.002s1.57-.375 2.959.316c-.957-1.068-2.389-.636-2.389-1.013c0-.735 1.158-1.013 1.158-1.013c2.054 0 3.022.979 3.934 1.47v5.88s-4.273 1.386-6.963.197c-.763-.722-1.329-1.855-1.68-3.459c-.497-2.277 2.374-2.38 2.899-2.38M36.783 61h-9.416c-2.488 0-10.607-.621-10.607-8.613c0-.527.041-1.026.104-1.508c1.115 2.951 3.088 3.629 4.656 3.629c2.182 0 3.624-.253 4.564-.541l-.014.426c5.093-.417 8.346-1.471 9.837-2.063c.038.234.071.464.117.709c.847 4.522.843 6.91.759 7.961m11.149-17.192c-.689 3.397-12.399 6.536-20.334 7.881l-.234-4.45c3.391-.839 12.908-3.354 14.534-5.539l.347-.465l-.232-.533c-.908-2.074-6.248-9.193-6.248-9.193l2.416 8.309l-.053.094c-.603 1.066-1.235 2.188-1.721 3.546c-1.707.53-4.99 1.506-8.499 2.299h-.952c-.244 0-.572-.211-.986-.478c-.83-.534-1.967-1.266-3.879-1.266c-1.246 0-1.908.496-2.244.912a2.21 2.21 0 0 0-.426.852c-.17.021-.354.059-.539.101c2.061-2.753 4.906-3.88 5.092-3.951l2.701-1.022l-2.762-.87c-.186-.059-1.814-.626-1.814-2.493c0-1.225 2.17-2.574 4.268-3.879c2.523-1.568 5.344-3.322 5.98-5.821l3.943.261c.856 4.167 4.686 7.002 4.686 7.002s.922-2.014 1.631-5.261c2.387 4.021 5.948 10.892 5.325 13.964m-10.295-.745c.679-1.605 1.547-2.914 2.255-4.348c.508.942.942 1.791 1.204 2.388c-.457.613-1.782 1.293-3.459 1.96"/>
+      <path fill={color} d="M31.652 12.844c.242-.245.533-.466.822-.735a2.407 2.407 0 0 0-1.141.302a1.934 1.934 0 0 0-.838.916a2.182 2.182 0 0 0-.107 1.322c.076.356.229.69.432.979c-.166.025-.318.099-.391.246c.246.039.389.146.529.248c.139.108.264.22.371.344a2 2 0 0 1 .277.393c.078.147.131.33.168.587c.209-.113.334-.368.324-.649c-.004-.282-.143-.557-.324-.764a1.247 1.247 0 0 0-.678-.4a1.204 1.204 0 0 0-.158-.014c-.068-.758-.102-1.43.146-1.97c.121-.297.324-.555.568-.805"/>
+      <path fill={color} d="M21.748 16.491c-.23.323-.427.608-.678.85a1.472 1.472 0 0 0-.143-.654c-.148-.351-.357-.631-.5-.903c-.16-.266-.262-.507-.295-.778c-.033-.272.025-.582.096-.93a1.225 1.225 0 0 0-.598.847c-.084.401.064.843.254 1.167c.197.331.42.593.625.84c.143.181.257.368.342.586a2.47 2.47 0 0 1-.713.391c.406.266.943.297 1.383.105c.445-.18.773-.523 1.023-.876c.248-.357.424-.735.572-1.108c.168-.366.256-.727.551-1.05c-.486-.077-.9.272-1.178.563c-.296.305-.522.643-.741.95"/>
+    </svg>
+  )
+}
 
 // Phase Guidance cards still use images — module tiles do not
 const MODULE_IMAGES = {
@@ -45,11 +60,11 @@ function getDayOffset() {
 // Today check-in pool — 5 cards, displayed 2 at a time, step-by-2 to avoid day-over-day repeats
 // Day 0: [Mood, Sleep]  Day 1: [Skin, Cycle]  Day 2: [Body Fuel, Mood]  …
 const TODAY_POOL = [
-  { key: 'mood',    label: 'Mood',      sub: 'How are you feeling today?',   icon: moodIcon,    img: '/images/dashboard/mood.png',    to: '/mood'    },
-  { key: 'sleep',   label: 'Sleep',     sub: 'How did you sleep last night?', icon: sleepIcon,   img: '/images/dashboard/sleep.png',   to: '/sleep'   },
-  { key: 'skin',    label: 'Skin',      sub: 'How is your skin today?',       icon: skinIcon,    img: '/images/dashboard/skin.png',    to: '/skin'    },
-  { key: 'cycle',   label: 'Cycle',     sub: 'Log your cycle today',          icon: cycleIcon,   img: '/images/dashboard/Cycle.png',   to: '/cycle'   },
-  { key: 'nourish', label: 'Body Fuel', sub: 'Fuel your body today',          icon: nourishIcon, img: '/images/dashboard/nourish.png', to: '/nourish' },
+  { key: 'mood',    label: 'Mood',      sub: 'How are you feeling today?',   SvgIcon: IconMood,  img: '/images/dashboard/mood.png',    to: '/mood'    },
+  { key: 'sleep',   label: 'Sleep',     sub: 'How did you sleep last night?', icon: sleepIcon,    img: '/images/dashboard/sleep.png',   to: '/sleep'   },
+  { key: 'skin',    label: 'Skin',      sub: 'How is your skin today?',       icon: skinIcon,     img: '/images/dashboard/skin.png',    to: '/skin'    },
+  { key: 'cycle',   label: 'Cycle',     sub: 'Log your cycle today',          SvgIcon: IconCycle, img: '/images/dashboard/Cycle.png',   to: '/cycle'   },
+  { key: 'nourish', label: 'Body Fuel', sub: 'Fuel your body today',          icon: nourishIcon,  img: '/images/dashboard/nourish.png', to: '/nourish' },
 ]
 
 // Phase Guidance rotations — 4 variants picking 3 of 4 phase cards each day.
@@ -200,11 +215,11 @@ const PHASE_CONTENT = {
 const MM = (name) => `/images/My%20Modules/${name}.png`
 
 const MODULE_NAV = [
-  { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   img: MM('Pilates'),   to: '/pilates'   },
-  { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     img: MM('Cycle'),     to: '/cycle'     },
-  { key: 'mood',      label: 'Mood',      icon: moodIcon,      img: MM('Mood'),      to: '/mood'      },
-  { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     img: MM('Sleep'),     to: '/sleep'     },
-  { key: 'skin',      label: 'Skin',      icon: skinIcon,      img: MM('Skin'),      to: '/skin'      },
+  { key: 'pilates',   label: 'Pilates',   img: MM('Pilates'),   to: '/pilates'   },
+  { key: 'cycle',     label: 'Cycle',     img: MM('Cycle'),     to: '/cycle'     },
+  { key: 'mood',      label: 'Mood',      img: MM('Mood'),      to: '/mood'      },
+  { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,      img: MM('Sleep'),     to: '/sleep'     },
+  { key: 'skin',      label: 'Skin',      icon: skinIcon,       img: MM('Skin'),      to: '/skin'      },
   { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   img: MM('Grocery'),   to: '/grocery'   },
   { key: 'community', label: 'Community', icon: communityIcon, img: MM('Community'), to: '/community' },
 ]
@@ -581,7 +596,7 @@ export default function Dashboard() {
       {/* ── Today's Check-ins (daily rotation) ── */}
       <SectionHeader title="Today" delay={0.17} />
       <div className="grid grid-cols-2 gap-3 px-4 max-w-md mx-auto mb-6" style={anim(0.19)}>
-        {todayPair.map(({ key, label, sub, icon, img, to }, i) => (
+        {todayPair.map(({ key, label, sub, icon, SvgIcon, img, to }, i) => (
           <div key={key} style={{ borderRadius: 16, overflow: 'hidden' }}>
             <button
               onClick={() => navigate(to)}
@@ -601,7 +616,7 @@ export default function Dashboard() {
                 <div className="absolute inset-0" style={{ borderRadius: 15, background: 'linear-gradient(to top, rgba(30,18,12,0.75) 0%, rgba(30,18,12,0.30) 55%, transparent 100%)' }} />
               )}
               <div className="relative z-10">
-                <ShimmerIcon src={icon} delay={i * 0.5} />
+                {SvgIcon ? <SvgIcon color="#F0EAE4" size={22} /> : <ShimmerIcon src={icon} delay={i * 0.5} />}
                 {img ? (
                   <span style={{
                     display: 'inline-block',
