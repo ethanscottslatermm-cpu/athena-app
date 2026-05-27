@@ -204,10 +204,10 @@ export default function WellnessWeatherWidget({ weather, phase }) {
         {tab === 'conditions' && (
           <div key="conditions" style={{ animation: 'wTabFade 0.22s ease both' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <StatTile Icon={Thermometer} label="Temperature" value={`${data.temp}°F`}   rimDelay={0}    image="/images/dashboard/temperature.png" />
-              <StatTile Icon={Sun}         label="UV Index"    value={`UV ${data.uv}`}     levelColor={uvLvl.color}  rimDelay={0.25} image="/images/dashboard/uv%20index.png" />
-              <StatTile Icon={Wind}        label="Air Quality" value={`AQI ${data.aqi}`}   levelColor={aqiLvl.color} rimDelay={0.5}  image="/images/dashboard/air%20quality.png" />
-              <StatTile Icon={Droplets}    label="Humidity"    value={`${data.humidity}%`} rimDelay={0.75} image="/images/dashboard/humidity.png" />
+              <StatTile Icon={Thermometer} label="Temperature" value={`${data.temp}°F`}   rimDelay={0}    image="/images/dashboard/Temperature.png" />
+              <StatTile Icon={Sun}         label="UV Index"    value={`UV ${data.uv}`}     levelColor={uvLvl.color}  rimDelay={0.25} image="/images/dashboard/UV%20Index.png" />
+              <StatTile Icon={Wind}        label="Air Quality" value={`AQI ${data.aqi}`}   levelColor={aqiLvl.color} rimDelay={0.5}  image="/images/dashboard/Air%20Quality.png" />
+              <StatTile Icon={Droplets}    label="Humidity"    value={`${data.humidity}%`} rimDelay={0.75} image="/images/dashboard/Humidity.png" />
             </div>
           </div>
         )}
