@@ -198,6 +198,52 @@ const PHASE_CONTENT = {
 
 const MM = (name) => `/images/My%20Modules/${name}.png`
 
+const SESSION_IMG = {
+  'Dynamic Stretch & Tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
+  'Glute Awakening':          '/images/sessions/Glute Awakening.webp',
+  'Grounding Evening Flow':   '/images/sessions/Grounding Evening Flow.webp',
+  'Pelvic Floor Reset':       '/images/sessions/Pelvic Floor Reset.webp',
+  'Restorative Mat Session':  '/images/sessions/Restorative Mat Session.webp',
+  'Rising Energy Core':       '/images/sessions/Rising Energy Core.webp',
+  'Spinal Release & Breathe': '/images/sessions/Spinal Release & Breathe.webp',
+  'Supine Surrender Flow':    '/images/sessions/Supine Surrender Flow.webp',
+  'Arm & Shoulder Sculpt':    '/images/sessions/Arm & Shoulder Sculpt.webp',
+  'Wind Down Restoration':    '/images/sessions/Wind Down Restoration.webp',
+  'Mindful Core & Breathe':   '/images/sessions/Mindful Core & Breathing.webp',
+  'Intuitive Movement':       '/images/sessions/Intuitive Movement.webp',
+  'Peak Power Core':          '/images/sessions/Peak Power Core.webp',
+  'Strong Arms & Back':       '/images/sessions/Strong Arms & Back.webp',
+  'Athletic Flow':            '/images/sessions/Athletic Flow.webp',
+  'Full Body Foundation':     '/images/sessions/Full Body Foundation.webp',
+  'Gentle Restoration Flow':  '/images/sessions/Gentle Restoration Flow.webp',
+  'Glute Sculptor':           '/images/sessions/Glute Sculptor.webp',
+  'Total Body Burn':          '/images/sessions/Total Body Burn.webp',
+  'Hip & Glute Release':      '/images/sessions/Hip & Glute Release.webp',
+}
+
+const FEATURED_WORKOUTS = [
+  { title: 'Dynamic Stretch & Tone',   duration: 30, focus: 'Full Body',   difficulty: 'Intermediate' },
+  { title: 'Glute Awakening',          duration: 25, focus: 'Glutes',      difficulty: 'Beginner'     },
+  { title: 'Grounding Evening Flow',   duration: 20, focus: 'Flexibility', difficulty: 'Beginner'     },
+  { title: 'Peak Power Core',          duration: 35, focus: 'Core',        difficulty: 'Advanced'     },
+  { title: 'Restorative Mat Session',  duration: 25, focus: 'Recovery',    difficulty: 'Beginner'     },
+  { title: 'Rising Energy Core',       duration: 30, focus: 'Core',        difficulty: 'Intermediate' },
+  { title: 'Spinal Release & Breathe', duration: 20, focus: 'Spine',       difficulty: 'Beginner'     },
+  { title: 'Athletic Flow',            duration: 40, focus: 'Full Body',   difficulty: 'Advanced'     },
+  { title: 'Wind Down Restoration',    duration: 20, focus: 'Recovery',    difficulty: 'Beginner'     },
+  { title: 'Hip & Glute Release',      duration: 25, focus: 'Hips',        difficulty: 'Beginner'     },
+  { title: 'Total Body Burn',          duration: 45, focus: 'Full Body',   difficulty: 'Advanced'     },
+  { title: 'Gentle Restoration Flow',  duration: 20, focus: 'Recovery',    difficulty: 'Beginner'     },
+  { title: 'Mindful Core & Breathe',   duration: 25, focus: 'Core',        difficulty: 'Intermediate' },
+  { title: 'Arm & Shoulder Sculpt',    duration: 30, focus: 'Upper Body',  difficulty: 'Intermediate' },
+  { title: 'Full Body Foundation',     duration: 35, focus: 'Full Body',   difficulty: 'Beginner'     },
+  { title: 'Glute Sculptor',           duration: 30, focus: 'Glutes',      difficulty: 'Intermediate' },
+  { title: 'Pelvic Floor Reset',       duration: 20, focus: 'Core',        difficulty: 'Beginner'     },
+  { title: 'Supine Surrender Flow',    duration: 25, focus: 'Flexibility', difficulty: 'Beginner'     },
+  { title: 'Strong Arms & Back',       duration: 30, focus: 'Upper Body',  difficulty: 'Intermediate' },
+  { title: 'Intuitive Movement',       duration: 30, focus: 'Full Body',   difficulty: 'Beginner'     },
+]
+
 const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   img: MM('Pilates'),   to: '/pilates'   },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     img: MM('Cycle'),     to: '/cycle'     },
@@ -303,7 +349,8 @@ export default function Dashboard() {
   const { phase, color } = usePhase()
   const { profile } = useProfile()
   const navigate = useNavigate()
-  const [weather, setWeather] = useState(null)
+  const [weather,    setWeather]    = useState(null)
+  const [heroSlide,  setHeroSlide]  = useState(0)
 
   // ── Exit / sign-out ──────────────────────────────────────────────────────────
   const [exiting,        setExiting]        = useState(false)
@@ -315,7 +362,8 @@ export default function Dashboard() {
   function doSignOut() {
     if (doneRef.current) return
     doneRef.current = true
-    supabase.auth.signOut().then(() => navigate('/login', { replace: true }))
+    navigate('/login', { replace: true })
+    supabase.auth.signOut()
   }
 
   useEffect(() => {
@@ -355,7 +403,32 @@ export default function Dashboard() {
   const todayPair     = [TODAY_POOL[(dayOffset * 2) % poolSize], TODAY_POOL[(dayOffset * 2 + 1) % poolSize]]
   const phaseRotation = PHASE_GUIDANCE_ROTATIONS[dayOffset % PHASE_GUIDANCE_ROTATIONS.length]
 
+  // ── Featured workout (daily rotation) ───────────────────────────────────────
+  const featuredWorkout = FEATURED_WORKOUTS[dayOffset % FEATURED_WORKOUTS.length]
+  const featuredImg     = SESSION_IMG[featuredWorkout.title] ?? null
+
+  // Auto-transition hero from phase → featured after 3.5 s
   useEffect(() => {
+    const t = setTimeout(() => setHeroSlide(1), 3500)
+    return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    const CACHE_KEY = 'athena_weather'
+    const CACHE_TTL = 3_600_000
+
+    const cached = (() => {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY)
+        if (!raw) return null
+        const { data, ts } = JSON.parse(raw)
+        if (Date.now() - ts < CACHE_TTL) return data
+      } catch (_) {}
+      return null
+    })()
+
+    if (cached) { setWeather(cached); return }
+
     if (!navigator.geolocation) return
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
@@ -364,11 +437,13 @@ export default function Dashboard() {
             `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,uv_index,relative_humidity_2m&temperature_unit=fahrenheit&timezone=auto`
           )
           const { current } = await res.json()
-          setWeather({
+          const data = {
             temp:     Math.round(current.temperature_2m),
             uv:       Math.round(current.uv_index ?? 0),
             humidity: Math.round(current.relative_humidity_2m ?? 58),
-          })
+          }
+          setWeather(data)
+          localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }))
         } catch (_) {}
       },
       () => {}
@@ -485,49 +560,121 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Phase Hero ── */}
+      {/* ── Phase Hero (two-slide: phase → featured workout) ── */}
       <div className="px-4 max-w-md mx-auto mb-5" style={anim(0.07)}>
-        <div
-          className="rounded-2xl overflow-hidden relative"
-          style={{
-            backgroundImage: 'url("/images/dashboard/phase-hero.png")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center 18%',
-            border: `1px solid ${activeColor}50`,
-          }}
-        >
-          {/* Linen wash — keeps dark text legible over the warm light image */}
+        <div style={{ position: 'relative' }}>
+
+          {/* Slide 0 — Phase ring (natural height anchors the container) */}
           <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'linear-gradient(to right, rgba(242,237,232,0.38) 0%, rgba(242,237,232,0.62) 55%, rgba(242,237,232,0.72) 100%)',
-          }} />
-          <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}14 0%, transparent 65%)`,
-          }} />
-          <div className="relative flex items-center gap-2 p-5">
-            <PhaseRing phase={phase} day={dayOfCycle} cycleLength={cycleLength} />
-            <div className="flex-1 min-w-0 pl-1">
-              {phaseMeta && (
-                <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase px-2 py-1 rounded-full mb-3 inline-block"
-                  style={{ background: 'rgba(59,51,48,0.12)', color: '#3B3330' }}>
-                  {phaseMeta.label}
-                </span>
-              )}
-              <h2 className="font-cinzel text-[20px] text-brown leading-tight mt-2 mb-1">
-                {content?.headline ?? 'Your Journey'}
-              </h2>
-              <p className="font-garamond text-sm leading-relaxed" style={{ color: '#7A6A65' }}>
-                {content?.sub ?? 'Set up your cycle to unlock phase guidance.'}
-              </p>
-              <button
-                onClick={() => navigate(content ? '/cycle' : '/settings')}
-                className="flex items-center gap-1 mt-3 font-cinzel text-[9px] tracking-[0.25em] uppercase transition-opacity hover:opacity-100"
-                style={{ color: '#3B3330', opacity: 0.85 }}>
-                {content ? 'Cycle Guide' : 'Set Up'} <ChevronRight size={10} />
-              </button>
+            opacity: heroSlide === 0 ? 1 : 0,
+            transition: 'opacity 0.7s ease',
+            pointerEvents: heroSlide === 0 ? 'auto' : 'none',
+          }}>
+            <div
+              className="rounded-2xl overflow-hidden relative"
+              style={{
+                backgroundImage: 'url("/images/dashboard/phase-hero.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center 18%',
+                border: `1px solid ${activeColor}50`,
+              }}
+            >
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(242,237,232,0.38) 0%, rgba(242,237,232,0.62) 55%, rgba(242,237,232,0.72) 100%)' }} />
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}14 0%, transparent 65%)` }} />
+              <div className="relative flex items-center gap-2 p-5">
+                <PhaseRing phase={phase} day={dayOfCycle} cycleLength={cycleLength} />
+                <div className="flex-1 min-w-0 pl-1">
+                  {phaseMeta && (
+                    <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase px-2 py-1 rounded-full mb-3 inline-block"
+                      style={{ background: 'rgba(59,51,48,0.12)', color: '#3B3330' }}>
+                      {phaseMeta.label}
+                    </span>
+                  )}
+                  <h2 className="font-cinzel text-[20px] text-brown leading-tight mt-2 mb-1">
+                    {content?.headline ?? 'Your Journey'}
+                  </h2>
+                  <p className="font-garamond text-sm leading-relaxed" style={{ color: '#7A6A65' }}>
+                    {content?.sub ?? 'Set up your cycle to unlock phase guidance.'}
+                  </p>
+                  <button
+                    onClick={() => navigate(content ? '/cycle' : '/settings')}
+                    className="flex items-center gap-1 mt-3 font-cinzel text-[9px] tracking-[0.25em] uppercase transition-opacity hover:opacity-100"
+                    style={{ color: '#3B3330', opacity: 0.85 }}>
+                    {content ? 'Cycle Guide' : 'Set Up'} <ChevronRight size={10} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* Slide 1 — Featured workout (absolutely fills the same space) */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            opacity: heroSlide === 1 ? 1 : 0,
+            transition: 'opacity 0.7s ease',
+            pointerEvents: heroSlide === 1 ? 'auto' : 'none',
+          }}>
+            <div
+              className="rounded-2xl overflow-hidden relative cursor-pointer"
+              style={{
+                height: '100%',
+                ...(featuredImg
+                  ? { backgroundImage: `url("${featuredImg}")`, backgroundSize: 'cover', backgroundPosition: 'center top' }
+                  : { background: `linear-gradient(135deg, ${activeColor}30, rgba(242,237,232,0.85))` }
+                ),
+                border: `1px solid ${activeColor}50`,
+              }}
+              onClick={() => navigate('/pilates')}
+            >
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(59,51,48,0.04) 0%, rgba(59,51,48,0.48) 50%, rgba(59,51,48,0.9) 100%)' }} />
+              <div className="relative z-10 p-5 flex flex-col h-full justify-between">
+                <span style={{
+                  alignSelf: 'flex-start',
+                  background: 'rgba(42,28,20,0.55)', backdropFilter: 'blur(4px)',
+                  borderRadius: 20, padding: '3px 12px',
+                  color: '#F5EDE3', fontSize: '0.6rem',
+                  letterSpacing: '0.14em', fontFamily: 'Cinzel, serif',
+                  textTransform: 'uppercase',
+                }}>Today's Studio</span>
+                <div>
+                  <h2 className="font-cinzel text-white leading-tight mb-2"
+                    style={{ fontSize: '1.15rem', fontWeight: 500, textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}>
+                    {featuredWorkout.title}
+                  </h2>
+                  <div className="flex gap-2 flex-wrap mb-3">
+                    {[`${featuredWorkout.duration} min`, featuredWorkout.focus, featuredWorkout.difficulty].map(pill => (
+                      <span key={pill} className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
+                        style={{ background: 'rgba(242,237,232,0.75)', border: '1px solid rgba(212,160,160,0.45)', color: '#C4859A' }}>
+                        {pill}
+                      </span>
+                    ))}
+                  </div>
+                  <button className="flex items-center gap-1 font-cinzel text-[9px] tracking-[0.25em] uppercase"
+                    style={{ color: '#F5EDE3', opacity: 0.88 }}>
+                    Begin Session <ChevronRight size={10} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Slide indicators */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 8 }}>
+          {[0, 1].map(i => (
+            <button
+              key={i}
+              onClick={() => setHeroSlide(i)}
+              style={{
+                width: heroSlide === i ? 18 : 6,
+                height: 6,
+                borderRadius: 3,
+                background: heroSlide === i ? activeColor : 'rgba(107,82,72,0.22)',
+                border: 'none', padding: 0, cursor: 'pointer',
+                transition: 'all 0.35s ease',
+              }}
+            />
+          ))}
         </div>
       </div>
 
