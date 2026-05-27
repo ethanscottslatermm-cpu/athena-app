@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react'
+﻿import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
@@ -118,6 +118,17 @@ function IconChallenges({ color }) {
 
 const TAB_ICONS = { home: IconStudio, library: IconSessions, progress: IconProgress, challenges: IconChallenges }
 
+const INTRO_KEY      = 'athena_pilates_intro_ts'
+const INTRO_COOLDOWN = 20 * 60 * 1000 // 20 minutes
+
+function shouldShowIntro() {
+  try {
+    const ts = localStorage.getItem(INTRO_KEY)
+    if (!ts) return true
+    return Date.now() - Number(ts) > INTRO_COOLDOWN
+  } catch { return true }
+}
+
 function TabIcon({ tabId, active }) {
   const Icon = TAB_ICONS[tabId]
   return <Icon color={active ? '#2A1C14' : '#6B5248'} />
@@ -163,6 +174,24 @@ export default function PilatesStudio() {
   const { user }    = useAuth()
   const { profile } = useProfile()
   const phaseData   = usePhase()
+
+  const introRef  = useRef(null)
+  const [showIntro,   setShowIntro]   = useState(() => shouldShowIntro())
+  const [skipVisible, setSkipVisible] = useState(false)
+
+  function dismissIntro() {
+    try { localStorage.setItem(INTRO_KEY, String(Date.now())) } catch {}
+    setShowIntro(false)
+    setSkipVisible(false)
+  }
+
+  useEffect(() => {
+    if (!showIntro || !introRef.current) return
+    introRef.current.muted = true
+    introRef.current.play().catch(dismissIntro)
+    const t = setTimeout(() => setSkipVisible(true), 2000)
+    return () => clearTimeout(t)
+  }, [showIntro])
 
   const [activeTab,        setActiveTab]        = useState('home')
   const [selectedSession,  setSelectedSession]  = useState(null)  // → SessionDetail overlay
@@ -268,6 +297,51 @@ export default function PilatesStudio() {
 
   return (
     <div className="relative min-h-[100svh] overflow-hidden bg-[#F3EAE7]">
+
+      {/* ── Pilates Studio intro video ──────────────────────────────────────── */}
+      {showIntro && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: '#0E0A08' }}>
+          <video
+            ref={introRef}
+            src="/pilates-studio.mp4"
+            playsInline
+            preload="auto"
+            onEnded={dismissIntro}
+            onError={dismissIntro}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+          {skipVisible && (
+            <button
+              onClick={dismissIntro}
+              style={{
+                position: 'absolute', bottom: 52, right: 24,
+                background: 'rgba(242,237,232,0.15)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(242,237,232,0.28)',
+                borderRadius: 20,
+                padding: '9px 22px',
+                fontFamily: 'Cinzel, serif',
+                fontSize: 10,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'rgba(242,237,232,0.85)',
+                cursor: 'pointer',
+                animation: 'skipFadeIn 0.4s ease forwards',
+              }}
+            >
+              Skip
+            </button>
+          )}
+          <style>{`
+            @keyframes skipFadeIn {
+              from { opacity: 0; transform: translateY(6px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
+        </div>
+      )}
+
       <style>{`
         @keyframes shimmerSlide {
           0%   { background-position: -200% 0; }
