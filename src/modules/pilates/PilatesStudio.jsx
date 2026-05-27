@@ -118,7 +118,7 @@ function IconChallenges({ color }) {
 
 const TAB_ICONS = { home: IconStudio, library: IconSessions, progress: IconProgress, challenges: IconChallenges }
 
-const INTRO_KEY      = 'athena_pilates_intro_ts'
+const INTRO_KEY      = 'athena_pilates_intro_ts_v2'
 const INTRO_COOLDOWN = 20 * 60 * 1000 // 20 minutes
 
 function shouldShowIntro() {
@@ -188,7 +188,7 @@ export default function PilatesStudio() {
   useEffect(() => {
     if (!showIntro || !introRef.current) return
     introRef.current.muted = true
-    introRef.current.play().catch(dismissIntro)
+    introRef.current.play().catch(() => {}) // silent — onError handles real failures
     const t = setTimeout(() => setSkipVisible(true), 2000)
     return () => clearTimeout(t)
   }, [showIntro])
@@ -304,6 +304,8 @@ export default function PilatesStudio() {
           <video
             ref={introRef}
             src="/pilates-studio.mp4"
+            autoPlay
+            muted
             playsInline
             preload="auto"
             onEnded={dismissIntro}
