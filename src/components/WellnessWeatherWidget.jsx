@@ -110,21 +110,24 @@ function StatTile({ Icon, label, value, levelColor, rimDelay = 0, image }) {
         display: 'flex', flexDirection: 'column', gap: 5,
       }}>
         {image && (
-          <div style={{ position: 'absolute', inset: 0, borderRadius: 11, background: 'linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 11, background: 'linear-gradient(to top, rgba(20,14,10,0.62) 0%, rgba(20,14,10,0.18) 55%, rgba(255,255,255,0.08) 100%)' }} />
         )}
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Icon size={13} color="#6B5248" strokeWidth={1.5} />
+            <Icon size={13} color={image ? 'rgba(244,239,230,0.75)' : '#6B5248'} strokeWidth={1.5} />
             {levelColor && <LevelDot color={levelColor} />}
           </div>
           <p style={{
-            fontFamily: 'Cinzel, serif', fontSize: '1.2rem', fontWeight: 700,
-            color: '#2A1C14', margin: 0, lineHeight: 1.1,
+            fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic',
+            fontSize: '1.45rem', fontWeight: 600, lineHeight: 1.1, margin: 0,
+            color: image ? '#F4EFE6' : '#2A1C14',
+            textShadow: image ? '0 1px 6px rgba(0,0,0,0.45)' : 'none',
           }}>{value}</p>
           <p style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: 10, fontWeight: 500,
-            color: '#6B5248', letterSpacing: '0.1em',
-            textTransform: 'uppercase', margin: 0,
+            fontFamily: 'Cinzel, serif', fontSize: 9, fontWeight: 500,
+            letterSpacing: '0.13em', textTransform: 'uppercase', margin: 0,
+            color: image ? 'rgba(244,239,230,0.82)' : '#6B5248',
+            textShadow: image ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
           }}>{label}</p>
         </div>
       </div>
