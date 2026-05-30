@@ -6,8 +6,9 @@ import {
   Sparkles, Users, Bell, Palette, Shield, Info, BedDouble,
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
-import { useAuth }  from '../hooks/useAuth'
-import { useAdmin } from '../hooks/useAdmin'
+import { useAuth }    from '../hooks/useAuth'
+import { useAdmin }   from '../hooks/useAdmin'
+import { useProfile } from '../hooks/useProfile'
 import athenaHero   from '../assets/athena-hero.webp'
 
 // ─── Section → field map ──────────────────────────────────────────────────────
@@ -323,12 +324,14 @@ function Brackets() {
 export default function Settings() {
   const { user }       = useAuth()
   const { isAdmin }    = useAdmin()
+  const { profile: ctxProfile, setProfile: setCtxProfile } = useProfile()
   const navigate       = useNavigate()
   const fileRef    = useRef(null)
+  const initRef    = useRef(false)
 
-  const [profile,   setProfile]   = useState(null)
-  const [draft,     setDraft]     = useState({})
-  const [avatarUrl, setAvatar]    = useState(null)
+  const [profile,   setProfile]   = useState(() => ctxProfile ?? null)
+  const [draft,     setDraft]     = useState(() => ctxProfile ?? {})
+  const [avatarUrl, setAvatar]    = useState(() => ctxProfile?.avatar_url ?? null)
   const [uploading, setUploading] = useState(false)
 
   const [openSections, setOpenSections] = useState(() => {
@@ -347,22 +350,16 @@ export default function Settings() {
   const [feedbackTxt, setFeedbackTxt] = useState('')
 
   useEffect(() => {
-    if (!user) return
-    supabase.from('profiles').select('*').eq('id', user.id).single()
-      .then(({ data }) => {
-        if (!data) return
-        setProfile(data)
-        setDraft(data)
-        setAvatar(data.avatar_url)
-        // Auto-open cycle section when last period date is not set
-        const hasDate = data.last_period_date
-          ?? data.preferences?.last_period_date
-          ?? null
-        if (!hasDate) {
-          setOpenSections(p => p.includes('cycle') ? p : [...p, 'cycle'])
-        }
-      })
-  }, [user?.id])
+    if (initRef.current || !ctxProfile) return
+    initRef.current = true
+    setProfile(ctxProfile)
+    setDraft(ctxProfile)
+    setAvatar(ctxProfile.avatar_url)
+    const hasDate = ctxProfile.last_period_date ?? ctxProfile.preferences?.last_period_date ?? null
+    if (!hasDate) {
+      setOpenSections(p => p.includes('cycle') ? p : [...p, 'cycle'])
+    }
+  }, [ctxProfile])
 
   useEffect(() => {
     localStorage.setItem('athena_settings_open_sections', JSON.stringify(openSections))
@@ -385,11 +382,11 @@ export default function Settings() {
     setSecSaving(s => ({ ...s, [id]: true }))
     const { error } = await supabase
       .from('profiles')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', user.id)
+      .upsert({ id: user.id, ...updates, updated_at: new Date().toISOString() })
     setSecSaving(s => ({ ...s, [id]: false }))
     if (error) { showToast('Something went wrong. Try again.', 'error'); return }
     setProfile(p => ({ ...p, ...updates }))
+    setCtxProfile(p => ({ ...p, ...updates }))
     setSecSaved(s => ({ ...s, [id]: true }))
     showToast('Settings saved')
     setTimeout(() => setSecSaved(s => ({ ...s, [id]: false })), 1500)
@@ -426,6 +423,7 @@ export default function Settings() {
     if (dbError) { showToast('Could not save photo', 'error'); setUploading(false); return }
     setAvatar(url)
     setProfile(p => ({ ...p, avatar_url: url }))
+    setCtxProfile(p => ({ ...p, avatar_url: url }))
     setUploading(false)
     showToast('Photo updated')
   }

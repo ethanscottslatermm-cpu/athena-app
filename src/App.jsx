@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+﻿import { useState, useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useProfile } from './hooks/useProfile'
@@ -8,28 +8,29 @@ import WelcomeFlow  from './components/WelcomeFlow'
 import { useSwipeNav } from './hooks/useSwipeNav'
 import { useAdmin }    from './hooks/useAdmin'
 import SwipeHint       from './components/SwipeHint'
+import { ProfileProvider } from './contexts/ProfileContext'
 
-import Login        from './pages/Login'
-import SeedPage     from './pages/SeedPage'
-import Onboarding   from './pages/Onboarding'
-import Dashboard    from './pages/Dashboard'
-import PilatesStudio from './pages/PilatesStudio'
-import Community    from './pages/Community'
-import CycleTracker from './pages/CycleTracker'
-import MoodMind     from './pages/MoodMind'
-import Nourish      from './pages/Nourish'
-import Sleep        from './pages/Sleep'
-import Skin         from './pages/Skin'
-import Settings     from './pages/Settings'
-import AdminPanel   from './pages/AdminPanel'
+const Login         = lazy(() => import('./pages/Login'))
+const SeedPage      = lazy(() => import('./pages/SeedPage'))
+const Onboarding    = lazy(() => import('./pages/Onboarding'))
+const Dashboard     = lazy(() => import('./pages/Dashboard'))
+const PilatesStudio = lazy(() => import('./pages/PilatesStudio'))
+const Community     = lazy(() => import('./pages/Community'))
+const CycleTracker  = lazy(() => import('./pages/CycleTracker'))
+const MoodMind      = lazy(() => import('./pages/MoodMind'))
+const Nourish       = lazy(() => import('./pages/Nourish'))
+const Sleep         = lazy(() => import('./pages/Sleep'))
+const Skin          = lazy(() => import('./pages/Skin'))
+const Settings      = lazy(() => import('./pages/Settings'))
+const AdminPanel    = lazy(() => import('./pages/AdminPanel'))
 
-import PilatesModule from './modules/pilates'
-import CycleModule   from './modules/cycle'
-import MoodModule    from './modules/mood'
-import NourishModule from './modules/nourish'
-import SleepModule    from './modules/sleep'
-import SkinModule     from './modules/skin'
-import GroceryModule  from './modules/grocery/GroceryModule'
+const PilatesModule = lazy(() => import('./modules/pilates'))
+const CycleModule   = lazy(() => import('./modules/cycle'))
+const MoodModule    = lazy(() => import('./modules/mood'))
+const NourishModule = lazy(() => import('./modules/nourish'))
+const SleepModule   = lazy(() => import('./modules/sleep'))
+const SkinModule    = lazy(() => import('./modules/skin'))
+const GroceryModule = lazy(() => import('./modules/grocery/GroceryModule'))
 
 function AuthGuard({ children }) {
   const { user, loading } = useAuth()
@@ -144,48 +145,52 @@ function PhoneFrame({ children }) {
 export default function App() {
   return (
     <BrowserRouter>
-      <PhoneFrame>
-        <Routes>
-          {/* Public */}
-          <Route path="/login" element={<Login />} />
+      <ProfileProvider>
+        <PhoneFrame>
+          <Suspense fallback={<Splash />}>
+            <Routes>
+              {/* Public */}
+              <Route path="/login" element={<Login />} />
 
-          {/* Onboarding */}
-          <Route path="/onboarding" element={
-            <AuthGuard><Onboarding /></AuthGuard>
-          } />
+              {/* Onboarding */}
+              <Route path="/onboarding" element={
+                <AuthGuard><Onboarding /></AuthGuard>
+              } />
 
-          {/* Protected */}
-          <Route path="/*" element={
-            <AuthGuard>
-              <OnboardingGuard>
-                <AppShell>
-                  <Routes>
-                    <Route index element={<Dashboard />} />
-                    <Route path="pilates"   element={<PilatesStudio />} />
-                    <Route path="pilates/*" element={<PilatesModule />} />
-                    <Route path="community" element={<Community />} />
-                    <Route path="cycle"     element={<CycleTracker />} />
-                    <Route path="cycle/*"   element={<CycleModule />} />
-                    <Route path="mood"      element={<MoodMind />} />
-                    <Route path="mood/*"    element={<MoodModule />} />
-                    <Route path="nourish"   element={<Nourish />} />
-                    <Route path="nourish/*" element={<NourishModule />} />
-                    <Route path="sleep"     element={<Sleep />} />
-                    <Route path="sleep/*"   element={<SleepModule />} />
-                    <Route path="skin"      element={<Skin />} />
-                    <Route path="skin/*"    element={<SkinModule />} />
-                    <Route path="grocery"   element={<GroceryModule />} />
-                    <Route path="settings"  element={<Settings />} />
-                    <Route path="admin"     element={<AdminGuard><AdminPanel /></AdminGuard>} />
-                    <Route path="seed"      element={<AdminGuard><SeedPage /></AdminGuard>} />
-                    <Route path="*"         element={<Navigate to="/" replace />} />
-                  </Routes>
-                </AppShell>
-              </OnboardingGuard>
-            </AuthGuard>
-          } />
-        </Routes>
-      </PhoneFrame>
+              {/* Protected */}
+              <Route path="/*" element={
+                <AuthGuard>
+                  <OnboardingGuard>
+                    <AppShell>
+                      <Routes>
+                        <Route index element={<Dashboard />} />
+                        <Route path="pilates"   element={<PilatesStudio />} />
+                        <Route path="pilates/*" element={<PilatesModule />} />
+                        <Route path="community" element={<Community />} />
+                        <Route path="cycle"     element={<CycleTracker />} />
+                        <Route path="cycle/*"   element={<CycleModule />} />
+                        <Route path="mood"      element={<MoodMind />} />
+                        <Route path="mood/*"    element={<MoodModule />} />
+                        <Route path="nourish"   element={<Nourish />} />
+                        <Route path="nourish/*" element={<NourishModule />} />
+                        <Route path="sleep"     element={<Sleep />} />
+                        <Route path="sleep/*"   element={<SleepModule />} />
+                        <Route path="skin"      element={<Skin />} />
+                        <Route path="skin/*"    element={<SkinModule />} />
+                        <Route path="grocery"   element={<GroceryModule />} />
+                        <Route path="settings"  element={<Settings />} />
+                        <Route path="admin"     element={<AdminGuard><AdminPanel /></AdminGuard>} />
+                        <Route path="seed"      element={<AdminGuard><SeedPage /></AdminGuard>} />
+                        <Route path="*"         element={<Navigate to="/" replace />} />
+                      </Routes>
+                    </AppShell>
+                  </OnboardingGuard>
+                </AuthGuard>
+              } />
+            </Routes>
+          </Suspense>
+        </PhoneFrame>
+      </ProfileProvider>
     </BrowserRouter>
   )
 }
