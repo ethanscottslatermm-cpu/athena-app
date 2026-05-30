@@ -353,9 +353,8 @@ export default function Dashboard() {
   const [heroSlide,  setHeroSlide]  = useState(0)
 
   // ── Exit / sign-out ──────────────────────────────────────────────────────────
-  const [exiting,        setExiting]        = useState(false)
-  const [fadingOut,      setFadingOut]      = useState(false)
-  const [showSignOutHint, setShowSignOutHint] = useState(false)
+  const [exiting,   setExiting]   = useState(false)
+  const [fadingOut, setFadingOut] = useState(false)
   const videoRef = useRef(null)
   const doneRef  = useRef(false)
 
@@ -376,16 +375,6 @@ export default function Dashboard() {
 
   function handleSignOut() { setExiting(true) }
   function handleVideoEnd() { setFadingOut(true); setTimeout(doSignOut, 650) }
-
-  useEffect(() => {
-    function showHint() {
-      setShowSignOutHint(true)
-      setTimeout(() => setShowSignOutHint(false), 4500)
-    }
-    const t = setTimeout(showHint, 1800)
-    const interval = setInterval(showHint, 8 * 60 * 1000)
-    return () => { clearTimeout(t); clearInterval(interval) }
-  }, [])
 
   const cycleLength = profile?.cycle_length ?? 28
   const dayOfCycle = profile?.last_period_date
@@ -530,33 +519,11 @@ export default function Dashboard() {
             style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
             <HeaderShimmerIcon src={settingsIcon} />
           </button>
-          <div style={{ position: 'relative' }}>
-            <button onClick={handleSignOut}
-              className="p-2 rounded-xl transition-all"
-              style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
-              <HeaderShimmerIcon src={exitIcon} />
-            </button>
-            {showSignOutHint && (
-              <div style={{
-                position: 'absolute', top: 'calc(100% + 6px)', right: 0,
-                whiteSpace: 'nowrap',
-                background: 'rgba(42,32,28,0.82)',
-                border: '1px solid rgba(196,133,154,0.32)',
-                borderRadius: 8,
-                padding: '5px 10px',
-                fontFamily: "'Cormorant Garamond', serif",
-                fontStyle: 'italic',
-                fontSize: 11,
-                letterSpacing: '0.06em',
-                color: 'rgba(232,213,176,0.88)',
-                pointerEvents: 'none',
-                zIndex: 50,
-                animation: 'hintFadeIn 0.35s ease forwards',
-              }}>
-                Remember to sign out
-              </div>
-            )}
-          </div>
+          <button onClick={handleSignOut}
+            className="p-2 rounded-xl transition-all"
+            style={{ background: 'rgba(196,175,168,0.25)', border: '1px solid #C4AFA8' }}>
+            <HeaderShimmerIcon src={exitIcon} />
+          </button>
         </div>
       </div>
 
