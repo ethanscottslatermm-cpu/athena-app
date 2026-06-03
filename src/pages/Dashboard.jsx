@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
+import { useAthena } from '../hooks/useAthena'
 import { ChevronRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import settingsIcon from '../assets/icons/settings-icon.png'
 import exitIcon from '../assets/icons/nav-exit.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 import HintBubble            from '../components/HintBubble'
+import AthenaBriefModal      from '../components/AthenaBriefModal'
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
@@ -345,12 +347,104 @@ function SectionHeader({ title, delay }) {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
+// ─── Daily Brief Card ─────────────────────────────────────────────────────────
+
+const PHASE_DOTS = {
+  follicular: '#8FA58C',
+  ovulation:  '#C9A86C',
+  luteal:     '#E8829A',
+  menstrual:  '#7A5A6A',
+}
+
+function DailyBriefCard({ brief, loading, phase, onExpand }) {
+  const dot = PHASE_DOTS[phase] ?? '#C9A86C'
+
+  return (
+    <div
+      onClick={onExpand}
+      style={{
+        margin: '0 16px 16px',
+        borderRadius: 16,
+        background: 'linear-gradient(135deg, #1A0E14 0%, #140E0C 100%)',
+        border: '1px solid rgba(201,168,108,0.3)',
+        borderTop: '1px solid #C9A86C',
+        padding: '16px 18px',
+        cursor: 'pointer',
+        animation: 'dashUp 0.4s ease 0.05s both',
+      }}
+    >
+      <style>{`
+        @keyframes briefShimmer {
+          0%   { background-position: -200% 0; }
+          100% { background-position:  200% 0; }
+        }
+      `}</style>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ color: '#C9A86C', fontSize: 10 }}>✦</span>
+          <span style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.65)' }}>
+            Athena
+          </span>
+        </div>
+        {brief?.phase_day && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: dot }} />
+            <span style={{ fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.45)' }}>
+              {brief.phase_day}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {loading ? (
+        <div>
+          <div style={{ height: 16, borderRadius: 8, marginBottom: 8, width: '70%', background: 'linear-gradient(90deg, rgba(201,168,108,0.06) 25%, rgba(201,168,108,0.14) 50%, rgba(201,168,108,0.06) 75%)', backgroundSize: '200% 100%', animation: 'briefShimmer 1.6s infinite' }} />
+          <div style={{ height: 11, borderRadius: 6, marginBottom: 6, width: '100%', background: 'linear-gradient(90deg, rgba(201,168,108,0.06) 25%, rgba(201,168,108,0.14) 50%, rgba(201,168,108,0.06) 75%)', backgroundSize: '200% 100%', animation: 'briefShimmer 1.6s infinite 0.2s' }} />
+          <div style={{ height: 11, borderRadius: 6, width: '85%', background: 'linear-gradient(90deg, rgba(201,168,108,0.06) 25%, rgba(201,168,108,0.14) 50%, rgba(201,168,108,0.06) 75%)', backgroundSize: '200% 100%', animation: 'briefShimmer 1.6s infinite 0.4s' }} />
+        </div>
+      ) : brief ? (
+        <div style={{ animation: 'dashUp 0.3s ease forwards' }}>
+          {brief.greeting && (
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 16, color: '#F2EDE8', lineHeight: 1.45, marginBottom: 8 }}>
+              {brief.greeting}
+            </p>
+          )}
+          {brief.rhythm_insight && (
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 13, color: 'rgba(196,133,154,0.8)', lineHeight: 1.55, marginBottom: 8 }}>
+              {brief.rhythm_insight}
+            </p>
+          )}
+          {brief.action_focus && (
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 13, fontWeight: 600, color: '#F2EDE8', lineHeight: 1.4, marginBottom: 8 }}>
+              Today: {brief.action_focus}
+            </p>
+          )}
+          {brief.intention && (
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 13, color: '#C9A86C', lineHeight: 1.4, marginBottom: 10 }}>
+              &ldquo;{brief.intention}&rdquo;
+            </p>
+          )}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <span style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.55)' }}>
+              Your full brief →
+            </span>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const { phase, color } = usePhase()
   const { profile } = useProfile()
+  const { getDailyBrief } = useAthena()
   const navigate = useNavigate()
   const [weather,    setWeather]    = useState(null)
   const [heroSlide,  setHeroSlide]  = useState(0)
+  const [brief,      setBrief]      = useState(null)
+  const [briefLoad,  setBriefLoad]  = useState(true)
+  const [briefModal, setBriefModal] = useState(false)
 
   // ── Exit / sign-out ──────────────────────────────────────────────────────────
   const [exiting,   setExiting]   = useState(false)
@@ -395,6 +489,11 @@ export default function Dashboard() {
   // ── Featured workout (daily rotation) ───────────────────────────────────────
   const featuredWorkout = FEATURED_WORKOUTS[dayOffset % FEATURED_WORKOUTS.length]
   const featuredImg     = SESSION_IMG[featuredWorkout.title] ?? null
+
+  // Daily brief
+  useEffect(() => {
+    getDailyBrief().then(data => { setBrief(data); setBriefLoad(false) })
+  }, [])
 
   // Auto-transition hero from phase → featured after 3.5 s
   useEffect(() => {
@@ -526,6 +625,17 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
+
+      {/* ── Athena Daily Brief ── */}
+      <DailyBriefCard
+        brief={brief}
+        loading={briefLoad}
+        phase={phase}
+        onExpand={() => setBriefModal(true)}
+      />
+      {briefModal && brief && (
+        <AthenaBriefModal brief={brief} onClose={() => setBriefModal(false)} />
+      )}
 
       {/* ── Phase Hero (two-slide: phase → featured workout) ── */}
       <div className="px-4 max-w-md mx-auto mb-5" style={anim(0.07)}>

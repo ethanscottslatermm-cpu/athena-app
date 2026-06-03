@@ -12,3 +12,6 @@
   command = "npm run dev"
   port = 8888
   targetPort = 5173
+
+[functions."athena-scheduled"]
+  schedule = "0 7 * * *"

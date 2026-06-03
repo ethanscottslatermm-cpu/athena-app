@@ -3,10 +3,12 @@ import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
-import CalendarTab from './CalendarTab'
-import LogTab      from './LogTab'
-import StatsTab    from './StatsTab'
-import HintBubble  from '../../components/HintBubble'
+import { useNavigate } from 'react-router-dom'
+import CalendarTab       from './CalendarTab'
+import LogTab            from './LogTab'
+import StatsTab          from './StatsTab'
+import HintBubble        from '../../components/HintBubble'
+import AthenaInsightCard from '../../components/AthenaInsightCard'
 
 const CYCLE_HINTS = {
   calendar: [
@@ -33,10 +35,67 @@ const TABS = [
   { id: 'stats',    label: 'Stats',    icon: statsIcon    },
 ]
 
+const PHASE_INFO = {
+  follicular: { label: 'Follicular', duration: '~8 days', energy: 'Rising',    color: '#8FA58C', dot: '#8FA58C' },
+  ovulation:  { label: 'Ovulation',  duration: '~3 days', energy: 'Peak',      color: '#C9A86C', dot: '#C9A86C' },
+  luteal:     { label: 'Luteal',     duration: '~12 days', energy: 'Declining', color: '#E8829A', dot: '#E8829A' },
+  menstrual:  { label: 'Menstrual',  duration: '~5 days', energy: 'Low',       color: '#7A5A6A', dot: '#7A5A6A' },
+}
+const PHASE_ORDER = ['menstrual', 'follicular', 'ovulation', 'luteal']
+
+function PhaseStripModal({ phase: activePhase, onClose }) {
+  const navigate = useNavigate()
+  const info = PHASE_INFO[activePhase] ?? PHASE_INFO.follicular
+  const DESCRIPTIONS = {
+    follicular: 'Estrogen rises as your body prepares for ovulation. Energy climbs, motivation sharpens, and creativity peaks. A time to begin, plan, and push.',
+    ovulation:  'Peak estrogen and testosterone. You are at your physical and social peak — magnetic, clear, and powerful. Make bold moves now.',
+    luteal:     'Progesterone rises as your body prepares for menstruation. Energy drops, appetite increases, emotions deepen. A time to soften, complete, and nourish.',
+    menstrual:  'The cycle resets. The uterine lining sheds, hormones are at their lowest, and your body asks for rest. Honor this phase — it is the foundation of the next.',
+  }
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 80, display: 'flex', alignItems: 'flex-end' }} onClick={onClose}>
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(20,14,12,0.55)' }} />
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          position: 'relative', width: '100%',
+          background: '#1A0E14',
+          borderTopLeftRadius: 22, borderTopRightRadius: 22,
+          borderTop: `1px solid ${info.color}55`,
+          padding: '22px 24px 36px',
+          animation: 'sheetUp 0.28s ease-out',
+        }}
+      >
+        <div style={{ width: 32, height: 3, borderRadius: 2, background: 'rgba(201,168,108,0.25)', margin: '0 auto 18px' }} />
+        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 18, color: 'rgba(242,237,232,0.3)', fontSize: 22, lineHeight: 1, background: 'none', border: 'none', cursor: 'pointer' }}>×</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: info.dot }} />
+          <span style={{ fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', color: info.color }}>{info.label} Phase</span>
+        </div>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+          <span style={{ fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.12em', background: `${info.color}22`, border: `1px solid ${info.color}40`, borderRadius: 20, padding: '3px 10px', color: info.color }}>{info.duration}</span>
+          <span style={{ fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.12em', background: `${info.color}22`, border: `1px solid ${info.color}40`, borderRadius: 20, padding: '3px 10px', color: info.color }}>Energy: {info.energy}</span>
+        </div>
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 15, color: 'rgba(242,237,232,0.82)', lineHeight: 1.65 }}>
+          {DESCRIPTIONS[activePhase]}
+        </p>
+        <button
+          onClick={() => { onClose(); navigate('/athena', { state: { preloadMessage: `Tell me more about the ${activePhase} phase and what it means for me right now.` } }) }}
+          style={{ marginTop: 18, fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C9A86C', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+        >
+          Ask Athena →
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function CycleTracker() {
   const { user }    = useAuth()
   const { profile } = useProfile()
   const phaseData   = usePhase()
+  const navigate    = useNavigate()
 
   const [activeTab, setActiveTab] = useState('calendar')
   const [symptoms,  setSymptoms]  = useState([])
@@ -76,6 +135,13 @@ export default function CycleTracker() {
     const t = setTimeout(() => setBannerOn(false), 4000)
     return () => clearTimeout(t)
   }, [bannerOn])
+
+  const [phaseModal, setPhaseModal] = useState(null)
+
+  // Simple client-side pattern detection from loaded symptoms
+  const patterns = {
+    headachesInLuteal: symptoms.filter(s => s.headache && s.phase_at_time === 'luteal').length >= 3,
+  }
 
   function handleQuickLog(date) {
     setLogDate(date)
@@ -190,12 +256,83 @@ export default function CycleTracker() {
       >
         <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">
           {activeTab === 'calendar' && (
-            <CalendarTab
-              profile={profile}
-              phaseData={phaseData}
-              symptoms={symptoms}
-              onQuickLog={handleQuickLog}
-            />
+            <>
+              <CalendarTab
+                profile={profile}
+                phaseData={phaseData}
+                symptoms={symptoms}
+                onQuickLog={handleQuickLog}
+              />
+
+              {/* ── Athena Insight Card ── */}
+              <AthenaInsightCard moduleName="cycle" />
+
+              {/* ── Rhythm Forecast ── */}
+              {phaseData?.nextPeriodDate && (
+                <div style={{ marginBottom: 16, borderRadius: 14, background: 'rgba(201,168,108,0.06)', border: '1px solid rgba(201,168,108,0.2)', padding: '14px 16px' }}>
+                  <p style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.65)', marginBottom: 10 }}>
+                    Your Rhythm Forecast
+                  </p>
+                  <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 14, color: '#3B3330', marginBottom: 4 }}>
+                    Period expected in <strong>{phaseData.daysUntilNextPeriod}</strong> days
+                  </p>
+                  {cycles?.length >= 3 && (
+                    <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 12, color: 'rgba(59,51,48,0.5)', marginBottom: 10 }}>
+                      Based on your recent cycles
+                    </p>
+                  )}
+                  {patterns?.headachesInLuteal && (
+                    <div style={{ borderTop: '1px solid rgba(201,168,108,0.15)', paddingTop: 10, marginTop: 4 }}>
+                      <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start', marginBottom: 8 }}>
+                        <span style={{ color: '#C9A86C', fontSize: 9, flexShrink: 0 }}>✦</span>
+                        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 13, color: '#3B3330', lineHeight: 1.6, margin: 0 }}>
+                          Athena noticed: you've logged headaches in luteal phase across multiple cycles. This may be progesterone-related.
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => navigate('/athena', { state: { preloadMessage: 'Tell me about my headache pattern in luteal phase and what I can do about it.' } })}
+                        style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C9A86C', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        Tell me more →
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ── Phase Strip ── */}
+              <div style={{ marginBottom: 20 }}>
+                <p style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(59,51,48,0.4)', marginBottom: 10 }}>
+                  Your Cycle Phases
+                </p>
+                <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+                  {PHASE_ORDER.map(p => {
+                    const info = PHASE_INFO[p]
+                    const isActive = phaseData?.phase === p
+                    return (
+                      <button
+                        key={p}
+                        onClick={() => setPhaseModal(p)}
+                        style={{
+                          flexShrink: 0,
+                          padding: '8px 14px',
+                          borderRadius: 22,
+                          border: isActive ? `2px solid ${info.color}` : `1px solid rgba(59,51,48,0.12)`,
+                          background: isActive ? `${info.color}12` : 'transparent',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <p style={{ fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: isActive ? info.color : 'rgba(59,51,48,0.5)', margin: '0 0 2px' }}>{info.label}</p>
+                        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 11, color: 'rgba(59,51,48,0.4)', margin: 0 }}>{info.energy}</p>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {phaseModal && <PhaseStripModal phase={phaseModal} onClose={() => setPhaseModal(null)} />}
+            </>
           )}
           {activeTab === 'log' && (
             <LogTab

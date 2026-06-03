@@ -1,8 +1,9 @@
 ﻿import { useState, useCallback } from 'react'
-import SleepLog      from '../modules/sleep/SleepLog'
-import SleepWindDown from '../modules/sleep/SleepWindDown'
-import SleepPatterns from '../modules/sleep/SleepPatterns'
-import HintBubble    from '../components/HintBubble'
+import SleepLog           from '../modules/sleep/SleepLog'
+import SleepWindDown      from '../modules/sleep/SleepWindDown'
+import SleepPatterns      from '../modules/sleep/SleepPatterns'
+import HintBubble         from '../components/HintBubble'
+import AthenaInsightCard  from '../components/AthenaInsightCard'
 
 const SLEEP_HINTS = {
   log: [
@@ -110,7 +111,7 @@ export default function Sleep() {
           >
             {visited[tab.id] && (
               <>
-                {tab.id === 'log'      && <SleepLog      key={refreshKey} onLogSaved={onLogSaved} />}
+                {tab.id === 'log'      && <><AthenaInsightCard moduleName="sleep" /><SleepLog key={refreshKey} onLogSaved={onLogSaved} /></>}
                 {tab.id === 'winddown' && <SleepWindDown />}
                 {tab.id === 'patterns' && <SleepPatterns key={refreshKey} />}
               </>

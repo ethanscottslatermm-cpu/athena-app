@@ -23,6 +23,7 @@ const Sleep         = lazy(() => import('./pages/Sleep'))
 const Skin          = lazy(() => import('./pages/Skin'))
 const Settings      = lazy(() => import('./pages/Settings'))
 const AdminPanel    = lazy(() => import('./pages/AdminPanel'))
+const AthenaAdvisor = lazy(() => import('./pages/AthenaAdvisor'))
 
 const PilatesModule = lazy(() => import('./modules/pilates'))
 const CycleModule   = lazy(() => import('./modules/cycle'))
@@ -178,6 +179,7 @@ export default function App() {
                         <Route path="skin"      element={<Skin />} />
                         <Route path="skin/*"    element={<SkinModule />} />
                         <Route path="grocery"   element={<GroceryModule />} />
+                        <Route path="athena"    element={<AthenaAdvisor />} />
                         <Route path="settings"  element={<Settings />} />
                         <Route path="admin"     element={<AdminGuard><AdminPanel /></AdminGuard>} />
                         <Route path="seed"      element={<AdminGuard><SeedPage /></AdminGuard>} />

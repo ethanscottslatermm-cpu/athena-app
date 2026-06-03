@@ -10,8 +10,7 @@ import groceryIcon   from '../assets/icons/nav-grocery.svg'
 
 function PngIcon({ src, delay = 0 }) {
   return (
-    <span style={{ position: 'relative', display: 'inline-block', width: '24px', height: '24px', flexShrink: 0 }}>
-      {/* Icon */}
+    <span style={{ position: 'relative', display: 'inline-block', width: '22px', height: '22px', flexShrink: 0 }}>
       <span style={{
         display: 'block', width: '100%', height: '100%',
         WebkitMask: `url(${src}) no-repeat center / contain`,
@@ -19,7 +18,6 @@ function PngIcon({ src, delay = 0 }) {
         backgroundColor: 'currentColor',
         transition: 'color 0.3s',
       }} />
-      {/* Platinum shimmer pass */}
       <span style={{
         position: 'absolute', inset: 0,
         WebkitMask: `url(${src}) no-repeat center / contain`,
@@ -34,14 +32,29 @@ function PngIcon({ src, delay = 0 }) {
   )
 }
 
+function AthenaIcon({ isActive }) {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      width: 22, height: 22, flexShrink: 0,
+      fontSize: 15,
+      color: isActive ? '#C9A86C' : 'currentColor',
+      transition: 'color 0.3s',
+    }}>
+      ✦
+    </span>
+  )
+}
+
 const navItems = [
-  { to: '/',          label: 'Home',      png: dashboardIcon },
-  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon   },
-  { to: '/grocery',   label: 'Grocery',   png: groceryIcon   },
-  { to: '/pilates',   label: 'Pilates',   png: pilatesIcon   },
-  { to: '/mood',      label: 'Mood',      png: moodIcon      },
-  { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
-  { to: '/community', label: 'Community', png: communityIcon },
+  { to: '/',          label: 'Home',      png: dashboardIcon, athena: false },
+  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon,   athena: false },
+  { to: '/grocery',   label: 'Grocery',   png: groceryIcon,   athena: false },
+  { to: '/pilates',   label: 'Pilates',   png: pilatesIcon,   athena: false },
+  { to: '/mood',      label: 'Mood',      png: moodIcon,      athena: false },
+  { to: '/cycle',     label: 'Cycle',     png: cycleIcon,     athena: false },
+  { to: '/athena',    label: 'Athena',    png: null,          athena: true  },
+  { to: '/community', label: 'Community', png: communityIcon, athena: false },
 ]
 
 export default function BottomNav() {
@@ -63,22 +76,30 @@ export default function BottomNav() {
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >
-        <div className="flex items-center justify-around h-16 max-w-md mx-auto px-1">
-          {navItems.map(({ to, label, png }, i) => (
+        <div className="flex items-center justify-around h-16 max-w-md mx-auto px-0.5">
+          {navItems.map(({ to, label, png, athena }, i) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
-              className="flex flex-col items-center gap-1 px-2 py-2 transition-colors"
-              style={({ isActive }) => ({ color: isActive ? '#2A1C14' : '#6B5248' })}
+              className="flex flex-col items-center gap-0.5 px-1 py-2 transition-colors"
+              style={({ isActive }) => ({ color: isActive ? (athena ? '#C9A86C' : '#2A1C14') : '#6B5248' })}
             >
-              <PngIcon src={png} delay={i * 0.7} />
-              <span style={{
-                fontFamily: 'Cormorant Garamond, serif',
-                fontSize: '0.65rem',
-                fontWeight: 500,
-                letterSpacing: '0.03em',
-              }}>{label}</span>
+              {({ isActive }) => (
+                <>
+                  {athena
+                    ? <AthenaIcon isActive={isActive} />
+                    : <PngIcon src={png} delay={i * 0.7} />
+                  }
+                  <span style={{
+                    fontFamily: 'Cormorant Garamond, serif',
+                    fontSize: '0.6rem',
+                    fontWeight: 500,
+                    letterSpacing: '0.03em',
+                    color: isActive && athena ? '#C9A86C' : 'inherit',
+                  }}>{label}</span>
+                </>
+              )}
             </NavLink>
           ))}
         </div>

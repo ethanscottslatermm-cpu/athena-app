@@ -1,11 +1,12 @@
 ﻿import { useState, useCallback } from 'react'
 import { Camera } from 'lucide-react'
-import NourishToday      from '../modules/nourish/NourishToday'
-import NourishSearch     from '../modules/nourish/NourishSearch'
-import NourishPhasePlate from '../modules/nourish/NourishPhasePlate'
-import NourishInsights   from '../modules/nourish/NourishInsights'
-import FoodScanner       from '../modules/nourish/FoodScanner'
-import HintBubble        from '../components/HintBubble'
+import NourishToday       from '../modules/nourish/NourishToday'
+import NourishSearch      from '../modules/nourish/NourishSearch'
+import NourishPhasePlate  from '../modules/nourish/NourishPhasePlate'
+import NourishInsights    from '../modules/nourish/NourishInsights'
+import FoodScanner        from '../modules/nourish/FoodScanner'
+import HintBubble         from '../components/HintBubble'
+import AthenaInsightCard  from '../components/AthenaInsightCard'
 
 const NOURISH_HINTS = {
   today: [
@@ -138,7 +139,7 @@ export default function Nourish() {
             {visited[tab.id] && (
               <>
                 {tab.id === 'today'    && (
-                  <NourishToday key={refreshKey} onOpenSearch={() => switchTab('search')} />
+                  <><AthenaInsightCard moduleName="nourish" /><NourishToday key={refreshKey} onOpenSearch={() => switchTab('search')} /></>
                 )}
                 {tab.id === 'search'   && <NourishSearch   onLogSaved={onLogSaved} onScanRequest={() => setScannerOpen(true)} />}
                 {tab.id === 'plate'    && <NourishPhasePlate />}

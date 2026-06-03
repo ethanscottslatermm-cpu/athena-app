@@ -3,6 +3,9 @@ import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
+import AthenaPreSession  from '../../components/AthenaPreSession'
+import AthenaPostSession from '../../components/AthenaPostSession'
+import AthenaInsightCard from '../../components/AthenaInsightCard'
 
 // ── Inline SVG tab icons ──────────────────────────────────────────────────────
 
@@ -198,6 +201,8 @@ export default function PilatesStudio() {
   const [activeSession,    setActiveSession]    = useState(null)  // → ActiveSession full-screen
   const [activeExercises,  setActiveExercises]  = useState([])
   const [completedData,    setCompletedData]    = useState(null)  // → SessionComplete
+  const [preSession,       setPreSession]       = useState(null)  // { session, exercises }
+  const [postSession,      setPostSession]      = useState(null)  // { completionId }
 
   // ── Data ─────────────────────────────────────────────────────────────────
   const [sessions,         setSessions]         = useState([])
@@ -257,8 +262,15 @@ export default function PilatesStudio() {
 
   function handleStartSession(session, sessionExercises) {
     setSelectedSession(null)
-    setActiveSession(session)
-    setActiveExercises(sessionExercises)
+    // Show pre-session Athena interstitial first
+    setPreSession({ session, exercises: sessionExercises })
+  }
+
+  function handlePreSessionBegin() {
+    if (!preSession) return
+    setActiveSession(preSession.session)
+    setActiveExercises(preSession.exercises)
+    setPreSession(null)
   }
 
   async function handleSessionComplete({ session, elapsed }) {
@@ -266,12 +278,14 @@ export default function PilatesStudio() {
     setActiveExercises([])
     setCompletedData({ session, elapsed })
     if (user) {
-      await supabase.from('session_completions').insert({
+      const { data } = await supabase.from('session_completions').insert({
         user_id:      user.id,
         session_id:   session.id,
         completed_at: new Date().toISOString(),
         duration_min: Math.round(elapsed / 60),
-      })
+      }).select('id').single()
+      // Show post-session check-in
+      if (data?.id) setPostSession({ completionId: data.id })
       fetchData()
     }
   }
@@ -297,6 +311,23 @@ export default function PilatesStudio() {
 
   return (
     <div className="relative min-h-[100svh] overflow-hidden bg-[#F3EAE7]">
+
+      {/* ── Athena Pre-session ─────────────────────────────────────────────── */}
+      {preSession && (
+        <AthenaPreSession
+          session={preSession.session}
+          onBegin={handlePreSessionBegin}
+          onLighterDay={null}
+        />
+      )}
+
+      {/* ── Athena Post-session ─────────────────────────────────────────────── */}
+      {postSession && (
+        <AthenaPostSession
+          completionId={postSession.completionId}
+          onDone={() => setPostSession(null)}
+        />
+      )}
 
       {/* ── Pilates Studio intro video ──────────────────────────────────────── */}
       {showIntro && (
@@ -424,17 +455,20 @@ export default function PilatesStudio() {
       >
         <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">
           {activeTab === 'home' && (
-            <HomeTab
-              sessions={sessions}
-              exercises={exercises}
-              completions={completions}
-              favorites={favorites}
-              phaseData={phaseData}
-              profile={profile}
-              onSelectSession={handleSelectSession}
-              onFavoriteToggle={toggleFavorite}
-              onSeeAll={() => setActiveTab('library')}
-            />
+            <>
+              <AthenaInsightCard moduleName="pilates" />
+              <HomeTab
+                sessions={sessions}
+                exercises={exercises}
+                completions={completions}
+                favorites={favorites}
+                phaseData={phaseData}
+                profile={profile}
+                onSelectSession={handleSelectSession}
+                onFavoriteToggle={toggleFavorite}
+                onSeeAll={() => setActiveTab('library')}
+              />
+            </>
           )}
           {activeTab === 'library' && (
             <LibraryTab
