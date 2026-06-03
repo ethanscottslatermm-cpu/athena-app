@@ -39,6 +39,7 @@ export function useSwipeNav() {
 
       const seg  = location.pathname.split('/')[1]
       const base = seg ? `/${seg}` : '/'
+      if (base === '/') return          // no swipe nav on dashboard
       const idx  = ROUTES.indexOf(base)
       if (idx === -1) return
 
