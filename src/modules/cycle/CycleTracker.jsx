@@ -90,8 +90,8 @@ export default function CycleTracker() {
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes goldPulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(212,160,160,0); }
-          50%      { box-shadow: 0 0 24px 6px rgba(212,160,160,0.25); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(232,130,154,0); }
+          50%      { box-shadow: 0 0 24px 6px rgba(232,130,154,0.25); }
         }
         @keyframes shimmerSlide {
           0%   { background-position: -200% 0; }
@@ -121,7 +121,7 @@ export default function CycleTracker() {
           className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3"
           style={{
             background: 'rgba(242,237,232,0.95)',
-            borderBottom: '1px solid rgba(212,160,160,0.35)',
+            borderBottom: '1px solid rgba(232,130,154,0.35)',
             animation: 'cycleSlideDown 0.35s ease-out',
           }}
         >
@@ -150,7 +150,7 @@ export default function CycleTracker() {
               className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-all"
               style={{
                 borderBottom: activeTab === tab.id
-                  ? '2px solid #D4A0A0'
+                  ? '2px solid #E8829A'
                   : '2px solid transparent',
               }}
             >
@@ -168,7 +168,7 @@ export default function CycleTracker() {
               />
               <span
                 className="font-cinzel text-[9px] tracking-widest"
-                style={{ color: activeTab === tab.id ? '#D4A0A0' : 'rgba(59,51,48,0.45)' }}
+                style={{ color: activeTab === tab.id ? '#E8829A' : 'rgba(59,51,48,0.45)' }}
               >
                 {tab.label.toUpperCase()}
               </span>
