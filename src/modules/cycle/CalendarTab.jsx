@@ -52,7 +52,7 @@ function DayCell({ cell, highlight, onClick }) {
 
   const { d, phase, fertile, ovulation, isToday, isPast, hasLog } = cell
 
-  let bg          = 'transparent'
+  let bg          = 'rgba(196,175,168,0.12)'
   let border      = 'transparent'
   let textColor   = isPast ? 'rgba(59,51,48,0.85)' : 'rgba(59,51,48,0.4)'
   let glow        = false
