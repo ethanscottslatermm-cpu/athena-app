@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { differenceInDays } from 'date-fns'
+import { useAuth } from '../hooks/useAuth'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
 import { useAthena } from '../hooks/useAthena'
@@ -438,6 +439,7 @@ function DailyBriefCard({ brief, loading, phase, onExpand }) {
 export default function Dashboard() {
   const { phase, color } = usePhase()
   const { profile } = useProfile()
+  const { user } = useAuth()
   const { getDailyBrief } = useAthena()
   const navigate = useNavigate()
   const [weather,    setWeather]    = useState(null)
@@ -490,10 +492,11 @@ export default function Dashboard() {
   const featuredWorkout = FEATURED_WORKOUTS[dayOffset % FEATURED_WORKOUTS.length]
   const featuredImg     = SESSION_IMG[featuredWorkout.title] ?? null
 
-  // Daily brief
+  // Daily brief — wait for auth to resolve before fetching
   useEffect(() => {
+    if (!user?.id) return
     getDailyBrief().then(data => { setBrief(data); setBriefLoad(false) })
-  }, [])
+  }, [user?.id])
 
   // Auto-transition hero from phase → featured after 3.5 s
   useEffect(() => {
