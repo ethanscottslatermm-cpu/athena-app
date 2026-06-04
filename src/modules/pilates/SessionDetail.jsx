@@ -1,4 +1,6 @@
 ﻿import ExerciseRow from './components/ExerciseRow'
+import BodyMuscleMap from '../../components/pilates/BodyMuscleMap'
+import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const SESSION_IMAGES = {
   'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
@@ -68,6 +70,8 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
     { icon: '💪', label: session.difficulty },
     { icon: '🎯', label: session.equipment },
   ]
+
+  const { primary: musclePrimary, secondary: muscleSecondary } = mapFocusToMuscles(session.focus_area)
 
   return (
     <div
@@ -165,6 +169,19 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             </p>
           </div>
         )}
+
+        {/* Muscle map */}
+        <div style={{ background: '#140A18', margin: '0 16px 20px', borderRadius: 16, padding: '16px 8px 8px', border: '1px solid rgba(201,168,108,0.12)' }}>
+          <p style={{ fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(242,237,232,0.4)', textAlign: 'center', marginBottom: 8 }}>
+            Muscles Targeted
+          </p>
+          <BodyMuscleMap
+            primaryMuscles={musclePrimary}
+            secondaryMuscles={muscleSecondary}
+            height={260}
+            showLabels={true}
+          />
+        </div>
 
         {/* Exercise list */}
         <div className="pb-4">

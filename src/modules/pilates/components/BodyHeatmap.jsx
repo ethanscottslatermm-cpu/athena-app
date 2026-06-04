@@ -1,3 +1,6 @@
+import BodyMuscleMap from '../../../components/pilates/BodyMuscleMap'
+import { mapFocusToMuscles } from '../../../utils/muscleGroupMap'
+
 export default function BodyHeatmap({ completions = [], sessions = [] }) {
   const freq = {}
   completions.forEach(c => {
@@ -6,72 +9,28 @@ export default function BodyHeatmap({ completions = [], sessions = [] }) {
   })
   const maxF = Math.max(...Object.values(freq), 1)
 
-  function glow(area, fallbackArea) {
-    const f = freq[area] || 0
-    const fb = fallbackArea ? (freq[fallbackArea] || 0) * 0.6 : 0
-    const effective = Math.max(f, fb)
-    if (effective === 0) return 'rgba(59,51,48,0.07)'
-    return `rgba(212,160,160,${Math.min(0.85, 0.15 + (effective / maxF) * 0.7)})`
-  }
+  const primary = [], secondary = []
+  Object.entries(freq).forEach(([area, count]) => {
+    const { primary: pm, secondary: sm } = mapFocusToMuscles(area)
+    if (count / maxF >= 0.4) primary.push(...pm)
+    else secondary.push(...sm)
+  })
 
   const hasData = Object.keys(freq).length > 0
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <svg viewBox="0 0 100 220" className="w-20 h-44">
-        <ellipse cx="50" cy="14" rx="11" ry="13"
-          fill="rgba(59,51,48,0.07)" stroke="rgba(59,51,48,0.12)" strokeWidth="0.8" />
-        <rect x="44" y="26" width="12" height="12" rx="3"
-          fill="rgba(59,51,48,0.05)" stroke="rgba(59,51,48,0.1)" strokeWidth="0.8" />
-        <rect x="35" y="40" width="30" height="52" rx="8"
-          fill={glow('core', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
-          style={{ transition: 'fill 0.5s' }} />
-        <rect x="18" y="42" width="14" height="44" rx="6"
-          fill={glow('arms', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
-          style={{ transition: 'fill 0.5s' }} />
-        <rect x="68" y="42" width="14" height="44" rx="6"
-          fill={glow('arms', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
-          style={{ transition: 'fill 0.5s' }} />
-        <rect x="33" y="94" width="34" height="30" rx="7"
-          fill={glow('glutes', 'full_body')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
-          style={{ transition: 'fill 0.5s' }} />
-        <rect x="34" y="126" width="13" height="70" rx="6"
-          fill={glow('full_body', 'flexibility')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
-          style={{ transition: 'fill 0.5s' }} />
-        <rect x="53" y="126" width="13" height="70" rx="6"
-          fill={glow('full_body', 'flexibility')}
-          stroke="rgba(59,51,48,0.1)" strokeWidth="0.8"
-          style={{ transition: 'fill 0.5s' }} />
-        {(freq['recovery'] || 0) > 0 && (
-          <rect x="18" y="40" width="64" height="170" rx="12"
-            fill={`rgba(143,165,140,${Math.min(0.2, (freq['recovery'] / maxF) * 0.25)})`}
-            style={{ transition: 'fill 0.5s' }} />
-        )}
-      </svg>
-
-      <div className="flex flex-wrap gap-x-3 gap-y-1 justify-center">
-        {hasData
-          ? Object.entries(freq)
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 5)
-              .map(([area, count]) => (
-                <span key={area} className="font-garamond text-[10px] text-brown/50 capitalize">
-                  <span style={{ color: '#D4A0A0' }}>●</span>{' '}
-                  {area.replace(/_/g, ' ')} ×{count}
-                </span>
-              ))
-          : (
-            <span className="font-garamond text-brown/30 text-xs text-center">
-              Complete sessions to see your heatmap
-            </span>
-          )
-        }
-      </div>
+    <div>
+      <BodyMuscleMap
+        primaryMuscles={hasData ? [...new Set(primary)] : []}
+        secondaryMuscles={hasData ? [...new Set(secondary)] : []}
+        height={280}
+        showLabels={true}
+      />
+      {!hasData && (
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', color: 'rgba(242,237,232,0.3)', fontSize: 13, textAlign: 'center', marginTop: 12 }}>
+          Complete sessions to see your body focus map
+        </p>
+      )}
     </div>
   )
 }

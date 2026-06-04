@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft } from 'lucide-react'
+import BodyMuscleMap from '../../components/pilates/BodyMuscleMap'
+import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const EXERCISE_SLUGS = {
   'Pelvic Tilt':            'pelvic-tilt',
@@ -86,6 +88,8 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
   const slug     = EXERCISE_SLUGS[current?.name]
   const videoSrc = slug ? `/videos/Exercises/${slug}.mp4.mp4` : null
 
+  const { primary: musclePrimary, secondary: muscleSecondary } = mapFocusToMuscles(current?.focus_area)
+
   return (
     <div
       className="fixed inset-0 z-[60] flex flex-col"
@@ -171,12 +175,13 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
               <source src={videoSrc} type="video/mp4" />
             </video>
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-              <span style={{ fontSize: 26, opacity: 0.35 }}>🧘</span>
-              <span className="font-cinzel tracking-widest"
-                style={{ fontSize: 9, color: 'rgba(59,51,48,0.28)' }}>
-                {current?.name?.toUpperCase()}
-              </span>
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#140A18' }}>
+              <BodyMuscleMap
+                primaryMuscles={musclePrimary}
+                secondaryMuscles={muscleSecondary}
+                height={190}
+                showLabels={false}
+              />
             </div>
           )}
         </div>
@@ -204,6 +209,11 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
             style={{ color: 'rgba(59,51,48,0.48)', maxWidth: 280 }}
           >
             {current.form_cue}
+          </p>
+        )}
+        {current?.focus_area && (
+          <p style={{ fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(196,133,154,0.55)', marginTop: 8 }}>
+            {current.focus_area.replace(/_/g, ' ')}
           </p>
         )}
 
