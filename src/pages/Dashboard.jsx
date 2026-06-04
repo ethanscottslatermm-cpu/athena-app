@@ -12,6 +12,7 @@ import exitIcon from '../assets/icons/nav-exit.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 import HintBubble            from '../components/HintBubble'
 import AthenaBriefModal      from '../components/AthenaBriefModal'
+import PhaseBar              from '../components/PhaseBar'
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
@@ -357,12 +358,12 @@ const PHASE_DOTS = {
   menstrual:  '#7A5A6A',
 }
 
-function DailyBriefCard({ brief, loading, phase, onExpand }) {
+function DailyBriefCard({ brief, loading, error, phase, onExpand }) {
   const dot = PHASE_DOTS[phase] ?? '#C9A86C'
 
   return (
     <div
-      onClick={onExpand}
+      onClick={brief ? onExpand : undefined}
       style={{
         margin: '0 16px 16px',
         borderRadius: 16,
@@ -370,7 +371,7 @@ function DailyBriefCard({ brief, loading, phase, onExpand }) {
         border: '1px solid rgba(201,168,108,0.3)',
         borderTop: '1px solid #C9A86C',
         padding: '16px 18px',
-        cursor: 'pointer',
+        cursor: brief ? 'pointer' : 'default',
         animation: 'dashUp 0.4s ease 0.05s both',
       }}
     >
@@ -431,7 +432,13 @@ function DailyBriefCard({ brief, loading, phase, onExpand }) {
             </span>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 14, color: 'rgba(242,237,232,0.35)', lineHeight: 1.5, margin: 0 }}>
+          {error
+            ? 'Athena is resting — your brief will return shortly.'
+            : 'Complete your cycle setup to unlock your daily brief.'}
+        </p>
+      )}
     </div>
   )
 }
@@ -450,6 +457,7 @@ export default function Dashboard() {
   const autoTimerRef = useRef(null)
   const [brief,      setBrief]      = useState(null)
   const [briefLoad,  setBriefLoad]  = useState(true)
+  const [briefError, setBriefError] = useState(false)
   const [briefModal, setBriefModal] = useState(false)
 
   // ── Exit / sign-out ──────────────────────────────────────────────────────────
@@ -499,7 +507,9 @@ export default function Dashboard() {
   // Daily brief — wait for auth to resolve before fetching
   useEffect(() => {
     if (!user?.id) return
-    getDailyBrief().then(data => { setBrief(data); setBriefLoad(false) })
+    getDailyBrief()
+      .then(data => { setBrief(data); setBriefLoad(false); if (!data) setBriefError(true) })
+      .catch(() => { setBriefLoad(false); setBriefError(true) })
   }, [user?.id])
 
   // Auto-alternate hero every 2 minutes
@@ -661,10 +671,14 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ── Phase Status Bar ── */}
+      <PhaseBar />
+
       {/* ── Athena Daily Brief ── */}
       <DailyBriefCard
         brief={brief}
         loading={briefLoad}
+        error={briefError}
         phase={phase}
         onExpand={() => setBriefModal(true)}
       />
