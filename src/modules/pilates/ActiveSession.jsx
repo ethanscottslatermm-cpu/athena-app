@@ -20,8 +20,11 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
   const [exIdx,         setExIdx]         = useState(0)
   const [elapsed,       setElapsed]       = useState(0)
   const [videoVisible,  setVideoVisible]  = useState(true)
+  const [videoOpacity,  setVideoOpacity]  = useState(1)
   const [showExitModal, setShowExitModal] = useState(false)
-  const touchStartX = useRef(null)
+  const touchStartX  = useRef(null)
+  const videoRef     = useRef(null)
+  const loopFading   = useRef(false)
 
   const current = exercises[exIdx]
   const total   = exercises.length
@@ -32,6 +35,30 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
     const t = setInterval(() => setElapsed(e => e + 1), 1000)
     return () => clearInterval(t)
   }, [])
+
+  // Reset loop fade state whenever exercise changes
+  useEffect(() => {
+    loopFading.current = false
+    setVideoOpacity(1)
+  }, [exIdx])
+
+  function handleVideoTimeUpdate() {
+    const vid = videoRef.current
+    if (!vid || !vid.duration || loopFading.current) return
+    if (vid.duration - vid.currentTime <= 0.45) {
+      loopFading.current = true
+      setVideoOpacity(0)
+    }
+  }
+
+  function handleVideoEnded() {
+    const vid = videoRef.current
+    if (!vid) return
+    vid.currentTime = 0
+    vid.play()
+    loopFading.current = false
+    setVideoOpacity(1)
+  }
 
   function advance() {
     if (isLast) {
@@ -125,12 +152,20 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
         >
           {videoSrc ? (
             <video
+              ref={videoRef}
               key={videoSrc}
               autoPlay
-              loop
               muted
               playsInline
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onTimeUpdate={handleVideoTimeUpdate}
+              onEnded={handleVideoEnded}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: videoOpacity,
+                transition: videoOpacity === 0 ? 'opacity 0.4s ease' : 'opacity 0.2s ease',
+              }}
             >
               <source src={videoSrc} type="video/mp4" />
             </video>
