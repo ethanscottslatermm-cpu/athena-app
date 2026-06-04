@@ -87,7 +87,16 @@ export default function BodyMuscleMap({
         <img
           src="/images/pilates/body-model.png"
           alt=""
-          style={{ height: '100%', width: 'auto', display: 'block', userSelect: 'none' }}
+          style={{
+            height: '100%',
+            width: 'auto',
+            display: 'block',
+            userSelect: 'none',
+            // multiply removes any white/grey background pixels (leaves only opaque silhouette)
+            mixBlendMode: 'multiply',
+            // recolor opaque pixels from black → warm brown (#6B5A52)
+            filter: 'url(#silhouette-color)',
+          }}
           draggable={false}
         />
 
@@ -100,6 +109,12 @@ export default function BodyMuscleMap({
           }}
         >
           <defs>
+            {/* Recolor silhouette: fills opaque source pixels with warm brown */}
+            <filter id="silhouette-color" x="0" y="0" width="100%" height="100%">
+              <feFlood floodColor="#6B5A52" floodOpacity="1" result="color"/>
+              <feComposite in="color" in2="SourceAlpha" operator="in"/>
+            </filter>
+
             <filter id="muscle-glow" x="-30%" y="-10%" width="160%" height="120%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="28" result="blur" />
               <feMerge>
