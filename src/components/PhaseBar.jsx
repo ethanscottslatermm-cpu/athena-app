@@ -6,11 +6,23 @@ export default function PhaseBar() {
   if (!label) return null
 
   return (
-    <div
-      className="w-full px-4 py-2 text-center text-xs font-garamond tracking-widest uppercase"
-      style={{ backgroundColor: color + '33', color }}
-    >
-      {label} Phase · Days {days}
+    <div style={{ padding: '0 16px 12px' }}>
+      <div
+        style={{
+          borderRadius: 12,
+          backgroundColor: color + '22',
+          border: `1px solid ${color}44`,
+          padding: '7px 14px',
+          textAlign: 'center',
+          fontFamily: 'Cinzel, serif',
+          fontSize: 9,
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          color: color,
+        }}
+      >
+        {label} Phase · Days {days}
+      </div>
     </div>
   )
 }
