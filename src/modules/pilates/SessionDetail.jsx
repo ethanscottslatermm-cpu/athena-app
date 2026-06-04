@@ -1,6 +1,4 @@
 ﻿import ExerciseRow from './components/ExerciseRow'
-import BodyMuscleMap from '../../components/pilates/BodyMuscleMap'
-import { focusToMuscles } from '../../utils/muscleGroupMap'
 
 const SESSION_IMAGES = {
   'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
@@ -70,8 +68,6 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
     { icon: '💪', label: session.difficulty },
     { icon: '🎯', label: session.equipment },
   ]
-
-  const { primary: musclePrimary, secondary: muscleSecondary } = focusToMuscles(session.focus_area)
 
   return (
     <div
@@ -167,20 +163,6 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             <p className="font-garamond italic text-brown/60 text-sm leading-relaxed">
               {session.description}
             </p>
-          </div>
-        )}
-
-        {/* Muscle map */}
-        {musclePrimary.length > 0 && (
-          <div className="px-4 pb-5">
-            <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase mb-4">
-              Muscles Targeted
-            </p>
-            <BodyMuscleMap
-              activeMuscles={musclePrimary}
-              secondaryMuscles={muscleSecondary}
-              height={240}
-            />
           </div>
         )}
 

@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft } from 'lucide-react'
-import BodyMuscleMap from '../../components/pilates/BodyMuscleMap'
-import { focusToMuscles } from '../../utils/muscleGroupMap'
 
 const EXERCISE_SLUGS = {
   'Pelvic Tilt':            'pelvic-tilt',
@@ -88,8 +86,6 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
   const slug     = EXERCISE_SLUGS[current?.name]
   const videoSrc = slug ? `/videos/Exercises/${slug}.mp4.mp4` : null
 
-  const { primary: musclePrimary, secondary: muscleSecondary } = focusToMuscles(current?.focus_area)
-
   return (
     <div
       className="fixed inset-0 z-[60] flex flex-col"
@@ -175,14 +171,12 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
               <source src={videoSrc} type="video/mp4" />
             </video>
           ) : (
-            <div className="w-full h-full flex items-center justify-center"
-              style={{ background: 'rgba(196,175,168,0.08)' }}>
-              <BodyMuscleMap
-                activeMuscles={musclePrimary}
-                secondaryMuscles={muscleSecondary}
-                height={160}
-                showLegend={false}
-              />
+            <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+              <span style={{ fontSize: 26, opacity: 0.35 }}>🧘</span>
+              <span className="font-cinzel tracking-widest"
+                style={{ fontSize: 9, color: 'rgba(59,51,48,0.28)' }}>
+                {current?.name?.toUpperCase()}
+              </span>
             </div>
           )}
         </div>
@@ -213,33 +207,6 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
           </p>
         )}
 
-        {/* Muscle target pills */}
-        {musclePrimary.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, justifyContent: 'center', marginTop: 10 }}>
-            {[...musclePrimary, ...muscleSecondary]
-              .filter(z => z !== 'full_body')
-              .slice(0, 5)
-              .map((zone, i) => {
-                const isPrimary = musclePrimary.includes(zone)
-                return (
-                  <span key={zone} style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 4,
-                    padding: '2px 8px', borderRadius: 20,
-                    background: isPrimary ? 'rgba(196,133,154,0.12)' : 'rgba(196,133,154,0.06)',
-                    border: `1px solid rgba(196,133,154,${isPrimary ? '0.3' : '0.15'})`,
-                    fontFamily: 'Cinzel, serif', fontSize: 7.5,
-                    letterSpacing: '0.12em', textTransform: 'uppercase',
-                    color: isPrimary ? '#C4859A' : 'rgba(196,133,154,0.5)',
-                    transition: 'all 0.3s ease',
-                  }}>
-                    <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#C9A86C', display: 'inline-block', opacity: isPrimary ? 1 : 0.5 }} />
-                    {zone.replace(/_/g, ' ')}
-                  </span>
-                )
-              })
-            }
-          </div>
-        )}
       </div>
 
       {/* Bottom controls */}
