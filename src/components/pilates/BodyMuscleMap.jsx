@@ -1,60 +1,59 @@
-// SVG viewBox="0 0 160 460" — update if body-model.png has a different aspect ratio.
-// Place the silhouette PNG at: public/images/pilates/body-model.png
+// viewBox matches body-model.png natural dimensions: 1536 × 2752
+// Muscle paths are traced to this specific silhouette.
+// public/images/pilates/body-model.png must be present for the base image.
 
-const VIEWBOX_W = 160
-const VIEWBOX_H = 460
+const VW = 1536
+const VH = 2752
 
-// Each zone is an array of SVG path strings (bilateral zones have two paths).
-// Paths trace an approximate standing female figure in anatomical neutral position.
 const MUSCLE_PATHS = {
   shoulders: [
-    // left deltoid
-    'M 30,64 C 18,59 11,69 13,84 C 15,97 26,102 40,95 C 50,89 54,77 47,66 Z',
-    // right deltoid
-    'M 130,64 C 142,59 149,69 147,84 C 145,97 134,102 120,95 C 110,89 106,77 113,66 Z',
+    // left deltoid cap
+    'M 312,532 C 228,504 180,562 192,652 C 204,730 270,762 370,732 C 442,710 472,650 448,566 Z',
+    // right deltoid cap (mirrored at x=768)
+    'M 1224,532 C 1308,504 1356,562 1344,652 C 1332,730 1266,762 1166,732 C 1094,710 1064,650 1088,566 Z',
   ],
   chest: [
-    'M 55,70 C 46,79 44,100 46,122 C 48,140 58,150 80,152 C 102,150 112,140 114,122 C 116,100 114,79 105,70 C 97,64 88,62 80,62 C 72,62 63,64 55,70 Z',
+    'M 482,548 C 400,610 372,742 384,878 C 396,992 454,1062 768,1082 C 1082,1062 1140,992 1152,878 C 1164,742 1136,610 1054,548 C 988,502 878,484 768,484 C 658,484 548,502 482,548 Z',
   ],
   core: [
-    'M 50,150 C 43,162 41,180 43,200 C 45,216 54,224 80,226 C 106,224 115,216 117,200 C 119,180 117,162 110,150 C 102,144 91,141 80,141 C 69,141 58,144 50,150 Z',
+    'M 476,1078 C 402,1122 376,1212 386,1308 C 396,1382 450,1422 768,1437 C 1086,1422 1140,1382 1150,1308 C 1160,1212 1134,1122 1060,1078 C 994,1040 882,1022 768,1022 C 654,1022 542,1040 476,1078 Z',
   ],
   arms: [
-    // left bicep / upper arm
-    'M 15,75 C 7,82 3,100 5,122 C 7,140 16,148 29,144 C 38,140 42,128 40,108 C 38,89 29,74 20,73 Z',
-    // right bicep / upper arm
-    'M 145,75 C 153,82 157,100 155,122 C 153,140 144,148 131,144 C 122,140 118,128 120,108 C 122,89 131,74 140,73 Z',
+    // left upper arm (bicep / deltoid to elbow)
+    'M 217,560 C 154,604 124,716 138,850 C 152,964 224,1014 320,992 C 380,972 406,908 392,808 C 378,712 336,592 280,560 Z',
+    // right upper arm
+    'M 1319,560 C 1382,604 1412,716 1398,850 C 1384,964 1312,1014 1216,992 C 1156,972 1130,908 1144,808 C 1158,712 1200,592 1256,560 Z',
   ],
   forearms: [
-    // left forearm
-    'M 7,146 C 1,156 -1,178 1,202 C 3,220 12,228 25,224 C 34,220 38,208 36,186 C 34,165 25,147 16,145 Z',
+    // left forearm (elbow to wrist/hand)
+    'M 170,990 C 110,1044 84,1150 98,1270 C 112,1374 170,1418 274,1398 C 334,1378 356,1314 340,1218 C 324,1126 280,1010 226,984 Z',
     // right forearm
-    'M 153,146 C 159,156 161,178 159,202 C 157,220 148,228 135,224 C 126,220 122,208 124,186 C 126,165 135,147 144,145 Z',
+    'M 1366,990 C 1426,1044 1452,1150 1438,1270 C 1424,1374 1366,1418 1262,1398 C 1202,1378 1180,1314 1196,1218 C 1212,1126 1256,1010 1310,984 Z',
   ],
-  // back uses the chest zone as a placeholder (front-view silhouette)
+  // back uses chest + core zones (front-view placeholder)
   back: [
-    'M 55,70 C 46,79 44,100 46,122 C 48,140 58,150 80,152 C 102,150 112,140 114,122 C 116,100 114,79 105,70 C 97,64 88,62 80,62 C 72,62 63,64 55,70 Z',
-    'M 50,150 C 43,162 41,180 43,200 C 45,216 54,224 80,226 C 106,224 115,216 117,200 C 119,180 117,162 110,150 C 102,144 91,141 80,141 C 69,141 58,144 50,150 Z',
+    'M 482,548 C 400,610 372,742 384,878 C 396,992 454,1062 768,1082 C 1082,1062 1140,992 1152,878 C 1164,742 1136,610 1054,548 C 988,502 878,484 768,484 C 658,484 548,502 482,548 Z',
+    'M 476,1078 C 402,1122 376,1212 386,1308 C 396,1382 450,1422 768,1437 C 1086,1422 1140,1382 1150,1308 C 1160,1212 1134,1122 1060,1078 C 994,1040 882,1022 768,1022 C 654,1022 542,1040 476,1078 Z',
   ],
   glutes: [
-    'M 46,222 C 36,232 32,250 34,268 C 36,283 46,292 80,294 C 114,292 124,283 126,268 C 128,250 124,232 114,222 C 104,215 92,212 80,212 C 68,212 56,215 46,222 Z',
+    'M 370,1410 C 292,1482 266,1584 284,1672 C 302,1746 372,1792 768,1810 C 1164,1792 1234,1746 1252,1672 C 1270,1584 1244,1482 1166,1410 C 1080,1338 926,1306 768,1306 C 610,1306 456,1338 370,1410 Z',
   ],
   quads: [
     // left front thigh
-    'M 37,290 C 28,302 24,324 26,348 C 28,366 38,375 56,370 C 67,366 71,353 69,332 C 67,311 58,293 46,288 Z',
+    'M 312,1792 C 254,1864 230,1970 246,2082 C 262,2180 324,2224 434,2212 C 504,2202 534,2156 520,2058 C 506,1966 466,1854 414,1814 Z',
     // right front thigh
-    'M 123,290 C 132,302 136,324 134,348 C 132,366 122,375 104,370 C 93,366 89,353 91,332 C 93,311 102,293 114,288 Z',
+    'M 1224,1792 C 1282,1864 1306,1970 1290,2082 C 1274,2180 1212,2224 1102,2212 C 1032,2202 1002,2156 1016,2058 C 1030,1966 1070,1854 1122,1814 Z',
   ],
-  // hamstrings share the quad zone (front-view figure — rear muscles shown as overlay)
+  // hamstrings share the thigh zone (front-facing silhouette)
   hamstrings: [
-    'M 37,290 C 28,302 24,324 26,348 C 28,366 38,375 56,370 C 67,366 71,353 69,332 C 67,311 58,293 46,288 Z',
-    'M 123,290 C 132,302 136,324 134,348 C 132,366 122,375 104,370 C 93,366 89,353 91,332 C 93,311 102,293 114,288 Z',
+    'M 312,1792 C 254,1864 230,1970 246,2082 C 262,2180 324,2224 434,2212 C 504,2202 534,2156 520,2058 C 506,1966 466,1854 414,1814 Z',
+    'M 1224,1792 C 1282,1864 1306,1970 1290,2082 C 1274,2180 1212,2224 1102,2212 C 1032,2202 1002,2156 1016,2058 C 1030,1966 1070,1854 1122,1814 Z',
   ],
   calves: [
     // left calf
-    'M 28,372 C 22,384 20,406 22,428 C 24,444 33,452 48,448 C 59,444 63,432 61,410 C 59,390 50,373 39,371 Z',
+    'M 270,2220 C 220,2294 202,2410 220,2522 C 236,2618 292,2660 404,2648 C 470,2638 494,2594 478,2496 C 462,2402 422,2266 368,2234 Z',
     // right calf
-    'M 132,372 C 138,384 140,406 138,428 C 136,444 127,452 112,448 C 101,444 97,432 99,410 C 101,390 110,373 121,371 Z',
+    'M 1266,2220 C 1316,2294 1334,2410 1316,2522 C 1300,2618 1244,2660 1132,2648 C 1066,2638 1042,2594 1058,2496 C 1074,2402 1114,2266 1168,2234 Z',
   ],
 }
 
@@ -66,11 +65,10 @@ export default function BodyMuscleMap({
   height = 220,
   showLegend = true,
 }) {
-  const expanded = (arr) =>
-    arr.includes('full_body') ? ALL_ZONES : arr
+  const expand = (arr) => arr.includes('full_body') ? ALL_ZONES : arr
 
-  const primary   = expanded(activeMuscles)
-  const secondary = expanded(secondaryMuscles).filter(z => !primary.includes(z))
+  const primary   = expand(activeMuscles)
+  const secondary = expand(secondaryMuscles).filter(z => !primary.includes(z))
 
   function zoneStyle(zone) {
     if (primary.includes(zone))   return { opacity: 0.55, filter: 'url(#muscle-glow)' }
@@ -84,7 +82,7 @@ export default function BodyMuscleMap({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
 
-      {/* Figure wrapper — PNG base + SVG overlay scale together */}
+      {/* PNG + SVG overlay scale together inside this relative wrapper */}
       <div style={{ position: 'relative', height, display: 'inline-block' }}>
         <img
           src="/images/pilates/body-model.png"
@@ -94,20 +92,16 @@ export default function BodyMuscleMap({
         />
 
         <svg
-          viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
+          viewBox={`0 0 ${VW} ${VH}`}
           style={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            overflow: 'visible',
+            top: 0, left: 0,
+            width: '100%', height: '100%',
           }}
         >
           <defs>
-            {/* Soft glow filter — extends slightly beyond path boundary */}
-            <filter id="muscle-glow" x="-25%" y="-10%" width="150%" height="120%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+            <filter id="muscle-glow" x="-30%" y="-10%" width="160%" height="120%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="28" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -140,27 +134,19 @@ export default function BodyMuscleMap({
               <span
                 key={zone}
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  padding: '3px 10px',
-                  borderRadius: 20,
-                  background: isPrimary
-                    ? 'rgba(196,133,154,0.14)'
-                    : 'rgba(196,133,154,0.07)',
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  padding: '3px 10px', borderRadius: 20,
+                  background: isPrimary ? 'rgba(196,133,154,0.14)' : 'rgba(196,133,154,0.07)',
                   border: `1px solid rgba(196,133,154,${isPrimary ? '0.35' : '0.2'})`,
-                  fontFamily: 'Cinzel, serif',
-                  fontSize: 8,
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
+                  fontFamily: 'Cinzel, serif', fontSize: 8,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
                   color: isPrimary ? '#C4859A' : 'rgba(196,133,154,0.6)',
                   transition: 'all 0.3s ease',
                 }}
               >
                 <span style={{
                   width: 4, height: 4, borderRadius: '50%',
-                  background: '#C9A86C',
-                  display: 'inline-block',
+                  background: '#C9A86C', display: 'inline-block',
                   opacity: isPrimary ? 1 : 0.5,
                 }} />
                 {zone.replace(/_/g, ' ')}

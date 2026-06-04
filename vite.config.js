@@ -13,8 +13,16 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
-        globIgnores: ['**/Themes/**', '**/favicon*', '**/images/dashboard/**', '**/My Modules/**'],
+        globIgnores: ['**/Themes/**', '**/favicon*', '**/images/dashboard/**', '**/My Modules/**', '**/images/pilates/**'],
         runtimeCaching: [
+          {
+            urlPattern: /\/images\/pilates\/.+\.png$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pilates-assets-v1',
+              expiration: { maxEntries: 5, maxAgeSeconds: 60 * 60 * 24 * 60 },
+            },
+          },
           {
             urlPattern: /\/images\/sessions\/.+\.webp$/i,
             handler: 'CacheFirst',
