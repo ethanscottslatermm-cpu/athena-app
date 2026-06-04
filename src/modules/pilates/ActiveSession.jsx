@@ -9,6 +9,7 @@ const EXERCISE_SLUGS = {
   'Single Leg Stretch':     'single-leg-stetch',   // matches filename on disk
   'Criss Cross':            'criss-cross',
   'Bridge Lift':            'bridge-lift',
+  'Single Leg Bridge':      'single-leg-bridge',
 }
 
 function formatTime(s) {
