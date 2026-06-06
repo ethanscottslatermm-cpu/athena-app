@@ -1,4 +1,4 @@
-import bodyModel from '../../assets/pilates/body-model.png'
+import bodyModel from '../../assets/pilates/body-model.svg'
 
 const W = 1425
 const H = 2000
