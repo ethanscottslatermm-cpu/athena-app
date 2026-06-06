@@ -285,17 +285,6 @@ export default function ProgressTab({
         <MonthHeatmap completions={completions} />
       </div>
 
-      {/* ── Body heatmap ────────────────────────────────────────────── */}
-      <div
-        className="rounded-xl p-4"
-        style={{ background: '#140A18', border: '1px solid rgba(201,168,108,0.15)' }}
-      >
-        <p className="font-cinzel text-[10px] tracking-widest uppercase mb-3" style={{ color: 'rgba(242,237,232,0.4)' }}>
-          Body Area Focus
-        </p>
-        <BodyHeatmap completions={completions} sessions={sessions} />
-      </div>
-
       {/* ── Phase distribution ──────────────────────────────────────── */}
       <div
         className="rounded-xl p-4"
