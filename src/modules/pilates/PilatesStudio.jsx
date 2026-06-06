@@ -400,7 +400,7 @@ export default function PilatesStudio() {
       {/* ── Background hero ─────────────────────────────────────────────────── */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/images/dashboard/pilates.png)' }}
+        style={{ backgroundImage: 'url(/images/dashboard/pilates-hero.svg)' }}
       />
       <div className="absolute inset-0" style={{
         background: 'linear-gradient(to bottom, rgba(242,237,232,0.18) 0%, rgba(242,237,232,0.08) 20%, rgba(242,237,232,0.72) 55%, rgba(242,237,232,0.97) 75%)',
