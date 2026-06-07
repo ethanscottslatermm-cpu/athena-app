@@ -1,6 +1,7 @@
 ﻿import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
-import BodyHeatmap from './components/BodyHeatmap'
+import PilatesMuscleMap from '../../components/pilates/PilatesMuscleMap'
+import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const PHASE_COLORS = {
   menstrual: '#D4A0A0',
@@ -165,6 +166,24 @@ function MonthHeatmap({ completions }) {
   )
 }
 
+// Derive most-worked muscles from completion history
+function useMostWorkedMuscles(completions, sessions) {
+  return useMemo(() => {
+    if (!completions.length) return { primary: [], secondary: [] }
+    const tally = {}
+    completions.forEach(c => {
+      const s = sessions.find(x => x.id === c.session_id)
+      if (!s?.focus_area) return
+      const { primary, secondary } = mapFocusToMuscles(s.focus_area)
+      ;[...primary, ...secondary].forEach(m => { tally[m] = (tally[m] || 0) + 1 })
+    })
+    const sorted = Object.entries(tally).sort((a, b) => b[1] - a[1])
+    const topGroup = sorted[0]?.[0]
+    if (!topGroup) return { primary: [], secondary: [] }
+    return mapFocusToMuscles(topGroup)
+  }, [completions, sessions])
+}
+
 export default function ProgressTab({
   sessions = [],
   completions = [],
@@ -250,7 +269,8 @@ export default function ProgressTab({
     )
   }
 
-  const phaseTotal = stats?.phaseData?.reduce((sum, d) => sum + d.count, 0) ?? 0
+  const phaseTotal  = stats?.phaseData?.reduce((sum, d) => sum + d.count, 0) ?? 0
+  const topMuscles  = useMostWorkedMuscles(completions, sessions)
 
   return (
     <div className="space-y-5 pb-4">
@@ -283,6 +303,21 @@ export default function ProgressTab({
           {format(today, 'MMMM yyyy')}
         </p>
         <MonthHeatmap completions={completions} />
+      </div>
+
+      {/* ── Muscle map ──────────────────────────────────────────────── */}
+      <div
+        className="rounded-xl py-5 px-4"
+        style={{ background: 'rgba(196,175,168,0.12)', border: '1px solid rgba(196,175,168,0.28)' }}
+      >
+        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-4">
+          Most Worked
+        </p>
+        <PilatesMuscleMap
+          primaryMuscles={topMuscles.primary}
+          secondaryMuscles={topMuscles.secondary}
+          height={300}
+        />
       </div>
 
       {/* ── Phase distribution ──────────────────────────────────────── */}

@@ -1,5 +1,5 @@
 ﻿import ExerciseRow from './components/ExerciseRow'
-import BodyMuscleMap from '../../components/pilates/BodyMuscleMap'
+import PilatesMuscleMap from '../../components/pilates/PilatesMuscleMap'
 import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const SESSION_IMAGES = {
@@ -163,13 +163,28 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
 
         {/* Description */}
         {session.description && (
-          <div className="px-4 pb-5">
+          <div className="px-4 pb-4">
             <p className="font-garamond italic text-brown/60 text-sm leading-relaxed">
               {session.description}
             </p>
           </div>
         )}
 
+        {/* Muscles targeted */}
+        {(musclePrimary.length > 0 || muscleSecondary.length > 0) && (
+          <div className="mx-4 mb-5 rounded-xl py-4 px-3"
+            style={{ background: 'rgba(196,175,168,0.12)', border: '1px solid rgba(196,175,168,0.28)' }}
+          >
+            <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase mb-3 text-center">
+              Muscles Targeted
+            </p>
+            <PilatesMuscleMap
+              primaryMuscles={musclePrimary}
+              secondaryMuscles={muscleSecondary}
+              height={260}
+            />
+          </div>
+        )}
 
         {/* Exercise list */}
         <div className="pb-4">

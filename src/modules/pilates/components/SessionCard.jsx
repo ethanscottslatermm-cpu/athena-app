@@ -1,4 +1,7 @@
-﻿const PHASE_COLORS = {
+﻿import PilatesMuscleMap from '../../../components/pilates/PilatesMuscleMap'
+import { mapFocusToMuscles } from '../../../utils/muscleGroupMap'
+
+const PHASE_COLORS = {
   menstrual: '#D4A0A0',
   follicular: '#8FA58C',
   ovulation: '#D4A0A0',
@@ -70,6 +73,7 @@ export default function SessionCard({
   if (!session) return null
   const pc  = PHASE_COLORS[session.phase] ?? '#D4A0A0'
   const img = getSessionImage(session.title)
+  const { primary: mPrimary, secondary: mSecondary } = mapFocusToMuscles(session.focus_area)
 
   const bgStyle = img
     ? {
@@ -207,6 +211,16 @@ export default function SessionCard({
         >
           <Heart filled={isFavorite} size={15} />
         </button>
+        {/* Muscle map inset — floated right, semi-transparent */}
+        {(mPrimary.length > 0 || mSecondary.length > 0) && (
+          <div className="absolute bottom-1 right-1 z-10" style={{ opacity: 0.88 }}>
+            <PilatesMuscleMap
+              primaryMuscles={mPrimary}
+              secondaryMuscles={mSecondary}
+              height={82}
+            />
+          </div>
+        )}
       </div>
       <div className="p-2.5">
         <h4 className="font-cinzel text-brown/85 text-[13px] leading-tight mb-1">{session.title}</h4>
