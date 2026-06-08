@@ -138,6 +138,29 @@ export default function MuscleMap({
             }}
           />
         )}
+        {/* Foot outlines + lower calf connectors — supplements the faint silhouette in the ankle/foot region */}
+        <svg
+          viewBox="0 0 1316 1883"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+        >
+          <g stroke="rgba(59,51,48,0.7)" strokeWidth="10" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            {/* ── Left foot outline ─────────────────────────────────── */}
+            <path d="M 543 1662 Q 520 1680 518 1720 Q 516 1760 520 1800 Q 524 1845 540 1860 Q 552 1868 560 1867 Q 572 1866 580 1858 Q 593 1843 594 1800 Q 595 1760 590 1720 Q 586 1680 570 1662 Z" />
+            {/* Left outer edge: calf bottom → foot top-right */}
+            <path d="M 600 1584 C 605 1615 597 1649 570 1662" />
+            {/* Left inner edge: tibialis bottom → foot top-left */}
+            <path d="M 565 1658 Q 554 1662 543 1662" />
+            {/* ── Right foot outline ─────────────────────────────────── */}
+            <path d="M 710 1662 Q 689 1680 686 1720 Q 683 1760 686 1800 Q 689 1845 705 1860 Q 716 1868 724 1867 Q 736 1866 748 1858 Q 762 1843 764 1800 Q 765 1760 762 1720 Q 758 1680 745 1662 Z" />
+            {/* Right inner edge: calf-right bottom → foot top-left */}
+            <path d="M 675 1589 C 672 1620 679 1649 710 1662" />
+            {/* Right outer edge: tibialis-right bottom → foot top-right */}
+            <path d="M 717 1658 Q 731 1661 745 1662" />
+          </g>
+        </svg>
+
         {ALL_MUSCLES.map(id => (
           <img
             key={id}
