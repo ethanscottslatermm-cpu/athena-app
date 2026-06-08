@@ -1,21 +1,24 @@
+import { useRef, useState } from 'react'
+import { musclePaths } from './musclePaths'
+
 const ALL_MUSCLES = [
-  'muscle_deltoid-left',       'muscle_deltoid-right',
-  'muscle_trapezius-left',     'muscle_trapezius-right',
-  'muscle_pectorals-left',     'muscle_pectorals-right',
-  'muscle_bicep-left',         'muscle_bicep-right',
-  'muscle_forearm-inner-left', 'muscle_forearm-outer-left',
-  'muscle_forearm-inner-right','muscle_forearm-outer-right',
-  'muscle_abs-upper-left',     'muscle_abs-upper-right',
-  'muscle_abs-mid-left',       'muscle_abs-mid-right',
-  'muscle_abs-lower-left',     'muscle_abs-lower-right',
-  'muscle_oblique-left',       'muscle_oblique-right',
-  'muscle_hip-flexor-left',    'muscle_hip-flexor-right',
-  'muscle_tfl-left',           'muscle_tfl-right',
-  'muscle_adductor-left',      'muscle_adductor-right',
-  'muscle_quad-inner-left',    'muscle_quad-inner-right',
-  'muscle_quad-outer-left',    'muscle_quad-outer-right',
-  'muscle_calf-left',          'muscle_calf-right',
-  'muscle_tibialis-left',      'muscle_tibialis-right',
+  'muscle_deltoid-left',        'muscle_deltoid-right',
+  'muscle_trapezius-left',      'muscle_trapezius-right',
+  'muscle_pectorals-left',      'muscle_pectorals-right',
+  'muscle_bicep-left',          'muscle_bicep-right',
+  'muscle_forearm-inner-left',  'muscle_forearm-outer-left',
+  'muscle_forearm-inner-right', 'muscle_forearm-outer-right',
+  'muscle_abs-upper-left',      'muscle_abs-upper-right',
+  'muscle_abs-mid-left',        'muscle_abs-mid-right',
+  'muscle_abs-lower-left',      'muscle_abs-lower-right',
+  'muscle_oblique-left',        'muscle_oblique-right',
+  'muscle_hip-flexor-left',     'muscle_hip-flexor-right',
+  'muscle_tfl-left',            'muscle_tfl-right',
+  'muscle_adductor-left',       'muscle_adductor-right',
+  'muscle_quad-inner-left',     'muscle_quad-inner-right',
+  'muscle_quad-outer-left',     'muscle_quad-outer-right',
+  'muscle_calf-left',           'muscle_calf-right',
+  'muscle_tibialis-left',       'muscle_tibialis-right',
 ]
 
 export const MUSCLE_GROUPS = {
@@ -38,7 +41,43 @@ export const MUSCLE_GROUPS = {
               'muscle_tibialis-left', 'muscle_tibialis-right'],
 }
 
-// Map legacy focus-area group keys → muscle_ IDs
+export const MUSCLE_LABELS = {
+  'muscle_deltoid-left':         'Left Deltoid',
+  'muscle_deltoid-right':        'Right Deltoid',
+  'muscle_trapezius-left':       'Left Trapezius',
+  'muscle_trapezius-right':      'Right Trapezius',
+  'muscle_pectorals-left':       'Left Pectoral',
+  'muscle_pectorals-right':      'Right Pectoral',
+  'muscle_bicep-left':           'Left Bicep',
+  'muscle_bicep-right':          'Right Bicep',
+  'muscle_forearm-inner-left':   'Left Inner Forearm',
+  'muscle_forearm-outer-left':   'Left Outer Forearm',
+  'muscle_forearm-inner-right':  'Right Inner Forearm',
+  'muscle_forearm-outer-right':  'Right Outer Forearm',
+  'muscle_abs-upper-left':       'Upper Abs',
+  'muscle_abs-upper-right':      'Upper Abs',
+  'muscle_abs-mid-left':         'Mid Abs',
+  'muscle_abs-mid-right':        'Mid Abs',
+  'muscle_abs-lower-left':       'Lower Abs',
+  'muscle_abs-lower-right':      'Lower Abs',
+  'muscle_oblique-left':         'Left Oblique',
+  'muscle_oblique-right':        'Right Oblique',
+  'muscle_hip-flexor-left':      'Left Hip Flexor',
+  'muscle_hip-flexor-right':     'Right Hip Flexor',
+  'muscle_tfl-left':             'Left TFL',
+  'muscle_tfl-right':            'Right TFL',
+  'muscle_adductor-left':        'Left Adductor',
+  'muscle_adductor-right':       'Right Adductor',
+  'muscle_quad-inner-left':      'Left Inner Quad',
+  'muscle_quad-inner-right':     'Right Inner Quad',
+  'muscle_quad-outer-left':      'Left Outer Quad',
+  'muscle_quad-outer-right':     'Right Outer Quad',
+  'muscle_calf-left':            'Left Calf',
+  'muscle_calf-right':           'Right Calf',
+  'muscle_tibialis-left':        'Left Tibialis',
+  'muscle_tibialis-right':       'Right Tibialis',
+}
+
 export const FOCUS_TO_MUSCLE_IDS = {
   deltoid:      ['muscle_deltoid-left', 'muscle_deltoid-right'],
   trapezius:    ['muscle_trapezius-left', 'muscle_trapezius-right'],
@@ -66,8 +105,7 @@ export function focusGroupsToMuscleIds(groups = []) {
   return [...ids]
 }
 
-const SIZE_WIDTHS = { sm: 120, md: 200 }
-const PINK_FILTER = 'sepia(1) saturate(5) hue-rotate(312deg) brightness(0.88)'
+const MUSCLE_FILL = '#D4A0A0'
 
 export default function MuscleMap({
   mode = 'static',
@@ -81,96 +119,90 @@ export default function MuscleMap({
   const hasActive = activeSet.size > 0
   const hasOpacityMap = Object.keys(opacityMap).length > 0
   const isInteractive = typeof onMusclePress === 'function'
+  const debounceRef = useRef(null)
+  const [hovered, setHovered] = useState(null)
 
-  const width = SIZE_WIDTHS[size]
-  const containerStyle = width
-    ? { width, flexShrink: 0 }
-    : { width: '100%' }
+  const widths = { sm: 120, md: 200 }
+  const w = widths[size]
+  const containerStyle = w ? { width: w, flexShrink: 0 } : { width: '100%' }
 
-  function getMuscleStyle(id) {
-    const isActive = activeSet.has(id)
-    let opacity = 0
-    let filter = 'none'
-
+  function getOpacity(id) {
+    const active = activeSet.has(id)
     if (mode === 'overview') {
-      filter = PINK_FILTER
-      if (hasOpacityMap) {
-        opacity = opacityMap[id] ?? (isActive ? 0.25 : 0.05)
-      } else if (hasActive) {
-        opacity = isActive ? 0.25 : 0.05
-      } else {
-        opacity = 0.25
-      }
-    } else if (mode === 'session') {
-      if (hasActive) {
-        if (isActive) { opacity = 1; filter = PINK_FILTER }
-        else { opacity = 0.05 }
-      }
+      if (hasOpacityMap) return opacityMap[id] ?? (active ? 0.25 : 0.06)
+      if (hasActive) return active ? 0.25 : 0.06
+      return 0.25
     }
-    // static: opacity stays 0
+    if (mode === 'session') {
+      if (hasActive) return active ? 1 : 0.06
+      return 0
+    }
+    if (mode === 'explore') {
+      return id === hovered ? 0.85 : 0.06
+    }
+    return 0
+  }
 
-    return {
-      position: 'absolute', top: 0, left: 0,
-      width: '100%', height: '100%',
-      pointerEvents: isInteractive ? 'auto' : 'none',
-      opacity,
-      filter,
-      transition: 'opacity 0.3s ease',
-      userSelect: 'none',
-    }
+  function handlePress(id) {
+    if (!isInteractive || debounceRef.current) return
+    debounceRef.current = setTimeout(() => { debounceRef.current = null }, 150)
+    onMusclePress(id)
   }
 
   return (
     <div style={containerStyle}>
       <div style={{ position: 'relative', width: '100%', aspectRatio: '1316 / 1883' }}>
+
+        {/* Layer 1: skin fill base */}
+        <img
+          src="/assets/body/body_skin.svg"
+          alt="" draggable={false}
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            pointerEvents: 'none', userSelect: 'none',
+          }}
+        />
+
+        {/* Layer 2: stroke silhouette with warm glow */}
         {showOutline && (
           <img
             src="/assets/body/Body_Silhoutte.svg"
-            alt=""
-            draggable={false}
+            alt="" draggable={false}
             style={{
-              position: 'absolute', top: 0, left: 0,
-              width: '100%', height: '100%',
-              pointerEvents: 'none',
-              opacity: 1,
-              filter: 'brightness(0.42) contrast(2) drop-shadow(0 0 4px rgba(59,51,48,0.35))',
-              userSelect: 'none',
+              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+              pointerEvents: 'none', userSelect: 'none', opacity: 0.9,
+              filter: 'drop-shadow(0 0 6px rgba(201,168,108,0.7)) drop-shadow(0 0 14px rgba(201,168,108,0.3))',
             }}
           />
         )}
-        {/* Foot outlines + lower calf connectors — supplements the faint silhouette in the ankle/foot region */}
+
+        {/* Layer 3: inline muscle paths — pixel-precise hit detection */}
         <svg
           viewBox="0 0 1316 1883"
-          preserveAspectRatio="none"
+          preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible' }}
         >
-          <g stroke="rgba(59,51,48,0.7)" strokeWidth="10" fill="none" strokeLinecap="round" strokeLinejoin="round">
-            {/* ── Left foot outline ─────────────────────────────────── */}
-            <path d="M 543 1662 Q 520 1680 518 1720 Q 516 1760 520 1800 Q 524 1845 540 1860 Q 552 1868 560 1867 Q 572 1866 580 1858 Q 593 1843 594 1800 Q 595 1760 590 1720 Q 586 1680 570 1662 Z" />
-            {/* Left outer edge: calf bottom → foot top-right */}
-            <path d="M 600 1584 C 605 1615 597 1649 570 1662" />
-            {/* Left inner edge: tibialis bottom → foot top-left */}
-            <path d="M 565 1658 Q 554 1662 543 1662" />
-            {/* ── Right foot outline ─────────────────────────────────── */}
-            <path d="M 710 1662 Q 689 1680 686 1720 Q 683 1760 686 1800 Q 689 1845 705 1860 Q 716 1868 724 1867 Q 736 1866 748 1858 Q 762 1843 764 1800 Q 765 1760 762 1720 Q 758 1680 745 1662 Z" />
-            {/* Right inner edge: calf-right bottom → foot top-left */}
-            <path d="M 675 1589 C 672 1620 679 1649 710 1662" />
-            {/* Right outer edge: tibialis-right bottom → foot top-right */}
-            <path d="M 717 1658 Q 731 1661 745 1662" />
-          </g>
+          {ALL_MUSCLES.map(id => {
+            const d = musclePaths[id]
+            if (!d) return null
+            const opacity = getOpacity(id)
+            return (
+              <path
+                key={id}
+                d={d}
+                fill={MUSCLE_FILL}
+                opacity={opacity}
+                pointerEvents={isInteractive ? 'visibleFill' : 'none'}
+                style={{ transition: 'opacity 0.3s ease', cursor: isInteractive ? 'pointer' : 'default' }}
+                onClick={() => handlePress(id)}
+                onMouseEnter={mode === 'explore' ? () => setHovered(id) : undefined}
+                onMouseLeave={mode === 'explore' ? () => setHovered(null) : undefined}
+              />
+            )
+          })}
         </svg>
 
-        {ALL_MUSCLES.map(id => (
-          <img
-            key={id}
-            src={`/assets/muscles/${id}.svg`}
-            alt=""
-            draggable={false}
-            onClick={isInteractive ? () => onMusclePress(id) : undefined}
-            style={getMuscleStyle(id)}
-          />
-        ))}
       </div>
     </div>
   )

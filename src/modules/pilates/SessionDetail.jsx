@@ -1,5 +1,6 @@
-﻿import ExerciseRow from './components/ExerciseRow'
-import MuscleMap, { focusGroupsToMuscleIds } from '../../components/MuscleMap'
+﻿import { useRef, useState } from 'react'
+import ExerciseRow from './components/ExerciseRow'
+import MuscleMap, { focusGroupsToMuscleIds, MUSCLE_LABELS } from '../../components/MuscleMap'
 import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const SESSION_IMAGES = {
@@ -50,6 +51,15 @@ function Heart({ filled }) {
 }
 
 export default function SessionDetail({ session, exercises = [], isFavorite, onFavoriteToggle, onStart, onClose }) {
+  const [tappedMuscle, setTappedMuscle] = useState(null)
+  const tappedTimerRef = useRef(null)
+
+  function handleMuscleTap(id) {
+    setTappedMuscle(id)
+    if (tappedTimerRef.current) clearTimeout(tappedTimerRef.current)
+    tappedTimerRef.current = setTimeout(() => setTappedMuscle(null), 2000)
+  }
+
   if (!session) return null
 
   const pc = PHASE_COLORS[session.phase] ?? '#D4A0A0'
@@ -181,13 +191,33 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase mb-3 text-center">
               Muscles Targeted
             </p>
-            <div style={{ width: 180, margin: '0 auto' }}>
+            <div style={{ width: 180, margin: '0 auto', position: 'relative' }}>
               <MuscleMap
                 mode="session"
                 activeMuscles={activeMuscleIds}
                 size="lg"
                 showOutline={true}
+                onMusclePress={handleMuscleTap}
               />
+              {tappedMuscle && (
+                <div style={{
+                  position: 'absolute', bottom: 6, left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: 'rgba(242,237,232,0.94)',
+                  border: '1px solid rgba(212,160,160,0.45)',
+                  borderRadius: 12,
+                  padding: '4px 12px',
+                  pointerEvents: 'none',
+                  whiteSpace: 'nowrap',
+                  fontFamily: 'Cinzel, serif',
+                  fontSize: 9,
+                  letterSpacing: '0.12em',
+                  color: '#D4A0A0',
+                  boxShadow: '0 2px 10px rgba(59,51,48,0.1)',
+                }}>
+                  {MUSCLE_LABELS[tappedMuscle] ?? tappedMuscle}
+                </div>
+              )}
             </div>
           </div>
         )}
