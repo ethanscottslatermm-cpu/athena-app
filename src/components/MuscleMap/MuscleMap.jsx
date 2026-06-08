@@ -67,7 +67,7 @@ export function focusGroupsToMuscleIds(groups = []) {
 }
 
 const SIZE_WIDTHS = { sm: 120, md: 200 }
-const GOLD_FILTER = 'sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1)'
+const PINK_FILTER = 'sepia(1) saturate(5) hue-rotate(312deg) brightness(0.88)'
 
 export default function MuscleMap({
   mode = 'static',
@@ -93,7 +93,7 @@ export default function MuscleMap({
     let filter = 'none'
 
     if (mode === 'overview') {
-      filter = GOLD_FILTER
+      filter = PINK_FILTER
       if (hasOpacityMap) {
         opacity = opacityMap[id] ?? (isActive ? 0.25 : 0.05)
       } else if (hasActive) {
@@ -103,7 +103,7 @@ export default function MuscleMap({
       }
     } else if (mode === 'session') {
       if (hasActive) {
-        if (isActive) { opacity = 1; filter = GOLD_FILTER }
+        if (isActive) { opacity = 1; filter = PINK_FILTER }
         else { opacity = 0.05 }
       }
     }
@@ -132,8 +132,8 @@ export default function MuscleMap({
               position: 'absolute', top: 0, left: 0,
               width: '100%', height: '100%',
               pointerEvents: 'none',
-              opacity: 0.85,
-              filter: 'drop-shadow(0 0 6px rgba(201,168,108,0.6)) drop-shadow(0 0 12px rgba(201,168,108,0.3))',
+              opacity: 1,
+              filter: 'brightness(0.42) contrast(2) drop-shadow(0 0 4px rgba(59,51,48,0.35))',
               userSelect: 'none',
             }}
           />
