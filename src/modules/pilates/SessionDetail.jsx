@@ -1,5 +1,5 @@
 ﻿import ExerciseRow from './components/ExerciseRow'
-import PilatesMuscleMap from '../../components/pilates/PilatesMuscleMap'
+import MuscleMap, { focusGroupsToMuscleIds } from '../../components/MuscleMap'
 import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const SESSION_IMAGES = {
@@ -72,6 +72,9 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
   ]
 
   const { primary: musclePrimary, secondary: muscleSecondary } = mapFocusToMuscles(session.focus_area)
+  const activeMuscleIds = session.target_muscles?.length
+    ? session.target_muscles
+    : focusGroupsToMuscleIds([...musclePrimary, ...muscleSecondary])
 
   return (
     <div
@@ -171,18 +174,21 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
         )}
 
         {/* Muscles targeted */}
-        {(musclePrimary.length > 0 || muscleSecondary.length > 0) && (
+        {activeMuscleIds.length > 0 && (
           <div className="mx-4 mb-5 rounded-xl py-4 px-3"
             style={{ background: 'rgba(196,175,168,0.12)', border: '1px solid rgba(196,175,168,0.28)' }}
           >
             <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase mb-3 text-center">
               Muscles Targeted
             </p>
-            <PilatesMuscleMap
-              primaryMuscles={musclePrimary}
-              secondaryMuscles={muscleSecondary}
-              height={260}
-            />
+            <div style={{ width: 180, margin: '0 auto' }}>
+              <MuscleMap
+                mode="session"
+                activeMuscles={activeMuscleIds}
+                size="lg"
+                showOutline={true}
+              />
+            </div>
           </div>
         )}
 

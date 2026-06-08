@@ -1,4 +1,4 @@
-﻿import PilatesMuscleMap from '../../../components/pilates/PilatesMuscleMap'
+﻿import MuscleMap, { focusGroupsToMuscleIds } from '../../../components/MuscleMap'
 import { mapFocusToMuscles } from '../../../utils/muscleGroupMap'
 
 const PHASE_COLORS = {
@@ -74,6 +74,7 @@ export default function SessionCard({
   const pc  = PHASE_COLORS[session.phase] ?? '#D4A0A0'
   const img = getSessionImage(session.title)
   const { primary: mPrimary, secondary: mSecondary } = mapFocusToMuscles(session.focus_area)
+  const cardMuscleIds = focusGroupsToMuscleIds([...mPrimary, ...mSecondary])
 
   const bgStyle = img
     ? {
@@ -212,12 +213,13 @@ export default function SessionCard({
           <Heart filled={isFavorite} size={15} />
         </button>
         {/* Muscle map inset — floated right, semi-transparent */}
-        {(mPrimary.length > 0 || mSecondary.length > 0) && (
-          <div className="absolute bottom-1 right-1 z-10" style={{ opacity: 0.88 }}>
-            <PilatesMuscleMap
-              primaryMuscles={mPrimary}
-              secondaryMuscles={mSecondary}
-              height={82}
+        {cardMuscleIds.length > 0 && (
+          <div className="absolute bottom-1 right-1 z-10" style={{ opacity: 0.88, width: 57 }}>
+            <MuscleMap
+              mode="session"
+              activeMuscles={cardMuscleIds}
+              size="lg"
+              showOutline={true}
             />
           </div>
         )}

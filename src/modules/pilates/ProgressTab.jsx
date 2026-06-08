@@ -1,6 +1,6 @@
 ﻿import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
-import PilatesMuscleMap from '../../components/pilates/PilatesMuscleMap'
+import MuscleMap, { focusGroupsToMuscleIds } from '../../components/MuscleMap'
 import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const PHASE_COLORS = {
@@ -166,21 +166,32 @@ function MonthHeatmap({ completions }) {
   )
 }
 
-// Derive most-worked muscles from completion history
+// Derive most-worked muscle IDs + per-muscle opacity map from completion history
 function useMostWorkedMuscles(completions, sessions) {
   return useMemo(() => {
-    if (!completions.length) return { primary: [], secondary: [] }
+    if (!completions.length) return { muscleIds: [], opacityMap: {} }
     const tally = {}
     completions.forEach(c => {
       const s = sessions.find(x => x.id === c.session_id)
-      if (!s?.focus_area) return
-      const { primary, secondary } = mapFocusToMuscles(s.focus_area)
-      ;[...primary, ...secondary].forEach(m => { tally[m] = (tally[m] || 0) + 1 })
+      if (!s) return
+      const ids = s.target_muscles?.length
+        ? s.target_muscles
+        : focusGroupsToMuscleIds(
+            (() => {
+              const { primary, secondary } = mapFocusToMuscles(s.focus_area)
+              return [...primary, ...secondary]
+            })()
+          )
+      ids.forEach(id => { tally[id] = (tally[id] || 0) + 1 })
     })
     const sorted = Object.entries(tally).sort((a, b) => b[1] - a[1])
-    const topGroup = sorted[0]?.[0]
-    if (!topGroup) return { primary: [], secondary: [] }
-    return mapFocusToMuscles(topGroup)
+    if (!sorted.length) return { muscleIds: [], opacityMap: {} }
+    const maxCount = sorted[0][1]
+    const opacityMap = {}
+    sorted.forEach(([id, count]) => {
+      opacityMap[id] = Math.max(0.12, count / maxCount)
+    })
+    return { muscleIds: sorted.map(([id]) => id), opacityMap }
   }, [completions, sessions])
 }
 
@@ -270,7 +281,7 @@ export default function ProgressTab({
   }
 
   const phaseTotal  = stats?.phaseData?.reduce((sum, d) => sum + d.count, 0) ?? 0
-  const topMuscles  = useMostWorkedMuscles(completions, sessions)
+  const { muscleIds: topMuscleIds, opacityMap: muscleOpacityMap } = useMostWorkedMuscles(completions, sessions)
 
   return (
     <div className="space-y-5 pb-4">
@@ -313,11 +324,15 @@ export default function ProgressTab({
         <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-4">
           Most Worked
         </p>
-        <PilatesMuscleMap
-          primaryMuscles={topMuscles.primary}
-          secondaryMuscles={topMuscles.secondary}
-          height={300}
-        />
+        <div style={{ width: 200, margin: '0 auto' }}>
+          <MuscleMap
+            mode="overview"
+            activeMuscles={topMuscleIds}
+            opacityMap={muscleOpacityMap}
+            size="lg"
+            showOutline={true}
+          />
+        </div>
       </div>
 
       {/* ── Phase distribution ──────────────────────────────────────── */}
