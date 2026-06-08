@@ -127,6 +127,8 @@ export default function MuscleMap({
   const containerStyle = w ? { width: w, flexShrink: 0 } : { width: '100%' }
 
   function getOpacity(id) {
+    // ALIGNMENT CHECK — set to true to paint all 34 paths at 0.3 for visual verification
+    // if (true) return 0.3
     const active = activeSet.has(id)
     if (mode === 'overview') {
       if (hasOpacityMap) return opacityMap[id] ?? (active ? 0.25 : 0.06)
@@ -151,59 +153,64 @@ export default function MuscleMap({
 
   return (
     <div style={containerStyle}>
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '1316 / 1883' }}>
-
-        {/* Layer 1: skin fill base */}
-        <img
-          src="/assets/body/body_skin.svg"
-          alt="" draggable={false}
-          style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            pointerEvents: 'none', userSelect: 'none',
-          }}
+      {/*
+        Single SVG — all layers share viewBox="0 0 1316 1883".
+        No <img> tags: they scale independently and drift from the
+        inline coordinate space. Everything lives here.
+      */}
+      <svg
+        viewBox="0 0 1316 1883"
+        preserveAspectRatio="xMidYMid meet"
+        aria-label="muscle map"
+        style={{
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '1316 / 1883',
+          display: 'block',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Layer 1: skin fill */}
+        <image
+          href="/assets/body/body_skin.svg"
+          x="0" y="0" width="1316" height="1883"
+          preserveAspectRatio="none"
         />
 
         {/* Layer 2: stroke silhouette with warm glow */}
         {showOutline && (
-          <img
-            src="/assets/body/Body_Silhoutte.svg"
-            alt="" draggable={false}
-            style={{
-              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-              pointerEvents: 'none', userSelect: 'none', opacity: 0.9,
-              filter: 'drop-shadow(0 0 6px rgba(201,168,108,0.7)) drop-shadow(0 0 14px rgba(201,168,108,0.3))',
-            }}
-          />
+          <g
+            opacity={0.9}
+            style={{ filter: 'drop-shadow(0 0 6px rgba(201,168,108,0.7)) drop-shadow(0 0 14px rgba(201,168,108,0.3))' }}
+          >
+            <image
+              href="/assets/body/Body_Silhoutte.svg"
+              x="0" y="0" width="1316" height="1883"
+              preserveAspectRatio="none"
+            />
+          </g>
         )}
 
-        {/* Layer 3: inline muscle paths — pixel-precise hit detection */}
-        <svg
-          viewBox="0 0 1316 1883"
-          preserveAspectRatio="xMidYMid meet"
-          aria-hidden="true"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible' }}
-        >
-          {ALL_MUSCLES.map(id => {
-            const d = musclePaths[id]
-            if (!d) return null
-            const opacity = getOpacity(id)
-            return (
-              <path
-                key={id}
-                d={d}
-                fill={MUSCLE_FILL}
-                opacity={opacity}
-                pointerEvents={isInteractive ? 'visibleFill' : 'none'}
-                style={{ transition: 'opacity 0.3s ease', cursor: isInteractive ? 'pointer' : 'default' }}
-                onClick={() => handlePress(id)}
-                onMouseEnter={mode === 'explore' ? () => setHovered(id) : undefined}
-                onMouseLeave={mode === 'explore' ? () => setHovered(null) : undefined}
-              />
-            )
-          })}
-        </svg>
-
-      </div>
+        {/* Layer 3: muscle paths — pointer-events="visibleFill" for pixel-precise tap */}
+        {ALL_MUSCLES.map(id => {
+          const d = musclePaths[id]
+          if (!d) return null
+          const opacity = getOpacity(id)
+          return (
+            <path
+              key={id}
+              d={d}
+              fill={MUSCLE_FILL}
+              opacity={opacity}
+              pointerEvents={isInteractive ? 'visibleFill' : 'none'}
+              style={{ transition: 'opacity 0.3s ease', cursor: isInteractive ? 'pointer' : 'default' }}
+              onClick={() => handlePress(id)}
+              onMouseEnter={mode === 'explore' ? () => setHovered(id) : undefined}
+              onMouseLeave={mode === 'explore' ? () => setHovered(null) : undefined}
+            />
+          )
+        })}
+      </svg>
     </div>
   )
 }
