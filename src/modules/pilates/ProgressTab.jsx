@@ -1,7 +1,5 @@
 ﻿import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
-import MuscleMap, { focusGroupsToMuscleIds, MUSCLE_LABELS } from '../../components/MuscleMap'
-import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const PHASE_COLORS = {
   menstrual: '#D4A0A0',
@@ -166,34 +164,6 @@ function MonthHeatmap({ completions }) {
   )
 }
 
-// Derive most-worked muscle IDs + per-muscle opacity map from completion history
-function useMostWorkedMuscles(completions, sessions) {
-  return useMemo(() => {
-    if (!completions.length) return { muscleIds: [], opacityMap: {}, tally: {} }
-    const tally = {}
-    completions.forEach(c => {
-      const s = sessions.find(x => x.id === c.session_id)
-      if (!s) return
-      const ids = s.target_muscles?.length
-        ? s.target_muscles
-        : focusGroupsToMuscleIds(
-            (() => {
-              const { primary, secondary } = mapFocusToMuscles(s.focus_area)
-              return [...primary, ...secondary]
-            })()
-          )
-      ids.forEach(id => { tally[id] = (tally[id] || 0) + 1 })
-    })
-    const sorted = Object.entries(tally).sort((a, b) => b[1] - a[1])
-    if (!sorted.length) return { muscleIds: [], opacityMap: {}, tally: {} }
-    const maxCount = sorted[0][1]
-    const opacityMap = {}
-    sorted.forEach(([id, count]) => {
-      opacityMap[id] = Math.max(0.12, count / maxCount)
-    })
-    return { muscleIds: sorted.map(([id]) => id), opacityMap, tally }
-  }, [completions, sessions])
-}
 
 export default function ProgressTab({
   sessions = [],
@@ -202,7 +172,6 @@ export default function ProgressTab({
   onSelectSession,
 }) {
   const today = new Date()
-  const [selectedMuscle, setSelectedMuscle] = useState(null)
 
   const stats = useMemo(() => {
     if (!completions.length) return null
@@ -281,21 +250,7 @@ export default function ProgressTab({
     )
   }
 
-  const phaseTotal  = stats?.phaseData?.reduce((sum, d) => sum + d.count, 0) ?? 0
-  const { muscleIds: topMuscleIds, opacityMap: muscleOpacityMap, tally: muscleTally } = useMostWorkedMuscles(completions, sessions)
-
-  const sessionsForMuscle = useMemo(() => {
-    if (!selectedMuscle) return []
-    return sessions.filter(s => {
-      const ids = s.target_muscles?.length
-        ? s.target_muscles
-        : focusGroupsToMuscleIds((() => {
-            const { primary, secondary } = mapFocusToMuscles(s.focus_area)
-            return [...primary, ...secondary]
-          })())
-      return ids.includes(selectedMuscle)
-    }).slice(0, 4)
-  }, [selectedMuscle, sessions])
+  const phaseTotal = stats?.phaseData?.reduce((sum, d) => sum + d.count, 0) ?? 0
 
   return (
     <div className="space-y-5 pb-4">
@@ -328,26 +283,6 @@ export default function ProgressTab({
           {format(today, 'MMMM yyyy')}
         </p>
         <MonthHeatmap completions={completions} />
-      </div>
-
-      {/* ── Muscle map ──────────────────────────────────────────────── */}
-      <div
-        className="rounded-xl py-5 px-4"
-        style={{ background: 'rgba(196,175,168,0.12)', border: '1px solid rgba(196,175,168,0.28)' }}
-      >
-        <p className="font-cinzel text-brown/40 text-[10px] tracking-widest uppercase mb-4">
-          Most Worked
-        </p>
-        <div style={{ width: 200, margin: '0 auto' }}>
-          <MuscleMap
-            mode="overview"
-            activeMuscles={topMuscleIds}
-            opacityMap={muscleOpacityMap}
-            size="lg"
-            showOutline={true}
-            onMusclePress={setSelectedMuscle}
-          />
-        </div>
       </div>
 
       {/* ── Phase distribution ──────────────────────────────────────── */}
@@ -404,58 +339,6 @@ export default function ProgressTab({
         })}
       </div>
 
-      {/* ── Muscle detail bottom sheet ──────────────────────────────── */}
-      {selectedMuscle && (
-        <>
-          <div
-            className="fixed inset-0 z-40"
-            style={{ background: 'rgba(59,51,48,0.3)' }}
-            onClick={() => setSelectedMuscle(null)}
-          />
-          <div
-            className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl px-5 pt-5 pb-10"
-            style={{ background: '#F2EDE8', boxShadow: '0 -4px 28px rgba(59,51,48,0.14)', border: '1px solid rgba(196,175,168,0.35)' }}
-          >
-            <div style={{ width: 32, height: 3, background: 'rgba(59,51,48,0.15)', borderRadius: 2, margin: '0 auto 18px' }} />
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <p className="font-cinzel text-brown/80" style={{ fontSize: 15 }}>
-                  {MUSCLE_LABELS[selectedMuscle] ?? selectedMuscle}
-                </p>
-                <p className="font-garamond text-brown/40 text-sm mt-0.5">
-                  Worked {muscleTally[selectedMuscle] ?? 0} time{(muscleTally[selectedMuscle] ?? 0) !== 1 ? 's' : ''}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedMuscle(null)}
-                className="w-8 h-8 flex items-center justify-center rounded-full"
-                style={{ background: 'rgba(59,51,48,0.08)', color: 'rgba(59,51,48,0.45)', fontSize: 14 }}
-              >
-                ✕
-              </button>
-            </div>
-            {sessionsForMuscle.length > 0 && (
-              <div>
-                <p className="font-cinzel text-brown/30 text-[10px] tracking-widest uppercase mb-2">
-                  Sessions
-                </p>
-                {sessionsForMuscle.map(s => (
-                  <button
-                    key={s.id}
-                    onClick={() => { setSelectedMuscle(null); onSelectSession?.(s) }}
-                    className="w-full text-left py-3 flex items-center gap-2"
-                    style={{ borderTop: '1px solid rgba(196,175,168,0.18)' }}
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#D4A0A0' }} />
-                    <span className="font-garamond text-brown/65 text-sm">{s.title}</span>
-                    <span className="font-garamond text-brown/30 text-xs ml-auto">{s.duration_min} min</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      )}
     </div>
   )
 }

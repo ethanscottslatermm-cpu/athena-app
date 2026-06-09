@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft } from 'lucide-react'
-import MuscleMap, { focusGroupsToMuscleIds } from '../../components/MuscleMap'
-import { mapFocusToMuscles } from '../../utils/muscleGroupMap'
 
 const EXERCISE_SLUGS = {
   'Pelvic Tilt':            'pelvic-tilt',
@@ -87,9 +85,6 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
 
   const slug     = EXERCISE_SLUGS[current?.name]
   const videoSrc = slug ? `/videos/Exercises/${slug}.mp4.mp4` : null
-
-  const { primary: musclePrimary, secondary: muscleSecondary } = mapFocusToMuscles(current?.focus_area)
-  const activeMuscleIds = focusGroupsToMuscleIds([...musclePrimary, ...muscleSecondary])
 
   return (
     <div
@@ -177,14 +172,9 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
             </video>
           ) : (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#140A18' }}>
-              <div style={{ width: 133, margin: '0 auto' }}>
-                <MuscleMap
-                  mode="session"
-                  activeMuscles={activeMuscleIds}
-                  size="lg"
-                  showOutline={true}
-                />
-              </div>
+              <span style={{ fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.16em', color: 'rgba(201,168,108,0.35)', textTransform: 'uppercase' }}>
+                {current?.focus_area?.replace(/_/g, ' ')}
+              </span>
             </div>
           )}
         </div>
