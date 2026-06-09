@@ -137,9 +137,8 @@ export default function MuscleMap() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        background: '#140A18',
+        background: 'transparent',
         width: '100%',
-        minHeight: '100%',
       }}
     >
       {/* ── Map container ─────────────────────────────────────────── */}
