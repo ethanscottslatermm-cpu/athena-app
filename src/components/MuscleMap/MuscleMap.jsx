@@ -102,6 +102,16 @@ function getMusclesContent() {
     })
   })
 
+  // Correct coordinate offset: muscles figure spans Y 300→1645 inside a 1387×1848 viewBox,
+  // body figure spans Y 35→1847. Scale + translate so overlay aligns with the silhouette.
+  const rootGroup = svg.getElementById('Frame 1') || svg.querySelector('g')
+  if (rootGroup) {
+    const wrapper = doc.createElementNS('http://www.w3.org/2000/svg', 'g')
+    wrapper.setAttribute('transform', 'translate(-240.5,-369) scale(1.347)')
+    rootGroup.parentNode.insertBefore(wrapper, rootGroup)
+    wrapper.appendChild(rootGroup)
+  }
+
   _musclesContent = svg.innerHTML
   return _musclesContent
 }
