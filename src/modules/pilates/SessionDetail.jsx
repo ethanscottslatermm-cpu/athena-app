@@ -1,5 +1,4 @@
 ﻿import ExerciseRow from './components/ExerciseRow'
-import MuscleMap from '../../components/MuscleMap'
 
 const SESSION_IMAGES = {
   'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
@@ -166,17 +165,6 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             </p>
           </div>
         )}
-
-        {/* Muscles targeted */}
-        <div className="mx-4 mb-5 rounded-xl overflow-hidden"
-          style={{ border: '1px solid rgba(201,168,108,0.2)' }}
-        >
-          <p className="font-cinzel text-[10px] tracking-widest uppercase px-4 pt-4 pb-3"
-            style={{ background: '#140A18', color: 'rgba(201,168,108,0.5)' }}>
-            Muscles Targeted
-          </p>
-          <MuscleMap />
-        </div>
 
         {/* Exercise list */}
         <div className="pb-4">

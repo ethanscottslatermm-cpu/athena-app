@@ -1,6 +1,5 @@
 ﻿import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
-import MuscleMap from '../../components/MuscleMap'
 
 const PHASE_COLORS = {
   menstrual: '#D4A0A0',
@@ -284,18 +283,6 @@ export default function ProgressTab({
           {format(today, 'MMMM yyyy')}
         </p>
         <MonthHeatmap completions={completions} />
-      </div>
-
-      {/* ── Muscle explorer ─────────────────────────────────────────── */}
-      <div
-        className="rounded-xl overflow-hidden"
-        style={{ border: '1px solid rgba(201,168,108,0.2)' }}
-      >
-        <p className="font-cinzel text-[10px] tracking-widest uppercase px-4 pt-4 pb-3"
-          style={{ background: '#140A18', color: 'rgba(201,168,108,0.5)' }}>
-          Muscle Explorer
-        </p>
-        <MuscleMap />
       </div>
 
       {/* ── Phase distribution ──────────────────────────────────────── */}
