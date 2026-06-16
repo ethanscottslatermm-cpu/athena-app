@@ -1,5 +1,10 @@
 import { useRef, useEffect, useState } from 'react'
-import muscleMapSVG from '../../assets/body/musclemap.svg?raw'
+import muscleMapSVGRaw from '../../assets/body/musclemap.svg?raw'
+
+// Set responsive dimensions before first render so the SVG never paints at 1107px
+const muscleMapSVG = muscleMapSVGRaw
+  .replace(/(<svg\b[^>]*)width="[^"]*"/, '$1width="100%"')
+  .replace(/(<svg\b[^>]*)height="[^"]*"/, '$1height="100%"')
 
 const MUSCLE_IDS = [
   'traps_left', 'traps_right',
@@ -87,10 +92,6 @@ export default function MuscleMap({ activeMuscles = [], onMusclePress = () => {}
     if (!container) return
     const svg = container.querySelector('svg')
     if (!svg) return
-
-    // Make SVG fluid
-    svg.setAttribute('width', '100%')
-    svg.setAttribute('height', '100%')
 
     // Gold glow filter
     let defs = svg.querySelector('defs')
@@ -205,7 +206,7 @@ export default function MuscleMap({ activeMuscles = [], onMusclePress = () => {}
   return (
     <div style={{ background: '#140A18' }}>
       {/* ── Map ── */}
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '1107 / 2311', overflow: 'hidden', contain: 'layout' }}>
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '1107 / 2311', overflow: 'hidden' }}>
         <div
           ref={containerRef}
           dangerouslySetInnerHTML={{ __html: muscleMapSVG }}
