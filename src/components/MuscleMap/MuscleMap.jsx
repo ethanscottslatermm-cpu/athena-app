@@ -132,18 +132,26 @@ export default function MuscleMap({ activeMuscles = [], onMusclePress = () => {}
         const pairKey = ID_TO_PAIR[id]
         if (pairKey) callbackRef.current(pairKey)
       }
-      const handleTouch = (e) => { e.preventDefault(); handleActivate() }
+      // touchstart: immediate visual feedback before 300ms click delay
+      const handleTouchStart = () => setHovered(id)
+      const handleTouchEnd   = (e) => {
+        e.preventDefault()
+        handleActivate()
+        setTimeout(() => setHovered(null), 500)
+      }
       const handleEnter = () => setHovered(id)
       const handleLeave = () => setHovered(null)
 
       group.addEventListener('click',      handleActivate)
-      group.addEventListener('touchend',   handleTouch,  { passive: false })
+      group.addEventListener('touchstart', handleTouchStart, { passive: true })
+      group.addEventListener('touchend',   handleTouchEnd,   { passive: false })
       group.addEventListener('mouseenter', handleEnter)
       group.addEventListener('mouseleave', handleLeave)
 
       cleanups.push(() => {
         group.removeEventListener('click',      handleActivate)
-        group.removeEventListener('touchend',   handleTouch)
+        group.removeEventListener('touchstart', handleTouchStart)
+        group.removeEventListener('touchend',   handleTouchEnd)
         group.removeEventListener('mouseenter', handleEnter)
         group.removeEventListener('mouseleave', handleLeave)
       })
@@ -197,7 +205,7 @@ export default function MuscleMap({ activeMuscles = [], onMusclePress = () => {}
   return (
     <div style={{ background: '#140A18' }}>
       {/* ── Map ── */}
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '1107 / 2311' }}>
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '1107 / 2311', overflow: 'hidden', contain: 'layout' }}>
         <div
           ref={containerRef}
           dangerouslySetInnerHTML={{ __html: muscleMapSVG }}
