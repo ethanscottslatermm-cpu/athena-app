@@ -1,86 +1,26 @@
 import { useRef, useEffect, useState } from 'react'
 import muscleMapSVG from '../assets/body/musclemap.svg?raw'
+import {
+  MUSCLE_PAIRS, MUSCLE_COLORS, MUSCLE_NAMES, HEATMAP_OPACITY,
+} from '../constants/muscleMap'
 
-const MUSCLE_PAIRS = {
-  traps:        ['traps_left',        'traps_right'],
-  front_delts:  ['front_delts_left',  'front_delts_right'],
-  chest:        ['chest_left',        'chest_right'],
-  biceps:       ['biceps_left',       'biceps_right'],
-  forearms:     ['forearms_left',     'forearms_right'],
-  hips:         ['hip_left',          'hip_right'],
-  inner_thigh:  ['inner_thigh_left',  'inner_thigh_right'],
-  quads:        ['quads_left',        'quads_right'],
-  outer_quad:   ['outer_quad_left',   'outer_quad_right'],
-  inner_quad:   ['inner_quad_left',   'inner_quad_right'],
-  shins:        ['shins_left',        'shins_right'],
-  calves_inner: ['calves_inner_left', 'calves_inner_right'],
-  wrists:       ['hand_left',         'hand_right'],
-  knees:        ['knee_left',         'knee_right'],
-  feet:         ['foot_left',         'foot_right'],
-  upper_abs:    ['upper_abs'],
-  mid_abs:      ['mid_abs'],
-  lower_abs:    ['lower_abs'],
-  obliques:     ['obliques'],
-  v_cut:        ['v_cut'],
+const PULSE_STYLE = `
+@keyframes musclePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
 }
-
-const ID_TO_PAIR = {}
-Object.entries(MUSCLE_PAIRS).forEach(([pair, ids]) => {
-  ids.forEach(id => { ID_TO_PAIR[id] = pair })
-})
-
-const MUSCLE_COLORS = {
-  traps:        '#C9A86C',
-  front_delts:  '#E8956D',
-  chest:        '#C4859A',
-  biceps:       '#A07BC4',
-  forearms:     '#7BA8C4',
-  upper_abs:    '#8FAF8A',
-  mid_abs:      '#8FAF8A',
-  lower_abs:    '#8FAF8A',
-  obliques:     '#7A9F7A',
-  v_cut:        '#6F8F6F',
-  hips:         '#C4956A',
-  inner_thigh:  '#9B7FA0',
-  quads:        '#6A8FBF',
-  outer_quad:   '#5A7FAF',
-  inner_quad:   '#7A9FC9',
-  shins:        '#8FAF9A',
-  calves_inner: '#7A9F8A',
-  wrists:       '#A09080',
-  knees:        '#A09080',
-  feet:         '#A09080',
-}
-
-const MUSCLE_NAMES = {
-  traps:        'Trapezius',
-  front_delts:  'Front Delts',
-  chest:        'Pectoralis',
-  biceps:       'Biceps',
-  forearms:     'Forearms',
-  upper_abs:    'Upper Abs',
-  mid_abs:      'Mid Abs',
-  lower_abs:    'Lower Abs',
-  obliques:     'Obliques',
-  v_cut:        'Hip Flexors',
-  hips:         'Hips',
-  inner_thigh:  'Inner Thigh',
-  quads:        'Quadriceps',
-  outer_quad:   'Outer Quad',
-  inner_quad:   'VMO',
-  shins:        'Tibialis',
-  calves_inner: 'Gastrocnemius',
-  wrists:       'Wrists',
-  knees:        'Knees',
-  feet:         'Feet',
-}
+`
 
 export default function MuscleMap({
-  activeMuscles = [],
-  onMusclePress = () => {},
-  interactive   = true,
-  showTooltip   = true,
-  showLegend    = true,
+  activeMuscles    = [],
+  onMusclePress    = () => {},
+  interactive      = true,
+  showTooltip      = true,
+  showLegend       = true,
+  suggestedMuscles = [],  // pair keys pre-illuminated by phase
+  phaseColor       = null,
+  heatmap          = null, // { [pairKey]: opacity 0-1 } — read-only heatmap mode
+  onHoverChange    = null, // optional callback for heatmap tooltip
 }) {
   const containerRef = useRef(null)
   const [hovered, setHovered] = useState(null)
@@ -104,7 +44,6 @@ export default function MuscleMap({
     svg.style.display  = 'block'
     svg.style.overflow = 'visible'
 
-    // Inject glow filter
     let defs = svg.querySelector('defs')
     if (!defs) {
       defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
@@ -122,6 +61,27 @@ export default function MuscleMap({
       </filter>
     `
 
+    if (heatmap) {
+      // Heatmap mode — hover tooltip only
+      Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
+        ids.forEach(id => {
+          const group = svg.getElementById(id)
+          if (!group) return
+          group.setAttribute('pointer-events', 'all')
+          group.style.cursor = 'default'
+          group.addEventListener('mouseenter', () => {
+            setHovered(pairKey)
+            onHoverChange?.(pairKey)
+          })
+          group.addEventListener('mouseleave', () => {
+            setHovered(null)
+            onHoverChange?.(null)
+          })
+        })
+      })
+      return
+    }
+
     if (!interactive) return
 
     Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
@@ -132,7 +92,7 @@ export default function MuscleMap({
         group.setAttribute('pointer-events', 'all')
         group.style.cursor = 'pointer'
 
-        const activate      = () => callbackRef.current(pairKey)
+        const activate         = () => callbackRef.current(pairKey)
         const handleTouchStart = () => setHovered(pairKey)
         const handleTouchEnd   = (e) => { e.preventDefault(); activate(); setTimeout(() => setHovered(null), 500) }
         const handleEnter      = () => setHovered(pairKey)
@@ -145,9 +105,9 @@ export default function MuscleMap({
         group.addEventListener('mouseleave', handleLeave)
       })
     })
-  }, [interactive])
+  }, [interactive, !!heatmap])
 
-  // ── Update: apply visual state whenever activeMuscles/hovered changes ────
+  // ── Update: apply visual state ────────────────────────────────────────────
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
@@ -155,22 +115,45 @@ export default function MuscleMap({
     if (!svg) return
 
     Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
-      const color  = MUSCLE_COLORS[pairKey]
-      const active = activeMuscles.includes(pairKey)
-      const isHov  = hovered === pairKey
+      const color    = MUSCLE_COLORS[pairKey]
+      const active   = activeMuscles.includes(pairKey)
+      const isHov    = hovered === pairKey
+      const isSugg   = suggestedMuscles.includes(pairKey) && !active
 
       ids.forEach(id => {
         const group = svg.getElementById(id)
         if (!group) return
 
+        // ── Heatmap mode ──
+        if (heatmap) {
+          const opacity = heatmap[pairKey] ?? 0.06
+          group.querySelectorAll('*').forEach(el => {
+            if (el.tagName.toLowerCase() === 'g') return
+            el.setAttribute('fill',           color)
+            el.style.fill          = color
+            el.setAttribute('fill-opacity',   String(opacity))
+            el.style.fillOpacity   = String(opacity)
+            el.setAttribute('stroke',         color)
+            el.style.stroke        = color
+            el.setAttribute('stroke-opacity', String(Math.min(opacity * 0.8, 1)))
+            el.style.strokeOpacity = String(Math.min(opacity * 0.8, 1))
+            el.setAttribute('stroke-width',   '0.8')
+          })
+          group.removeAttribute('filter')
+          group.style.animation = 'none'
+          return
+        }
+
+        // ── Interactive mode ──
         group.querySelectorAll('*').forEach(el => {
           if (el.tagName === 'g' || el.tagName === 'G') return
           el.style.transition = 'fill-opacity 0.18s ease, stroke-opacity 0.18s ease'
 
           let fillOp, strokeOp, strokeW
-          if (active)     { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
-          else if (isHov) { fillOp = '0.45'; strokeOp = '0.75'; strokeW = '1.2' }
-          else            { fillOp = '0.15'; strokeOp = '0.3';  strokeW = '0.8' }
+          if (active)        { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
+          else if (isHov)    { fillOp = '0.5';  strokeOp = '0.85'; strokeW = '1.3' }
+          else if (isSugg)   { fillOp = '0.35'; strokeOp = '0.6';  strokeW = '1.0' }
+          else               { fillOp = '0.12'; strokeOp = '0.25'; strokeW = '0.8' }
 
           el.setAttribute('fill',           color)
           el.setAttribute('fill-opacity',   fillOp)
@@ -186,16 +169,26 @@ export default function MuscleMap({
         if (active) {
           group.style.setProperty('--glow-color', color)
           group.setAttribute('filter', 'url(#muscleGlow)')
+          group.style.animation = 'none'
+        } else if (isSugg) {
+          group.style.removeProperty('--glow-color')
+          group.removeAttribute('filter')
+          group.style.animation = 'musclePulse 2.5s ease-in-out infinite'
         } else {
           group.style.removeProperty('--glow-color')
           group.removeAttribute('filter')
+          group.style.animation = 'none'
         }
       })
     })
-  }, [activeMuscles, hovered])
+  }, [activeMuscles, hovered, suggestedMuscles, heatmap])
+
+  const suggestColor = phaseColor ?? '#8FAF8A'
 
   return (
     <div style={{ position: 'relative', width: '100%', overflow: 'visible' }}>
+      <style>{PULSE_STYLE}</style>
+
       {/* Tooltip */}
       {showTooltip && hovered && (
         <div style={{
@@ -204,9 +197,9 @@ export default function MuscleMap({
           left:          '50%',
           transform:     'translateX(-50%)',
           background:    'rgba(20,10,24,0.92)',
-          border:        `1px solid ${MUSCLE_COLORS[hovered]}`,
+          border:        `1px solid ${heatmap ? suggestColor : MUSCLE_COLORS[hovered]}`,
           borderRadius:  '20px',
-          color:         MUSCLE_COLORS[hovered],
+          color:         heatmap ? suggestColor : MUSCLE_COLORS[hovered],
           fontFamily:    "'Cormorant Garamond', serif",
           fontSize:      '13px',
           letterSpacing: '0.08em',
@@ -215,7 +208,10 @@ export default function MuscleMap({
           whiteSpace:    'nowrap',
           zIndex:        10,
         }}>
-          {MUSCLE_NAMES[hovered]}
+          {heatmap
+            ? `Trained ${Math.round((heatmap[hovered] ?? 0.06) * 5)} times`
+            : MUSCLE_NAMES[hovered]
+          }
         </div>
       )}
 

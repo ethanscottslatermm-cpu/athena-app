@@ -1,6 +1,9 @@
 ﻿import { useMemo, useState } from 'react'
 import { format, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
 import MuscleMap from '../../components/MuscleMap'
+import MuscleBottomSheet from '../../components/MuscleBottomSheet'
+import { usePhase } from '../../hooks/usePhase'
+import { PHASE_MUSCLES, PHASE_COLORS as PHASE_CLRS } from '../../constants/muscleMap'
 
 const PHASE_COLORS = {
   menstrual: '#D4A0A0',
@@ -174,10 +177,22 @@ export default function ProgressTab({
 }) {
   const today = new Date()
   const [selectedMuscles, setSelectedMuscles] = useState([])
+  const [activeSheet, setActiveSheet] = useState(null)
   const toggleMuscle = (pairKey) =>
     setSelectedMuscles(prev =>
       prev.includes(pairKey) ? prev.filter(k => k !== pairKey) : [...prev, pairKey]
     )
+
+  const phaseHook = usePhase()
+  const currentPhase = phaseHook.phase ? {
+    name:        phaseHook.phase,
+    day:         phaseHook.dayOfCycle ?? 1,
+    daysRemaining: phaseHook.days ?? 0,
+    phaseColor:  PHASE_CLRS[phaseHook.phase] ?? '#C9A86C',
+  } : null
+  const suggestedMuscles = currentPhase
+    ? (PHASE_MUSCLES[currentPhase.name]?.primary ?? [])
+    : []
 
   const stats = useMemo(() => {
     if (!completions.length) return null
@@ -310,14 +325,69 @@ export default function ProgressTab({
         }}>
           Muscle Explorer
         </p>
+
+        {/* Phase header bar */}
+        {currentPhase && (
+          <div style={{
+            display:      'flex',
+            alignItems:   'center',
+            gap:          '8px',
+            padding:      '8px 12px',
+            background:   `${currentPhase.phaseColor}18`,
+            border:       `1px solid ${currentPhase.phaseColor}40`,
+            borderRadius: '10px',
+            marginBottom: '0.75rem',
+            flexWrap:     'wrap',
+          }}>
+            <div style={{
+              width: 8, height: 8,
+              borderRadius: '50%',
+              background:   currentPhase.phaseColor,
+              boxShadow:    `0 0 6px ${currentPhase.phaseColor}`,
+              flexShrink:   0,
+            }} />
+            <span style={{
+              fontFamily:    "'Cormorant Garamond', serif",
+              fontSize:      '12px',
+              color:         currentPhase.phaseColor,
+              letterSpacing: '0.05em',
+              textTransform: 'capitalize',
+            }}>
+              {currentPhase.name} phase · Day {currentPhase.day}
+            </span>
+            <span style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize:   '11px',
+              color:      'rgba(242,237,232,0.45)',
+              marginLeft: 'auto',
+            }}>
+              {PHASE_MUSCLES[currentPhase.name]?.rationale}
+            </span>
+          </div>
+        )}
+
         <MuscleMap
           activeMuscles={selectedMuscles}
-          onMusclePress={toggleMuscle}
+          onMusclePress={(pairKey) => { toggleMuscle(pairKey); setActiveSheet(pairKey) }}
           interactive={true}
           showTooltip={true}
           showLegend={true}
+          suggestedMuscles={suggestedMuscles}
+          phaseColor={currentPhase?.phaseColor}
         />
       </div>
+
+      <MuscleBottomSheet
+        pairKey={activeSheet}
+        isOpen={!!activeSheet}
+        onClose={() => setActiveSheet(null)}
+        currentPhase={currentPhase}
+        sessionHistory={completions.map(c => {
+          const s = sessions.find(x => x.id === c.session_id)
+          return { ...c, id: c.session_id, title: s?.title, duration_min: s?.duration_min, muscleGroups: s?.muscleGroups ?? [] }
+        })}
+        onNavigateToSession={onSelectSession}
+      />
 
       {/* ── Phase distribution ──────────────────────────────────────── */}
       <div

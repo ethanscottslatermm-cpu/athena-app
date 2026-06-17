@@ -6,6 +6,7 @@ import { supabase }   from '../../lib/supabase'
 import AthenaPreSession  from '../../components/AthenaPreSession'
 import AthenaPostSession from '../../components/AthenaPostSession'
 import AthenaInsightCard from '../../components/AthenaInsightCard'
+import { FOCUS_TO_MUSCLES } from '../../constants/muscleMap'
 
 // ── Inline SVG tab icons ──────────────────────────────────────────────────────
 
@@ -224,7 +225,12 @@ export default function PilatesStudio() {
       supabase.from('challenges').select('*').order('name'),
       supabase.from('challenge_entries').select('*').eq('user_id', user.id),
     ])
-    setSessions(sRes.data ?? [])
+    setSessions((sRes.data ?? []).map(s => ({
+      ...s,
+      muscleGroups: s.muscle_groups?.length
+        ? s.muscle_groups
+        : (FOCUS_TO_MUSCLES[s.focus_area] ?? []),
+    })))
     setExercises(eRes.data ?? [])
     setCompletions(cRes.data ?? [])
     setFavorites(new Set((fRes.data ?? []).map(f => f.session_id)))
