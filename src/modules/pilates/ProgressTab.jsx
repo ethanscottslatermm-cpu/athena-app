@@ -173,6 +173,11 @@ export default function ProgressTab({
   onSelectSession,
 }) {
   const today = new Date()
+  const [selectedMuscles, setSelectedMuscles] = useState([])
+  const toggleMuscle = (pairKey) =>
+    setSelectedMuscles(prev =>
+      prev.includes(pairKey) ? prev.filter(k => k !== pairKey) : [...prev, pairKey]
+    )
 
   const stats = useMemo(() => {
     if (!completions.length) return null
@@ -287,15 +292,32 @@ export default function ProgressTab({
       </div>
 
       {/* ── Muscle explorer ─────────────────────────────────────────── */}
-      <div
-        className="rounded-xl overflow-hidden"
-        style={{ border: '1px solid rgba(201,168,108,0.2)' }}
-      >
-        <p className="font-cinzel text-[10px] tracking-widest uppercase px-4 pt-4 pb-3"
-          style={{ background: '#140A18', color: 'rgba(201,168,108,0.5)' }}>
+      <div style={{
+        background: '#140A18',
+        borderRadius: '16px',
+        border: '1px solid rgba(201,168,108,0.12)',
+        padding: '1rem',
+        width: '100%',
+      }}>
+        <p style={{
+          color: 'rgba(242,237,232,0.4)',
+          fontSize: '10px',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          margin: '0 0 0.75rem',
+          fontFamily: "'Cinzel', serif",
+        }}>
           Muscle Explorer
         </p>
-        <MuscleMap />
+        <div style={{ maxHeight: '60vh', overflow: 'hidden' }}>
+          <MuscleMap
+            activeMuscles={selectedMuscles}
+            onMusclePress={toggleMuscle}
+            interactive={true}
+            showTooltip={true}
+            showLegend={true}
+          />
+        </div>
       </div>
 
       {/* ── Phase distribution ──────────────────────────────────────── */}

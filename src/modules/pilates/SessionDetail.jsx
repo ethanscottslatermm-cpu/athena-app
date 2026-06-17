@@ -168,14 +168,29 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
         )}
 
         {/* Muscles targeted */}
-        <div className="mx-4 mb-5 rounded-xl overflow-hidden"
-          style={{ border: '1px solid rgba(201,168,108,0.2)' }}
-        >
-          <p className="font-cinzel text-[10px] tracking-widest uppercase px-4 pt-4 pb-3"
-            style={{ background: '#140A18', color: 'rgba(201,168,108,0.5)' }}>
+        <div className="mx-4 mb-5" style={{
+          background: '#140A18',
+          borderRadius: '16px',
+          border: '1px solid rgba(201,168,108,0.12)',
+          padding: '1rem',
+        }}>
+          <p style={{
+            color: 'rgba(242,237,232,0.4)',
+            fontSize: '10px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            margin: '0 0 0.75rem',
+            fontFamily: "'Cinzel', serif",
+          }}>
             Muscles Targeted
           </p>
-          <MuscleMap />
+          <MuscleMap
+            activeMuscles={session.muscleGroups ?? []}
+            onMusclePress={() => {}}
+            interactive={false}
+            showTooltip={false}
+            showLegend={true}
+          />
         </div>
 
         {/* Exercise list */}
