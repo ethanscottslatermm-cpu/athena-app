@@ -298,6 +298,7 @@ export default function ProgressTab({
         border: '1px solid rgba(201,168,108,0.12)',
         padding: '1rem',
         width: '100%',
+        overflow: 'visible',
       }}>
         <p style={{
           color: 'rgba(242,237,232,0.4)',
@@ -309,15 +310,13 @@ export default function ProgressTab({
         }}>
           Muscle Explorer
         </p>
-        <div style={{ maxHeight: '60vh', overflow: 'hidden' }}>
-          <MuscleMap
-            activeMuscles={selectedMuscles}
-            onMusclePress={toggleMuscle}
-            interactive={true}
-            showTooltip={true}
-            showLegend={true}
-          />
-        </div>
+        <MuscleMap
+          activeMuscles={selectedMuscles}
+          onMusclePress={toggleMuscle}
+          interactive={true}
+          showTooltip={true}
+          showLegend={true}
+        />
       </div>
 
       {/* ── Phase distribution ──────────────────────────────────────── */}

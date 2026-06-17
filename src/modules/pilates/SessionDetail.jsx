@@ -173,6 +173,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
           borderRadius: '16px',
           border: '1px solid rgba(201,168,108,0.12)',
           padding: '1rem',
+          overflow: 'visible',
         }}>
           <p style={{
             color: 'rgba(242,237,232,0.4)',

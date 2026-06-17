@@ -35,10 +35,10 @@ const MUSCLE_COLORS = {
   biceps:       '#A07BC4',
   forearms:     '#7BA8C4',
   upper_abs:    '#8FAF8A',
-  mid_abs:      '#7FA08A',
-  lower_abs:    '#6F9180',
-  obliques:     '#C4A86C',
-  v_cut:        '#D4956A',
+  mid_abs:      '#8FAF8A',
+  lower_abs:    '#8FAF8A',
+  obliques:     '#7A9F7A',
+  v_cut:        '#6F8F6F',
   inner_thigh:  '#9B7FA0',
   quads:        '#6A8FBF',
   outer_quad:   '#5A7FAF',
@@ -94,10 +94,12 @@ export default function MuscleMap({
     const svg = container.querySelector('svg')
     if (!svg) return
 
+    svg.setAttribute('viewBox', '0 0 973 2170')
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
     svg.setAttribute('width', '100%')
     svg.setAttribute('height', '100%')
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
-    svg.style.display = 'block'
+    svg.style.display  = 'block'
+    svg.style.overflow = 'visible'
 
     // Inject glow filter
     let defs = svg.querySelector('defs')
@@ -158,27 +160,27 @@ export default function MuscleMap({
         const group = svg.getElementById(id)
         if (!group) return
 
-        group.querySelectorAll('path, rect, circle, ellipse').forEach(el => {
+        // querySelectorAll('*') catches all leaf elements including
+        // nested structures; skip <g> containers, only style leaves
+        group.querySelectorAll('*').forEach(el => {
+          if (el.tagName === 'g' || el.tagName === 'G') return
           el.style.transition = 'fill-opacity 0.18s ease, stroke-opacity 0.18s ease'
-          if (active) {
-            el.setAttribute('fill',           color)
-            el.setAttribute('fill-opacity',   '1')
-            el.setAttribute('stroke',         color)
-            el.setAttribute('stroke-opacity', '1')
-            el.setAttribute('stroke-width',   '1.8')
-          } else if (isHov) {
-            el.setAttribute('fill',           color)
-            el.setAttribute('fill-opacity',   '0.4')
-            el.setAttribute('stroke',         color)
-            el.setAttribute('stroke-opacity', '0.75')
-            el.setAttribute('stroke-width',   '1.2')
-          } else {
-            el.setAttribute('fill',           color)
-            el.setAttribute('fill-opacity',   '0.15')
-            el.setAttribute('stroke',         color)
-            el.setAttribute('stroke-opacity', '0.3')
-            el.setAttribute('stroke-width',   '0.8')
-          }
+
+          let fillOp, strokeOp, strokeW
+          if (active)      { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
+          else if (isHov)  { fillOp = '0.4';  strokeOp = '0.75'; strokeW = '1.2' }
+          else             { fillOp = '0.15'; strokeOp = '0.3';  strokeW = '0.8' }
+
+          // Set both attribute AND inline style to beat any conflicting rules
+          el.setAttribute('fill',           color)
+          el.setAttribute('fill-opacity',   fillOp)
+          el.setAttribute('stroke',         color)
+          el.setAttribute('stroke-opacity', strokeOp)
+          el.setAttribute('stroke-width',   strokeW)
+          el.style.fill         = color
+          el.style.fillOpacity  = fillOp
+          el.style.stroke       = color
+          el.style.strokeOpacity = strokeOp
         })
 
         if (active) {
@@ -193,7 +195,7 @@ export default function MuscleMap({
   }, [activeMuscles, hovered])
 
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
+    <div style={{ position: 'relative', width: '100%', overflow: 'visible' }}>
       {/* Tooltip */}
       {showTooltip && hovered && (
         <div style={{
@@ -220,7 +222,7 @@ export default function MuscleMap({
       {/* SVG container */}
       <div
         ref={containerRef}
-        style={{ width: '100%', aspectRatio: '973 / 2170', overflow: 'hidden' }}
+        style={{ width: '100%', aspectRatio: '973 / 2170', overflow: 'visible', display: 'block' }}
       />
 
       {/* Active muscle chips */}
