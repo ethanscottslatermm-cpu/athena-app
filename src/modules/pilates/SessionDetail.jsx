@@ -1,5 +1,7 @@
-﻿import ExerciseRow from './components/ExerciseRow'
+import { useState } from 'react'
+import ExerciseRow from './components/ExerciseRow'
 import MuscleMap from '../../components/MuscleMap'
+import { MUSCLE_NAMES } from '../../constants/muscleMap'
 
 const SESSION_IMAGES = {
   'dynamic stretch & tone':   '/images/sessions/Dynamic Stretch & Tone.webp',
@@ -29,18 +31,24 @@ const HERO_POSITION = {
 }
 
 const PHASE_COLORS = {
-  menstrual: '#D4A0A0',
-  follicular: '#8FA58C',
-  ovulation: '#D4A0A0',
-  luteal: '#C4AFA8',
-  all: '#D4A0A0',
+  menstrual:  '#C4606A',
+  follicular: '#8FAF8A',
+  ovulation:  '#C9A86C',
+  luteal:     '#9B7FA0',
+  all:        '#C4859A',
+}
+
+const DIFFICULTY_LABEL = {
+  beginner:     { label: 'Beginner',     color: '#8FAF8A' },
+  intermediate: { label: 'Intermediate', color: '#C9A86C' },
+  advanced:     { label: 'Advanced',     color: '#C4606A' },
 }
 
 function Heart({ filled }) {
   return (
     <svg width={22} height={22} viewBox="0 0 24 24"
-      fill={filled ? '#D4A0A0' : 'none'}
-      stroke={filled ? '#D4A0A0' : 'rgba(59,51,48,0.5)'}
+      fill={filled ? '#C9A86C' : 'none'}
+      stroke={filled ? '#C9A86C' : 'rgba(242,237,232,0.45)'}
       strokeWidth={1.8}
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -51,10 +59,13 @@ function Heart({ filled }) {
 export default function SessionDetail({ session, exercises = [], isFavorite, onFavoriteToggle, onStart, onClose }) {
   if (!session) return null
 
-  const pc = PHASE_COLORS[session.phase] ?? '#D4A0A0'
-  const titleKey  = (session.title ?? '').toLowerCase()
-  const heroImage = SESSION_IMAGES[titleKey]
-  const heroPos   = HERO_POSITION[titleKey] ?? 'center'
+  const [expanded, setExpanded] = useState(false)
+
+  const pc         = PHASE_COLORS[session.phase] ?? '#C4859A'
+  const titleKey   = (session.title ?? '').toLowerCase()
+  const heroImage  = SESSION_IMAGES[titleKey]
+  const heroPos    = HERO_POSITION[titleKey] ?? 'center'
+  const difficulty = DIFFICULTY_LABEL[session.difficulty] ?? { label: session.difficulty, color: '#C9A86C' }
   const phaseLabel = session.phase && session.phase !== 'all'
     ? session.phase.charAt(0).toUpperCase() + session.phase.slice(1)
     : 'All phases'
@@ -63,180 +74,251 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
     .filter(e => e.session_id === session.id)
     .sort((a, b) => (a.order_num ?? 0) - (b.order_num ?? 0))
 
-  const stats = [
-    { icon: '⏱', label: `${session.duration_min} min` },
-    { icon: '🔥', label: (session.focus_area ?? '').replace(/_/g, ' ') },
-    { icon: '💪', label: session.difficulty },
-    { icon: '🎯', label: session.equipment },
-  ]
+  const musclesToShow = session.muscleGroups ?? []
 
   return (
     <div
       className="fixed inset-0 z-[60] flex flex-col"
-      style={{ background: '#F2EDE8', animation: 'sheetUp 0.32s ease-out' }}
+      style={{
+        background: 'linear-gradient(180deg, #1a0d22 0%, #0E0A14 60%, #140A18 100%)',
+        animation: 'sheetUp 0.32s ease-out',
+      }}
     >
-      {/* ── Header area ──────────────────────────────────────────────────── */}
-      <div
-        className="relative shrink-0 overflow-hidden"
-        style={{
-          height: 240,
-          background: heroImage ? 'transparent' : `linear-gradient(160deg, ${pc}40 0%, rgba(242,237,232,0.97) 100%)`,
-        }}
-      >
-        {heroImage && (
-          <img
-            src={heroImage}
-            alt=""
-            className="absolute inset-0 w-full h-full"
-            style={{ objectFit: 'cover', objectPosition: heroPos }}
-          />
+      <style>{`
+        @keyframes sheetUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to   { transform: translateY(0);    opacity: 1; }
+        }
+        @keyframes shimmerGold {
+          0%   { background-position: -200% 0; }
+          100% { background-position:  200% 0; }
+        }
+        @keyframes pulseRing {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,108,0.0); }
+          50%       { box-shadow: 0 0 0 8px rgba(201,168,108,0.12); }
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
+      {/* ── Hero ────────────────────────────────────────────────────────── */}
+      <div className="relative shrink-0 overflow-hidden" style={{ height: 260 }}>
+        {heroImage ? (
+          <>
+            <img
+              src={heroImage} alt=""
+              className="absolute inset-0 w-full h-full"
+              style={{ objectFit: 'cover', objectPosition: heroPos }}
+            />
+            <div className="absolute inset-0" style={{
+              background: 'linear-gradient(to top, #0E0A14 0%, rgba(14,10,20,0.72) 45%, rgba(14,10,20,0.15) 100%)',
+            }} />
+          </>
+        ) : (
+          <div className="absolute inset-0" style={{
+            background: `linear-gradient(160deg, ${pc}30 0%, #1a0d22 60%, #0E0A14 100%)`,
+          }} />
         )}
-        {heroImage && (
-          <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(59,51,48,0.85) 0%, rgba(59,51,48,0.25) 55%, transparent 100%)' }}
-          />
-        )}
+
+        {/* Back */}
         <button
           onClick={onClose}
           className="absolute z-10 flex items-center justify-center rounded-full"
-          style={{ top: 52, left: 16, width: 44, height: 44, background: 'rgba(242,237,232,0.85)', border: '1px solid rgba(196,175,168,0.5)' }}
+          style={{ top: 52, left: 16, width: 40, height: 40, background: 'rgba(20,10,24,0.7)', border: '1px solid rgba(201,168,108,0.2)', backdropFilter: 'blur(8px)' }}
         >
-          <span className="text-brown text-2xl leading-none">‹</span>
+          <span style={{ color: 'rgba(242,237,232,0.8)', fontSize: 22, lineHeight: 1 }}>‹</span>
         </button>
+
+        {/* Fav */}
         <button
           onClick={() => onFavoriteToggle?.(session.id)}
-          className="absolute z-10 flex items-center justify-center"
-          style={{ top: 52, right: 16, width: 40, height: 40 }}
+          className="absolute z-10 flex items-center justify-center rounded-full"
+          style={{ top: 52, right: 16, width: 40, height: 40, background: 'rgba(20,10,24,0.7)', border: '1px solid rgba(201,168,108,0.2)', backdropFilter: 'blur(8px)' }}
         >
           <Heart filled={isFavorite} />
         </button>
-        <div className="absolute bottom-6 left-4 right-16">
-          <span
-            className="inline-block font-garamond text-xs px-2.5 py-0.5 rounded-full mb-2 capitalize"
-            style={{ background: `${pc}28`, color: pc, border: `1px solid ${pc}45` }}
-          >
-            Best for {phaseLabel}
-          </span>
-          <h2 className={`font-cinzel text-[22px] leading-tight mb-2 ${heroImage ? 'text-white' : 'text-brown'}`}>
+
+        {/* Title block */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-5">
+          <div className="flex items-center gap-2 mb-2">
+            <span style={{
+              fontFamily:    "'Tenor Sans', sans-serif",
+              fontSize:      10,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color:         pc,
+              border:        `1px solid ${pc}50`,
+              borderRadius:  20,
+              padding:       '2px 10px',
+              background:    `${pc}15`,
+            }}>
+              {phaseLabel}
+            </span>
+            <span style={{
+              fontFamily:    "'Tenor Sans', sans-serif",
+              fontSize:      10,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color:         difficulty.color,
+              border:        `1px solid ${difficulty.color}45`,
+              borderRadius:  20,
+              padding:       '2px 10px',
+              background:    `${difficulty.color}12`,
+            }}>
+              {difficulty.label}
+            </span>
+          </div>
+          <h2 style={{
+            fontFamily:    "'Cinzel', serif",
+            fontSize:      24,
+            color:         '#F2EDE8',
+            margin:        0,
+            lineHeight:    1.1,
+            letterSpacing: '0.02em',
+            textShadow:    '0 2px 20px rgba(0,0,0,0.6)',
+          }}>
             {session.title}
           </h2>
-          <div className="flex gap-2 flex-wrap">
-            {[`${session.duration_min} min`, session.focus_area, session.difficulty, session.equipment]
-              .filter(Boolean)
-              .map(tag => (
-                <span
-                  key={tag}
-                  className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
-                  style={{
-                    background: heroImage ? 'rgba(242,237,232,0.75)' : 'rgba(212,160,160,0.12)',
-                    border: heroImage ? '1px solid rgba(212,160,160,0.4)' : '1px solid rgba(212,160,160,0.3)',
-                    color: '#D4A0A0',
-                  }}
-                >
-                  {(tag ?? '').replace(/_/g, ' ')}
-                </span>
-              ))}
-          </div>
         </div>
       </div>
 
       {/* ── Scrollable content ───────────────────────────────────────────── */}
-      <div className="flex-1 overflow-y-auto hide-scrollbar">
-        {/* Stat chips */}
-        <div className="grid grid-cols-4 gap-2 px-4 py-4">
-          {stats.map(({ icon, label }) => (
-            <div
-              key={label}
-              className="flex flex-col items-center py-2.5 rounded-xl"
-              style={{ background: 'rgba(196,175,168,0.2)', border: '1px solid rgba(196,175,168,0.65)' }}
-            >
-              <span className="font-garamond text-brown/55 text-[10px] text-center leading-tight capitalize">
-                {label}
-              </span>
+      <div className="flex-1 overflow-y-auto hide-scrollbar" style={{ paddingBottom: 120 }}>
+
+        {/* Quick stats strip */}
+        <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgba(201,168,108,0.08)', marginBottom: '1.25rem' }}>
+          {[
+            { value: `${session.duration_min}`, unit: 'min' },
+            { value: (session.focus_area ?? '').replace(/_/g, ' '), unit: 'focus' },
+            { value: session.equipment ?? 'mat', unit: 'gear' },
+          ].filter(s => s.value).map((s, i) => (
+            <div key={i} style={{
+              flex:       1,
+              padding:    '14px 0',
+              textAlign:  'center',
+              borderRight: i < 2 ? '1px solid rgba(201,168,108,0.08)' : 'none',
+            }}>
+              <p style={{ fontFamily: "'Cinzel', serif", fontSize: 18, color: '#F2EDE8', margin: 0, lineHeight: 1 }}>
+                {s.value}
+              </p>
+              <p style={{ fontFamily: "'Tenor Sans', sans-serif", fontSize: 9, color: 'rgba(242,237,232,0.35)', letterSpacing: '0.12em', textTransform: 'uppercase', margin: '4px 0 0' }}>
+                {s.unit}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Description */}
         {session.description && (
-          <div className="px-4 pb-4">
-            <p className="font-garamond italic text-brown/60 text-sm leading-relaxed">
+          <div style={{ padding: '0 1.25rem 1.25rem' }}>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontStyle:  'italic',
+              fontSize:   15,
+              color:      'rgba(242,237,232,0.55)',
+              lineHeight: 1.6,
+              margin:     0,
+            }}>
               {session.description}
             </p>
           </div>
         )}
 
-        {/* Muscles targeted */}
-        <div className="mx-4 mb-5" style={{
-          background: '#140A18',
-          borderRadius: '16px',
-          border: '1px solid rgba(201,168,108,0.12)',
-          padding: '1rem',
-          overflow: 'visible',
-        }}>
-          <p style={{
-            color: 'rgba(242,237,232,0.4)',
-            fontSize: '10px',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            margin: '0 0 0.75rem',
-            fontFamily: "'Tenor Sans', sans-serif",
-          }}>
-            Muscles Targeted
-          </p>
-          <MuscleMap
-            activeMuscles={session.muscleGroups ?? []}
-            onMusclePress={() => {}}
-            interactive={false}
-            showTooltip={false}
-            showLegend={true}
-          />
-        </div>
+        {/* ── Muscles targeted — compact side-by-side ─────────────────── */}
+        {musclesToShow.length > 0 && (
+          <div style={{ margin: '0 1rem 1.25rem', padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: 14, border: '1px solid rgba(201,168,108,0.1)' }}>
+            <p style={{ fontFamily: "'Tenor Sans', sans-serif", fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(242,237,232,0.35)', margin: '0 0 0.75rem' }}>
+              Muscles Targeted
+            </p>
+            <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+              {/* Compact figure — 105px wide, full figure visible */}
+              <div style={{ width: 105, flexShrink: 0 }}>
+                <MuscleMap
+                  activeMuscles={musclesToShow}
+                  interactive={false}
+                  showTooltip={false}
+                  showLegend={false}
+                />
+              </div>
+              {/* Chips beside the figure */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6, paddingTop: 2 }}>
+                {musclesToShow.map(key => (
+                  <span key={key} style={{
+                    fontFamily:    "'Tenor Sans', sans-serif",
+                    fontSize:      11,
+                    letterSpacing: '0.04em',
+                    color:         'rgba(242,237,232,0.75)',
+                    padding:       '4px 0',
+                    borderBottom:  '1px solid rgba(255,255,255,0.06)',
+                    display:       'block',
+                  }}>
+                    {MUSCLE_NAMES[key] ?? key}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
-        {/* Exercise list */}
-        <div className="pb-4">
-          <p className="font-cinzel text-brown/35 text-[10px] tracking-widest uppercase px-4 pb-2">
-            {sessionExercises.length} Exercise{sessionExercises.length !== 1 ? 's' : ''}
-            {sessionExercises.length > 0 && ' — tap to expand form cue'}
-          </p>
-          <div
-            className="mx-4 rounded-xl overflow-hidden"
-            style={{ border: '1px solid rgba(196,175,168,0.65)' }}
-          >
+        {/* ── Exercise list ────────────────────────────────────────────── */}
+        <div style={{ margin: '0 1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+            <p style={{ fontFamily: "'Tenor Sans', sans-serif", fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(242,237,232,0.35)', margin: 0 }}>
+              {sessionExercises.length} Exercise{sessionExercises.length !== 1 ? 's' : ''}
+            </p>
+            {sessionExercises.length > 0 && (
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 12, fontStyle: 'italic', color: 'rgba(242,237,232,0.25)', margin: 0 }}>
+                tap to expand form cue
+              </p>
+            )}
+          </div>
+
+          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(201,168,108,0.1)' }}>
             {sessionExercises.length > 0 ? sessionExercises.map((ex, i) => (
-              <ExerciseRow key={ex.id ?? i} exercise={ex} index={i} />
+              <ExerciseRow key={ex.id ?? i} exercise={ex} index={i} dark />
             )) : (
-              <p className="font-garamond text-brown/30 text-sm px-4 py-5 text-center">
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', color: 'rgba(242,237,232,0.25)', fontSize: 14, padding: '1.25rem', textAlign: 'center', margin: 0 }}>
                 Exercise list loading…
               </p>
             )}
           </div>
         </div>
 
-        <div className="h-28" />
       </div>
 
-      {/* ── Start button (sticky bottom) ─────────────────────────────────── */}
+      {/* ── Start CTA — sticky bottom ────────────────────────────────── */}
       <div
-        className="shrink-0 px-4 pt-5"
+        className="shrink-0 px-4"
         style={{
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 100px)',
-          background: 'linear-gradient(to top, rgba(242,237,232,1) 55%, transparent)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 96px)',
+          paddingTop:    '1rem',
+          background:    'linear-gradient(to top, #0E0A14 55%, transparent)',
+          position:      'absolute',
+          bottom:        0,
+          left:          0,
+          right:         0,
         }}
       >
         <button
           onClick={() => onStart?.(session, sessionExercises)}
-          className="w-full py-4 rounded-xl font-cinzel tracking-widest text-sm"
           style={{
-            background: 'linear-gradient(90deg, rgba(212,160,160,0.15) 0%, rgba(212,160,160,0.35) 50%, rgba(212,160,160,0.15) 100%)',
+            width:          '100%',
+            padding:        '16px',
+            borderRadius:   14,
+            border:         'none',
+            background:     'linear-gradient(90deg, #A07B4C 0%, #C9A86C 40%, #E8C98A 60%, #C9A86C 80%, #A07B4C 100%)',
             backgroundSize: '200% 100%',
-            animation: 'shimmerSlide 2.5s infinite',
-            border: '1px solid rgba(212,160,160,0.55)',
-            color: '#D4A0A0',
+            animation:      'shimmerGold 3s ease-in-out infinite',
+            color:          '#140A18',
+            fontFamily:     "'Cinzel', serif",
+            fontSize:       13,
+            letterSpacing:  '0.22em',
+            textTransform:  'uppercase',
+            cursor:         'pointer',
+            fontWeight:     600,
           }}
         >
-          START SESSION
+          Begin Session
         </button>
       </div>
     </div>
