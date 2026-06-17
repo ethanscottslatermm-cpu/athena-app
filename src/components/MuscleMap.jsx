@@ -7,11 +7,7 @@ const MUSCLE_PAIRS = {
   chest:        ['chest_left',        'chest_right'],
   biceps:       ['biceps_left',       'biceps_right'],
   forearms:     ['forearms_left',     'forearms_right'],
-  upper_abs:    ['upper_abs_left',    'upper_abs_right'],
-  mid_abs:      ['mid_abs_left',      'mid_abs_right'],
-  lower_abs:    ['lower_abs_left',    'lower_abs_right'],
-  obliques:     ['obliques_left',     'obliques_right'],
-  v_cut:        ['v_cut_left',        'v_cut_right'],
+  hips:         ['hip_left',          'hip_right'],
   inner_thigh:  ['inner_thigh_left',  'inner_thigh_right'],
   quads:        ['quads_left',        'quads_right'],
   outer_quad:   ['outer_quad_left',   'outer_quad_right'],
@@ -21,6 +17,11 @@ const MUSCLE_PAIRS = {
   wrists:       ['hand_left',         'hand_right'],
   knees:        ['knee_left',         'knee_right'],
   feet:         ['foot_left',         'foot_right'],
+  upper_abs:    ['upper_abs'],
+  mid_abs:      ['mid_abs'],
+  lower_abs:    ['lower_abs'],
+  obliques:     ['obliques'],
+  v_cut:        ['v_cut'],
 }
 
 const ID_TO_PAIR = {}
@@ -39,6 +40,7 @@ const MUSCLE_COLORS = {
   lower_abs:    '#8FAF8A',
   obliques:     '#7A9F7A',
   v_cut:        '#6F8F6F',
+  hips:         '#C4956A',
   inner_thigh:  '#9B7FA0',
   quads:        '#6A8FBF',
   outer_quad:   '#5A7FAF',
@@ -61,6 +63,7 @@ const MUSCLE_NAMES = {
   lower_abs:    'Lower Abs',
   obliques:     'Obliques',
   v_cut:        'Hip Flexors',
+  hips:         'Hips',
   inner_thigh:  'Inner Thigh',
   quads:        'Quadriceps',
   outer_quad:   'Outer Quad',
@@ -94,7 +97,7 @@ export default function MuscleMap({
     const svg = container.querySelector('svg')
     if (!svg) return
 
-    svg.setAttribute('viewBox', '0 0 973 2170')
+    svg.setAttribute('viewBox', '0 0 882 1866')
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
     svg.setAttribute('width', '100%')
     svg.setAttribute('height', '100%')
@@ -129,7 +132,7 @@ export default function MuscleMap({
         group.setAttribute('pointer-events', 'all')
         group.style.cursor = 'pointer'
 
-        const activate = () => callbackRef.current(pairKey)
+        const activate      = () => callbackRef.current(pairKey)
         const handleTouchStart = () => setHovered(pairKey)
         const handleTouchEnd   = (e) => { e.preventDefault(); activate(); setTimeout(() => setHovered(null), 500) }
         const handleEnter      = () => setHovered(pairKey)
@@ -160,26 +163,23 @@ export default function MuscleMap({
         const group = svg.getElementById(id)
         if (!group) return
 
-        // querySelectorAll('*') catches all leaf elements including
-        // nested structures; skip <g> containers, only style leaves
         group.querySelectorAll('*').forEach(el => {
           if (el.tagName === 'g' || el.tagName === 'G') return
           el.style.transition = 'fill-opacity 0.18s ease, stroke-opacity 0.18s ease'
 
           let fillOp, strokeOp, strokeW
-          if (active)      { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
-          else if (isHov)  { fillOp = '0.4';  strokeOp = '0.75'; strokeW = '1.2' }
-          else             { fillOp = '0.15'; strokeOp = '0.3';  strokeW = '0.8' }
+          if (active)     { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
+          else if (isHov) { fillOp = '0.45'; strokeOp = '0.75'; strokeW = '1.2' }
+          else            { fillOp = '0.15'; strokeOp = '0.3';  strokeW = '0.8' }
 
-          // Set both attribute AND inline style to beat any conflicting rules
           el.setAttribute('fill',           color)
           el.setAttribute('fill-opacity',   fillOp)
           el.setAttribute('stroke',         color)
           el.setAttribute('stroke-opacity', strokeOp)
           el.setAttribute('stroke-width',   strokeW)
-          el.style.fill         = color
-          el.style.fillOpacity  = fillOp
-          el.style.stroke       = color
+          el.style.fill          = color
+          el.style.fillOpacity   = fillOp
+          el.style.stroke        = color
           el.style.strokeOpacity = strokeOp
         })
 
@@ -222,25 +222,30 @@ export default function MuscleMap({
       {/* SVG container */}
       <div
         ref={containerRef}
-        style={{ width: '100%', aspectRatio: '973 / 2170', overflow: 'visible', display: 'block' }}
+        style={{ width: '100%', aspectRatio: '882 / 1866', overflow: 'visible', display: 'block' }}
       />
 
       {/* Active muscle chips */}
       {showLegend && activeMuscles.length > 0 && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', padding: '0.75rem 0 0' }}>
           {activeMuscles.map(key => (
-            <span key={key} style={{
-              background:    `${MUSCLE_COLORS[key]}1A`,
-              border:        `1px solid ${MUSCLE_COLORS[key]}`,
-              borderRadius:  '20px',
-              color:         MUSCLE_COLORS[key],
-              fontSize:      '11px',
-              padding:       '3px 12px',
-              fontFamily:    "'Tenor Sans', sans-serif",
-              letterSpacing: '0.04em',
-            }}>
+            <button
+              key={key}
+              onClick={interactive ? () => onMusclePress(key) : undefined}
+              style={{
+                background:    `${MUSCLE_COLORS[key]}1A`,
+                border:        `1px solid ${MUSCLE_COLORS[key]}`,
+                borderRadius:  '20px',
+                color:         MUSCLE_COLORS[key],
+                fontSize:      '11px',
+                padding:       '3px 12px',
+                fontFamily:    "'Tenor Sans', sans-serif",
+                letterSpacing: '0.04em',
+                cursor:        interactive ? 'pointer' : 'default',
+              }}
+            >
               {MUSCLE_NAMES[key]}
-            </span>
+            </button>
           ))}
         </div>
       )}

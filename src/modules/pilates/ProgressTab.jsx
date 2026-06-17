@@ -306,7 +306,7 @@ export default function ProgressTab({
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
           margin: '0 0 0.75rem',
-          fontFamily: "'Cinzel', serif",
+          fontFamily: "'Tenor Sans', sans-serif",
         }}>
           Muscle Explorer
         </p>

@@ -181,7 +181,7 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
             margin: '0 0 0.75rem',
-            fontFamily: "'Cinzel', serif",
+            fontFamily: "'Tenor Sans', sans-serif",
           }}>
             Muscles Targeted
           </p>
