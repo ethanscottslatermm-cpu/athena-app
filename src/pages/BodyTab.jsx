@@ -173,15 +173,28 @@ function MapView({ currentPhase, sessionHistory, onSelectSession }) {
     setActiveSheet(pairKey)
   }
 
+  const glowColor = currentPhase?.phaseColor ?? '#C9A86C'
+
   return (
     <div style={{ padding: '0 1rem 2rem' }}>
       <div style={{
-        background:   'linear-gradient(165deg, #2A1C16 0%, #1E1410 100%)',
+        background:   'linear-gradient(165deg, #1C1020 0%, #140A18 100%)',
         borderRadius: 16,
-        border:       '1px solid rgba(201,168,108,0.14)',
+        border:       `1px solid ${glowColor}28`,
         padding:      '1rem',
         overflow:     'visible',
+        position:     'relative',
+        transition:   'border-color 1s ease',
       }}>
+        {/* Phase ambient glow */}
+        <div style={{
+          position:     'absolute',
+          inset:        0,
+          borderRadius: 16,
+          background:   `radial-gradient(ellipse 82% 58% at 50% 44%, ${glowColor}2A 0%, ${glowColor}0C 42%, transparent 70%)`,
+          pointerEvents: 'none',
+          transition:   'background 1.2s ease',
+        }} />
         <PhaseBar currentPhase={currentPhase} />
         <MuscleMap
           activeMuscles={activeMuscles}
@@ -206,7 +219,7 @@ function MapView({ currentPhase, sessionHistory, onSelectSession }) {
 }
 
 // ── History view ──────────────────────────────────────────────────────────────
-function HistoryView({ sessionHistory }) {
+function HistoryView({ sessionHistory, currentPhase }) {
   const [rangeIdx, setRangeIdx] = useState(1)
   const range    = TIME_RANGES[rangeIdx]
   const cutoff   = useMemo(() => subDays(new Date(), range.days), [range.days])
@@ -264,23 +277,38 @@ function HistoryView({ sessionHistory }) {
       </div>
 
       {/* Heatmap */}
-      <div style={{
-        background:   'linear-gradient(165deg, #2A1C16 0%, #1E1410 100%)',
-        borderRadius: 16,
-        border:       '1px solid rgba(201,168,108,0.14)',
-        padding:      '1rem',
-        overflow:     'visible',
-        marginBottom: '1rem',
-      }}>
-        <MuscleMap
-          activeMuscles={[]}
-          interactive={false}
-          showTooltip={true}
-          showLegend={false}
-          heatmap={heatmap}
-        />
-        <HeatmapLegend />
-      </div>
+      {(() => {
+        const hGlow = currentPhase?.phaseColor ?? '#C9A86C'
+        return (
+          <div style={{
+            background:   'linear-gradient(165deg, #1C1020 0%, #140A18 100%)',
+            borderRadius: 16,
+            border:       `1px solid ${hGlow}28`,
+            padding:      '1rem',
+            overflow:     'visible',
+            marginBottom: '1rem',
+            position:     'relative',
+            transition:   'border-color 1s ease',
+          }}>
+            <div style={{
+              position:     'absolute',
+              inset:        0,
+              borderRadius: 16,
+              background:   `radial-gradient(ellipse 82% 58% at 50% 44%, ${hGlow}22 0%, ${hGlow}08 42%, transparent 70%)`,
+              pointerEvents: 'none',
+              transition:   'background 1.2s ease',
+            }} />
+            <MuscleMap
+              activeMuscles={[]}
+              interactive={false}
+              showTooltip={true}
+              showLegend={false}
+              heatmap={heatmap}
+            />
+            <HeatmapLegend />
+          </div>
+        )
+      })()}
 
       {/* Training log */}
       <p style={{ fontFamily: fontSans, fontSize: 10, letterSpacing: '0.14em', color: mutedText, textTransform: 'uppercase', margin: '0 0 0.75rem' }}>
@@ -433,7 +461,7 @@ export default function BodyTab({ embedded = false }) {
         />
       )}
       {view === 'history' && (
-        <HistoryView sessionHistory={sessionHistory} />
+        <HistoryView sessionHistory={sessionHistory} currentPhase={currentPhase} />
       )}
       {view === 'insights' && (
         <InsightsView sessionHistory={sessionHistory} currentPhase={currentPhase} />

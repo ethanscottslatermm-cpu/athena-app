@@ -59,6 +59,15 @@ export default function MuscleMap({
           <feMergeNode in="SourceGraphic"/>
         </feMerge>
       </filter>
+      <filter id="muscleSuggestGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="8" result="blur"/>
+        <feFlood flood-color="var(--glow-color, #8FAF8A)" flood-opacity="0.35" result="color"/>
+        <feComposite in="color" in2="blur" operator="in" result="glow"/>
+        <feMerge>
+          <feMergeNode in="glow"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
     `
 
     if (heatmap) {
@@ -171,8 +180,8 @@ export default function MuscleMap({
           group.setAttribute('filter', 'url(#muscleGlow)')
           group.style.animation = 'none'
         } else if (isSugg) {
-          group.style.removeProperty('--glow-color')
-          group.removeAttribute('filter')
+          group.style.setProperty('--glow-color', phaseColor ?? '#8FAF8A')
+          group.setAttribute('filter', 'url(#muscleSuggestGlow)')
           group.style.animation = 'musclePulse 2.5s ease-in-out infinite'
         } else {
           group.style.removeProperty('--glow-color')
@@ -181,7 +190,7 @@ export default function MuscleMap({
         }
       })
     })
-  }, [activeMuscles, hovered, suggestedMuscles, heatmap])
+  }, [activeMuscles, hovered, suggestedMuscles, phaseColor, heatmap])
 
   const suggestColor = phaseColor ?? '#8FAF8A'
 
