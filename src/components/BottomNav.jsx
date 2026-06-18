@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 
 import dashboardIcon from '../assets/icons/nav-dashboard.png'
-import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
 import communityIcon from '../assets/icons/nav-community.png'
@@ -68,7 +67,6 @@ const navItems = [
   { to: '/',          label: 'Home',      png: dashboardIcon, athena: false, body: false },
   { to: '/nourish',   label: 'Body Fuel', png: nourishIcon,   athena: false, body: false },
   { to: '/grocery',   label: 'Grocery',   png: groceryIcon,   athena: false, body: false },
-  { to: '/pilates',   label: 'Pilates',   png: pilatesIcon,   athena: false, body: false },
   { to: '/body',      label: 'Body',      png: null,          athena: false, body: true  },
   { to: '/mood',      label: 'Mood',      png: moodIcon,      athena: false, body: false },
   { to: '/cycle',     label: 'Cycle',     png: cycleIcon,     athena: false, body: false },

@@ -274,7 +274,7 @@ function anim(delay = 0) {
 
 // ─── Phase Ring SVG ───────────────────────────────────────────────────────────
 
-function PhaseRing({ phase, day, cycleLength }) {
+function PhaseRing({ phase, day, cycleLength, size = 128 }) {
   const cx = 64, cy = 64, r = 52
   const C = 2 * Math.PI * r
   const quarterC = C / 4
@@ -294,7 +294,7 @@ function PhaseRing({ phase, day, cycleLength }) {
   const dotY = dotRad != null ? cy + r * Math.sin(dotRad) : null
 
   return (
-    <svg width="128" height="128" viewBox="0 0 128 128">
+    <svg width={size} height={size} viewBox="0 0 128 128">
       <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(59,51,48,0.1)" strokeWidth="5" />
       {segments.map(seg => {
         const dash = Math.max(0, (seg.days / cycleLength) * C - GAP)
@@ -449,13 +449,10 @@ export default function Dashboard() {
   const { user } = useAuth()
   const { getDailyBrief } = useAthena()
   const navigate = useNavigate()
-  const [weather,    setWeather]    = useState(null)
-  const [heroSlide,  setHeroSlide]  = useState(0)
-  const [dragOffset, setDragOffset] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
-  const touchStartX  = useRef(null)
-  const autoTimerRef = useRef(null)
-  const [brief,      setBrief]      = useState(null)
+  const [weather,        setWeather]        = useState(null)
+  const [pilatesPressed, setPilatesPressed] = useState(false)
+  const [pilatesSubline, setPilatesSubline] = useState('Begin your practice')
+  const [brief,          setBrief]          = useState(null)
   const [briefLoad,  setBriefLoad]  = useState(true)
   const [briefError, setBriefError] = useState(false)
   const [briefModal, setBriefModal] = useState(false)
@@ -501,9 +498,6 @@ export default function Dashboard() {
   const phaseRotation = PHASE_GUIDANCE_ROTATIONS[dayOffset % PHASE_GUIDANCE_ROTATIONS.length]
 
   // ── Featured workout (daily rotation) ───────────────────────────────────────
-  const featuredWorkout = FEATURED_WORKOUTS[dayOffset % FEATURED_WORKOUTS.length]
-  const featuredImg     = SESSION_IMG[featuredWorkout.title] ?? null
-
   // Daily brief — wait for auth to resolve before fetching
   useEffect(() => {
     if (!user?.id) return
@@ -512,39 +506,24 @@ export default function Dashboard() {
       .catch(() => { setBriefLoad(false); setBriefError(true) })
   }, [user?.id])
 
-  // Auto-alternate hero every 2 minutes
+  // Pilates streak for hero subline
   useEffect(() => {
-    autoTimerRef.current = setInterval(() => setHeroSlide(s => s === 0 ? 1 : 0), 120000)
-    return () => clearInterval(autoTimerRef.current)
-  }, [])
-
-  function goToSlide(idx) {
-    setHeroSlide(idx)
-    clearInterval(autoTimerRef.current)
-    autoTimerRef.current = setInterval(() => setHeroSlide(s => s === 0 ? 1 : 0), 120000)
-  }
-
-  function handleHeroTouchStart(e) {
-    touchStartX.current = e.touches[0].clientX
-    setIsDragging(true)
-  }
-
-  function handleHeroTouchMove(e) {
-    if (touchStartX.current === null) return
-    let dx = e.touches[0].clientX - touchStartX.current
-    // Rubber-band resistance at ends
-    if ((heroSlide === 0 && dx > 0) || (heroSlide === 1 && dx < 0)) dx *= 0.18
-    setDragOffset(dx)
-  }
-
-  function handleHeroTouchEnd() {
-    const dx = dragOffset
-    if (dx < -50) goToSlide(1)
-    else if (dx > 50) goToSlide(0)
-    touchStartX.current = null
-    setDragOffset(0)
-    setIsDragging(false)
-  }
+    if (!user?.id) return
+    supabase
+      .from('session_completions')
+      .select('completed_at')
+      .eq('user_id', user.id)
+      .order('completed_at', { ascending: false })
+      .limit(14)
+      .then(({ data }) => {
+        if (!data?.length) return
+        const days = new Set(data.map(c => new Date(c.completed_at).toDateString()))
+        let streak = 0
+        const d = new Date()
+        while (days.has(d.toDateString())) { streak++; d.setDate(d.getDate() - 1) }
+        if (streak >= 2) setPilatesSubline(`${streak} day streak ✦`)
+      })
+  }, [user?.id])
 
   useEffect(() => {
     const CACHE_KEY = 'athena_weather'
@@ -686,124 +665,128 @@ export default function Dashboard() {
         <AthenaBriefModal brief={brief} onClose={() => setBriefModal(false)} />
       )}
 
-      {/* ── Phase Hero — swipable carousel ── */}
+      {/* ── Phase Hero — split banner ── */}
       <div className="px-4 max-w-md mx-auto mb-5" style={anim(0.07)}>
-        {/* Overflow clip — touch events on the card itself */}
-        <div
-          style={{ overflow: 'hidden', borderRadius: 18, border: `1px solid ${activeColor}50`, touchAction: 'pan-y' }}
-          onTouchStart={handleHeroTouchStart}
-          onTouchMove={handleHeroTouchMove}
-          onTouchEnd={handleHeroTouchEnd}
-        >
-          {/* Flex track — slides sit side by side and translate together */}
-          <div style={{
-            display: 'flex',
-            transform: `translateX(calc(${-heroSlide * 100}% + ${dragOffset}px))`,
-            transition: isDragging ? 'none' : 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1)',
-            willChange: 'transform',
-          }}>
+        <div style={{
+          display: 'flex',
+          borderRadius: 18,
+          border: `1px solid ${activeColor}50`,
+          overflow: 'hidden',
+          minHeight: 168,
+        }}>
 
-            {/* Slide 0 — Phase ring */}
-            <div style={{ flex: '0 0 100%', minWidth: 0, position: 'relative' }}>
-              <div
-                style={{
-                  backgroundImage: 'url("/images/dashboard/phase-hero.png")',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center 18%',
-                }}
-              >
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(242,237,232,0.38) 0%, rgba(242,237,232,0.62) 55%, rgba(242,237,232,0.72) 100%)' }} />
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}14 0%, transparent 65%)` }} />
-                <div className="relative flex items-center gap-2 p-5">
-                  <PhaseRing phase={phase} day={dayOfCycle} cycleLength={cycleLength} />
-                  <div className="flex-1 min-w-0 pl-1">
-                    {phaseMeta && (
-                      <span className="font-cinzel text-[9px] tracking-[0.3em] uppercase px-2 py-1 rounded-full mb-3 inline-block"
-                        style={{ background: 'rgba(59,51,48,0.12)', color: '#3B3330' }}>
-                        {phaseMeta.label}
-                      </span>
-                    )}
-                    <h2 className="font-cinzel text-[20px] text-brown leading-tight mt-2 mb-1">
-                      {content?.headline ?? 'Your Journey'}
-                    </h2>
-                    <p className="font-garamond text-sm leading-relaxed" style={{ color: '#7A6A65' }}>
-                      {content?.sub ?? 'Set up your cycle to unlock phase guidance.'}
-                    </p>
-                    <button
-                      onClick={() => navigate(content ? '/cycle' : '/settings')}
-                      className="flex items-center gap-1 mt-3 font-cinzel text-[9px] tracking-[0.25em] uppercase transition-opacity hover:opacity-100"
-                      style={{ color: '#3B3330', opacity: 0.85 }}>
-                      {content ? 'Cycle Guide' : 'Set Up'} <ChevronRight size={10} />
-                    </button>
-                  </div>
-                </div>
+          {/* Left half — Cycle daily update */}
+          <div style={{ flex: '0 0 50%', minWidth: 0, position: 'relative' }}>
+            <div style={{
+              height: '100%',
+              backgroundImage: 'url("/images/dashboard/phase-hero.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 18%',
+            }}>
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(to right, rgba(242,237,232,0.38) 0%, rgba(242,237,232,0.62) 55%, rgba(242,237,232,0.72) 100%)' }} />
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: `radial-gradient(ellipse 80% 70% at 80% 50%, ${activeColor}14 0%, transparent 65%)` }} />
+              <div className="relative flex flex-col items-center justify-center p-3 h-full">
+                <PhaseRing phase={phase} day={dayOfCycle} cycleLength={cycleLength} size={80} />
+                {phaseMeta && (
+                  <span className="font-cinzel tracking-[0.25em] uppercase rounded-full mt-1.5 inline-block"
+                    style={{ fontSize: 7.5, padding: '3px 8px', background: 'rgba(59,51,48,0.12)', color: '#3B3330' }}>
+                    {phaseMeta.label}
+                  </span>
+                )}
+                <h2 className="font-cinzel text-brown leading-tight mt-1 text-center"
+                  style={{ fontSize: 14 }}>
+                  {content?.headline ?? 'Your Journey'}
+                </h2>
+                <p className="font-garamond leading-snug text-center mt-0.5"
+                  style={{ color: '#7A6A65', fontSize: 11 }}>
+                  {content?.sub ?? 'Set up your cycle to unlock phase guidance.'}
+                </p>
+                <button
+                  onClick={() => navigate(content ? '/cycle' : '/settings')}
+                  className="flex items-center gap-0.5 mt-2 font-cinzel uppercase"
+                  style={{ fontSize: 7.5, letterSpacing: '0.22em', color: '#3B3330', opacity: 0.85 }}>
+                  {content ? 'Cycle Guide' : 'Set Up'} <ChevronRight size={8} />
+                </button>
               </div>
             </div>
-
-            {/* Slide 1 — Featured workout */}
-            <div style={{ flex: '0 0 100%', minWidth: 0 }}>
-              <div
-                className="relative cursor-pointer"
-                style={{
-                  minHeight: 168,
-                  ...(featuredImg
-                    ? { backgroundImage: `url("${featuredImg}")`, backgroundSize: 'cover', backgroundPosition: 'center top' }
-                    : { background: `linear-gradient(135deg, ${activeColor}30, rgba(242,237,232,0.85))` }
-                  ),
-                }}
-                onClick={() => navigate('/pilates')}
-              >
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(59,51,48,0.04) 0%, rgba(59,51,48,0.48) 50%, rgba(59,51,48,0.9) 100%)' }} />
-                <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: 168 }}>
-                  <span style={{
-                    alignSelf: 'flex-start',
-                    background: 'rgba(42,28,20,0.55)', backdropFilter: 'blur(4px)',
-                    borderRadius: 20, padding: '3px 12px',
-                    color: '#F5EDE3', fontSize: '0.6rem',
-                    letterSpacing: '0.14em', fontFamily: 'Cinzel, serif',
-                    textTransform: 'uppercase',
-                  }}>Today's Studio</span>
-                  <div>
-                    <h2 className="font-cinzel text-white leading-tight mb-2"
-                      style={{ fontSize: '1.15rem', fontWeight: 500, textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}>
-                      {featuredWorkout.title}
-                    </h2>
-                    <div className="flex gap-2 flex-wrap mb-3">
-                      {[`${featuredWorkout.duration} min`, featuredWorkout.focus, featuredWorkout.difficulty].map(pill => (
-                        <span key={pill} className="font-garamond text-[11px] px-2 py-0.5 rounded-full capitalize"
-                          style={{ background: 'rgba(242,237,232,0.75)', border: '1px solid rgba(212,160,160,0.45)', color: '#C4859A' }}>
-                          {pill}
-                        </span>
-                      ))}
-                    </div>
-                    <button className="flex items-center gap-1 font-cinzel text-[9px] tracking-[0.25em] uppercase"
-                      style={{ color: '#F5EDE3', opacity: 0.88 }}>
-                      Begin Session <ChevronRight size={10} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
-        </div>
 
-        {/* Slide indicators */}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 8 }}>
-          {[0, 1].map(i => (
-            <button
-              key={i}
-              onClick={() => goToSlide(i)}
-              style={{
-                width: heroSlide === i ? 18 : 6,
-                height: 6,
-                borderRadius: 3,
-                background: heroSlide === i ? activeColor : 'rgba(107,82,72,0.22)',
-                border: 'none', padding: 0, cursor: 'pointer',
-                transition: 'all 0.35s ease',
-              }}
-            />
-          ))}
+          {/* Divider */}
+          <div style={{ width: 1, background: 'rgba(201,168,108,0.2)', flexShrink: 0 }} />
+
+          {/* Right half — Pilates entry */}
+          <div
+            style={{
+              flex: '0 0 calc(50% - 1px)',
+              minWidth: 0,
+              background: 'linear-gradient(145deg, #1E0E1A 0%, #2A1020 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '16px 10px',
+              cursor: 'pointer',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              transform: pilatesPressed ? 'scale(0.97)' : 'scale(1)',
+              transition: 'transform 0.15s ease',
+            }}
+            onClick={() => navigate('/pilates')}
+            onPointerDown={() => setPilatesPressed(true)}
+            onPointerUp={() => setPilatesPressed(false)}
+            onPointerLeave={() => setPilatesPressed(false)}
+          >
+            <span style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 9,
+              letterSpacing: '0.18em',
+              color: 'rgba(201,168,108,0.7)',
+              textTransform: 'uppercase',
+              marginBottom: 6,
+              display: 'block',
+            }}>Pilates Studio</span>
+
+            <span style={{
+              display: 'inline-block', width: 28, height: 28,
+              WebkitMask: `url(${pilatesIcon}) no-repeat center / contain`,
+              mask: `url(${pilatesIcon}) no-repeat center / contain`,
+              backgroundColor: '#C9A86C',
+              filter: 'drop-shadow(0 0 8px rgba(201,168,108,0.5))',
+            }} />
+
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 18,
+              color: '#F2EDE8',
+              letterSpacing: '-0.01em',
+              margin: '6px 0 0',
+              lineHeight: 1.2,
+            }}>Your Studio</p>
+
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 11,
+              color: 'rgba(242,237,232,0.55)',
+              margin: '3px 0 0',
+              textAlign: 'center',
+              lineHeight: 1.3,
+            }}>{pilatesSubline}</p>
+
+            <button style={{
+              background: 'rgba(201,168,108,0.12)',
+              border: '1px solid rgba(201,168,108,0.35)',
+              borderRadius: 20,
+              color: '#C9A86C',
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 11,
+              letterSpacing: '0.06em',
+              padding: '5px 14px',
+              marginTop: 10,
+              cursor: 'pointer',
+              pointerEvents: 'none',
+            }}>Enter →</button>
+          </div>
+
         </div>
       </div>
 

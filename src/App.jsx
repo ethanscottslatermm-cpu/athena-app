@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useProfile } from './hooks/useProfile'
 
@@ -120,10 +120,11 @@ function WelcomeOverlay() {
 
 function AppShell({ children }) {
   useSwipeNav()
+  const { pathname } = useLocation()
   return (
     <>
       {children}
-      <BottomNav />
+      {!pathname.startsWith('/pilates') && <BottomNav />}
       <WelcomeFlow />
       <SwipeHint />
     </>

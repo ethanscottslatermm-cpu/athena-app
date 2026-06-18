@@ -1,8 +1,11 @@
 ﻿import { useState, useEffect, useCallback, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
+import { useInactivityTimer } from '../../hooks/useInactivityTimer'
+import exitIcon from '../../assets/icons/nav-exit.png'
 import AthenaPreSession  from '../../components/AthenaPreSession'
 import AthenaPostSession from '../../components/AthenaPostSession'
 import AthenaInsightCard from '../../components/AthenaInsightCard'
@@ -214,6 +217,25 @@ export default function PilatesStudio() {
   const [challengeEntries, setChallengeEntries] = useState([])
   const [loading,          setLoading]          = useState(true)
 
+  // ── Exit / inactivity ────────────────────────────────────────────────────────
+  const navigate = useNavigate()
+  const [exiting, setExiting] = useState(false)
+
+  const PILATES_TIMEOUT = 10 * 60 * 1000
+
+  const handleTimeout = useCallback(() => {
+    setExiting(true)
+    setTimeout(() => navigate('/', { replace: true }), 320)
+  }, [navigate])
+
+  const { clearTimer } = useInactivityTimer(PILATES_TIMEOUT, handleTimeout)
+
+  const handleExit = useCallback(() => {
+    clearTimer()
+    setExiting(true)
+    setTimeout(() => navigate('/', { replace: true }), 320)
+  }, [clearTimer, navigate])
+
   const fetchData = useCallback(async () => {
     if (!user) return
     setLoading(true)
@@ -316,7 +338,47 @@ export default function PilatesStudio() {
   }
 
   return (
-    <div className="relative min-h-[100svh] overflow-hidden bg-[#F3EAE7]">
+    <div
+      className="relative min-h-[100svh] overflow-hidden bg-[#F3EAE7]"
+      style={{
+        animation: exiting
+          ? 'pilatesSlideDown 320ms cubic-bezier(0.4, 0, 1, 1) forwards'
+          : 'pilatesSlideUp 380ms cubic-bezier(0.32, 0.72, 0, 1) forwards',
+      }}
+    >
+
+      {/* ── Exit button — always visible ──────────────────────────────────── */}
+      <button
+        onClick={handleExit}
+        aria-label="Exit Pilates Studio"
+        style={{
+          position: 'fixed',
+          top: 'calc(env(safe-area-inset-top, 16px) + 12px)',
+          right: '20px',
+          zIndex: 200,
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          background: 'rgba(20,10,24,0.75)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          border: '1px solid rgba(201,168,108,0.2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          padding: 0,
+        }}
+      >
+        <span style={{
+          display: 'inline-block',
+          width: 16,
+          height: 16,
+          WebkitMask: `url(${exitIcon}) no-repeat center / contain`,
+          mask: `url(${exitIcon}) no-repeat center / contain`,
+          backgroundColor: 'rgba(242,237,232,0.7)',
+        }} />
+      </button>
 
       {/* ── Athena Pre-session ─────────────────────────────────────────────── */}
       {preSession && (
@@ -400,6 +462,14 @@ export default function PilatesStudio() {
         }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes pilatesSlideUp {
+          from { transform: translateY(100vh); }
+          to   { transform: translateY(0); }
+        }
+        @keyframes pilatesSlideDown {
+          from { transform: translateY(0); }
+          to   { transform: translateY(100vh); }
+        }
       `}</style>
 
 
