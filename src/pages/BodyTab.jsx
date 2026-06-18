@@ -11,11 +11,11 @@ import {
 } from '../constants/muscleMap'
 
 const gold      = '#C9A86C'
-const mutedText = 'rgba(242,237,232,0.45)'
-const linen     = '#F2EDE8'
+const mutedText = 'rgba(59,51,48,0.45)'
+const linen     = '#3B3330'
 const fontSerif = "'Cormorant Garamond', serif"
 const fontSans  = "'Tenor Sans', sans-serif"
-const bgCard    = 'rgba(255,255,255,0.04)'
+const bgCard    = 'rgba(255,255,255,0.6)'
 
 const TIME_RANGES = [
   { label: 'This Week',  days: 7  },
@@ -124,7 +124,7 @@ function ViewToggle({ view, setView }) {
   return (
     <div style={{
       display: 'flex',
-      background: bgCard,
+      background: 'rgba(59,51,48,0.07)',
       borderRadius: 10,
       padding: 3,
       margin: '0.75rem 1rem',
@@ -176,9 +176,9 @@ function MapView({ currentPhase, sessionHistory, onSelectSession }) {
   return (
     <div style={{ padding: '0 1rem 2rem' }}>
       <div style={{
-        background:   '#140A18',
+        background:   'linear-gradient(165deg, #EDE8E2 0%, #E8E0D8 100%)',
         borderRadius: 16,
-        border:       '1px solid rgba(201,168,108,0.12)',
+        border:       '1px solid rgba(196,175,168,0.4)',
         padding:      '1rem',
         overflow:     'visible',
       }}>
@@ -265,9 +265,9 @@ function HistoryView({ sessionHistory }) {
 
       {/* Heatmap */}
       <div style={{
-        background:   '#140A18',
+        background:   'linear-gradient(165deg, #EDE8E2 0%, #E8E0D8 100%)',
         borderRadius: 16,
-        border:       '1px solid rgba(201,168,108,0.12)',
+        border:       '1px solid rgba(196,175,168,0.4)',
         padding:      '1rem',
         overflow:     'visible',
         marginBottom: '1rem',
@@ -453,7 +453,7 @@ export default function BodyTab({ embedded = false }) {
   return (
     <div style={{
       minHeight:  '100svh',
-      background: 'linear-gradient(180deg, #1E1128 0%, #140A18 100%)',
+      background: 'linear-gradient(180deg, #F0E8E2 0%, #F3EAE7 100%)',
       overflowY:  'auto',
       paddingBottom: 120,
     }}>

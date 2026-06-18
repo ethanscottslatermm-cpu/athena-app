@@ -151,9 +151,9 @@ export default function MuscleMap({
 
           let fillOp, strokeOp, strokeW
           if (active)        { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
-          else if (isHov)    { fillOp = '0.5';  strokeOp = '0.85'; strokeW = '1.3' }
-          else if (isSugg)   { fillOp = '0.35'; strokeOp = '0.6';  strokeW = '1.0' }
-          else               { fillOp = '0.12'; strokeOp = '0.25'; strokeW = '0.8' }
+          else if (isHov)    { fillOp = '0.55'; strokeOp = '0.9';  strokeW = '1.3' }
+          else if (isSugg)   { fillOp = '0.4';  strokeOp = '0.65'; strokeW = '1.0' }
+          else               { fillOp = '0.22'; strokeOp = '0.38'; strokeW = '0.8' }
 
           el.setAttribute('fill',           color)
           el.setAttribute('fill-opacity',   fillOp)
@@ -250,7 +250,7 @@ export default function MuscleMap({
       {showLegend && activeMuscles.length === 0 && interactive && (
         <p style={{
           textAlign:  'center',
-          color:      'rgba(242,237,232,0.4)',
+          color:      'rgba(59,51,48,0.35)',
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle:  'italic',
           fontSize:   '13px',

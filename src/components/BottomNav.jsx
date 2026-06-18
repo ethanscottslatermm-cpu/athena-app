@@ -45,14 +45,33 @@ function AthenaIcon({ isActive }) {
   )
 }
 
+function BodyIcon({ isActive }) {
+  const c = isActive ? '#2A1C14' : '#6B5248'
+  return (
+    <svg width="20" height="22" viewBox="0 0 24 42" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+      <circle cx="12" cy="4" r="3.2" stroke={c} strokeWidth="1.5" fill="none"/>
+      <path d="M8 10 Q12 8 16 10 L17 20 H7 Z" stroke={c} strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+      <path d="M7 20 L5 32" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M17 20 L19 32" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M7 20 L2 16" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M17 20 L22 16" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M5 32 L4 40" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M5 32 L8 40" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M19 32 L18 40" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M19 32 L22 40" stroke={c} strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
 const navItems = [
-  { to: '/',          label: 'Home',      png: dashboardIcon, athena: false },
-  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon,   athena: false },
-  { to: '/grocery',   label: 'Grocery',   png: groceryIcon,   athena: false },
-  { to: '/mood',      label: 'Mood',      png: moodIcon,      athena: false },
-  { to: '/cycle',     label: 'Cycle',     png: cycleIcon,     athena: false },
-  { to: '/athena',    label: 'Athena',    png: null,          athena: true  },
-  { to: '/community', label: 'Community', png: communityIcon, athena: false },
+  { to: '/',          label: 'Home',      png: dashboardIcon, athena: false, body: false },
+  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon,   athena: false, body: false },
+  { to: '/grocery',   label: 'Grocery',   png: groceryIcon,   athena: false, body: false },
+  { to: '/body',      label: 'Body',      png: null,          athena: false, body: true  },
+  { to: '/mood',      label: 'Mood',      png: moodIcon,      athena: false, body: false },
+  { to: '/cycle',     label: 'Cycle',     png: cycleIcon,     athena: false, body: false },
+  { to: '/athena',    label: 'Athena',    png: null,          athena: true,  body: false },
+  { to: '/community', label: 'Community', png: communityIcon, athena: false, body: false },
 ]
 
 export default function BottomNav() {
@@ -75,7 +94,7 @@ export default function BottomNav() {
         }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-0.5">
-          {navItems.map(({ to, label, png, athena }, i) => (
+          {navItems.map(({ to, label, png, athena, body }, i) => (
             <NavLink
               key={to}
               to={to}
@@ -87,6 +106,8 @@ export default function BottomNav() {
                 <>
                   {athena
                     ? <AthenaIcon isActive={isActive} />
+                    : body
+                    ? <BodyIcon isActive={isActive} />
                     : <PngIcon src={png} delay={i * 0.7} />
                   }
                   <span style={{
