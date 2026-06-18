@@ -123,7 +123,24 @@ function IconChallenges({ color }) {
   )
 }
 
-const TAB_ICONS = { home: IconStudio, library: IconSessions, progress: IconProgress, challenges: IconChallenges }
+function IconBodyMap({ color }) {
+  return (
+    <svg width="20" height="22" viewBox="0 0 24 42" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+      <circle cx="12" cy="4" r="3.2" stroke={color} strokeWidth="1.5" fill="none"/>
+      <path d="M8 10 Q12 8 16 10 L17 20 H7 Z" stroke={color} strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+      <path d="M7 20 L5 32" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M17 20 L19 32" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M7 20 L2 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M17 20 L22 16" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M5 32 L4 40" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M5 32 L8 40" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M19 32 L18 40" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M19 32 L22 40" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
+const TAB_ICONS = { home: IconStudio, library: IconSessions, progress: IconProgress, challenges: IconChallenges, bodymap: IconBodyMap }
 
 const INTRO_KEY      = 'athena_pilates_intro_ts_v2'
 const INTRO_COOLDOWN = 20 * 60 * 1000 // 20 minutes
@@ -160,6 +177,10 @@ const PILATES_HINTS = {
     'Challenges reset monthly — join one now to build a habit that genuinely sticks.',
     'Your challenge progress is visible to your Tribe, which keeps you quietly accountable.',
   ],
+  bodymap: [
+    'Tap any muscle group to see which sessions target it and how often you train it.',
+    'Your phase shapes which muscles to prioritize — the highlighted groups reflect where your body is right now.',
+  ],
 }
 
 import HomeTab        from './HomeTab'
@@ -169,12 +190,14 @@ import ChallengesTab  from './ChallengesTab'
 import SessionDetail  from './SessionDetail'
 import ActiveSession  from './ActiveSession'
 import SessionComplete from './SessionComplete'
+import BodyTab        from '../../pages/BodyTab'
 
 const TABS = [
   { id: 'home',       label: 'Studio'     },
   { id: 'library',    label: 'Sessions'   },
   { id: 'progress',   label: 'Progress'   },
   { id: 'challenges', label: 'Challenges' },
+  { id: 'bodymap',    label: 'Body'       },
 ]
 
 export default function PilatesStudio() {
@@ -523,13 +546,16 @@ export default function PilatesStudio() {
         className="absolute left-0 right-0 bottom-0"
         style={{
           top: '15%',
-          background: 'rgba(242,237,232,0.92)',
+          background: activeTab === 'bodymap' ? 'rgba(20,10,24,0.94)' : 'rgba(242,237,232,0.92)',
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
-          borderTop: '1px solid rgba(196,175,168,0.4)',
+          borderTop: activeTab === 'bodymap'
+            ? '1px solid rgba(201,168,108,0.15)'
+            : '1px solid rgba(196,175,168,0.4)',
+          transition: 'background 0.25s ease, border-top-color 0.25s ease',
         }}
       >
-        <div className="overflow-y-auto hide-scrollbar h-full px-4 pt-5 pb-nav">
+        <div className={`overflow-y-auto hide-scrollbar h-full pt-5 pb-nav ${activeTab === 'bodymap' ? 'px-0' : 'px-4'}`}>
           {activeTab === 'home' && (
             <>
               <AthenaInsightCard moduleName="pilates" />
@@ -571,6 +597,7 @@ export default function PilatesStudio() {
               onRefresh={fetchData}
             />
           )}
+          {activeTab === 'bodymap' && <BodyTab embedded />}
         </div>
       </div>
 

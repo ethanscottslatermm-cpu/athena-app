@@ -362,7 +362,7 @@ function InsightsView({ sessionHistory, currentPhase }) {
 }
 
 // ── Main BodyTab page ─────────────────────────────────────────────────────────
-export default function BodyTab() {
+export default function BodyTab({ embedded = false }) {
   const { user } = useAuth()
   const phaseHook = usePhase()
 
@@ -417,6 +417,39 @@ export default function BodyTab() {
 
   useEffect(() => { fetchData() }, [fetchData])
 
+  const content = loading ? (
+    <div style={{ padding: '2rem 1rem', textAlign: 'center' }}>
+      <p style={{ fontFamily: fontSerif, fontStyle: 'italic', fontSize: 14, color: mutedText }}>
+        Loading…
+      </p>
+    </div>
+  ) : (
+    <>
+      {view === 'map' && (
+        <MapView
+          currentPhase={currentPhase}
+          sessionHistory={sessionHistory}
+          onSelectSession={null}
+        />
+      )}
+      {view === 'history' && (
+        <HistoryView sessionHistory={sessionHistory} />
+      )}
+      {view === 'insights' && (
+        <InsightsView sessionHistory={sessionHistory} currentPhase={currentPhase} />
+      )}
+    </>
+  )
+
+  if (embedded) {
+    return (
+      <div>
+        <ViewToggle view={view} setView={setView} />
+        {content}
+      </div>
+    )
+  }
+
   return (
     <div style={{
       minHeight:  '100svh',
@@ -435,30 +468,7 @@ export default function BodyTab() {
       </div>
 
       <ViewToggle view={view} setView={setView} />
-
-      {loading ? (
-        <div style={{ padding: '2rem 1rem', textAlign: 'center' }}>
-          <p style={{ fontFamily: fontSerif, fontStyle: 'italic', fontSize: 14, color: mutedText }}>
-            Loading…
-          </p>
-        </div>
-      ) : (
-        <>
-          {view === 'map' && (
-            <MapView
-              currentPhase={currentPhase}
-              sessionHistory={sessionHistory}
-              onSelectSession={null}
-            />
-          )}
-          {view === 'history' && (
-            <HistoryView sessionHistory={sessionHistory} />
-          )}
-          {view === 'insights' && (
-            <InsightsView sessionHistory={sessionHistory} currentPhase={currentPhase} />
-          )}
-        </>
-      )}
+      {content}
     </div>
   )
 }
