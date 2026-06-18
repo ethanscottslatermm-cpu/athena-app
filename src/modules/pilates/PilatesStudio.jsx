@@ -96,32 +96,6 @@ function IconProgress({ color }) {
   )
 }
 
-function IconChallenges({ color }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill={color} d="M60,6h-7V4c0-2.212-1.789-4-4-4H15c-2.211,0-4,1.788-4,4v2H4c-2.211,0-4,1.788-4,4v8
-        c0,6.074,4.925,11,11,11h0.096C12.01,38.659,19.477,46.395,29,47.761V56h-7c-2.211,0-4,1.788-4,4v3
-        c0,0.552,0.447,1,1,1h26c0.553,0,1-0.448,1-1v-3c0-2.212-1.789-4-4-4h-7v-8.239
-        c9.523-1.366,16.985-9.1,17.899-18.761H53c6.075,0,11-4.926,11-11v-8C64,7.788,62.211,6,60,6z
-        M11,23c-2.762,0-5-2.239-5-5v-6h5V23z
-        M2,18v-8c0-1.105,0.896-2,2-2h7v2H5c-0.553,0-1,0.446-1,1v7c0,3.865,3.134,7,7,7v2C6.029,27,2,22.97,2,18z
-        M42,58c1.104,0,2,0.895,2,2v2H20v-2c0-1.105,0.896-2,2-2H42z
-        M31,56v-8.052C31.334,47.964,31.662,48,32,48s0.666-0.036,1-0.052V56H31z
-        M51,27c0,10.492-8.507,19-19,19s-19-8.508-19-19V4c0-1.105,0.896-2,2-2h34c1.104,0,2,0.895,2,2V27z
-        M53,12h5v6c0,2.761-2.238,5-5,5V12z
-        M62,18c0,4.97-4.029,9-9,9v-2c3.866,0,7-3.135,7-7v-7c0-0.554-0.447-1-1-1h-6V8h7c1.104,0,2,0.895,2,2V18z"/>
-      <path fill={color} d="M39.147,19.36l-4.309-0.658l-1.936-4.123c-0.165-0.352-0.518-0.575-0.905-0.575
-        s-0.74,0.224-0.905,0.575l-1.936,4.123l-4.309,0.658c-0.37,0.058-0.678,0.315-0.797,0.671s-0.029,0.747,0.232,1.016
-        l3.146,3.227l-0.745,4.564c-0.062,0.378,0.099,0.758,0.411,0.979s0.725,0.243,1.061,0.059l3.841-2.123l3.841,2.123
-        C35.99,29.959,36.157,30,36.323,30c0.202,0,0.404-0.062,0.576-0.184c0.312-0.221,0.473-0.601,0.411-0.979l-0.745-4.564
-        l3.146-3.227c0.262-0.269,0.352-0.66,0.232-1.016S39.518,19.418,39.147,19.36z
-        M34.781,23.238c-0.222,0.228-0.322,0.546-0.271,0.859l0.495,3.029l-2.522-1.395
-        c-0.151-0.083-0.317-0.125-0.484-0.125s-0.333,0.042-0.484,0.125l-2.522,1.395l0.495-3.029
-        c0.051-0.313-0.05-0.632-0.271-0.859l-2.141-2.193l2.913-0.446c0.329-0.05,0.612-0.261,0.754-0.563l1.257-2.678
-        l1.257,2.678c0.142,0.303,0.425,0.514,0.754,0.563l2.913,0.446L34.781,23.238z"/>
-    </svg>
-  )
-}
 
 function IconBodyMap({ color }) {
   return (
@@ -140,7 +114,7 @@ function IconBodyMap({ color }) {
   )
 }
 
-const TAB_ICONS = { home: IconStudio, library: IconSessions, progress: IconProgress, challenges: IconChallenges, bodymap: IconBodyMap }
+const TAB_ICONS = { home: IconStudio, library: IconSessions, progress: IconProgress, bodymap: IconBodyMap }
 
 const INTRO_KEY      = 'athena_pilates_intro_ts_v2'
 const INTRO_COOLDOWN = 20 * 60 * 1000 // 20 minutes
@@ -173,10 +147,6 @@ const PILATES_HINTS = {
     'Every completed session builds your streak. Consistency is the most powerful form of self-care.',
     'Scroll your completion history to celebrate how much you have already done.',
   ],
-  challenges: [
-    'Challenges reset monthly — join one now to build a habit that genuinely sticks.',
-    'Your challenge progress is visible to your Tribe, which keeps you quietly accountable.',
-  ],
   bodymap: [
     'Tap any muscle group to see which sessions target it and how often you train it.',
     'Your phase shapes which muscles to prioritize — the highlighted groups reflect where your body is right now.',
@@ -186,7 +156,6 @@ const PILATES_HINTS = {
 import HomeTab        from './HomeTab'
 import LibraryTab     from './LibraryTab'
 import ProgressTab    from './ProgressTab'
-import ChallengesTab  from './ChallengesTab'
 import SessionDetail  from './SessionDetail'
 import ActiveSession  from './ActiveSession'
 import SessionComplete from './SessionComplete'
@@ -196,7 +165,6 @@ const TABS = [
   { id: 'home',       label: 'Studio'     },
   { id: 'library',    label: 'Sessions'   },
   { id: 'progress',   label: 'Progress'   },
-  { id: 'challenges', label: 'Challenges' },
   { id: 'bodymap',    label: 'Body'       },
 ]
 
@@ -236,8 +204,6 @@ export default function PilatesStudio() {
   const [exercises,        setExercises]        = useState([])
   const [completions,      setCompletions]      = useState([])
   const [favorites,        setFavorites]        = useState(new Set())
-  const [challenges,       setChallenges]       = useState([])
-  const [challengeEntries, setChallengeEntries] = useState([])
   const [loading,          setLoading]          = useState(true)
 
   // ── Exit / inactivity ────────────────────────────────────────────────────────
@@ -262,13 +228,11 @@ export default function PilatesStudio() {
   const fetchData = useCallback(async () => {
     if (!user) return
     setLoading(true)
-    const [sRes, eRes, cRes, fRes, chRes, ceRes] = await Promise.all([
+    const [sRes, eRes, cRes, fRes] = await Promise.all([
       supabase.from('pilates_sessions').select('*').order('phase').order('duration_min'),
       supabase.from('pilates_exercises').select('*').order('order_num'),
       supabase.from('session_completions').select('*').eq('user_id', user.id).order('completed_at', { ascending: false }),
       supabase.from('user_favorites').select('session_id').eq('user_id', user.id),
-      supabase.from('challenges').select('*').order('name'),
-      supabase.from('challenge_entries').select('*').eq('user_id', user.id),
     ])
     setSessions((sRes.data ?? []).map(s => ({
       ...s,
@@ -279,8 +243,6 @@ export default function PilatesStudio() {
     setExercises(eRes.data ?? [])
     setCompletions(cRes.data ?? [])
     setFavorites(new Set((fRes.data ?? []).map(f => f.session_id)))
-    setChallenges(chRes.data ?? [])
-    setChallengeEntries(ceRes.data ?? [])
     setLoading(false)
   }, [user?.id])
 
@@ -586,15 +548,6 @@ export default function PilatesStudio() {
               completions={completions}
               loading={loading}
               onSelectSession={handleSelectSession}
-            />
-          )}
-          {activeTab === 'challenges' && (
-            <ChallengesTab
-              challenges={challenges}
-              challengeEntries={challengeEntries}
-              phaseData={phaseData}
-              user={user}
-              onRefresh={fetchData}
             />
           )}
           {activeTab === 'bodymap' && <BodyTab embedded />}
