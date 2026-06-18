@@ -250,7 +250,7 @@ export default function MuscleMap({
       {showLegend && activeMuscles.length === 0 && interactive && (
         <p style={{
           textAlign:  'center',
-          color:      'rgba(59,51,48,0.35)',
+          color:      'rgba(242,237,232,0.4)',
           fontFamily: "'Cormorant Garamond', serif",
           fontStyle:  'italic',
           fontSize:   '13px',

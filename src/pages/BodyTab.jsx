@@ -112,7 +112,7 @@ function PhaseBar({ currentPhase }) {
       <span style={{ fontFamily: fontSerif, fontSize: 12, color: currentPhase.phaseColor, letterSpacing: '0.05em', textTransform: 'capitalize' }}>
         {currentPhase.name} phase · Day {currentPhase.day}
       </span>
-      <span style={{ fontFamily: fontSans, fontSize: 11, color: mutedText, marginLeft: 'auto' }}>
+      <span style={{ fontFamily: fontSans, fontSize: 11, color: 'rgba(242,237,232,0.45)', marginLeft: 'auto' }}>
         {rec?.rationale}
       </span>
     </div>
@@ -176,9 +176,9 @@ function MapView({ currentPhase, sessionHistory, onSelectSession }) {
   return (
     <div style={{ padding: '0 1rem 2rem' }}>
       <div style={{
-        background:   'linear-gradient(165deg, #EDE8E2 0%, #E8E0D8 100%)',
+        background:   'linear-gradient(165deg, #2A1C16 0%, #1E1410 100%)',
         borderRadius: 16,
-        border:       '1px solid rgba(196,175,168,0.4)',
+        border:       '1px solid rgba(201,168,108,0.14)',
         padding:      '1rem',
         overflow:     'visible',
       }}>
@@ -265,9 +265,9 @@ function HistoryView({ sessionHistory }) {
 
       {/* Heatmap */}
       <div style={{
-        background:   'linear-gradient(165deg, #EDE8E2 0%, #E8E0D8 100%)',
+        background:   'linear-gradient(165deg, #2A1C16 0%, #1E1410 100%)',
         borderRadius: 16,
-        border:       '1px solid rgba(196,175,168,0.4)',
+        border:       '1px solid rgba(201,168,108,0.14)',
         padding:      '1rem',
         overflow:     'visible',
         marginBottom: '1rem',
