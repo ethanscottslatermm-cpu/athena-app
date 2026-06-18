@@ -10,7 +10,6 @@ import settingsIcon from '../assets/icons/settings-icon.png'
 import exitIcon from '../assets/icons/nav-exit.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 import HintBubble            from '../components/HintBubble'
-import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
 import nourishIcon   from '../assets/icons/nav-nourish.png'
@@ -622,40 +621,38 @@ export default function Dashboard() {
           }} />
 
           {/* Content */}
-          <div style={{ position: 'relative', padding: '20px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ position: 'relative', padding: '20px 20px 22px' }}>
 
-            {/* Left column */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{
-                fontFamily: "'Tenor Sans', sans-serif",
-                fontSize: 9, letterSpacing: '0.2em',
-                color: 'rgba(201,168,108,0.65)',
-                textTransform: 'uppercase',
-                margin: '0 0 8px',
-              }}>Pilates Studio</p>
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 9, letterSpacing: '0.2em',
+              color: 'rgba(201,168,108,0.65)',
+              textTransform: 'uppercase',
+              margin: '0 0 6px',
+            }}>Pilates Studio</p>
 
-              <p style={{
-                fontFamily: "'Tenor Sans', sans-serif",
-                fontSize: 12,
-                color: 'rgba(242,237,232,0.5)',
-                margin: '0 0 16px',
-              }}>{pilatesSubline}</p>
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 13,
+              color: 'rgba(242,237,232,0.6)',
+              margin: '0 0 18px',
+              letterSpacing: '0.02em',
+            }}>{pilatesSubline}</p>
 
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
               {phase && PILATES_PHASE_COLORS[phase] && (
-                <div style={{ marginBottom: 16 }}>
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    background: `${PILATES_PHASE_COLORS[phase]}18`,
-                    border: `1px solid ${PILATES_PHASE_COLORS[phase]}40`,
-                    borderRadius: 20, padding: '3px 10px',
-                    fontFamily: "'Tenor Sans', sans-serif",
-                    fontSize: 10, color: PILATES_PHASE_COLORS[phase],
-                    letterSpacing: '0.06em',
-                  }}>
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: PILATES_PHASE_COLORS[phase], flexShrink: 0 }} />
-                    {phase.charAt(0).toUpperCase() + phase.slice(1)} phase
-                  </span>
-                </div>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  background: `${PILATES_PHASE_COLORS[phase]}18`,
+                  border: `1px solid ${PILATES_PHASE_COLORS[phase]}40`,
+                  borderRadius: 20, padding: '3px 10px',
+                  fontFamily: "'Tenor Sans', sans-serif",
+                  fontSize: 10, color: PILATES_PHASE_COLORS[phase],
+                  letterSpacing: '0.06em',
+                }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: PILATES_PHASE_COLORS[phase], flexShrink: 0 }} />
+                  {phase.charAt(0).toUpperCase() + phase.slice(1)} phase
+                </span>
               )}
 
               <button style={{
@@ -671,18 +668,6 @@ export default function Dashboard() {
                 Enter Studio
                 <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
               </button>
-            </div>
-
-            {/* Right column — Pilates icon */}
-            <div style={{ width: 100, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{
-                display: 'inline-block', width: 80, height: 80,
-                WebkitMask: `url(${pilatesIcon}) no-repeat center / contain`,
-                mask: `url(${pilatesIcon}) no-repeat center / contain`,
-                backgroundColor: '#C4859A',
-                opacity: 0.85,
-                filter: 'drop-shadow(0 0 16px rgba(196,133,154,0.35)) drop-shadow(0 0 32px rgba(201,168,108,0.15))',
-              }} />
             </div>
 
           </div>
