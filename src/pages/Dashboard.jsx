@@ -591,89 +591,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Pilates Studio Hero Card ── */}
-      <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.05)}>
-        <div
-          style={{
-            borderRadius: 16,
-            overflow: 'hidden',
-            position: 'relative',
-            minHeight: 160,
-            backgroundImage: 'url("/images/dashboard/pilates-studio-hero.png")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center 30%',
-            border: '1px solid rgba(201,168,108,0.18)',
-            cursor: 'pointer',
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            transform: heroPressed ? 'scale(0.98)' : 'scale(1)',
-            transition: 'transform 0.15s ease',
-          }}
-          onClick={() => navigate('/pilates')}
-          onPointerDown={() => setHeroPressed(true)}
-          onPointerUp={() => setHeroPressed(false)}
-          onPointerLeave={() => setHeroPressed(false)}
-        >
-          {/* Dark scrim over photo */}
-          <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'linear-gradient(to right, rgba(20,10,24,0.82) 0%, rgba(20,10,24,0.55) 55%, rgba(20,10,24,0.2) 100%)',
-          }} />
-
-          {/* Content */}
-          <div style={{ position: 'relative', padding: '20px 20px 22px' }}>
-
-            <p style={{
-              fontFamily: "'Tenor Sans', sans-serif",
-              fontSize: 9, letterSpacing: '0.2em',
-              color: 'rgba(201,168,108,0.65)',
-              textTransform: 'uppercase',
-              margin: '0 0 6px',
-            }}>Pilates Studio</p>
-
-            <p style={{
-              fontFamily: "'Tenor Sans', sans-serif",
-              fontSize: 13,
-              color: 'rgba(242,237,232,0.6)',
-              margin: '0 0 18px',
-              letterSpacing: '0.02em',
-            }}>{pilatesSubline}</p>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              {phase && PILATES_PHASE_COLORS[phase] && (
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                  background: `${PILATES_PHASE_COLORS[phase]}18`,
-                  border: `1px solid ${PILATES_PHASE_COLORS[phase]}40`,
-                  borderRadius: 20, padding: '3px 10px',
-                  fontFamily: "'Tenor Sans', sans-serif",
-                  fontSize: 10, color: PILATES_PHASE_COLORS[phase],
-                  letterSpacing: '0.06em',
-                }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: PILATES_PHASE_COLORS[phase], flexShrink: 0 }} />
-                  {phase.charAt(0).toUpperCase() + phase.slice(1)} phase
-                </span>
-              )}
-
-              <button style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                background: 'rgba(201,168,108,0.1)',
-                border: '1px solid rgba(201,168,108,0.35)',
-                borderRadius: 20, padding: '7px 16px',
-                color: '#C9A86C',
-                fontFamily: "'Tenor Sans', sans-serif",
-                fontSize: 12, letterSpacing: '0.08em',
-                cursor: 'pointer', pointerEvents: 'none',
-              }}>
-                Enter Studio
-                <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
       {/* ── Phase Hero — swipable carousel ── */}
       <div className="px-4 max-w-md mx-auto mb-5" style={anim(0.07)}>
         <div
@@ -788,6 +705,89 @@ export default function Dashboard() {
               }}
             />
           ))}
+        </div>
+      </div>
+
+      {/* ── Pilates Studio Hero Card ── */}
+      <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.09)}>
+        <div
+          style={{
+            borderRadius: 16,
+            overflow: 'hidden',
+            position: 'relative',
+            minHeight: 160,
+            backgroundImage: 'url("/images/dashboard/pilates-studio-hero.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 30%',
+            border: '1px solid rgba(201,168,108,0.18)',
+            cursor: 'pointer',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            transform: heroPressed ? 'scale(0.98)' : 'scale(1)',
+            transition: 'transform 0.15s ease',
+          }}
+          onClick={() => navigate('/pilates')}
+          onPointerDown={() => setHeroPressed(true)}
+          onPointerUp={() => setHeroPressed(false)}
+          onPointerLeave={() => setHeroPressed(false)}
+        >
+          {/* Dark scrim over photo */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'linear-gradient(to right, rgba(20,10,24,0.82) 0%, rgba(20,10,24,0.55) 55%, rgba(20,10,24,0.2) 100%)',
+          }} />
+
+          {/* Content */}
+          <div style={{ position: 'relative', padding: '20px 20px 22px' }}>
+
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 9, letterSpacing: '0.2em',
+              color: 'rgba(201,168,108,0.65)',
+              textTransform: 'uppercase',
+              margin: '0 0 6px',
+            }}>Pilates Studio</p>
+
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 13,
+              color: 'rgba(242,237,232,0.6)',
+              margin: '0 0 18px',
+              letterSpacing: '0.02em',
+            }}>{pilatesSubline}</p>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              {phase && PILATES_PHASE_COLORS[phase] && (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  background: `${PILATES_PHASE_COLORS[phase]}18`,
+                  border: `1px solid ${PILATES_PHASE_COLORS[phase]}40`,
+                  borderRadius: 20, padding: '3px 10px',
+                  fontFamily: "'Tenor Sans', sans-serif",
+                  fontSize: 10, color: PILATES_PHASE_COLORS[phase],
+                  letterSpacing: '0.06em',
+                }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: PILATES_PHASE_COLORS[phase], flexShrink: 0 }} />
+                  {phase.charAt(0).toUpperCase() + phase.slice(1)} phase
+                </span>
+              )}
+
+              <button style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(201,168,108,0.1)',
+                border: '1px solid rgba(201,168,108,0.35)',
+                borderRadius: 20, padding: '7px 16px',
+                color: '#C9A86C',
+                fontFamily: "'Tenor Sans', sans-serif",
+                fontSize: 12, letterSpacing: '0.08em',
+                cursor: 'pointer', pointerEvents: 'none',
+              }}>
+                Enter Studio
+                <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
+              </button>
+            </div>
+
+          </div>
         </div>
       </div>
 
