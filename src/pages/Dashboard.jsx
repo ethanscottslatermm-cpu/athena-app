@@ -4,15 +4,12 @@ import { differenceInDays } from 'date-fns'
 import { useAuth } from '../hooks/useAuth'
 import { usePhase } from '../hooks/usePhase'
 import { useProfile } from '../hooks/useProfile'
-import { useAthena } from '../hooks/useAthena'
 import { ChevronRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import settingsIcon from '../assets/icons/settings-icon.png'
 import exitIcon from '../assets/icons/nav-exit.png'
 import WellnessWeatherWidget from '../components/WellnessWeatherWidget'
 import HintBubble            from '../components/HintBubble'
-import AthenaBriefModal      from '../components/AthenaBriefModal'
-import PhaseBar              from '../components/PhaseBar'
 import pilatesIcon   from '../assets/icons/nav-pilates.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
@@ -151,6 +148,13 @@ const PHASE_META = {
   follicular: { color: '#8FA58C', label: 'Follicular', days: 8  },
   ovulation:  { color: '#D4A0A0', label: 'Ovulation',  days: 3  },
   luteal:     { color: '#C4AFA8', label: 'Luteal',     days: 12 },
+}
+
+const PILATES_PHASE_COLORS = {
+  menstrual:  '#C4606A',
+  follicular: '#8FAF8A',
+  ovulation:  '#C9A86C',
+  luteal:     '#9B7FA0',
 }
 
 const PHASE_CONTENT = {
@@ -349,113 +353,15 @@ function SectionHeader({ title, delay }) {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
-// ─── Daily Brief Card ─────────────────────────────────────────────────────────
-
-const PHASE_DOTS = {
-  follicular: '#8FA58C',
-  ovulation:  '#C9A86C',
-  luteal:     '#E8829A',
-  menstrual:  '#7A5A6A',
-}
-
-function DailyBriefCard({ brief, loading, error, phase, onExpand }) {
-  const dot = PHASE_DOTS[phase] ?? '#C9A86C'
-
-  return (
-    <div
-      onClick={brief ? onExpand : undefined}
-      style={{
-        margin: '0 16px 16px',
-        borderRadius: 16,
-        background: 'linear-gradient(135deg, #1A0E14 0%, #140E0C 100%)',
-        border: '1px solid rgba(201,168,108,0.3)',
-        borderTop: '1px solid #C9A86C',
-        padding: '16px 18px',
-        cursor: brief ? 'pointer' : 'default',
-        animation: 'dashUp 0.4s ease 0.05s both',
-      }}
-    >
-      <style>{`
-        @keyframes briefShimmer {
-          0%   { background-position: -200% 0; }
-          100% { background-position:  200% 0; }
-        }
-      `}</style>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ color: '#C9A86C', fontSize: 10 }}>✦</span>
-          <span style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.65)' }}>
-            Athena
-          </span>
-        </div>
-        {brief?.phase_day && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <div style={{ width: 5, height: 5, borderRadius: '50%', background: dot }} />
-            <span style={{ fontFamily: 'Cinzel, serif', fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.45)' }}>
-              {brief.phase_day}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {loading ? (
-        <div>
-          <div style={{ height: 16, borderRadius: 8, marginBottom: 8, width: '70%', background: 'linear-gradient(90deg, rgba(201,168,108,0.06) 25%, rgba(201,168,108,0.14) 50%, rgba(201,168,108,0.06) 75%)', backgroundSize: '200% 100%', animation: 'briefShimmer 1.6s infinite' }} />
-          <div style={{ height: 11, borderRadius: 6, marginBottom: 6, width: '100%', background: 'linear-gradient(90deg, rgba(201,168,108,0.06) 25%, rgba(201,168,108,0.14) 50%, rgba(201,168,108,0.06) 75%)', backgroundSize: '200% 100%', animation: 'briefShimmer 1.6s infinite 0.2s' }} />
-          <div style={{ height: 11, borderRadius: 6, width: '85%', background: 'linear-gradient(90deg, rgba(201,168,108,0.06) 25%, rgba(201,168,108,0.14) 50%, rgba(201,168,108,0.06) 75%)', backgroundSize: '200% 100%', animation: 'briefShimmer 1.6s infinite 0.4s' }} />
-        </div>
-      ) : brief ? (
-        <div style={{ animation: 'dashUp 0.3s ease forwards' }}>
-          {brief.greeting && (
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 16, color: '#F2EDE8', lineHeight: 1.45, marginBottom: 8 }}>
-              {brief.greeting}
-            </p>
-          )}
-          {brief.rhythm_insight && (
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 13, color: 'rgba(196,133,154,0.8)', lineHeight: 1.55, marginBottom: 8 }}>
-              {brief.rhythm_insight}
-            </p>
-          )}
-          {brief.action_focus && (
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 13, fontWeight: 600, color: '#F2EDE8', lineHeight: 1.4, marginBottom: 8 }}>
-              Today: {brief.action_focus}
-            </p>
-          )}
-          {brief.intention && (
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 13, color: '#C9A86C', lineHeight: 1.4, marginBottom: 10 }}>
-              &ldquo;{brief.intention}&rdquo;
-            </p>
-          )}
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <span style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(201,168,108,0.55)' }}>
-              Your full brief →
-            </span>
-          </div>
-        </div>
-      ) : (
-        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 14, color: 'rgba(242,237,232,0.35)', lineHeight: 1.5, margin: 0 }}>
-          {error
-            ? 'Athena is resting — your brief will return shortly.'
-            : 'Complete your cycle setup to unlock your daily brief.'}
-        </p>
-      )}
-    </div>
-  )
-}
-
 export default function Dashboard() {
   const { phase, color } = usePhase()
   const { profile } = useProfile()
   const { user } = useAuth()
-  const { getDailyBrief } = useAthena()
   const navigate = useNavigate()
   const [weather,        setWeather]        = useState(null)
+  const [heroPressed,    setHeroPressed]    = useState(false)
   const [pilatesPressed, setPilatesPressed] = useState(false)
   const [pilatesSubline, setPilatesSubline] = useState('Begin your practice')
-  const [brief,          setBrief]          = useState(null)
-  const [briefLoad,  setBriefLoad]  = useState(true)
-  const [briefError, setBriefError] = useState(false)
-  const [briefModal, setBriefModal] = useState(false)
 
   // ── Exit / sign-out ──────────────────────────────────────────────────────────
   const [exiting,   setExiting]   = useState(false)
@@ -497,33 +403,28 @@ export default function Dashboard() {
   const todayPair     = [TODAY_POOL[(dayOffset * 2) % poolSize], TODAY_POOL[(dayOffset * 2 + 1) % poolSize]]
   const phaseRotation = PHASE_GUIDANCE_ROTATIONS[dayOffset % PHASE_GUIDANCE_ROTATIONS.length]
 
-  // ── Featured workout (daily rotation) ───────────────────────────────────────
-  // Daily brief — wait for auth to resolve before fetching
+  // Pilates hero subline — today's completions → phase sessions → default
   useEffect(() => {
     if (!user?.id) return
-    getDailyBrief()
-      .then(data => { setBrief(data); setBriefLoad(false); if (!data) setBriefError(true) })
-      .catch(() => { setBriefLoad(false); setBriefError(true) })
-  }, [user?.id])
-
-  // Pilates streak for hero subline
-  useEffect(() => {
-    if (!user?.id) return
-    supabase
-      .from('session_completions')
-      .select('completed_at')
-      .eq('user_id', user.id)
-      .order('completed_at', { ascending: false })
-      .limit(14)
-      .then(({ data }) => {
-        if (!data?.length) return
-        const days = new Set(data.map(c => new Date(c.completed_at).toDateString()))
-        let streak = 0
-        const d = new Date()
-        while (days.has(d.toDateString())) { streak++; d.setDate(d.getDate() - 1) }
-        if (streak >= 2) setPilatesSubline(`${streak} day streak ✦`)
-      })
-  }, [user?.id])
+    async function computeSubline() {
+      const today = new Date(); today.setHours(0, 0, 0, 0)
+      const { data: todayData } = await supabase
+        .from('session_completions')
+        .select('id')
+        .eq('user_id', user.id)
+        .gte('completed_at', today.toISOString())
+        .limit(1)
+      if (todayData?.length) { setPilatesSubline('Continue where you left off'); return }
+      if (phase) {
+        const { count } = await supabase
+          .from('pilates_sessions')
+          .select('id', { count: 'exact', head: true })
+          .eq('phase', phase)
+        if (count > 0) { setPilatesSubline(`${count} sessions for your phase`); return }
+      }
+    }
+    computeSubline()
+  }, [user?.id, phase])
 
   useEffect(() => {
     const CACHE_KEY = 'athena_weather'
@@ -650,20 +551,109 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Phase Status Bar ── */}
-      <PhaseBar />
+      {/* ── Pilates Studio Hero Card ── */}
+      <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.05)}>
+        <div
+          style={{
+            borderRadius: 16,
+            overflow: 'hidden',
+            position: 'relative',
+            minHeight: 160,
+            background: 'linear-gradient(145deg, #1E0E1A 0%, #2A1020 60%, #1A0E24 100%)',
+            border: '1px solid rgba(201,168,108,0.18)',
+            cursor: 'pointer',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            transform: heroPressed ? 'scale(0.98)' : 'scale(1)',
+            transition: 'transform 0.15s ease',
+          }}
+          onClick={() => navigate('/pilates')}
+          onPointerDown={() => setHeroPressed(true)}
+          onPointerUp={() => setHeroPressed(false)}
+          onPointerLeave={() => setHeroPressed(false)}
+        >
+          {/* Radial glow */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse at 70% 50%, rgba(196,133,154,0.12) 0%, transparent 65%)',
+          }} />
 
-      {/* ── Athena Daily Brief ── */}
-      <DailyBriefCard
-        brief={brief}
-        loading={briefLoad}
-        error={briefError}
-        phase={phase}
-        onExpand={() => setBriefModal(true)}
-      />
-      {briefModal && brief && (
-        <AthenaBriefModal brief={brief} onClose={() => setBriefModal(false)} />
-      )}
+          {/* Content */}
+          <div style={{ position: 'relative', padding: '20px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+
+            {/* Left column */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{
+                fontFamily: "'Tenor Sans', sans-serif",
+                fontSize: 9, letterSpacing: '0.2em',
+                color: 'rgba(201,168,108,0.65)',
+                textTransform: 'uppercase',
+                margin: '0 0 8px',
+              }}>Pilates Studio</p>
+
+              <h2 style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 26, fontWeight: 400,
+                color: '#F2EDE8',
+                letterSpacing: '-0.01em',
+                lineHeight: 1.1,
+                margin: '0 0 6px',
+              }}>Your Studio</h2>
+
+              <p style={{
+                fontFamily: "'Tenor Sans', sans-serif",
+                fontSize: 12,
+                color: 'rgba(242,237,232,0.5)',
+                margin: '0 0 16px',
+              }}>{pilatesSubline}</p>
+
+              {phase && PILATES_PHASE_COLORS[phase] && (
+                <div style={{ marginBottom: 16 }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    background: `${PILATES_PHASE_COLORS[phase]}18`,
+                    border: `1px solid ${PILATES_PHASE_COLORS[phase]}40`,
+                    borderRadius: 20, padding: '3px 10px',
+                    fontFamily: "'Tenor Sans', sans-serif",
+                    fontSize: 10, color: PILATES_PHASE_COLORS[phase],
+                    letterSpacing: '0.06em',
+                  }}>
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: PILATES_PHASE_COLORS[phase], flexShrink: 0 }} />
+                    {phase.charAt(0).toUpperCase() + phase.slice(1)} phase
+                  </span>
+                </div>
+              )}
+
+              <button style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(201,168,108,0.1)',
+                border: '1px solid rgba(201,168,108,0.35)',
+                borderRadius: 20, padding: '7px 16px',
+                color: '#C9A86C',
+                fontFamily: "'Tenor Sans', sans-serif",
+                fontSize: 12, letterSpacing: '0.08em',
+                cursor: 'pointer', pointerEvents: 'none',
+              }}>
+                Enter Studio
+                <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
+              </button>
+            </div>
+
+            {/* Right column — Pilates icon */}
+            <div style={{ width: 100, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{
+                display: 'inline-block', width: 80, height: 80,
+                WebkitMask: `url(${pilatesIcon}) no-repeat center / contain`,
+                mask: `url(${pilatesIcon}) no-repeat center / contain`,
+                backgroundColor: '#C4859A',
+                opacity: 0.85,
+                filter: 'drop-shadow(0 0 16px rgba(196,133,154,0.35)) drop-shadow(0 0 32px rgba(201,168,108,0.15))',
+              }} />
+            </div>
+
+          </div>
+        </div>
+      </div>
 
       {/* ── Phase Hero — split banner ── */}
       <div className="px-4 max-w-md mx-auto mb-5" style={anim(0.07)}>
