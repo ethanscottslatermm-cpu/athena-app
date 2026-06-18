@@ -600,7 +600,9 @@ export default function Dashboard() {
             overflow: 'hidden',
             position: 'relative',
             minHeight: 160,
-            background: 'linear-gradient(145deg, #1E0E1A 0%, #2A1020 60%, #1A0E24 100%)',
+            backgroundImage: 'url("/images/dashboard/pilates-studio-hero.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 30%',
             border: '1px solid rgba(201,168,108,0.18)',
             cursor: 'pointer',
             userSelect: 'none',
@@ -613,10 +615,10 @@ export default function Dashboard() {
           onPointerUp={() => setHeroPressed(false)}
           onPointerLeave={() => setHeroPressed(false)}
         >
-          {/* Radial glow */}
+          {/* Dark scrim over photo */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'radial-gradient(ellipse at 70% 50%, rgba(196,133,154,0.12) 0%, transparent 65%)',
+            background: 'linear-gradient(to right, rgba(20,10,24,0.82) 0%, rgba(20,10,24,0.55) 55%, rgba(20,10,24,0.2) 100%)',
           }} />
 
           {/* Content */}
@@ -631,15 +633,6 @@ export default function Dashboard() {
                 textTransform: 'uppercase',
                 margin: '0 0 8px',
               }}>Pilates Studio</p>
-
-              <h2 style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 26, fontWeight: 400,
-                color: '#F2EDE8',
-                letterSpacing: '-0.01em',
-                lineHeight: 1.1,
-                margin: '0 0 6px',
-              }}>Your Studio</h2>
 
               <p style={{
                 fontFamily: "'Tenor Sans', sans-serif",
