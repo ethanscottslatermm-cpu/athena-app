@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import muscleMapSVG from '../assets/body/musclemap.svg?raw'
 import {
-  MUSCLE_PAIRS, MUSCLE_COLORS, MUSCLE_NAMES, HEATMAP_OPACITY,
+  MUSCLE_PAIRS, MUSCLE_COLORS, MUSCLE_NAMES, MUSCLE_ANATOMICAL, HEATMAP_OPACITY,
 } from '../constants/muscleMap'
 
 const PULSE_STYLE = `
@@ -11,16 +11,72 @@ const PULSE_STYLE = `
 }
 `
 
+// Muscles too small or non-muscular to label cleanly
+const SKIP_LABELS = new Set(['wrists', 'knees', 'feet'])
+// Min SVG-unit² bounding box area to warrant a label
+const LABEL_MIN_AREA = 3000
+
+function addMuscleLabels(svg) {
+  const existing = svg.getElementById('muscle-labels')
+  if (existing) existing.remove()
+
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+  g.id = 'muscle-labels'
+  g.setAttribute('pointer-events', 'none')
+
+  Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
+    if (SKIP_LABELS.has(pairKey)) return
+
+    const color = MUSCLE_COLORS[pairKey] ?? '#C9A86C'
+    const label = MUSCLE_ANATOMICAL[pairKey] ?? MUSCLE_NAMES[pairKey] ?? pairKey
+
+    // Use only the first id for label anchor (one label per pair)
+    const el = svg.getElementById(ids[0])
+    if (!el) return
+
+    let bbox
+    try { bbox = el.getBBox() } catch { return }
+    if (!bbox || bbox.width === 0 || bbox.height === 0) return
+    if (bbox.width * bbox.height < LABEL_MIN_AREA) return
+
+    const cx = Math.round(bbox.x + bbox.width * 0.5)
+    const cy = Math.round(bbox.y + bbox.height * 0.5)
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+    text.setAttribute('x', String(cx))
+    text.setAttribute('y', String(cy))
+    text.setAttribute('text-anchor', 'middle')
+    text.setAttribute('dominant-baseline', 'middle')
+    text.setAttribute('font-family', "'Cinzel', serif")
+    text.setAttribute('font-size', '34')
+    text.setAttribute('letter-spacing', '1.5')
+    text.setAttribute('fill', color)
+    text.setAttribute('fill-opacity', '0.92')
+    // Dark outline for legibility on any background
+    text.setAttribute('paint-order', 'stroke')
+    text.setAttribute('stroke', 'rgba(12,6,18,0.75)')
+    text.setAttribute('stroke-width', '7')
+    text.setAttribute('stroke-linejoin', 'round')
+    text.textContent = label
+
+    g.appendChild(text)
+  })
+
+  svg.appendChild(g)
+}
+
 export default function MuscleMap({
   activeMuscles    = [],
   onMusclePress    = () => {},
   interactive      = true,
   showTooltip      = true,
   showLegend       = true,
-  suggestedMuscles = [],  // pair keys pre-illuminated by phase
+  showLabels       = false,
+  containerStyle   = null,
+  suggestedMuscles = [],
   phaseColor       = null,
-  heatmap          = null, // { [pairKey]: opacity 0-1 } — read-only heatmap mode
-  onHoverChange    = null, // optional callback for heatmap tooltip
+  heatmap          = null,
+  onHoverChange    = null,
 }) {
   const containerRef = useRef(null)
   const [hovered, setHovered] = useState(null)
@@ -50,9 +106,9 @@ export default function MuscleMap({
       svg.prepend(defs)
     }
     defs.innerHTML += `
-      <filter id="muscleGlow" x="-25%" y="-25%" width="150%" height="150%">
-        <feGaussianBlur stdDeviation="5" result="blur"/>
-        <feFlood flood-color="var(--glow-color, #C9A86C)" flood-opacity="0.6" result="color"/>
+      <filter id="muscleGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="8" result="blur"/>
+        <feFlood flood-color="var(--glow-color, #C9A86C)" flood-opacity="0.85" result="color"/>
         <feComposite in="color" in2="blur" operator="in" result="glow"/>
         <feMerge>
           <feMergeNode in="glow"/>
@@ -71,12 +127,11 @@ export default function MuscleMap({
     `
 
     if (heatmap) {
-      // Heatmap mode — hover tooltip only
       Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
         ids.forEach(id => {
           const group = svg.getElementById(id)
           if (!group) return
-          group.setAttribute('pointer-events', 'all')
+          group.setAttribute('pointer-events', 'visiblePainted')
           group.style.cursor = 'default'
           group.addEventListener('mouseenter', () => {
             setHovered(pairKey)
@@ -91,30 +146,32 @@ export default function MuscleMap({
       return
     }
 
-    if (!interactive) return
+    if (interactive) {
+      Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
+        ids.forEach(id => {
+          const group = svg.getElementById(id)
+          if (!group) return
 
-    Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
-      ids.forEach(id => {
-        const group = svg.getElementById(id)
-        if (!group) return
+          group.setAttribute('pointer-events', 'visiblePainted')
+          group.style.cursor = 'pointer'
 
-        group.setAttribute('pointer-events', 'all')
-        group.style.cursor = 'pointer'
+          const activate         = () => callbackRef.current(pairKey)
+          const handleTouchStart = () => setHovered(pairKey)
+          const handleTouchEnd   = (e) => { e.preventDefault(); activate(); setTimeout(() => setHovered(null), 500) }
+          const handleEnter      = () => setHovered(pairKey)
+          const handleLeave      = () => setHovered(null)
 
-        const activate         = () => callbackRef.current(pairKey)
-        const handleTouchStart = () => setHovered(pairKey)
-        const handleTouchEnd   = (e) => { e.preventDefault(); activate(); setTimeout(() => setHovered(null), 500) }
-        const handleEnter      = () => setHovered(pairKey)
-        const handleLeave      = () => setHovered(null)
-
-        group.addEventListener('click',      activate)
-        group.addEventListener('touchstart', handleTouchStart, { passive: true })
-        group.addEventListener('touchend',   handleTouchEnd,   { passive: false })
-        group.addEventListener('mouseenter', handleEnter)
-        group.addEventListener('mouseleave', handleLeave)
+          group.addEventListener('click',      activate)
+          group.addEventListener('touchstart', handleTouchStart, { passive: true })
+          group.addEventListener('touchend',   handleTouchEnd,   { passive: false })
+          group.addEventListener('mouseenter', handleEnter)
+          group.addEventListener('mouseleave', handleLeave)
+        })
       })
-    })
-  }, [interactive, !!heatmap])
+    }
+
+    if (showLabels) addMuscleLabels(svg)
+  }, [interactive, !!heatmap, showLabels])
 
   // ── Update: apply visual state ────────────────────────────────────────────
   useEffect(() => {
@@ -159,7 +216,7 @@ export default function MuscleMap({
           el.style.transition = 'fill-opacity 0.18s ease, stroke-opacity 0.18s ease'
 
           let fillOp, strokeOp, strokeW
-          if (active)        { fillOp = '1';    strokeOp = '1';    strokeW = '1.8' }
+          if (active)        { fillOp = '1';    strokeOp = '1';    strokeW = '2.5' }
           else if (isHov)    { fillOp = '0.55'; strokeOp = '0.9';  strokeW = '1.3' }
           else if (isSugg)   { fillOp = '0.4';  strokeOp = '0.65'; strokeW = '1.0' }
           else               { fillOp = '0.22'; strokeOp = '0.38'; strokeW = '0.8' }
@@ -227,7 +284,13 @@ export default function MuscleMap({
       {/* SVG container */}
       <div
         ref={containerRef}
-        style={{ width: '100%', aspectRatio: '882 / 1866', overflow: 'visible', display: 'block' }}
+        style={{
+          width: '100%',
+          ...(!containerStyle && { aspectRatio: '882 / 1866' }),
+          overflow: 'visible',
+          display: 'block',
+          ...containerStyle,
+        }}
       />
 
       {/* Active muscle chips */}

@@ -158,19 +158,18 @@ function ViewToggle({ view, setView }) {
 }
 
 // ── Map view ──────────────────────────────────────────────────────────────────
-function MapView({ currentPhase, sessionHistory, onSelectSession }) {
-  const [activeMuscles, setActiveMuscles] = useState([])
-  const [activeSheet,   setActiveSheet]   = useState(null)
+function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
+  const [activeMuscle, setActiveMuscle] = useState(null)
+  const [activeSheet,  setActiveSheet]  = useState(null)
 
   const suggestedMuscles = currentPhase
     ? (PHASE_MUSCLES[currentPhase.name]?.primary ?? [])
     : []
 
   const toggleMuscle = (pairKey) => {
-    setActiveMuscles(prev =>
-      prev.includes(pairKey) ? prev.filter(k => k !== pairKey) : [...prev, pairKey]
-    )
-    setActiveSheet(pairKey)
+    const isAlreadyActive = activeMuscle === pairKey
+    setActiveMuscle(isAlreadyActive ? null : pairKey)
+    setActiveSheet(isAlreadyActive ? null : pairKey)
   }
 
   const glowColor = currentPhase?.phaseColor ?? '#C9A86C'
@@ -197,11 +196,13 @@ function MapView({ currentPhase, sessionHistory, onSelectSession }) {
         }} />
         <PhaseBar currentPhase={currentPhase} />
         <MuscleMap
-          activeMuscles={activeMuscles}
+          activeMuscles={activeMuscle ? [activeMuscle] : []}
           onMusclePress={toggleMuscle}
           interactive={true}
           showTooltip={true}
           showLegend={true}
+          showLabels={true}
+          containerStyle={{ height: 'calc(100svh - 310px)', minHeight: 320 }}
           suggestedMuscles={suggestedMuscles}
           phaseColor={currentPhase?.phaseColor}
         />
@@ -209,9 +210,10 @@ function MapView({ currentPhase, sessionHistory, onSelectSession }) {
       <MuscleBottomSheet
         pairKey={activeSheet}
         isOpen={!!activeSheet}
-        onClose={() => setActiveSheet(null)}
+        onClose={() => { setActiveSheet(null); setActiveMuscle(null) }}
         currentPhase={currentPhase}
         sessionHistory={sessionHistory}
+        allSessions={sessions}
         onNavigateToSession={onSelectSession}
       />
     </div>
@@ -457,6 +459,7 @@ export default function BodyTab({ embedded = false }) {
         <MapView
           currentPhase={currentPhase}
           sessionHistory={sessionHistory}
+          sessions={sessions}
           onSelectSession={null}
         />
       )}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
-  MUSCLE_COLORS, MUSCLE_NAMES, MUSCLE_ANATOMICAL, PHASE_MUSCLES,
+  MUSCLE_COLORS, MUSCLE_NAMES, MUSCLE_ANATOMICAL, PHASE_MUSCLES, FOCUS_TO_MUSCLES,
 } from '../constants/muscleMap'
 
 const gold      = '#C9A86C'
@@ -25,8 +26,10 @@ export default function MuscleBottomSheet({
   onClose,
   currentPhase,
   sessionHistory = [],
+  allSessions    = [],
   onNavigateToSession,
 }) {
+  const navigate = useNavigate()
   const color   = pairKey ? MUSCLE_COLORS[pairKey] : gold
   const name    = pairKey ? MUSCLE_NAMES[pairKey]  : ''
   const anatom  = pairKey ? MUSCLE_ANATOMICAL[pairKey] : ''
@@ -62,16 +65,22 @@ export default function MuscleBottomSheet({
   const MONTHLY_GOAL = 8
   const freqPct = Math.min(thisMonthCount / MONTHLY_GOAL, 1)
 
+  // Sessions from the Pilates library that target this muscle
   const sessionCards = useMemo(() => {
     if (!pairKey) return []
-    return sessionHistory
-      .filter(s => (s.muscleGroups ?? []).includes(pairKey))
+    const pool = allSessions.length ? allSessions : sessionHistory
+    return pool
+      .filter(s => {
+        const groups = s.muscleGroups ?? s.muscle_groups ?? []
+        const fromFocus = FOCUS_TO_MUSCLES[s.focus_area] ?? []
+        return groups.includes(pairKey) || fromFocus.includes(pairKey)
+      })
       .reduce((acc, s) => {
         if (!acc.find(x => x.id === s.id)) acc.push(s)
         return acc
       }, [])
-      .slice(0, 8)
-  }, [pairKey, sessionHistory])
+      .slice(0, 6)
+  }, [pairKey, allSessions, sessionHistory])
 
   return (
     <>
@@ -91,20 +100,22 @@ export default function MuscleBottomSheet({
 
       {/* Sheet */}
       <div style={{
-        position:     'fixed',
-        bottom:       0,
-        left:         0,
-        right:        0,
-        maxHeight:    '72vh',
-        background:   'linear-gradient(180deg, #1E1128 0%, #140A18 100%)',
-        borderRadius: '20px 20px 0 0',
-        border:       '1px solid rgba(201,168,108,0.15)',
-        borderBottom: 'none',
-        overflowY:    'auto',
-        padding:      '0 1.25rem 2rem',
-        zIndex:       100,
-        transform:    isOpen ? 'translateY(0)' : 'translateY(100%)',
-        transition:   'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
+        position:           'fixed',
+        bottom:             0,
+        left:               0,
+        right:              0,
+        maxHeight:          '72vh',
+        background:         'rgba(20,8,28,0.78)',
+        backdropFilter:     'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
+        borderRadius:       '20px 20px 0 0',
+        border:             '1px solid rgba(201,168,108,0.15)',
+        borderBottom:       'none',
+        overflowY:          'auto',
+        padding:            '0 1.25rem 2rem',
+        zIndex:             100,
+        transform:          isOpen ? 'translateY(0)' : 'translateY(100%)',
+        transition:         'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
       }}>
 
         {/* Drag handle */}
@@ -184,7 +195,7 @@ export default function MuscleBottomSheet({
 
         {/* Sessions */}
         <p style={{ fontFamily: fontSans, fontSize: 10, letterSpacing: '0.14em', color: mutedText, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
-          Sessions
+          Pilates Sessions
         </p>
 
         {sessionCards.length > 0 ? (
@@ -192,7 +203,10 @@ export default function MuscleBottomSheet({
             {sessionCards.map(s => (
               <button
                 key={s.id}
-                onClick={() => onNavigateToSession?.(s)}
+                onClick={() => {
+                  onClose()
+                  navigate('/pilates', { state: { openSessionId: s.id } })
+                }}
                 style={{
                   flexShrink:   0,
                   minWidth:     140,
@@ -252,7 +266,12 @@ export default function MuscleBottomSheet({
 
         {/* CTA */}
         <button
-          onClick={() => { onNavigateToSession?.(); onClose() }}
+          onClick={() => {
+            onClose()
+            navigate('/pilates', {
+              state: sessionCards.length > 0 ? { openSessionId: sessionCards[0].id } : undefined,
+            })
+          }}
           style={{
             width:         '100%',
             padding:       '14px',
@@ -267,7 +286,7 @@ export default function MuscleBottomSheet({
             marginTop:     '0.5rem',
           }}
         >
-          Find Sessions → {name}
+          {sessionCards.length > 0 ? `Open in Pilates Studio →` : `Browse Pilates Sessions →`}
         </button>
       </div>
     </>

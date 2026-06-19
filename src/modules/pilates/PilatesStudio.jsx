@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useCallback, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
@@ -185,6 +185,7 @@ export default function PilatesStudio() {
 
   // ── Exit / inactivity ────────────────────────────────────────────────────────
   const navigate = useNavigate()
+  const location = useLocation()
   const [exiting, setExiting] = useState(false)
 
   const PILATES_TIMEOUT = 10 * 60 * 1000
@@ -224,6 +225,17 @@ export default function PilatesStudio() {
   }, [user?.id])
 
   useEffect(() => { fetchData() }, [fetchData])
+
+  // Open a specific session when navigated from Body Map
+  useEffect(() => {
+    const id = location.state?.openSessionId
+    if (!id || !sessions.length) return
+    const target = sessions.find(s => s.id === id)
+    if (target) {
+      setSelectedSession(target)
+      setActiveTab('library')
+    }
+  }, [sessions, location.state?.openSessionId])
 
   // ── Favorite toggle ──────────────────────────────────────────────────────
   async function toggleFavorite(sessionId) {
