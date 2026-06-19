@@ -259,7 +259,7 @@ function MapView({ currentPhase, sessionHistory }) {
             interactive={true}
             showTooltip={true}
             showLegend={false}
-            showLabels={true}
+            showLabels={false}
             containerStyle={{
               height:     hasCard ? 'calc(100svh - 458px)' : 'calc(100svh - 248px)',
               minHeight:  260,
