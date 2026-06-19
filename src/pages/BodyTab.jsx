@@ -17,6 +17,35 @@ const fontSerif = "'Cormorant Garamond', serif"
 const fontSans  = "'Tenor Sans', sans-serif"
 const bgCard    = 'rgba(255,255,255,0.6)'
 
+// ── Ambient animation keyframes ───────────────────────────────────────────────
+const AMBIENT_STYLE = `
+@keyframes ambientPulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1; }
+}
+@keyframes scanlineSweep {
+  0%   { transform: translateY(-4px); opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { transform: translateY(120vh); opacity: 0; }
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.55; }
+  50%  { transform: translateY(-50%) translateX(8px); opacity: 0.35; }
+  90%  { opacity: 0; }
+  100% { transform: translateY(-100%) translateX(-4px); opacity: 0; }
+}
+`
+
+const PARTICLES = [
+  { left: '12%', delay: '0s',   duration: '14s', size: 3 },
+  { left: '33%', delay: '3.5s', duration: '18s', size: 2 },
+  { left: '54%', delay: '6s',   duration: '16s', size: 3 },
+  { left: '71%', delay: '2s',   duration: '20s', size: 2 },
+  { left: '86%', delay: '8.5s', duration: '15s', size: 2 },
+]
+
 const TIME_RANGES = [
   { label: 'This Week',  days: 7  },
   { label: 'This Month', days: 30 },
@@ -173,46 +202,96 @@ function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
   const hasCard   = !!activeMuscle
 
   return (
-    <div style={{ padding: '0 1rem 1rem' }}>
-      {/* Model card — bottom corners flatten when inline card is open */}
+    <>
+      <style>{AMBIENT_STYLE}</style>
+
+      {/* Full-bleed dark model area — edge to edge */}
       <div style={{
-        background:    'linear-gradient(165deg, #1C1020 0%, #140A18 100%)',
-        borderRadius:  hasCard ? '16px 16px 0 0' : '16px',
-        border:        `1px solid ${glowColor}28`,
-        borderBottom:  hasCard ? 'none' : `1px solid ${glowColor}28`,
-        padding:       '1rem',
-        overflow:      'visible',
-        position:      'relative',
-        transition:    'border-color 1s ease, border-radius 0.35s ease',
+        position:   'relative',
+        background: 'linear-gradient(180deg, #1E1128 0%, #140A18 100%)',
+        overflow:   'visible',
       }}>
-        {/* Phase ambient glow */}
+
+        {/* ── Ambient layer (clips internally, sits behind SVG) ── */}
         <div style={{
           position:      'absolute',
           inset:         0,
-          borderRadius:  hasCard ? '16px 16px 0 0' : '16px',
-          background:    `radial-gradient(ellipse 82% 58% at 50% 44%, ${glowColor}2A 0%, ${glowColor}0C 42%, transparent 70%)`,
+          overflow:      'hidden',
+          pointerEvents: 'none',
+          zIndex:        0,
+        }}>
+          {/* Radial glow pulse */}
+          <div style={{
+            position:   'absolute',
+            inset:      0,
+            background: `radial-gradient(ellipse at 50% 35%, ${glowColor}0E 0%, transparent 62%)`,
+            animation:  'ambientPulse 6s ease-in-out infinite',
+          }} />
+
+          {/* Scanline sweep */}
+          <div style={{
+            position:   'absolute',
+            top:        0,
+            left:       0,
+            right:      0,
+            height:     '2px',
+            background: 'linear-gradient(to right, transparent, rgba(201,168,108,0.12), transparent)',
+            animation:  'scanlineSweep 9s linear infinite',
+          }} />
+
+          {/* Floating gold particles */}
+          {PARTICLES.map((p, i) => (
+            <div key={i} style={{
+              position:        'absolute',
+              left:            p.left,
+              bottom:          '-10px',
+              width:           p.size,
+              height:          p.size,
+              borderRadius:    '50%',
+              background:      'rgba(201,168,108,0.35)',
+              boxShadow:       '0 0 4px rgba(201,168,108,0.25)',
+              animation:       `floatUp ${p.duration} linear infinite`,
+              animationDelay:  p.delay,
+            }} />
+          ))}
+        </div>
+
+        {/* Phase-reactive background glow */}
+        <div style={{
+          position:      'absolute',
+          inset:         0,
+          background:    `radial-gradient(ellipse 80% 52% at 50% 44%, ${glowColor}18 0%, transparent 65%)`,
           pointerEvents: 'none',
           transition:    'background 1.2s ease',
+          zIndex:        0,
         }} />
-        <PhaseBar currentPhase={currentPhase} />
-        <MuscleMap
-          activeMuscles={activeMuscle ? [activeMuscle] : []}
-          onMusclePress={toggleMuscle}
-          interactive={true}
-          showTooltip={true}
-          showLegend={false}
-          showLabels={true}
-          containerStyle={{
-            height:     hasCard ? 'calc(100svh - 510px)' : 'calc(100svh - 300px)',
-            minHeight:  260,
-            transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
-          }}
-          suggestedMuscles={suggestedMuscles}
-          phaseColor={currentPhase?.phaseColor}
-        />
+
+        {/* Phase bar — inset with its own horizontal padding */}
+        <div style={{ position: 'relative', zIndex: 2, padding: '0.75rem 1rem 0' }}>
+          <PhaseBar currentPhase={currentPhase} />
+        </div>
+
+        {/* Muscle map — above ambient layers */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <MuscleMap
+            activeMuscles={activeMuscle ? [activeMuscle] : []}
+            onMusclePress={toggleMuscle}
+            interactive={true}
+            showTooltip={true}
+            showLegend={false}
+            showLabels={true}
+            containerStyle={{
+              height:     hasCard ? 'calc(100svh - 458px)' : 'calc(100svh - 248px)',
+              minHeight:  260,
+              transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
+            }}
+            suggestedMuscles={suggestedMuscles}
+            phaseColor={currentPhase?.phaseColor}
+          />
+        </div>
       </div>
 
-      {/* Inline muscle detail card — attaches below model card */}
+      {/* Inline muscle detail card — attaches flush below model area */}
       <MuscleBottomSheet
         pairKey={activeMuscle}
         isOpen={!!activeMuscle}
@@ -223,7 +302,7 @@ function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
         allSessions={sessions}
         onNavigateToSession={onSelectSession}
       />
-    </div>
+    </>
   )
 }
 

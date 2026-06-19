@@ -18,7 +18,7 @@ const SVG_MID       = 441   // horizontal midpoint of the 882-wide viewBox
 const LABEL_LEFT_X  = -12   // text-anchor:end  → text extends leftward from here
 const LABEL_RIGHT_X = 902   // text-anchor:start → text extends rightward from here
 const MIN_BBOX_AREA = 2000  // SVG-unit² threshold — skip tiny elements
-const LABEL_MIN_GAP = 90    // min vertical gap between labels (SVG units)
+const LABEL_MIN_GAP = 130   // min vertical gap between labels (SVG units)
 
 // Wrap long strings at a space near maxChars
 function splitText(str, maxChars = 16) {
@@ -103,45 +103,52 @@ function addMuscleLabels(svg) {
   }
 
   function drawLabel(item, isLeft) {
-    const { pairKey, cx, cy, edgeX, color, labelY } = item
-    const labelX    = isLeft ? LABEL_LEFT_X : LABEL_RIGHT_X
+    const { pairKey, cx, cy, edgeX, labelY } = item
+    const labelX     = isLeft ? LABEL_LEFT_X : LABEL_RIGHT_X
     const textAnchor = isLeft ? 'end' : 'start'
     const commonName = MUSCLE_NAMES[pairKey] ?? pairKey
     const sciName    = MUSCLE_ANATOMICAL[pairKey] ?? ''
     const sciLines   = splitText(sciName, 16)
 
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+    g.id = `label-group-${pairKey}`
 
     // ── Leader line: label → muscle near-edge ──
-    g.appendChild(mkEl('line', {
+    const leader = mkEl('line', {
       x1: Math.round(labelX + (isLeft ? 6 : -6)),
       y1: Math.round(labelY),
       x2: Math.round(edgeX),
       y2: Math.round(cy),
-      stroke: color,
-      'stroke-opacity': 0.38,
-      'stroke-width': 2,
-    }))
+      stroke: 'rgba(201,168,108,0.25)',
+      'stroke-width': 1.5,
+      'data-role': 'label-leader',
+    })
+    leader.style.transition = 'stroke 0.25s ease, stroke-width 0.25s ease'
+    g.appendChild(leader)
 
     // ── Small tick at label end of leader ──
-    g.appendChild(mkEl('line', {
+    const tick = mkEl('line', {
       x1: Math.round(labelX + (isLeft ? 6 : -6)),
       y1: Math.round(labelY - 10),
       x2: Math.round(labelX + (isLeft ? 6 : -6)),
       y2: Math.round(labelY + 10),
-      stroke: color,
-      'stroke-opacity': 0.45,
+      stroke: 'rgba(201,168,108,0.3)',
       'stroke-width': 1.5,
-    }))
+      'data-role': 'label-tick',
+    })
+    tick.style.transition = 'stroke 0.25s ease'
+    g.appendChild(tick)
 
     // ── Dot at muscle end of leader ──
-    g.appendChild(mkEl('circle', {
+    const dot = mkEl('circle', {
       cx: Math.round(edgeX),
       cy: Math.round(cy),
       r: 4,
-      fill: color,
-      'fill-opacity': 0.45,
-    }))
+      fill: 'rgba(201,168,108,0.3)',
+      'data-role': 'label-dot',
+    })
+    dot.style.transition = 'fill 0.25s ease, opacity 0.25s ease'
+    g.appendChild(dot)
 
     // ── Common name ──
     const t1 = mkEl('text', {
@@ -150,13 +157,14 @@ function addMuscleLabels(svg) {
       'text-anchor': textAnchor,
       'font-family': "'Cinzel', serif",
       'font-size': 28,
-      fill: color,
-      'fill-opacity': 0.95,
+      fill: 'rgba(242,237,232,0.55)',
       'paint-order': 'stroke',
       stroke: 'rgba(8,3,14,0.75)',
       'stroke-width': 6,
       'stroke-linejoin': 'round',
+      'data-role': 'label-name',
     })
+    t1.style.transition = 'fill 0.25s ease, filter 0.25s ease'
     t1.textContent = commonName
     g.appendChild(t1)
 
@@ -164,18 +172,19 @@ function addMuscleLabels(svg) {
     sciLines.forEach((line, i) => {
       const t2 = mkEl('text', {
         x: Math.round(labelX),
-        y: Math.round(labelY + 20 + i * 21),
+        y: Math.round(labelY + 22 + i * 22),
         'text-anchor': textAnchor,
         'font-family': "'Cormorant Garamond', serif",
         'font-style': 'italic',
         'font-size': 21,
-        fill: color,
-        'fill-opacity': 0.58,
+        fill: 'rgba(242,237,232,0.3)',
         'paint-order': 'stroke',
         stroke: 'rgba(8,3,14,0.7)',
         'stroke-width': 4,
         'stroke-linejoin': 'round',
+        'data-role': 'label-sci',
       })
+      t2.style.transition = 'fill 0.25s ease'
       t2.textContent = line
       g.appendChild(t2)
     })
@@ -356,7 +365,44 @@ export default function MuscleMap({
         }
       })
     })
-  }, [activeMuscles, hovered, suggestedMuscles, phaseColor, heatmap])
+    // ── Label active / dimmed / default states ──────────────────────────────
+    if (showLabels && !heatmap) {
+      const hasAnyActive = activeMuscles.length > 0
+      Object.keys(MUSCLE_PAIRS).forEach(pairKey => {
+        if (SKIP_LABELS.has(pairKey)) return
+        const lg = svg.getElementById(`label-group-${pairKey}`)
+        if (!lg) return
+
+        const isActive = activeMuscles.includes(pairKey)
+        const isDimmed = hasAnyActive && !isActive
+
+        const nameEl   = lg.querySelector('[data-role="label-name"]')
+        const sciEls   = Array.from(lg.querySelectorAll('[data-role="label-sci"]'))
+        const leaderEl = lg.querySelector('[data-role="label-leader"]')
+        const tickEl   = lg.querySelector('[data-role="label-tick"]')
+        const dotEl    = lg.querySelector('[data-role="label-dot"]')
+
+        if (nameEl) {
+          nameEl.style.fill   = isActive ? '#C9A86C' : isDimmed ? 'rgba(242,237,232,0.15)' : 'rgba(242,237,232,0.55)'
+          nameEl.style.filter = isActive ? 'drop-shadow(0 0 8px rgba(201,168,108,0.55))' : 'none'
+        }
+        sciEls.forEach(el => {
+          el.style.fill = isActive ? 'rgba(201,168,108,0.7)' : isDimmed ? 'rgba(242,237,232,0.08)' : 'rgba(242,237,232,0.3)'
+        })
+        if (leaderEl) {
+          leaderEl.style.stroke      = isActive ? '#C9A86C' : isDimmed ? 'rgba(201,168,108,0.06)' : 'rgba(201,168,108,0.25)'
+          leaderEl.style.strokeWidth = isActive ? '2.5' : '1.5'
+        }
+        if (tickEl) {
+          tickEl.style.stroke = isActive ? '#C9A86C' : isDimmed ? 'rgba(201,168,108,0.06)' : 'rgba(201,168,108,0.3)'
+        }
+        if (dotEl) {
+          dotEl.style.fill    = isActive ? '#C9A86C' : 'rgba(201,168,108,0.3)'
+          dotEl.style.opacity = isActive ? '0.85' : isDimmed ? '0.06' : '0.4'
+        }
+      })
+    }
+  }, [activeMuscles, hovered, suggestedMuscles, phaseColor, heatmap, showLabels])
 
   const suggestColor = phaseColor ?? '#8FAF8A'
 
