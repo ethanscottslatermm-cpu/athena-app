@@ -75,7 +75,7 @@ exports.handler = async (event) => {
   const muscleName = SEARCH_NAMES[muscleId] ?? muscleId.replace(/_/g, ' ')
   const params = new URLSearchParams({
     part:              'snippet',
-    q:                 `${muscleName} exercises for women`,
+    q:                 `women's ${muscleName} workout female trainer`,
     type:              'video',
     maxResults:        '6',
     relevanceLanguage: 'en',
