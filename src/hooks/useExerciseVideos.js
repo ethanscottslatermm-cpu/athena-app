@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 
-export function useExerciseData(muscleId) {
-  const [exercises, setExercises] = useState([])
-  const [loading,   setLoading]   = useState(false)
-  const [error,     setError]     = useState(null)
+export function useExerciseVideos(muscleId) {
+  const [videos, setVideos]   = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState(null)
 
   useEffect(() => {
     if (!muscleId) {
-      setExercises([])
+      setVideos([])
       setLoading(false)
       setError(null)
       return
@@ -16,9 +16,9 @@ export function useExerciseData(muscleId) {
     let stale = false
     setLoading(true)
     setError(null)
-    setExercises([])
+    setVideos([])
 
-    fetch('/.netlify/functions/workoutx-exercise-search', {
+    fetch('/.netlify/functions/youtube-exercise-search', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ muscleId }),
@@ -27,7 +27,7 @@ export function useExerciseData(muscleId) {
       .then(data => {
         if (stale) return
         if (data.error) throw new Error(data.error)
-        setExercises(data.exercises ?? [])
+        setVideos(data.videos ?? [])
       })
       .catch(err => { if (!stale) setError(err.message) })
       .finally(() => { if (!stale) setLoading(false) })
@@ -35,5 +35,5 @@ export function useExerciseData(muscleId) {
     return () => { stale = true }
   }, [muscleId])
 
-  return { exercises, loading, error }
+  return { videos, loading, error }
 }
