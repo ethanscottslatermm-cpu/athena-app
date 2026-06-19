@@ -9,6 +9,14 @@ const PULSE_STYLE = `
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.7; }
 }
+@keyframes activePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.87; }
+}
+@keyframes muscleRipple {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(5.5); opacity: 0; }
+}
 `
 
 // ── Label helpers ─────────────────────────────────────────────────────────────
@@ -112,6 +120,7 @@ function addMuscleLabels(svg) {
 
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     g.id = `label-group-${pairKey}`
+    g.setAttribute('data-side', isLeft ? 'left' : 'right')
 
     // ── Leader line: label → muscle near-edge ──
     const leader = mkEl('line', {
@@ -214,7 +223,8 @@ export default function MuscleMap({
 }) {
   const containerRef = useRef(null)
   const [hovered, setHovered] = useState(null)
-  const callbackRef = useRef(onMusclePress)
+  const callbackRef   = useRef(onMusclePress)
+  const prevActiveRef = useRef([])
   useEffect(() => { callbackRef.current = onMusclePress }, [onMusclePress])
 
   // ── Mount: render SVG + wire events ──────────────────────────────────────
@@ -308,6 +318,10 @@ export default function MuscleMap({
     const svg = container.querySelector('svg')
     if (!svg) return
 
+    // Track which muscles are newly activated this render (for ripple)
+    const newlyActive = activeMuscles.filter(m => !prevActiveRef.current.includes(m))
+    prevActiveRef.current = [...activeMuscles]
+
     Object.entries(MUSCLE_PAIRS).forEach(([pairKey, ids]) => {
       const color  = MUSCLE_COLORS[pairKey]
       const active = activeMuscles.includes(pairKey)
@@ -353,7 +367,7 @@ export default function MuscleMap({
         if (active) {
           group.style.setProperty('--glow-color', color)
           group.setAttribute('filter', 'url(#muscleGlow)')
-          group.style.animation = 'none'
+          group.style.animation = 'activePulse 3s ease-in-out infinite'
         } else if (isSugg) {
           group.style.setProperty('--glow-color', phaseColor ?? '#8FAF8A')
           group.setAttribute('filter', 'url(#muscleSuggestGlow)')
@@ -365,7 +379,7 @@ export default function MuscleMap({
         }
       })
     })
-    // ── Label visibility: only the active muscle's label is shown ───────────
+    // ── Labels: slide-in for active, slide-out for inactive ─────────────────
     if (showLabels && !heatmap) {
       Object.keys(MUSCLE_PAIRS).forEach(pairKey => {
         if (SKIP_LABELS.has(pairKey)) return
@@ -373,30 +387,67 @@ export default function MuscleMap({
         if (!lg) return
 
         const isActive = activeMuscles.includes(pairKey)
-        lg.style.transition = 'opacity 0.2s ease'
-        lg.style.opacity    = isActive ? '1' : '0'
+        const isLeft   = lg.getAttribute('data-side') === 'left'
+        const slideDir = isLeft ? '-14px' : '14px'
 
-        if (!isActive) return
+        if (isActive) {
+          // Reset to off-screen position, force reflow, then animate in
+          lg.style.transition = 'none'
+          lg.style.transform  = `translateX(${slideDir})`
+          lg.style.opacity    = '0'
+          void lg.getBoundingClientRect()
+          lg.style.transition = 'opacity 0.28s ease, transform 0.42s cubic-bezier(0.22, 1, 0.36, 1)'
+          lg.style.transform  = 'translateX(0)'
+          lg.style.opacity    = '1'
 
-        const nameEl   = lg.querySelector('[data-role="label-name"]')
-        const sciEls   = Array.from(lg.querySelectorAll('[data-role="label-sci"]'))
-        const leaderEl = lg.querySelector('[data-role="label-leader"]')
-        const tickEl   = lg.querySelector('[data-role="label-tick"]')
-        const dotEl    = lg.querySelector('[data-role="label-dot"]')
+          const nameEl   = lg.querySelector('[data-role="label-name"]')
+          const sciEls   = Array.from(lg.querySelectorAll('[data-role="label-sci"]'))
+          const leaderEl = lg.querySelector('[data-role="label-leader"]')
+          const tickEl   = lg.querySelector('[data-role="label-tick"]')
+          const dotEl    = lg.querySelector('[data-role="label-dot"]')
 
-        if (nameEl) {
-          nameEl.style.fill   = '#C9A86C'
-          nameEl.style.filter = 'drop-shadow(0 0 8px rgba(201,168,108,0.55))'
+          if (nameEl) {
+            nameEl.style.fill   = '#C9A86C'
+            nameEl.style.filter = 'drop-shadow(0 0 8px rgba(201,168,108,0.55))'
+          }
+          sciEls.forEach(el => { el.style.fill = 'rgba(201,168,108,0.7)' })
+          if (leaderEl) { leaderEl.style.stroke = '#C9A86C'; leaderEl.style.strokeWidth = '2.5' }
+          if (tickEl)   { tickEl.style.stroke = '#C9A86C' }
+          if (dotEl)    { dotEl.style.fill = '#C9A86C'; dotEl.style.opacity = '0.85' }
+        } else {
+          // Slide slightly back and fade out
+          lg.style.transition = 'opacity 0.15s ease, transform 0.18s ease'
+          lg.style.opacity    = '0'
+          lg.style.transform  = `translateX(${isLeft ? '-6px' : '6px'})`
         }
-        sciEls.forEach(el => { el.style.fill = 'rgba(201,168,108,0.7)' })
-        if (leaderEl) {
-          leaderEl.style.stroke      = '#C9A86C'
-          leaderEl.style.strokeWidth = '2.5'
-        }
-        if (tickEl) { tickEl.style.stroke = '#C9A86C' }
-        if (dotEl)  { dotEl.style.fill = '#C9A86C'; dotEl.style.opacity = '0.85' }
       })
     }
+
+    // ── Ripple burst on newly activated muscles ───────────────────────────────
+    newlyActive.forEach(pairKey => {
+      const ids = MUSCLE_PAIRS[pairKey]
+      if (!ids) return
+      const el = svg.getElementById(ids[0])
+      if (!el) return
+      let bbox
+      try { bbox = el.getBBox() } catch { return }
+      const cx    = bbox.x + bbox.width  / 2
+      const cy    = bbox.y + bbox.height / 2
+      const color = MUSCLE_COLORS[pairKey] ?? '#C9A86C'
+
+      const ripple = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+      ripple.setAttribute('cx',             String(Math.round(cx)))
+      ripple.setAttribute('cy',             String(Math.round(cy)))
+      ripple.setAttribute('r',              '28')
+      ripple.setAttribute('fill',           'none')
+      ripple.setAttribute('stroke',         color)
+      ripple.setAttribute('stroke-width',   '2')
+      ripple.setAttribute('pointer-events', 'none')
+      ripple.style.transformOrigin = `${Math.round(cx)}px ${Math.round(cy)}px`
+      ripple.style.animation       = 'muscleRipple 0.65s ease-out forwards'
+      svg.appendChild(ripple)
+      setTimeout(() => { try { svg.removeChild(ripple) } catch {} }, 700)
+    })
   }, [activeMuscles, hovered, suggestedMuscles, phaseColor, heatmap, showLabels])
 
   const suggestColor = phaseColor ?? '#8FAF8A'
