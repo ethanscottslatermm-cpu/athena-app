@@ -160,39 +160,39 @@ function ViewToggle({ view, setView }) {
 // ── Map view ──────────────────────────────────────────────────────────────────
 function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
   const [activeMuscle, setActiveMuscle] = useState(null)
-  const [activeSheet,  setActiveSheet]  = useState(null)
 
   const suggestedMuscles = currentPhase
     ? (PHASE_MUSCLES[currentPhase.name]?.primary ?? [])
     : []
 
   const toggleMuscle = (pairKey) => {
-    const isAlreadyActive = activeMuscle === pairKey
-    setActiveMuscle(isAlreadyActive ? null : pairKey)
-    setActiveSheet(isAlreadyActive ? null : pairKey)
+    setActiveMuscle(prev => prev === pairKey ? null : pairKey)
   }
 
   const glowColor = currentPhase?.phaseColor ?? '#C9A86C'
+  const hasCard   = !!activeMuscle
 
   return (
-    <div style={{ padding: '0 1rem 2rem' }}>
+    <div style={{ padding: '0 1rem 1rem' }}>
+      {/* Model card — bottom corners flatten when inline card is open */}
       <div style={{
-        background:   'linear-gradient(165deg, #1C1020 0%, #140A18 100%)',
-        borderRadius: 16,
-        border:       `1px solid ${glowColor}28`,
-        padding:      '1rem',
-        overflow:     'visible',
-        position:     'relative',
-        transition:   'border-color 1s ease',
+        background:    'linear-gradient(165deg, #1C1020 0%, #140A18 100%)',
+        borderRadius:  hasCard ? '16px 16px 0 0' : '16px',
+        border:        `1px solid ${glowColor}28`,
+        borderBottom:  hasCard ? 'none' : `1px solid ${glowColor}28`,
+        padding:       '1rem',
+        overflow:      'visible',
+        position:      'relative',
+        transition:    'border-color 1s ease, border-radius 0.35s ease',
       }}>
         {/* Phase ambient glow */}
         <div style={{
-          position:     'absolute',
-          inset:        0,
-          borderRadius: 16,
-          background:   `radial-gradient(ellipse 82% 58% at 50% 44%, ${glowColor}2A 0%, ${glowColor}0C 42%, transparent 70%)`,
+          position:      'absolute',
+          inset:         0,
+          borderRadius:  hasCard ? '16px 16px 0 0' : '16px',
+          background:    `radial-gradient(ellipse 82% 58% at 50% 44%, ${glowColor}2A 0%, ${glowColor}0C 42%, transparent 70%)`,
           pointerEvents: 'none',
-          transition:   'background 1.2s ease',
+          transition:    'background 1.2s ease',
         }} />
         <PhaseBar currentPhase={currentPhase} />
         <MuscleMap
@@ -200,17 +200,24 @@ function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
           onMusclePress={toggleMuscle}
           interactive={true}
           showTooltip={true}
-          showLegend={true}
+          showLegend={false}
           showLabels={true}
-          containerStyle={{ height: 'calc(100svh - 310px)', minHeight: 320 }}
+          containerStyle={{
+            height:     hasCard ? 'calc(100svh - 510px)' : 'calc(100svh - 300px)',
+            minHeight:  260,
+            transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
+          }}
           suggestedMuscles={suggestedMuscles}
           phaseColor={currentPhase?.phaseColor}
         />
       </div>
+
+      {/* Inline muscle detail card — attaches below model card */}
       <MuscleBottomSheet
-        pairKey={activeSheet}
-        isOpen={!!activeSheet}
-        onClose={() => { setActiveSheet(null); setActiveMuscle(null) }}
+        pairKey={activeMuscle}
+        isOpen={!!activeMuscle}
+        inline={true}
+        onClose={() => setActiveMuscle(null)}
         currentPhase={currentPhase}
         sessionHistory={sessionHistory}
         allSessions={sessions}
