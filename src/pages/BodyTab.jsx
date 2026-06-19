@@ -574,14 +574,26 @@ export default function BodyTab({ embedded = false }) {
       overflowY:  'auto',
       paddingBottom: 120,
     }}>
-      {/* Header */}
-      <div style={{ padding: 'max(env(safe-area-inset-top, 0px), 52px) 1rem 0' }}>
-        <p style={{ fontFamily: fontSerif, fontSize: 28, color: linen, margin: 0, letterSpacing: '-0.01em' }}>
-          Body Map
-        </p>
-        <p style={{ fontFamily: fontSans, fontSize: 12, color: mutedText, margin: '2px 0 0' }}>
-          Tap any muscle to explore
-        </p>
+      {/* Hero header with anatomy image */}
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/images/dashboard/body-map-hero.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 18%',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(240,232,226,0.25) 0%, rgba(240,232,226,0.88) 62%, rgba(240,232,226,1) 100%)',
+        }} />
+        <div style={{ position: 'relative', padding: 'max(env(safe-area-inset-top, 0px), 52px) 1rem 1rem' }}>
+          <p style={{ fontFamily: fontSerif, fontSize: 28, color: linen, margin: 0, letterSpacing: '-0.01em' }}>
+            Body Map
+          </p>
+          <p style={{ fontFamily: fontSans, fontSize: 12, color: mutedText, margin: '2px 0 0' }}>
+            Tap any muscle to explore
+          </p>
+        </div>
       </div>
 
       <ViewToggle view={view} setView={setView} />

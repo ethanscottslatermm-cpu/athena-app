@@ -261,7 +261,6 @@ const BODY_MAP_PHASE_TIPS = {
 
 const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   img: MM('Pilates'),   to: '/pilates'   },
-  { key: 'body',      label: 'Body Map',  icon: null,          img: MM('Body Map'),  to: '/body'      },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     img: MM('Cycle'),     to: '/cycle'     },
   { key: 'mood',      label: 'Mood',      icon: moodIcon,      img: MM('Mood'),      to: '/mood'      },
   { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     img: MM('Sleep'),     to: '/sleep'     },
