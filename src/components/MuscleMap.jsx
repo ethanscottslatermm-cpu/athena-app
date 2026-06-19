@@ -365,16 +365,18 @@ export default function MuscleMap({
         }
       })
     })
-    // ── Label active / dimmed / default states ──────────────────────────────
+    // ── Label visibility: only the active muscle's label is shown ───────────
     if (showLabels && !heatmap) {
-      const hasAnyActive = activeMuscles.length > 0
       Object.keys(MUSCLE_PAIRS).forEach(pairKey => {
         if (SKIP_LABELS.has(pairKey)) return
         const lg = svg.getElementById(`label-group-${pairKey}`)
         if (!lg) return
 
         const isActive = activeMuscles.includes(pairKey)
-        const isDimmed = hasAnyActive && !isActive
+        lg.style.transition = 'opacity 0.2s ease'
+        lg.style.opacity    = isActive ? '1' : '0'
+
+        if (!isActive) return
 
         const nameEl   = lg.querySelector('[data-role="label-name"]')
         const sciEls   = Array.from(lg.querySelectorAll('[data-role="label-sci"]'))
@@ -383,23 +385,16 @@ export default function MuscleMap({
         const dotEl    = lg.querySelector('[data-role="label-dot"]')
 
         if (nameEl) {
-          nameEl.style.fill   = isActive ? '#C9A86C' : isDimmed ? 'rgba(242,237,232,0.15)' : 'rgba(242,237,232,0.55)'
-          nameEl.style.filter = isActive ? 'drop-shadow(0 0 8px rgba(201,168,108,0.55))' : 'none'
+          nameEl.style.fill   = '#C9A86C'
+          nameEl.style.filter = 'drop-shadow(0 0 8px rgba(201,168,108,0.55))'
         }
-        sciEls.forEach(el => {
-          el.style.fill = isActive ? 'rgba(201,168,108,0.7)' : isDimmed ? 'rgba(242,237,232,0.08)' : 'rgba(242,237,232,0.3)'
-        })
+        sciEls.forEach(el => { el.style.fill = 'rgba(201,168,108,0.7)' })
         if (leaderEl) {
-          leaderEl.style.stroke      = isActive ? '#C9A86C' : isDimmed ? 'rgba(201,168,108,0.06)' : 'rgba(201,168,108,0.25)'
-          leaderEl.style.strokeWidth = isActive ? '2.5' : '1.5'
+          leaderEl.style.stroke      = '#C9A86C'
+          leaderEl.style.strokeWidth = '2.5'
         }
-        if (tickEl) {
-          tickEl.style.stroke = isActive ? '#C9A86C' : isDimmed ? 'rgba(201,168,108,0.06)' : 'rgba(201,168,108,0.3)'
-        }
-        if (dotEl) {
-          dotEl.style.fill    = isActive ? '#C9A86C' : 'rgba(201,168,108,0.3)'
-          dotEl.style.opacity = isActive ? '0.85' : isDimmed ? '0.06' : '0.4'
-        }
+        if (tickEl) { tickEl.style.stroke = '#C9A86C' }
+        if (dotEl)  { dotEl.style.fill = '#C9A86C'; dotEl.style.opacity = '0.85' }
       })
     }
   }, [activeMuscles, hovered, suggestedMuscles, phaseColor, heatmap, showLabels])

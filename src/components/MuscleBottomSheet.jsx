@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo } from 'react'
 import {
-  MUSCLE_COLORS, MUSCLE_NAMES, MUSCLE_ANATOMICAL, PHASE_MUSCLES, FOCUS_TO_MUSCLES,
+  MUSCLE_COLORS, MUSCLE_NAMES, MUSCLE_ANATOMICAL, PHASE_MUSCLES,
 } from '../constants/muscleMap'
+import { useExerciseVideos } from '../hooks/useExerciseVideos'
+import LogWorkoutModal       from './LogWorkoutModal'
 
 const gold      = '#C9A86C'
 const mutedText = 'rgba(242,237,232,0.45)'
@@ -20,6 +21,76 @@ function formatRelativeDate(dateStr) {
   return `Last trained ${Math.floor(diff / 30)} month${Math.floor(diff / 30) > 1 ? 's' : ''} ago`
 }
 
+// ── Video player overlay ───────────────────────────────────────────────────────
+function VideoModal({ video, color, onClose, onLog }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position:             'fixed',
+        inset:                0,
+        zIndex:               200,
+        background:           'rgba(8,3,14,0.88)',
+        backdropFilter:       'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
+        display:              'flex',
+        alignItems:           'center',
+        justifyContent:       'center',
+        padding:              '1rem',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width:        '100%',
+          maxWidth:     480,
+          background:   'rgba(20,8,28,0.96)',
+          borderRadius: 16,
+          overflow:     'hidden',
+          border:       `1px solid ${color}30`,
+        }}
+      >
+        {/* 16:9 iframe embed */}
+        <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`}
+            title={video.title}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        <div style={{ padding: '0.75rem 1rem 1rem' }}>
+          <p style={{ fontFamily: fontSerif, fontSize: 14, color: linen, margin: '0 0 3px', lineHeight: 1.4 }}>
+            {video.title}
+          </p>
+          <p style={{ fontFamily: fontSans, fontSize: 11, color: mutedText, margin: '0 0 0.75rem' }}>
+            {video.channel}
+          </p>
+          <button
+            onClick={() => onLog(video)}
+            style={{
+              width:         '100%',
+              padding:       '10px',
+              background:    `${color}18`,
+              border:        `1px solid ${color}55`,
+              borderRadius:  10,
+              color:         gold,
+              fontFamily:    fontSans,
+              fontSize:      12,
+              letterSpacing: '0.06em',
+              cursor:        'pointer',
+            }}
+          >
+            Log this exercise →
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
 export default function MuscleBottomSheet({
   pairKey,
   isOpen,
@@ -27,13 +98,18 @@ export default function MuscleBottomSheet({
   onClose,
   currentPhase,
   sessionHistory = [],
-  allSessions    = [],
-  onNavigateToSession,
 }) {
-  const navigate = useNavigate()
-  const color   = pairKey ? MUSCLE_COLORS[pairKey] : gold
-  const name    = pairKey ? MUSCLE_NAMES[pairKey]  : ''
-  const anatom  = pairKey ? MUSCLE_ANATOMICAL[pairKey] : ''
+  const [logOpen,          setLogOpen]          = useState(false)
+  const [videoModal,       setVideoModal]       = useState(null)   // video object or null
+  const [prefillExercise,  setPrefillExercise]  = useState('')
+
+  // Only fetch videos when the sheet is open (avoids background API calls)
+  const { videos, loading: videosLoading, error: videosError } =
+    useExerciseVideos(isOpen ? pairKey : null)
+
+  const color  = pairKey ? MUSCLE_COLORS[pairKey] : gold
+  const name   = pairKey ? MUSCLE_NAMES[pairKey]  : ''
+  const anatom = pairKey ? MUSCLE_ANATOMICAL[pairKey] : ''
 
   const phaseRec    = currentPhase?.name ? PHASE_MUSCLES[currentPhase.name] : null
   const isPrimary   = phaseRec?.primary?.includes(pairKey)
@@ -50,10 +126,9 @@ export default function MuscleBottomSheet({
 
   const lastTrained = useMemo(() => {
     if (!relevantSessions.length) return null
-    const sorted = [...relevantSessions].sort(
-      (a, b) => new Date(b.completed_at ?? b.date) - new Date(a.completed_at ?? a.date)
-    )
-    return sorted[0]?.completed_at ?? sorted[0]?.date ?? null
+    return [...relevantSessions]
+      .sort((a, b) => new Date(b.completed_at ?? b.date) - new Date(a.completed_at ?? a.date))[0]
+      ?.completed_at ?? null
   }, [relevantSessions])
 
   const thisMonthCount = useMemo(() =>
@@ -64,23 +139,20 @@ export default function MuscleBottomSheet({
   const MONTHLY_GOAL = 8
   const freqPct = Math.min(thisMonthCount / MONTHLY_GOAL, 1)
 
-  const sessionCards = useMemo(() => {
-    if (!pairKey) return []
-    const pool = allSessions.length ? allSessions : sessionHistory
-    return pool
-      .filter(s => {
-        const groups    = s.muscleGroups ?? s.muscle_groups ?? []
-        const fromFocus = FOCUS_TO_MUSCLES[s.focus_area] ?? []
-        return groups.includes(pairKey) || fromFocus.includes(pairKey)
-      })
-      .reduce((acc, s) => {
-        if (!acc.find(x => x.id === s.id)) acc.push(s)
-        return acc
-      }, [])
-      .slice(0, 6)
-  }, [pairKey, allSessions, sessionHistory])
+  const handleVideoTap = (video) => setVideoModal(video)
 
-  // Shared inner content rendered in both inline and overlay modes
+  const handleLogFromVideo = (video) => {
+    setPrefillExercise(video.title)
+    setVideoModal(null)
+    setLogOpen(true)
+  }
+
+  const handleLogClose = () => {
+    setLogOpen(false)
+    setPrefillExercise('')
+  }
+
+  // ── Shared sheet content ──────────────────────────────────────────────────
   const sheetContent = (
     <>
       {/* Header */}
@@ -92,7 +164,6 @@ export default function MuscleBottomSheet({
             <p style={{ fontFamily: fontSans, fontSize: 11, color: mutedText, margin: '2px 0 0', letterSpacing: '0.04em' }}>{anatom}</p>
           </div>
         </div>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {isPrimary && currentPhase && (
             <span style={{ fontFamily: fontSans, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: currentPhase.phaseColor, border: `1px solid ${currentPhase.phaseColor}50`, borderRadius: 20, padding: '3px 10px', background: `${currentPhase.phaseColor}15` }}>
@@ -124,37 +195,90 @@ export default function MuscleBottomSheet({
         </div>
       )}
 
-      {/* Sessions label */}
+      {/* Exercises section label */}
       <p style={{ fontFamily: fontSans, fontSize: 10, letterSpacing: '0.14em', color: mutedText, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
-        Pilates Sessions
+        Exercises for this group
       </p>
 
-      {sessionCards.length > 0 ? (
-        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8, marginBottom: '1rem' }}>
-          {sessionCards.map(s => (
+      {/* Video cards / skeleton / empty */}
+      {videosLoading ? (
+        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8, marginBottom: '0.75rem' }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{ flexShrink: 0, width: 148, height: 120, background: 'rgba(242,237,232,0.06)', borderRadius: 12 }} />
+          ))}
+        </div>
+      ) : (videosError || videos.length === 0) ? (
+        <p style={{ fontFamily: fontSerif, fontStyle: 'italic', fontSize: 13, color: mutedText, marginBottom: '0.75rem' }}>
+          {videosError ? 'No videos found — try again later.' : `No videos found for ${name}.`}
+        </p>
+      ) : (
+        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8, marginBottom: '0.75rem', scrollbarWidth: 'none' }}>
+          {videos.map(video => (
             <button
-              key={s.id}
-              onClick={() => { onClose(); navigate('/pilates', { state: { openSessionId: s.id } }) }}
-              style={{ flexShrink: 0, minWidth: 130, background: 'rgba(255,255,255,0.04)', border: `1px solid ${color}25`, borderRadius: 12, padding: '10px 12px', textAlign: 'left', cursor: 'pointer' }}
+              key={video.id}
+              onClick={() => handleVideoTap(video)}
+              style={{
+                flexShrink:  0,
+                width:       148,
+                background:  'rgba(255,255,255,0.04)',
+                border:      `1px solid ${color}25`,
+                borderRadius: 12,
+                padding:     0,
+                overflow:    'hidden',
+                cursor:      'pointer',
+                textAlign:   'left',
+              }}
             >
-              <p style={{ fontFamily: fontSerif, fontSize: 14, color: linen, margin: '0 0 4px', lineHeight: 1.3 }}>{s.title ?? s.name}</p>
-              <p style={{ fontFamily: fontSans, fontSize: 10, color: mutedText, margin: 0 }}>{s.duration_min ?? s.duration} min</p>
-              {(s.muscleGroups ?? []).slice(0, 2).map(m => (
-                <span key={m} style={{ display: 'inline-block', marginTop: 4, marginRight: 4, fontSize: 9, fontFamily: fontSans, letterSpacing: '0.06em', color: MUSCLE_COLORS[m] ?? mutedText, border: `1px solid ${MUSCLE_COLORS[m] ?? mutedText}40`, borderRadius: 10, padding: '1px 6px' }}>
-                  {MUSCLE_NAMES[m]}
-                </span>
-              ))}
+              <img
+                src={video.thumbnail}
+                alt=""
+                style={{ width: '100%', height: 83, objectFit: 'cover', display: 'block' }}
+              />
+              <div style={{ padding: '6px 8px 8px' }}>
+                <p style={{
+                  fontFamily:          fontSerif,
+                  fontSize:            12,
+                  color:               linen,
+                  margin:              '0 0 2px',
+                  lineHeight:          1.35,
+                  display:             '-webkit-box',
+                  WebkitLineClamp:     2,
+                  WebkitBoxOrient:     'vertical',
+                  overflow:            'hidden',
+                }}>
+                  {video.title}
+                </p>
+                <p style={{ fontFamily: fontSans, fontSize: 10, color: mutedText, margin: 0 }}>
+                  {video.channel}
+                </p>
+              </div>
             </button>
           ))}
         </div>
-      ) : (
-        <p style={{ fontFamily: fontSerif, fontStyle: 'italic', fontSize: 13, color: mutedText, marginBottom: '1rem' }}>
-          No sessions target {name} yet.
-        </p>
       )}
 
+      {/* Log Workout CTA */}
+      <button
+        onClick={() => { setPrefillExercise(''); setLogOpen(true) }}
+        style={{
+          width:         '100%',
+          padding:       '12px',
+          background:    'linear-gradient(135deg, #C9A86C, #A07B4C)',
+          borderRadius:  '12px',
+          color:         '#140A18',
+          fontFamily:    fontSans,
+          fontSize:      '13px',
+          letterSpacing: '0.08em',
+          border:        'none',
+          cursor:        'pointer',
+          marginBottom:  '1rem',
+        }}
+      >
+        Log Workout
+      </button>
+
       {/* Stats row */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: 10 }}>
         <div style={{ flex: 1, background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px' }}>
           <p style={{ fontFamily: fontSans, fontSize: 10, color: mutedText, margin: '0 0 4px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Last Trained</p>
           <p style={{ fontFamily: fontSerif, fontSize: 13, color: linen, margin: 0 }}>{formatRelativeDate(lastTrained)}</p>
@@ -167,34 +291,39 @@ export default function MuscleBottomSheet({
           </div>
         </div>
       </div>
-
-      {/* CTA */}
-      <button
-        onClick={() => { onClose(); navigate('/pilates', { state: sessionCards.length > 0 ? { openSessionId: sessionCards[0].id } : undefined }) }}
-        style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg, #C9A86C, #A07B4C)', borderRadius: '12px', color: '#140A18', fontFamily: fontSans, fontSize: '13px', letterSpacing: '0.08em', border: 'none', cursor: 'pointer' }}
-      >
-        {sessionCards.length > 0 ? `Open in Pilates Studio →` : `Browse Pilates Sessions →`}
-      </button>
     </>
   )
 
-  // ── Inline mode (below model, no backdrop) ───────────────────────────────
+  // ── Inline mode (below map, no backdrop) ──────────────────────────────────
   if (inline) {
     if (!isOpen || !pairKey) return null
     return (
-      <div style={{
-        background:           'rgba(18,6,26,0.92)',
-        backdropFilter:       'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
-        borderRadius:         '0 0 16px 16px',
-        border:               `1px solid ${color}22`,
-        borderTop:            'none',
-        overflowY:            'auto',
-        maxHeight:            '44svh',
-        padding:              '1rem 1.25rem 1.25rem',
-      }}>
-        {sheetContent}
-      </div>
+      <>
+        <div style={{
+          background:           'rgba(18,6,26,0.92)',
+          backdropFilter:       'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
+          borderRadius:         '0 0 16px 16px',
+          border:               `1px solid ${color}22`,
+          borderTop:            'none',
+          overflowY:            'auto',
+          maxHeight:            '44svh',
+          padding:              '1rem 1.25rem 1.25rem',
+        }}>
+          {sheetContent}
+        </div>
+
+        {videoModal && (
+          <VideoModal video={videoModal} color={color} onClose={() => setVideoModal(null)} onLog={handleLogFromVideo} />
+        )}
+        <LogWorkoutModal
+          isOpen={logOpen}
+          onClose={handleLogClose}
+          muscleId={pairKey}
+          muscleName={name}
+          prefillExerciseName={prefillExercise}
+        />
+      </>
     )
   }
 
@@ -228,6 +357,17 @@ export default function MuscleBottomSheet({
         <div style={{ width: 40, height: 4, borderRadius: 2, background: 'rgba(201,168,108,0.2)', margin: '12px auto 1.25rem' }} />
         {sheetContent}
       </div>
+
+      {videoModal && (
+        <VideoModal video={videoModal} color={color} onClose={() => setVideoModal(null)} onLog={handleLogFromVideo} />
+      )}
+      <LogWorkoutModal
+        isOpen={logOpen}
+        onClose={handleLogClose}
+        muscleId={pairKey}
+        muscleName={name}
+        prefillExerciseName={prefillExercise}
+      />
     </>
   )
 }

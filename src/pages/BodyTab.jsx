@@ -1,13 +1,13 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { format, subDays, subMonths } from 'date-fns'
+import WeightExerciseLog from '../components/WeightExerciseLog'
 import { useAuth }    from '../hooks/useAuth'
 import { usePhase }   from '../hooks/usePhase'
 import { supabase }   from '../lib/supabase'
 import MuscleMap          from '../components/MuscleMap'
 import MuscleBottomSheet  from '../components/MuscleBottomSheet'
 import {
-  MUSCLE_PAIRS, MUSCLE_COLORS, MUSCLE_NAMES, ALL_MUSCLE_KEYS,
-  PHASE_MUSCLES, PHASE_COLORS, FOCUS_TO_MUSCLES, HEATMAP_OPACITY,
+  MUSCLE_COLORS, MUSCLE_NAMES, ALL_MUSCLE_KEYS,
+  PHASE_MUSCLES, PHASE_COLORS, FOCUS_TO_MUSCLES,
 } from '../constants/muscleMap'
 
 const gold      = '#C9A86C'
@@ -15,7 +15,6 @@ const mutedText = 'rgba(59,51,48,0.45)'
 const linen     = '#3B3330'
 const fontSerif = "'Cormorant Garamond', serif"
 const fontSans  = "'Tenor Sans', sans-serif"
-const bgCard    = 'rgba(255,255,255,0.6)'
 
 // ── Ambient animation keyframes ───────────────────────────────────────────────
 const AMBIENT_STYLE = `
@@ -44,12 +43,6 @@ const PARTICLES = [
   { left: '54%', delay: '6s',   duration: '16s', size: 3 },
   { left: '71%', delay: '2s',   duration: '20s', size: 2 },
   { left: '86%', delay: '8.5s', duration: '15s', size: 2 },
-]
-
-const TIME_RANGES = [
-  { label: 'This Week',  days: 7  },
-  { label: 'This Month', days: 30 },
-  { label: '3 Months',   days: 90 },
 ]
 
 // ── Insights generator ────────────────────────────────────────────────────────
@@ -105,19 +98,6 @@ function generateInsights(sessionHistory, currentPhase) {
   return insights
 }
 
-// ── Heatmap legend ────────────────────────────────────────────────────────────
-function HeatmapLegend() {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0.5rem 0' }}>
-      <span style={{ fontFamily: fontSans, fontSize: 10, color: mutedText }}>Less</span>
-      {[0.06, 0.25, 0.45, 0.65, 0.82, 1.0].map((op, i) => (
-        <div key={i} style={{ width: 16, height: 16, borderRadius: 3, background: gold, opacity: op }} />
-      ))}
-      <span style={{ fontFamily: fontSans, fontSize: 10, color: mutedText }}>More</span>
-    </div>
-  )
-}
-
 // ── Phase header bar ──────────────────────────────────────────────────────────
 function PhaseBar({ currentPhase }) {
   if (!currentPhase) return null
@@ -159,7 +139,7 @@ function ViewToggle({ view, setView }) {
       margin: '0.75rem 1rem',
       gap: 2,
     }}>
-      {['map', 'history', 'insights'].map(v => (
+      {['map', 'log', 'insights'].map(v => (
         <button
           key={v}
           onClick={() => setView(v)}
@@ -187,7 +167,7 @@ function ViewToggle({ view, setView }) {
 }
 
 // ── Map view ──────────────────────────────────────────────────────────────────
-function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
+function MapView({ currentPhase, sessionHistory }) {
   const [activeMuscle, setActiveMuscle] = useState(null)
 
   const suggestedMuscles = currentPhase
@@ -299,152 +279,8 @@ function MapView({ currentPhase, sessionHistory, sessions, onSelectSession }) {
         onClose={() => setActiveMuscle(null)}
         currentPhase={currentPhase}
         sessionHistory={sessionHistory}
-        allSessions={sessions}
-        onNavigateToSession={onSelectSession}
       />
     </>
-  )
-}
-
-// ── History view ──────────────────────────────────────────────────────────────
-function HistoryView({ sessionHistory, currentPhase }) {
-  const [rangeIdx, setRangeIdx] = useState(1)
-  const range    = TIME_RANGES[rangeIdx]
-  const cutoff   = useMemo(() => subDays(new Date(), range.days), [range.days])
-
-  const filtered = useMemo(() =>
-    sessionHistory.filter(s => new Date(s.date ?? s.completed_at) >= cutoff),
-    [sessionHistory, cutoff]
-  )
-
-  const heatmap = useMemo(() => {
-    const freq = {}
-    ALL_MUSCLE_KEYS.forEach(m => { freq[m] = 0 })
-    filtered.forEach(s => (s.muscleGroups ?? []).forEach(m => { freq[m] = (freq[m] ?? 0) + 1 }))
-    const result = {}
-    Object.entries(freq).forEach(([k, v]) => { result[k] = HEATMAP_OPACITY(v) })
-    return result
-  }, [filtered])
-
-  // Group sessions by week for log
-  const grouped = useMemo(() => {
-    const weeks = {}
-    filtered.forEach(s => {
-      const d   = new Date(s.date ?? s.completed_at)
-      const key = format(subDays(d, d.getDay()), 'MMM d')
-      if (!weeks[key]) weeks[key] = []
-      weeks[key].push(s)
-    })
-    return Object.entries(weeks)
-  }, [filtered])
-
-  return (
-    <div style={{ padding: '0 1rem 2rem' }}>
-      {/* Range toggle */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: '1rem' }}>
-        {TIME_RANGES.map((r, i) => (
-          <button
-            key={r.label}
-            onClick={() => setRangeIdx(i)}
-            style={{
-              flex:          1,
-              padding:       '7px 4px',
-              borderRadius:  20,
-              border:        rangeIdx === i ? `1px solid ${gold}` : '1px solid rgba(201,168,108,0.2)',
-              background:    rangeIdx === i ? 'rgba(201,168,108,0.12)' : 'transparent',
-              color:         rangeIdx === i ? gold : mutedText,
-              fontFamily:    fontSans,
-              fontSize:      11,
-              letterSpacing: '0.06em',
-              cursor:        'pointer',
-            }}
-          >
-            {r.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Heatmap */}
-      {(() => {
-        const hGlow = currentPhase?.phaseColor ?? '#C9A86C'
-        return (
-          <div style={{
-            background:   'linear-gradient(165deg, #1C1020 0%, #140A18 100%)',
-            borderRadius: 16,
-            border:       `1px solid ${hGlow}28`,
-            padding:      '1rem',
-            overflow:     'visible',
-            marginBottom: '1rem',
-            position:     'relative',
-            transition:   'border-color 1s ease',
-          }}>
-            <div style={{
-              position:     'absolute',
-              inset:        0,
-              borderRadius: 16,
-              background:   `radial-gradient(ellipse 82% 58% at 50% 44%, ${hGlow}22 0%, ${hGlow}08 42%, transparent 70%)`,
-              pointerEvents: 'none',
-              transition:   'background 1.2s ease',
-            }} />
-            <MuscleMap
-              activeMuscles={[]}
-              interactive={false}
-              showTooltip={true}
-              showLegend={false}
-              heatmap={heatmap}
-            />
-            <HeatmapLegend />
-          </div>
-        )
-      })()}
-
-      {/* Training log */}
-      <p style={{ fontFamily: fontSans, fontSize: 10, letterSpacing: '0.14em', color: mutedText, textTransform: 'uppercase', margin: '0 0 0.75rem' }}>
-        Training Log
-      </p>
-      {grouped.length === 0 ? (
-        <p style={{ fontFamily: fontSerif, fontStyle: 'italic', fontSize: 14, color: mutedText, textAlign: 'center', padding: '2rem 0' }}>
-          No sessions in this time range.
-        </p>
-      ) : grouped.map(([week, sessions]) => (
-        <div key={week} style={{ marginBottom: '1rem' }}>
-          <p style={{ fontFamily: fontSans, fontSize: 10, color: mutedText, letterSpacing: '0.1em', margin: '0 0 6px' }}>
-            Week of {week}
-          </p>
-          {sessions.map((s, i) => (
-            <div key={i} style={{
-              display:      'flex',
-              alignItems:   'center',
-              justifyContent: 'space-between',
-              padding:      '10px 12px',
-              background:   bgCard,
-              borderRadius: 10,
-              marginBottom: 6,
-              border:       '1px solid rgba(201,168,108,0.08)',
-            }}>
-              <div>
-                <p style={{ fontFamily: fontSerif, fontSize: 14, color: linen, margin: '0 0 3px' }}>
-                  {format(new Date(s.date ?? s.completed_at), 'MMM d')} · {s.title ?? s.name ?? 'Session'}
-                </p>
-                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                  {(s.muscleGroups ?? []).slice(0, 3).map(m => (
-                    <span key={m} style={{
-                      width:  8, height: 8,
-                      borderRadius: '50%',
-                      background: MUSCLE_COLORS[m] ?? mutedText,
-                      display: 'inline-block',
-                    }} />
-                  ))}
-                </div>
-              </div>
-              <span style={{ fontFamily: fontSans, fontSize: 11, color: mutedText }}>
-                {s.duration_min ?? s.duration ?? 30} min
-              </span>
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
   )
 }
 
@@ -545,12 +381,10 @@ export default function BodyTab({ embedded = false }) {
         <MapView
           currentPhase={currentPhase}
           sessionHistory={sessionHistory}
-          sessions={sessions}
-          onSelectSession={null}
         />
       )}
-      {view === 'history' && (
-        <HistoryView sessionHistory={sessionHistory} currentPhase={currentPhase} />
+      {view === 'log' && (
+        <WeightExerciseLog currentPhase={currentPhase} />
       )}
       {view === 'insights' && (
         <InsightsView sessionHistory={sessionHistory} currentPhase={currentPhase} />
