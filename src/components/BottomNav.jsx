@@ -4,9 +4,6 @@ import bodyIcon      from '../assets/icons/nav-body.svg'
 import dashboardIcon from '../assets/icons/nav-dashboard.png'
 import cycleIcon     from '../assets/icons/nav-cycle.png'
 import moodIcon      from '../assets/icons/nav-mood.png'
-import communityIcon from '../assets/icons/nav-community.png'
-import nourishIcon   from '../assets/icons/nav-nourish.png'
-import groceryIcon   from '../assets/icons/nav-grocery.svg'
 
 function PngIcon({ src, delay = 0 }) {
   return (
@@ -32,14 +29,25 @@ function PngIcon({ src, delay = 0 }) {
   )
 }
 
+function GridIcon() {
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, flexShrink: 0 }}>
+      <svg viewBox="0 0 18 18" width={17} height={17} fill="currentColor">
+        <rect x="1"    y="1"    width="6.5" height="6.5" rx="1.5" />
+        <rect x="10.5" y="1"    width="6.5" height="6.5" rx="1.5" />
+        <rect x="1"    y="10.5" width="6.5" height="6.5" rx="1.5" />
+        <rect x="10.5" y="10.5" width="6.5" height="6.5" rx="1.5" />
+      </svg>
+    </span>
+  )
+}
+
 const navItems = [
-  { to: '/',          label: 'Home',      png: dashboardIcon },
-  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon   },
-  { to: '/grocery',   label: 'Grocery',   png: groceryIcon   },
-  { to: '/body',      label: 'Body',      png: bodyIcon      },
-  { to: '/mood',      label: 'Mood',      png: moodIcon      },
-  { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
-  { to: '/community', label: 'Community', png: communityIcon },
+  { to: '/',      label: 'Home',  png: dashboardIcon },
+  { to: '/body',  label: 'Body',  png: bodyIcon      },
+  { to: '/cycle', label: 'Cycle', png: cycleIcon     },
+  { to: '/mood',  label: 'Mood',  png: moodIcon      },
+  { to: '/more',  label: 'More',  png: null          },
 ]
 
 export default function BottomNav() {
@@ -72,7 +80,7 @@ export default function BottomNav() {
             >
               {({ isActive }) => (
                 <>
-                  <PngIcon src={png} delay={i * 0.7} />
+                  {png ? <PngIcon src={png} delay={i * 0.7} /> : <GridIcon />}
                   <span style={{
                     fontFamily: 'Cormorant Garamond, serif',
                     fontSize: '0.6rem',

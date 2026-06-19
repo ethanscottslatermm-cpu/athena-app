@@ -33,6 +33,7 @@ const SleepModule   = lazy(() => import('./modules/sleep'))
 const SkinModule    = lazy(() => import('./modules/skin'))
 const GroceryModule = lazy(() => import('./modules/grocery/GroceryModule'))
 const BodyTab       = lazy(() => import('./pages/BodyTab'))
+const MorePage      = lazy(() => import('./pages/More'))
 
 function AuthGuard({ children }) {
   const { user, loading } = useAuth()
@@ -183,6 +184,7 @@ export default function App() {
                         <Route path="skin/*"    element={<SkinModule />} />
                         <Route path="grocery"   element={<GroceryModule />} />
                         <Route path="body"      element={<BodyTab />} />
+                        <Route path="more"      element={<MorePage />} />
                         <Route path="settings"  element={<Settings />} />
                         <Route path="admin"     element={<AdminGuard><AdminPanel /></AdminGuard>} />
                         <Route path="seed"      element={<AdminGuard><SeedPage /></AdminGuard>} />

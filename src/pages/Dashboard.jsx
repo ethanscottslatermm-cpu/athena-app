@@ -260,13 +260,11 @@ const BODY_MAP_PHASE_TIPS = {
 }
 
 const MODULE_NAV = [
-  { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   img: MM('Pilates'),   to: '/pilates'   },
-  { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     img: MM('Cycle'),     to: '/cycle'     },
-  { key: 'mood',      label: 'Mood',      icon: moodIcon,      img: MM('Mood'),      to: '/mood'      },
-  { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     img: MM('Sleep'),     to: '/sleep'     },
-  { key: 'skin',      label: 'Skin',      icon: skinIcon,      img: MM('Skin'),      to: '/skin'      },
-  { key: 'grocery',   label: 'Grocery',   icon: groceryIcon,   img: MM('Grocery'),   to: '/grocery'   },
-  { key: 'community', label: 'Community', icon: communityIcon, img: MM('Community'), to: '/community' },
+  { key: 'body',    label: 'Body Map',  img: MM('Body Map'),        to: '/body'    },
+  { key: 'cycle',   label: 'Cycle',     img: MM('Cycle'),           to: '/cycle'   },
+  { key: 'nourish', label: 'Body Fuel', img: MM('Body Fuel'),       to: '/nourish' },
+  { key: 'sleep',   label: 'Sleep',     img: MM('Sleep'),           to: '/sleep'   },
+  { key: 'more',    label: 'More',      img: null,                  to: '/more'    },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -888,37 +886,47 @@ export default function Dashboard() {
       <SectionHeader title="My Modules" delay={0.12} />
       <div className="module-scroll overflow-x-auto mb-6" style={anim(0.15)}>
         <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-          {MODULE_NAV.map(({ key, label, icon, img, to }, i) => (
+          {MODULE_NAV.map(({ key, label, img, to }) => (
             <button
               key={key}
               onClick={() => navigate(to)}
               className="flex flex-col items-center gap-2"
               style={{ minWidth: '72px' }}
             >
-              <div style={{ position: 'relative', width: 72, height: 88, borderRadius: 18, overflow: 'hidden' }}>
+              <div style={{
+                position: 'relative', width: 72, height: 88, borderRadius: 18, overflow: 'hidden',
+                ...(key === 'more' && { border: '1px solid rgba(201,168,108,0.22)' }),
+              }}>
                 <div style={{
                   position: 'absolute', inset: 0,
-                  borderRadius: 18,
-                  overflow: 'hidden',
-                  backgroundImage: `url("${img}")`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
+                  borderRadius: 18, overflow: 'hidden',
+                  ...(img
+                    ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                    : { background: 'linear-gradient(145deg, #281630 0%, #180E1E 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+                  ),
                 }}>
-                  {/* Bottom gradient for label legibility */}
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to bottom, transparent 40%, rgba(30,18,12,0.70) 100%)',
-                  }} />
-                  {/* Module label pinned to bottom */}
+                  {img && (
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      background: 'linear-gradient(to bottom, transparent 40%, rgba(30,18,12,0.70) 100%)',
+                    }} />
+                  )}
+                  {key === 'more' && (
+                    <svg viewBox="0 0 18 18" width={22} height={22} fill="rgba(201,168,108,0.55)" style={{ marginBottom: 14 }}>
+                      <rect x="1"    y="1"    width="6.5" height="6.5" rx="1.5" />
+                      <rect x="10.5" y="1"    width="6.5" height="6.5" rx="1.5" />
+                      <rect x="1"    y="10.5" width="6.5" height="6.5" rx="1.5" />
+                      <rect x="10.5" y="10.5" width="6.5" height="6.5" rx="1.5" />
+                    </svg>
+                  )}
                   <span style={{
                     position: 'absolute', bottom: 7, left: 0, right: 0,
                     textAlign: 'center',
                     fontFamily: 'Cinzel, serif',
-                    fontSize: 7.5,
-                    fontWeight: 500,
+                    fontSize: 7.5, fontWeight: 500,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    color: '#F5EDE3',
+                    color: key === 'more' ? 'rgba(201,168,108,0.75)' : '#F5EDE3',
                     textShadow: '0 1px 4px rgba(0,0,0,0.6)',
                   }}>
                     {label}

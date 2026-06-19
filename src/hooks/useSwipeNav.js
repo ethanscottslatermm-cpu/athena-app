@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-const ROUTES = ['/', '/nourish', '/grocery', '/pilates', '/mood', '/cycle', '/community']
+const ROUTES = ['/', '/body', '/cycle', '/mood', '/more']
 const THRESHOLD = 65    // min horizontal px to trigger
 const ANGLE_RATIO = 1.4 // dx must be this many times larger than dy
 
