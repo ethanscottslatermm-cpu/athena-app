@@ -252,8 +252,16 @@ const FEATURED_WORKOUTS = [
   { title: 'Intuitive Movement',       duration: 30, focus: 'Full Body',   difficulty: 'Beginner'     },
 ]
 
+const BODY_MAP_PHASE_TIPS = {
+  menstrual:  'Rest & gentle recovery',
+  follicular: 'Build your foundation',
+  ovulation:  'Train at peak capacity',
+  luteal:     'Support & restore',
+}
+
 const MODULE_NAV = [
   { key: 'pilates',   label: 'Pilates',   icon: pilatesIcon,   img: MM('Pilates'),   to: '/pilates'   },
+  { key: 'body',      label: 'Body Map',  icon: null,          img: MM('Body Map'),  to: '/body'      },
   { key: 'cycle',     label: 'Cycle',     icon: cycleIcon,     img: MM('Cycle'),     to: '/cycle'     },
   { key: 'mood',      label: 'Mood',      icon: moodIcon,      img: MM('Mood'),      to: '/mood'      },
   { key: 'sleep',     label: 'Sleep',     icon: sleepIcon,     img: MM('Sleep'),     to: '/sleep'     },
@@ -784,6 +792,91 @@ export default function Dashboard() {
                 cursor: 'pointer', pointerEvents: 'none',
               }}>
                 Enter Studio
+                <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ── Body Map Hero Card ── */}
+      <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.11)}>
+        <div
+          style={{
+            borderRadius: 16,
+            overflow: 'hidden',
+            position: 'relative',
+            minHeight: 160,
+            backgroundImage: 'url("/images/dashboard/body-map-hero.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 18%',
+            border: '1px solid rgba(201,168,108,0.18)',
+            cursor: 'pointer',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+          }}
+          onClick={() => navigate('/body')}
+        >
+          {/* Gradient scrim — darker on left for text legibility */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'linear-gradient(to right, rgba(14,8,20,0.88) 0%, rgba(14,8,20,0.58) 50%, rgba(14,8,20,0.18) 100%)',
+          }} />
+          {/* Bottom fade */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'linear-gradient(to top, rgba(14,8,20,0.55) 0%, transparent 45%)',
+          }} />
+
+          {/* Content */}
+          <div style={{ position: 'relative', padding: '20px 20px 22px' }}>
+
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 9, letterSpacing: '0.2em',
+              color: 'rgba(201,168,108,0.7)',
+              textTransform: 'uppercase',
+              margin: '0 0 6px',
+            }}>Body Map</p>
+
+            <p style={{
+              fontFamily: "'Tenor Sans', sans-serif",
+              fontSize: 13,
+              color: 'rgba(242,237,232,0.62)',
+              margin: '0 0 18px',
+              letterSpacing: '0.02em',
+            }}>
+              {phase ? BODY_MAP_PHASE_TIPS[phase] : 'Explore your anatomy'}
+            </p>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              {phase && (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  background: `${activeColor}18`,
+                  border: `1px solid ${activeColor}40`,
+                  borderRadius: 20, padding: '3px 10px',
+                  fontFamily: "'Tenor Sans', sans-serif",
+                  fontSize: 10, color: activeColor,
+                  letterSpacing: '0.06em',
+                }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: activeColor, flexShrink: 0 }} />
+                  {phase.charAt(0).toUpperCase() + phase.slice(1)} phase
+                </span>
+              )}
+
+              <button style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(201,168,108,0.1)',
+                border: '1px solid rgba(201,168,108,0.35)',
+                borderRadius: 20, padding: '7px 16px',
+                color: '#C9A86C',
+                fontFamily: "'Tenor Sans', sans-serif",
+                fontSize: 12, letterSpacing: '0.08em',
+                cursor: 'pointer', pointerEvents: 'none',
+              }}>
+                Open Map
                 <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
               </button>
             </div>
