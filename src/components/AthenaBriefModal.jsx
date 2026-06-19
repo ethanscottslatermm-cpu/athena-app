@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { usePhase } from '../hooks/usePhase'
 
 const PHASE_DOTS = {
@@ -9,13 +8,12 @@ const PHASE_DOTS = {
 }
 
 export default function AthenaBriefModal({ brief, onClose }) {
-  const navigate = useNavigate()
   const { phase } = usePhase()
   const dot = PHASE_DOTS[phase] ?? '#C9A86C'
 
   function handleTalkToAthena() {
     onClose()
-    navigate('/athena')
+    window.dispatchEvent(new CustomEvent('athena:open'))
   }
 
   return (

@@ -3,7 +3,6 @@ import { useAuth }    from '../../hooks/useAuth'
 import { useProfile } from '../../hooks/useProfile'
 import { usePhase }   from '../../hooks/usePhase'
 import { supabase }   from '../../lib/supabase'
-import { useNavigate } from 'react-router-dom'
 import CalendarTab       from './CalendarTab'
 import LogTab            from './LogTab'
 import StatsTab          from './StatsTab'
@@ -44,7 +43,6 @@ const PHASE_INFO = {
 const PHASE_ORDER = ['menstrual', 'follicular', 'ovulation', 'luteal']
 
 function PhaseStripModal({ phase: activePhase, onClose }) {
-  const navigate = useNavigate()
   const info = PHASE_INFO[activePhase] ?? PHASE_INFO.follicular
   const DESCRIPTIONS = {
     follicular: 'Estrogen rises as your body prepares for ovulation. Energy climbs, motivation sharpens, and creativity peaks. A time to begin, plan, and push.',
@@ -81,7 +79,7 @@ function PhaseStripModal({ phase: activePhase, onClose }) {
           {DESCRIPTIONS[activePhase]}
         </p>
         <button
-          onClick={() => { onClose(); navigate('/athena', { state: { preloadMessage: `Tell me more about the ${activePhase} phase and what it means for me right now.` } }) }}
+          onClick={() => { onClose(); window.dispatchEvent(new CustomEvent('athena:open', { detail: { message: `Tell me more about the ${activePhase} phase and what it means for me right now.` } })) }}
           style={{ marginTop: 18, fontFamily: 'Cinzel, serif', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C9A86C', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
         >
           Ask Athena →
@@ -95,7 +93,6 @@ export default function CycleTracker() {
   const { user }    = useAuth()
   const { profile } = useProfile()
   const phaseData   = usePhase()
-  const navigate    = useNavigate()
 
   const [activeTab, setActiveTab] = useState('calendar')
   const [symptoms,  setSymptoms]  = useState([])
@@ -290,7 +287,7 @@ export default function CycleTracker() {
                         </p>
                       </div>
                       <button
-                        onClick={() => navigate('/athena', { state: { preloadMessage: 'Tell me about my headache pattern in luteal phase and what I can do about it.' } })}
+                        onClick={() => window.dispatchEvent(new CustomEvent('athena:open', { detail: { message: 'Tell me about my headache pattern in luteal phase and what I can do about it.' } }))}
                         style={{ fontFamily: 'Cinzel, serif', fontSize: 8.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C9A86C', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                       >
                         Tell me more →

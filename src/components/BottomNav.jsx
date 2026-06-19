@@ -32,29 +32,14 @@ function PngIcon({ src, delay = 0 }) {
   )
 }
 
-function AthenaIcon({ isActive }) {
-  return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      width: 22, height: 22, flexShrink: 0,
-      fontSize: 15,
-      color: isActive ? '#C9A86C' : 'currentColor',
-      transition: 'color 0.3s',
-    }}>
-      ✦
-    </span>
-  )
-}
-
 const navItems = [
-  { to: '/',          label: 'Home',      png: dashboardIcon, athena: false },
-  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon,   athena: false },
-  { to: '/grocery',   label: 'Grocery',   png: groceryIcon,   athena: false },
-  { to: '/body',      label: 'Body',      png: bodyIcon,      athena: false },
-  { to: '/mood',      label: 'Mood',      png: moodIcon,      athena: false },
-  { to: '/cycle',     label: 'Cycle',     png: cycleIcon,     athena: false },
-  { to: '/athena',    label: 'Athena',    png: null,          athena: true  },
-  { to: '/community', label: 'Community', png: communityIcon, athena: false },
+  { to: '/',          label: 'Home',      png: dashboardIcon },
+  { to: '/nourish',   label: 'Body Fuel', png: nourishIcon   },
+  { to: '/grocery',   label: 'Grocery',   png: groceryIcon   },
+  { to: '/body',      label: 'Body',      png: bodyIcon      },
+  { to: '/mood',      label: 'Mood',      png: moodIcon      },
+  { to: '/cycle',     label: 'Cycle',     png: cycleIcon     },
+  { to: '/community', label: 'Community', png: communityIcon },
 ]
 
 export default function BottomNav() {
@@ -77,26 +62,22 @@ export default function BottomNav() {
         }}
       >
         <div className="flex items-center justify-around h-16 max-w-md mx-auto px-0.5">
-          {navItems.map(({ to, label, png, athena }, i) => (
+          {navItems.map(({ to, label, png }, i) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className="flex flex-col items-center gap-0.5 px-1 py-2 transition-colors"
-              style={({ isActive }) => ({ color: isActive ? (athena ? '#C9A86C' : '#2A1C14') : '#6B5248' })}
+              style={({ isActive }) => ({ color: isActive ? '#2A1C14' : '#6B5248' })}
             >
               {({ isActive }) => (
                 <>
-                  {athena
-                    ? <AthenaIcon isActive={isActive} />
-                    : <PngIcon src={png} delay={i * 0.7} />
-                  }
+                  <PngIcon src={png} delay={i * 0.7} />
                   <span style={{
                     fontFamily: 'Cormorant Garamond, serif',
                     fontSize: '0.6rem',
                     fontWeight: 500,
                     letterSpacing: '0.03em',
-                    color: isActive && athena ? '#C9A86C' : 'inherit',
                   }}>{label}</span>
                 </>
               )}

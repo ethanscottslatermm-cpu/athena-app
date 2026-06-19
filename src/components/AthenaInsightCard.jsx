@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAthena } from '../hooks/useAthena'
 
 const DISMISS_KEY = (moduleName) => `athena_insight_dismissed_${moduleName}`
@@ -25,7 +24,6 @@ function dismissToday(moduleName) {
 
 export default function AthenaInsightCard({ moduleName, preloadedContext = null }) {
   const { getInsight } = useAthena()
-  const navigate = useNavigate()
 
   const [insight,   setInsight]   = useState(null)
   const [loading,   setLoading]   = useState(true)
@@ -46,7 +44,9 @@ export default function AthenaInsightCard({ moduleName, preloadedContext = null 
   }
 
   function handleTellMore() {
-    navigate('/athena', { state: { preloadMessage: insight?.cta ?? `Tell me more about my ${moduleName} insight.` } })
+    window.dispatchEvent(new CustomEvent('athena:open', {
+      detail: { message: insight?.cta ?? `Tell me more about my ${moduleName} insight.` }
+    }))
   }
 
   if (dismissed) return null

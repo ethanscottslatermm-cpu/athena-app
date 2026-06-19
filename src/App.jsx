@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { useAuth } from './hooks/useAuth'
 import { useProfile } from './hooks/useProfile'
 
-import BottomNav    from './components/BottomNav'
-import WelcomeFlow  from './components/WelcomeFlow'
+import BottomNav      from './components/BottomNav'
+import WelcomeFlow    from './components/WelcomeFlow'
+import AthenaChatbox  from './components/AthenaChatbox'
 import { useSwipeNav } from './hooks/useSwipeNav'
 import { useAdmin }    from './hooks/useAdmin'
 import SwipeHint       from './components/SwipeHint'
@@ -23,7 +24,6 @@ const Sleep         = lazy(() => import('./pages/Sleep'))
 const Skin          = lazy(() => import('./pages/Skin'))
 const Settings      = lazy(() => import('./pages/Settings'))
 const AdminPanel    = lazy(() => import('./pages/AdminPanel'))
-const AthenaAdvisor = lazy(() => import('./pages/AthenaAdvisor'))
 
 const PilatesModule = lazy(() => import('./modules/pilates'))
 const CycleModule   = lazy(() => import('./modules/cycle'))
@@ -125,6 +125,7 @@ function AppShell({ children }) {
     <>
       {children}
       {!pathname.startsWith('/pilates') && <BottomNav />}
+      {!pathname.startsWith('/pilates') && <AthenaChatbox />}
       <WelcomeFlow />
       <SwipeHint />
     </>
@@ -182,7 +183,6 @@ export default function App() {
                         <Route path="skin/*"    element={<SkinModule />} />
                         <Route path="grocery"   element={<GroceryModule />} />
                         <Route path="body"      element={<BodyTab />} />
-                        <Route path="athena"    element={<AthenaAdvisor />} />
                         <Route path="settings"  element={<Settings />} />
                         <Route path="admin"     element={<AdminGuard><AdminPanel /></AdminGuard>} />
                         <Route path="seed"      element={<AdminGuard><SeedPage /></AdminGuard>} />
