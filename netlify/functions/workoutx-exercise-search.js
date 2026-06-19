@@ -98,7 +98,9 @@ exports.handler = async (event) => {
   const exercises = raw.map(ex => ({
     id:               ex.id,
     name:             ex.name,
-    gifUrl:           ex.gifUrl,
+    // Proxy GIFs through our own function — WorkoutX GIF URLs require the
+    // API key header, which browsers can't send via <img> tags.
+    gifUrl:           ex.id ? `/.netlify/functions/workoutx-gif?id=${ex.id}` : null,
     equipment:        ex.equipment    ?? 'Body Weight',
     difficulty:       ex.difficulty   ?? 'beginner',
     target:           ex.target       ?? target,
