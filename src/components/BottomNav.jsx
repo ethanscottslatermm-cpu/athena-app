@@ -173,10 +173,10 @@ export default function BottomNav() {
               style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                 background: 'none', border: 'none', cursor: 'pointer',
-                opacity: isActive ? 1 : 0.48,
+                opacity: isActive ? 1 : 0.72,
                 transition: 'opacity 0.25s ease, color 0.25s ease',
                 flex: 1, minWidth: 0, padding: '8px 2px 4px',
-                color: isActive ? color : '#7A6A65',
+                color: isActive ? color : '#5A4A45',
                 outline: 'none',
                 borderRadius: '12px',
                 minHeight: '56px',
@@ -185,11 +185,11 @@ export default function BottomNav() {
               aria-label={label}
             >
               <div style={{
-                filter: isActive ? `drop-shadow(0 0 8px ${color}66)` : 'none',
-                transition: 'filter 0.25s ease',
+                filter: isActive ? `drop-shadow(0 0 8px ${color}66)` : 'opacity(0.85)',
+                transition: 'filter 0.25s ease, opacity 0.25s ease',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                {png ? <PngIcon src={png} size={24} delay={i * 0.3} /> : <GridIcon />}
+                {png ? <PngIcon src={png} size={26} delay={i * 0.3} /> : <GridIcon />}
               </div>
               <span style={{
                 fontFamily: 'Cormorant Garamond, serif',
