@@ -133,19 +133,15 @@ export default function BottomNav() {
               transition: 'all 0.3s ease',
               position: 'relative',
               outline: 'none',
+              color: activeItem.color,
             }}
             aria-label="Expand navigation"
           >
-            {/* Glow effect layer */}
+            {/* Single stable icon with glow effect */}
             <div style={{
-              position: 'absolute', inset: 0, borderRadius: '50%',
-              filter: `drop-shadow(0 0 10px ${activeItem.color}44)`,
-              transition: 'filter 0.3s ease', pointerEvents: 'none',
+              filter: `drop-shadow(0 0 12px ${activeItem.color}55)`,
+              transition: 'filter 0.3s ease',
             }}>
-              <PngIcon src={activeItem.png} size={26} />
-            </div>
-            {/* Icon layer */}
-            <div style={{ position: 'relative', color: activeItem.color, transition: 'color 0.3s ease' }}>
               <PngIcon src={activeItem.png} size={26} />
             </div>
           </button>
@@ -155,13 +151,13 @@ export default function BottomNav() {
       {/* Expanded: Full Nav Bar */}
       <nav style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(242, 237, 232, 0.88)',
-        backdropFilter: 'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
-        borderTop: '1px solid rgba(196, 133, 154, 0.15)',
+        background: 'rgba(243, 240, 237, 0.94)',
+        backdropFilter: 'blur(22px)',
+        WebkitBackdropFilter: 'blur(22px)',
+        borderTop: '1px solid rgba(196, 133, 154, 0.2)',
         paddingBottom: 'env(safe-area-inset-bottom)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-        padding: '10px 8px max(10px, env(safe-area-inset-bottom))',
+        padding: '12px 8px max(10px, env(safe-area-inset-bottom))',
         opacity: isExpanded ? 1 : 0,
         pointerEvents: isExpanded ? 'auto' : 'none',
         transform: isExpanded ? 'translateY(0)' : 'translateY(100%)',
@@ -189,7 +185,7 @@ export default function BottomNav() {
               aria-label={label}
             >
               <div style={{
-                filter: isActive ? `drop-shadow(0 0 6px ${color}55)` : 'none',
+                filter: isActive ? `drop-shadow(0 0 8px ${color}66)` : 'none',
                 transition: 'filter 0.25s ease',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
@@ -197,11 +193,13 @@ export default function BottomNav() {
               </div>
               <span style={{
                 fontFamily: 'Cormorant Garamond, serif',
-                fontSize: '0.68rem',
-                fontWeight: isActive ? 600 : 400,
-                letterSpacing: '0.05em',
+                fontSize: '0.72rem',
+                fontWeight: isActive ? 700 : 500,
+                letterSpacing: '0.06em',
                 textTransform: 'capitalize',
-                transition: 'font-weight 0.25s ease',
+                transition: 'font-weight 0.25s ease, opacity 0.25s ease',
+                opacity: isActive ? 1 : 0.68,
+                textShadow: isActive ? '0 0 1px rgba(0,0,0,0.2)' : 'none',
               }}>
                 {label}
               </span>
