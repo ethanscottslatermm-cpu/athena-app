@@ -540,6 +540,16 @@ export default function Dashboard() {
           0%, 42%   { background-position: -250% 0; }
           78%, 100% { background-position:  250% 0; }
         }
+        @keyframes cardEntranceUp {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
         /* Shimmer rim rotation — used by dashboard + wellness widget */
         @keyframes srimRotate {
           from { transform: rotate(0deg); }
@@ -559,6 +569,13 @@ export default function Dashboard() {
           -webkit-text-fill-color: transparent;
           animation: dashShimmer 10s ease-in-out infinite;
         }
+        .interactive-card {
+          transition: all 0.25s ease;
+        }
+        .interactive-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 32px rgba(196, 133, 154, 0.3), 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
         /* Reduced-motion overrides */
         @keyframes hintFadeIn {
           from { opacity: 0; transform: translateY(-4px); }
@@ -568,6 +585,8 @@ export default function Dashboard() {
           .srim-spin-el  { animation: none !important; }
           .icon-sweep-el { animation: none !important; }
           .header-shimmer { animation: none !important; }
+          .interactive-card { animation: none !important; transform: none !important; }
+          .interactive-card:hover { transform: none !important; }
         }
       `}</style>
 
@@ -600,6 +619,7 @@ export default function Dashboard() {
       {/* ── Phase Hero — swipable carousel ── */}
       <div className="px-4 max-w-md mx-auto mb-5" style={anim(0.07)}>
         <div
+          className="interactive-card"
           style={{ overflow: 'hidden', borderRadius: 18, border: `1px solid ${activeColor}50`, touchAction: 'pan-y' }}
           onTouchStart={handleHeroTouchStart}
           onTouchMove={handleHeroTouchMove}
@@ -717,6 +737,7 @@ export default function Dashboard() {
       {/* ── Pilates Studio Hero Card ── */}
       <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.09)}>
         <div
+          className="interactive-card"
           style={{
             borderRadius: 16,
             overflow: 'hidden',
@@ -800,6 +821,7 @@ export default function Dashboard() {
       {/* ── Body Map Hero Card ── */}
       <div className="px-4 max-w-md mx-auto mb-4" style={anim(0.11)}>
         <div
+          className="interactive-card"
           style={{
             borderRadius: 16,
             overflow: 'hidden',
@@ -886,12 +908,15 @@ export default function Dashboard() {
       <SectionHeader title="My Modules" delay={0.12} />
       <div className="module-scroll overflow-x-auto mb-6" style={anim(0.15)}>
         <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-          {MODULE_NAV.map(({ key, label, img, to }) => (
+          {MODULE_NAV.map(({ key, label, img, to }, idx) => (
             <button
               key={key}
               onClick={() => navigate(to)}
-              className="flex flex-col items-center gap-2"
-              style={{ minWidth: '72px' }}
+              className="flex flex-col items-center gap-2 interactive-card"
+              style={{
+                minWidth: '72px',
+                animation: `cardEntranceUp 0.4s ease ${idx * 40}ms both`,
+              }}
             >
               <div style={{
                 position: 'relative', width: 72, height: 88, borderRadius: 18, overflow: 'hidden',
@@ -942,9 +967,10 @@ export default function Dashboard() {
       <SectionHeader title="Today" delay={0.17} />
       <div className="grid grid-cols-2 gap-3 px-4 max-w-md mx-auto mb-6" style={anim(0.19)}>
         {todayPair.map(({ key, label, sub, icon, img, to }, i) => (
-          <div key={key} style={{ borderRadius: 16, overflow: 'hidden' }}>
+          <div key={key} style={{ borderRadius: 16, overflow: 'hidden', animation: `cardEntranceUp 0.4s ease ${i * 40 + 600}ms both` }}>
             <button
               onClick={() => navigate(to)}
+              className="interactive-card"
               style={{
                 position: 'relative',
                 display: 'block', width: '100%',
@@ -993,17 +1019,18 @@ export default function Dashboard() {
           <SectionHeader title="Phase Guidance" delay={0.21} />
           <div className="module-scroll overflow-x-auto mb-6" style={anim(0.23)}>
             <div className="flex gap-3 px-5" style={{ width: 'max-content', paddingBottom: '4px' }}>
-              {phaseRotation.map(cardIdx => {
+              {phaseRotation.map((cardIdx, idx) => {
                 const { module, tip, to } = content.cards[cardIdx]
                 const img = MODULE_IMAGES[module]
                 return (
                   <button
                     key={module}
                     onClick={() => navigate(to)}
-                    className="relative text-left rounded-2xl flex-shrink-0 overflow-hidden"
+                    className="relative text-left rounded-2xl flex-shrink-0 overflow-hidden interactive-card"
                     style={{
                       width: '172px', minHeight: '130px',
                       border: `1px solid ${img ? 'rgba(196,175,168,0.35)' : `${activeColor}40`}`,
+                      animation: `cardEntranceUp 0.4s ease ${idx * 40 + 800}ms both`,
                       ...(img
                         ? { backgroundImage: `url("${img}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
                         : { background: `${activeColor}0e` }
@@ -1054,7 +1081,7 @@ export default function Dashboard() {
 
       {/* ── Wellness Weather ── */}
       <SectionHeader title="Wellness" delay={0.26} />
-      <div className="px-4 max-w-md mx-auto mb-6" style={anim(0.28)}>
+      <div className="px-4 max-w-md mx-auto mb-6 interactive-card" style={{ ...anim(0.28), animation: `cardEntranceUp 0.4s ease 920ms both` }}>
         <WellnessWeatherWidget weather={weather} phase={phase} />
       </div>
 
