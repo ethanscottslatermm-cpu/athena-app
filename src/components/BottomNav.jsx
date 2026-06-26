@@ -123,26 +123,26 @@ export default function BottomNav() {
             className="nav-glow"
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 52, height: 52, minWidth: 44, minHeight: 44,
+              width: 60, height: 60, minWidth: 48, minHeight: 48,
               borderRadius: '50%',
-              background: 'rgba(242, 237, 232, 0.88)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: `2px solid ${activeItem.color}28`,
+              background: 'rgba(242, 237, 232, 0.92)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '2px solid #C4859A2A',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               position: 'relative',
               outline: 'none',
-              color: activeItem.color,
+              color: '#3B3330',
             }}
             aria-label="Expand navigation"
           >
             {/* Single stable icon with glow effect */}
             <div style={{
-              filter: `drop-shadow(0 0 12px ${activeItem.color}55)`,
+              filter: 'drop-shadow(0 0 14px rgba(196, 133, 154, 0.6))',
               transition: 'filter 0.3s ease',
             }}>
-              <PngIcon src={activeItem.png} size={26} />
+              <PngIcon src={activeItem.png} size={32} />
             </div>
           </button>
         </div>
@@ -166,6 +166,7 @@ export default function BottomNav() {
       }}>
         {navItems.map(({ to, label, png, color }, i) => {
           const isActive = to === '/' ? location.pathname === '/' : (location.pathname === to || location.pathname.startsWith(to + '/'))
+          const navColor = '#C4859A'
           return (
             <button
               key={to}
@@ -176,7 +177,7 @@ export default function BottomNav() {
                 opacity: isActive ? 1 : 0.72,
                 transition: 'opacity 0.25s ease, color 0.25s ease',
                 flex: 1, minWidth: 0, padding: '8px 2px 4px',
-                color: isActive ? color : '#5A4A45',
+                color: isActive ? navColor : '#5A4A45',
                 outline: 'none',
                 borderRadius: '12px',
                 minHeight: '56px',
@@ -185,7 +186,7 @@ export default function BottomNav() {
               aria-label={label}
             >
               <div style={{
-                filter: isActive ? `drop-shadow(0 0 8px ${color}66)` : 'opacity(0.85)',
+                filter: isActive ? `drop-shadow(0 0 8px ${navColor}77)` : 'opacity(0.85)',
                 transition: 'filter 0.25s ease, opacity 0.25s ease',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
