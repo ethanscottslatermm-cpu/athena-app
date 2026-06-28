@@ -12,6 +12,9 @@ export function useExerciseData(muscleId) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [isDecorative, setIsDecorative] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const refresh = () => setRefreshKey(k => k + 1)
 
   useEffect(() => {
     if (!muscleId) {
@@ -102,7 +105,7 @@ export function useExerciseData(muscleId) {
     return () => {
       stale = true
     }
-  }, [muscleId])
+  }, [muscleId, refreshKey])
 
   const triggerVideoLookup = async (exerciseId, exerciseName) => {
     try {
@@ -139,5 +142,5 @@ export function useExerciseData(muscleId) {
     }
   }
 
-  return { exercises, loading, error, isDecorative }
+  return { exercises, loading, error, isDecorative, refresh }
 }

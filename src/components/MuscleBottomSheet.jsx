@@ -48,7 +48,7 @@ export default function MuscleBottomSheet({
   const [prefillExercise,   setPrefillExercise]   = useState('')
   const [shuffledExercises, setShuffledExercises] = useState([])
 
-  const { exercises, loading, error, isDecorative } =
+  const { exercises, loading, error, isDecorative, refresh } =
     useExerciseData(isOpen ? pairKey : null)
 
   const color  = pairKey ? MUSCLE_COLORS[pairKey] : gold
@@ -163,31 +163,53 @@ export default function MuscleBottomSheet({
         </div>
       )}
 
-      {/* Section label + Shuffle — 160ms */}
+      {/* Section label + Shuffle + Refresh — 160ms */}
       {!isDecorative && (
         <div style={anim(160)}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <p style={{ fontFamily: fontSans, fontSize: 10, letterSpacing: '0.14em', color: mutedText, textTransform: 'uppercase', margin: 0 }}>
               Exercises for this group
             </p>
-            <button
-              onClick={handleShuffle}
-              style={{
-                fontFamily: fontSans,
-                fontSize: 11,
-                color: color,
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-              }}
-              title="Shuffle exercises"
-            >
-              ↻ Shuffle
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button
+                onClick={handleShuffle}
+                style={{
+                  fontFamily: fontSans,
+                  fontSize: 11,
+                  color: color,
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}
+                title="Shuffle exercises"
+              >
+                ↻ Shuffle
+              </button>
+              <button
+                onClick={refresh}
+                disabled={loading}
+                style={{
+                  fontFamily: fontSans,
+                  fontSize: 11,
+                  color: loading ? mutedText : color,
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  opacity: loading ? 0.5 : 1,
+                }}
+                title="Refresh exercises"
+              >
+                ⟳ Refresh
+              </button>
+            </div>
           </div>
         </div>
       )}
