@@ -189,18 +189,39 @@ export default function ExerciseCard({
                   allowFullScreen
                 />
               </div>
-              {exercise.videoRow.channel_title && (
-                <p
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                <div>
+                  {exercise.videoRow.channel_title && (
+                    <p
+                      style={{
+                        fontFamily: fontSans,
+                        fontSize: 10,
+                        color: mutedText,
+                        margin: 0,
+                      }}
+                    >
+                      {exercise.videoRow.channel_title}
+                    </p>
+                  )}
+                </div>
+                <a
+                  href={`https://www.youtube.com/watch?v=${exercise.videoRow.video_id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     fontFamily: fontSans,
                     fontSize: 10,
-                    color: mutedText,
-                    margin: '0 0 0.75rem',
+                    color: '#4F9DE0',
+                    textDecoration: 'none',
+                    padding: '4px 8px',
+                    border: '1px solid rgba(79,157,224,0.35)',
+                    borderRadius: 6,
+                    whiteSpace: 'nowrap',
                   }}
                 >
-                  {exercise.videoRow.channel_title}
-                </p>
-              )}
+                  Open in YouTube →
+                </a>
+              </div>
             </>
           )}
 
