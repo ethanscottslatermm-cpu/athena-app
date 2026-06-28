@@ -99,6 +99,11 @@ export default function MuscleBottomSheet({
     setShuffledExercises(shuffled)
   }
 
+  const handleRefresh = () => {
+    setShuffledExercises([])
+    refresh()
+  }
+
   const displayedExercises = shuffledExercises.length > 0 ? shuffledExercises : exercises
 
   // ── Staggered sheet content (key={pairKey} forces remount on muscle switch) ──
@@ -190,7 +195,7 @@ export default function MuscleBottomSheet({
                 ↻ Shuffle
               </button>
               <button
-                onClick={refresh}
+                onClick={handleRefresh}
                 disabled={loading}
                 style={{
                   fontFamily: fontSans,
