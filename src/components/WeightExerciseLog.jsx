@@ -6,9 +6,6 @@ import { MUSCLE_COLORS, MUSCLE_NAMES } from '../constants/muscleMap'
 
 const gold      = '#C9A86C'
 const rose      = '#C4859A'
-const sage      = '#8FA58C'
-const green     = '#4CAF50'
-const red       = '#E74C3C'
 const mutedText = 'rgba(59,51,48,0.45)'
 const brown     = '#3B3330'
 const bgCard    = 'rgba(255,255,255,0.6)'
@@ -214,7 +211,7 @@ export default function WeightExerciseLog({ currentPhase }) {
     <div style={{ padding: '0 1rem 2rem' }}>
 
       {/* ══ Section A: Weight Log ══════════════════════════════════════════════ */}
-      <p style={{ fontFamily: fontSerif, fontSize: 24, color: sage, margin: '0 0 2px', letterSpacing: '-0.01em' }}>
+      <p style={{ fontFamily: fontSerif, fontSize: 24, color: brown, margin: '0 0 2px', letterSpacing: '-0.01em' }}>
         Weight
       </p>
       <p style={{ fontFamily: fontSans, fontSize: 11, color: mutedText, margin: '0 0 1rem', letterSpacing: '0.06em' }}>
@@ -292,39 +289,6 @@ export default function WeightExerciseLog({ currentPhase }) {
           border:       `1px solid rgba(196,133,154,0.18)`,
         }}>
           <WeightChart entries={weightLogs} />
-
-          {/* Weight stats with colors */}
-          {weightLogs.length >= 1 && (() => {
-            const sorted = [...weightLogs].sort((a, b) => parseLocalDate(a.logged_at) - parseLocalDate(b.logged_at))
-            const current = Number(sorted[sorted.length - 1].weight)
-            const previous = sorted.length >= 2 ? Number(sorted[sorted.length - 2].weight) : null
-            const change = previous !== null ? current - previous : null
-            const changeColor = change !== null ? (change < 0 ? green : change > 0 ? red : mutedText) : mutedText
-            const changeStr = change !== null ? (change > 0 ? `+${change.toFixed(1)}` : change.toFixed(1)) : null
-
-            return (
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(59,51,48,0.08)' }}>
-                <div>
-                  <p style={{ fontFamily: fontSans, fontSize: 10, color: mutedText, margin: '0 0 4px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                    Current Weight
-                  </p>
-                  <p style={{ fontFamily: fontSerif, fontSize: 20, color: changeColor, margin: 0, fontWeight: 600 }}>
-                    {current} <span style={{ fontSize: 14, fontWeight: 'normal' }}>{weightLogs[0].unit}</span>
-                  </p>
-                </div>
-                {changeStr && (
-                  <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontFamily: fontSans, fontSize: 10, color: mutedText, margin: '0 0 4px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                      Change
-                    </p>
-                    <p style={{ fontFamily: fontSerif, fontSize: 18, color: changeColor, margin: 0, fontWeight: 600 }}>
-                      {change < 0 ? '📉' : change > 0 ? '📈' : '→'} {changeStr}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )
-          })()}
         </div>
       ) : (
         <p style={{ fontFamily: fontSerif, fontStyle: 'italic', fontSize: 13, color: mutedText, textAlign: 'center', padding: '0.75rem 0', marginBottom: '1.5rem' }}>
@@ -334,7 +298,7 @@ export default function WeightExerciseLog({ currentPhase }) {
 
       {/* ══ Section B: Exercise Log ════════════════════════════════════════════ */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2px' }}>
-        <p style={{ fontFamily: fontSerif, fontSize: 24, color: rose, margin: 0, letterSpacing: '-0.01em' }}>
+        <p style={{ fontFamily: fontSerif, fontSize: 24, color: brown, margin: 0, letterSpacing: '-0.01em' }}>
           Exercises
         </p>
         <button
