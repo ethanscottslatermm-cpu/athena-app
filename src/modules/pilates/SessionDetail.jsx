@@ -26,6 +26,19 @@ const SESSION_IMAGES = {
   'hip & glute release':      '/images/sessions/Hip & Glute Release.webp',
 }
 
+// Sessions whose hero is a looping video rather than a still. Keyed by the
+// lowercased title, same as SESSION_IMAGES. The matching still (if any) is used
+// as the video's poster so the card shows an instant frame while it loads.
+const SESSION_HERO_VIDEOS = {
+  'dynamic stretch & tone': '/images/pilates/dynamic-stretch-and-tone/dynamic_stretch_hero.mp4',
+}
+
+// Hold frame (first frame) of each hero video, shown while the video buffers so
+// the placeholder matches the clip exactly — the fade-in is then invisible.
+const SESSION_HERO_POSTERS = {
+  'dynamic stretch & tone': '/images/pilates/dynamic-stretch-and-tone/dynamic_stretch_hero.hold.png',
+}
+
 const HERO_POSITION = {
   'gentle restoration flow': 'center 20%',
 }
@@ -59,11 +72,16 @@ function Heart({ filled }) {
 export default function SessionDetail({ session, exercises = [], isFavorite, onFavoriteToggle, onStart, onClose }) {
   if (!session) return null
 
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded]   = useState(false)
+  // Hero video fade-in: stays hidden (dark placeholder shows) until the first
+  // frame is decoded, then fades in — so the wrong still never flashes.
+  const [heroReady, setHeroReady] = useState(false)
 
   const pc         = PHASE_COLORS[session.phase] ?? '#C4859A'
   const titleKey   = (session.title ?? '').toLowerCase()
   const heroImage  = SESSION_IMAGES[titleKey]
+  const heroVideo  = SESSION_HERO_VIDEOS[titleKey]
+  const heroPoster = SESSION_HERO_POSTERS[titleKey] ?? heroImage
   const heroPos    = HERO_POSITION[titleKey] ?? 'center'
   const difficulty = DIFFICULTY_LABEL[session.difficulty] ?? { label: session.difficulty, color: '#C9A86C' }
   const phaseLabel = session.phase && session.phase !== 'all'
@@ -103,7 +121,40 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <div className="relative shrink-0 overflow-hidden" style={{ height: 260 }}>
-        {heroImage ? (
+        {heroVideo ? (
+          <>
+            {/* Hold frame shown while the video buffers — it matches the clip's
+                first frame, so the video's fade-in over it is invisible and the
+                mismatched session still is never flashed. */}
+            <img
+              src={heroPoster} alt=""
+              className="absolute inset-0 w-full h-full"
+              style={{ objectFit: 'cover', objectPosition: heroPos }}
+            />
+            {/* Looping hero video — muted + playsInline + autoplay so mobile
+                (incl. iOS) plays it silently; native loop keeps it seamless.
+                No poster: it fades in on first decoded frame (onLoadedData). */}
+            <video
+              src={heroVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              onLoadedData={() => setHeroReady(true)}
+              className="absolute inset-0 w-full h-full"
+              style={{
+                objectFit: 'cover',
+                objectPosition: heroPos,
+                opacity: heroReady ? 1 : 0,
+                transition: 'opacity 0.5s ease',
+              }}
+            />
+            <div className="absolute inset-0" style={{
+              background: 'linear-gradient(to top, #0E0A14 0%, rgba(14,10,20,0.72) 45%, rgba(14,10,20,0.15) 100%)',
+            }} />
+          </>
+        ) : heroImage ? (
           <>
             <img
               src={heroImage} alt=""

@@ -12,6 +12,17 @@ const EXERCISE_SLUGS = {
   'Single Leg Bridge':      'single-leg-bridge',
 }
 
+// Explicit per-exercise video paths (full public URLs). These take priority
+// over the slug-based /videos/Exercises lookup below, for clips that live
+// elsewhere on disk. Folder names are kept URL-safe (lowercase, hyphenated).
+const EXERCISE_VIDEO_SRC = {
+  'Standing Roll Down':       '/images/pilates/dynamic-stretch-and-tone/standing_roll_down.mp4',
+  'Lunge Hip Flexor':         '/images/pilates/dynamic-stretch-and-tone/lung_hip_flexor.mp4',
+  "World's Greatest Stretch": '/images/pilates/dynamic-stretch-and-tone/worlds_greatest_stretch.mp4',
+  'Leg Pull Front':           '/images/pilates/dynamic-stretch-and-tone/leg_pull_front.mp4',
+  'Pigeon Stretch':           '/images/pilates/dynamic-stretch-and-tone/pigeon_stretch.mp4',
+}
+
 function formatTime(s) {
   const m = Math.floor(s / 60)
   return `${m}:${String(s % 60).padStart(2, '0')}`
@@ -84,7 +95,8 @@ export default function ActiveSession({ session, exercises = [], phaseData, onCo
   }
 
   const slug     = EXERCISE_SLUGS[current?.name]
-  const videoSrc = slug ? `/videos/Exercises/${slug}.mp4.mp4` : null
+  const videoSrc = EXERCISE_VIDEO_SRC[current?.name]
+    ?? (slug ? `/videos/Exercises/${slug}.mp4.mp4` : null)
 
   return (
     <div

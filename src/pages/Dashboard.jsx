@@ -526,7 +526,19 @@ export default function Dashboard() {
     {fadingOut && (
       <div style={{ position: 'fixed', inset: 0, zIndex: 201, backgroundColor: '#140E0C', animation: 'exitDarkIn 0.65s ease forwards', pointerEvents: 'none' }} />
     )}
-    <div className="flex-1 min-h-0 pb-nav overflow-y-auto" style={{ backgroundColor: '#F3EAE7' }}>
+    <div
+      className="flex-1 min-h-0 pb-nav overflow-y-auto"
+      style={{
+        backgroundColor: '#F3EAE7',
+        // Phase-tinted ambient glow: a soft radial wash in the active cycle
+        // phase's colour bleeding down from the top, melting into the linen.
+        // Anchored to the top of the scroll area (default background-attachment),
+        // so it reads as gentle overhead lighting behind the header. Uses the
+        // same activeColor + hex-alpha convention as the cards for consistency.
+        backgroundImage: `radial-gradient(ellipse 90% 380px at 50% -30px, ${activeColor}30 0%, ${activeColor}12 45%, rgba(243,234,231,0) 75%)`,
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <style>{`
         @keyframes dashUp {
           from { opacity: 0; transform: translateY(12px); }

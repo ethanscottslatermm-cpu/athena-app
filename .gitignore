@@ -40,6 +40,7 @@ Thumbs.db
 !public/*.mp4
 !public/*.mov
 !public/videos/**
+!public/images/pilates/**
 
 # Root-level design screenshots
 Athena*.png
