@@ -50,6 +50,15 @@ Athena*.jpg
 # Duplicate asset staging folders
 Pilate Exercise Card Slots/
 
+# Local design/asset source dumps — not referenced by the app, kept out of git
+# (the app's muscle map uses src/assets/body/musclemap.svg, not these)
+/New SVG Build/
+/muscle_svgs_final-2dsvg/
+/netlify/Pilate Studio (1).svg
+/public/Athena SVG V7 compressed/
+/public/pilates-muscle groups/
+/public/pilates-muscle groups compressed.zip
+
 # Root-level loose images (not in public/)
 Community nav.jpg
 Mood nav.jpg
