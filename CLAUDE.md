@@ -38,6 +38,23 @@
 - Font Display: Cinzel (Roman serif)
 - Font Body: Cormorant Garamond
 
+## Active Session (light mode) — screen-local tokens
+The Active Session player (`src/modules/pilates/ActiveSession.jsx`) is the ONLY
+light-themed screen in the app. It intentionally departs from the palette above
+for workout focus and legibility while moving. Do not apply these anywhere else.
+- Screen background (soft blush): #F2E8E8
+- Card background (white): #FFFFFF
+- Primary text (deep plum-brown): #2E1F26
+- Accent / secondary (muted mauve-rose): #8B5A6B
+- Muted text (dusty taupe): #9B8288
+- Progress bar: #8B5A6B
+- Next button (muted teal): #5F7D82
+- Fonts unchanged: Cinzel headers, Cormorant Garamond body/cues
+
+This screen is a REUSABLE TEMPLATE — every session renders through it. Structure,
+styling and spacing are identical across sessions; only video, exercise name,
+sets/reps, cue text and the exercise queue come from data.
+
 ## Cycle Phase Logic
 - Menstrual: days 1-5
 - Follicular: days 6-13

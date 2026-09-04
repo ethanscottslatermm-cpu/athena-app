@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import ExerciseRow from './components/ExerciseRow'
 import MuscleMap from '../../components/MuscleMap'
 import { MUSCLE_NAMES } from '../../constants/muscleMap'
@@ -31,12 +31,14 @@ const SESSION_IMAGES = {
 // as the video's poster so the card shows an instant frame while it loads.
 const SESSION_HERO_VIDEOS = {
   'dynamic stretch & tone': '/images/pilates/dynamic-stretch-and-tone/dynamic_stretch_hero.mp4',
+  'rising energy core':     '/images/pilates/rising-energy-core/rising_energy_hero.mp4',
 }
 
 // Hold frame (first frame) of each hero video, shown while the video buffers so
 // the placeholder matches the clip exactly — the fade-in is then invisible.
 const SESSION_HERO_POSTERS = {
   'dynamic stretch & tone': '/images/pilates/dynamic-stretch-and-tone/dynamic_stretch_hero.hold.png',
+  'rising energy core':     '/images/pilates/rising-energy-core/rising_energy_hero.hold.jpg',
 }
 
 const HERO_POSITION = {
@@ -72,10 +74,51 @@ function Heart({ filled }) {
 export default function SessionDetail({ session, exercises = [], isFavorite, onFavoriteToggle, onStart, onClose }) {
   if (!session) return null
 
-  const [expanded, setExpanded]   = useState(false)
-  // Hero video fade-in: stays hidden (dark placeholder shows) until the first
-  // frame is decoded, then fades in — so the wrong still never flashes.
-  const [heroReady, setHeroReady] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+
+  // Hero video opacity. Starts hidden (the hold still shows through) until the
+  // first frame decodes, then fades in. It also dips to 0 just before the clip
+  // ends and comes back after the restart — a crossfade through the still that
+  // hides the loop seam, since a native `loop` hard-cuts last frame → first and
+  // reads as a jolt whenever those frames don't match.
+  const [heroOpacity, setHeroOpacity] = useState(0)
+  const heroVideoRef  = useRef(null)
+  const heroLoopFade  = useRef(false)
+  const heroLoopTimer = useRef(null)
+
+  // Fade must FINISH before the restart, otherwise the dip and the seek collide
+  // and read as a double glitch. Lead > fade guarantees the seek happens while
+  // the video is fully invisible, and early enough that `ended` never fires.
+  const HERO_FADE_MS   = 420
+  const HERO_FADE_LEAD = 0.75   // seconds before the end to start fading
+
+  function restartHero() {
+    const vid = heroVideoRef.current
+    if (!vid) return
+    vid.currentTime = 0
+    vid.play().catch(() => {})
+    setHeroOpacity(1)
+    heroLoopFade.current = false
+  }
+
+  function handleHeroTimeUpdate() {
+    const vid = heroVideoRef.current
+    if (!vid || !vid.duration || heroLoopFade.current) return
+    if (vid.duration - vid.currentTime <= HERO_FADE_LEAD) {
+      heroLoopFade.current = true
+      setHeroOpacity(0)
+      clearTimeout(heroLoopTimer.current)
+      heroLoopTimer.current = setTimeout(restartHero, HERO_FADE_MS)
+    }
+  }
+
+  // Safety net only — with the lead above the clip should never reach its end.
+  function handleHeroEnded() {
+    clearTimeout(heroLoopTimer.current)
+    restartHero()
+  }
+
+  useEffect(() => () => clearTimeout(heroLoopTimer.current), [])
 
   const pc         = PHASE_COLORS[session.phase] ?? '#C4859A'
   const titleKey   = (session.title ?? '').toLowerCase()
@@ -132,22 +175,25 @@ export default function SessionDetail({ session, exercises = [], isFavorite, onF
               style={{ objectFit: 'cover', objectPosition: heroPos }}
             />
             {/* Looping hero video — muted + playsInline + autoplay so mobile
-                (incl. iOS) plays it silently; native loop keeps it seamless.
-                No poster: it fades in on first decoded frame (onLoadedData). */}
+                (incl. iOS) plays it silently. Deliberately NOT using the native
+                `loop` attribute: it hard-cuts the seam and suppresses `ended`,
+                which the crossfade-restart below relies on. */}
             <video
+              ref={heroVideoRef}
               src={heroVideo}
               autoPlay
               muted
-              loop
               playsInline
               preload="auto"
-              onLoadedData={() => setHeroReady(true)}
+              onLoadedData={() => setHeroOpacity(1)}
+              onTimeUpdate={handleHeroTimeUpdate}
+              onEnded={handleHeroEnded}
               className="absolute inset-0 w-full h-full"
               style={{
                 objectFit: 'cover',
                 objectPosition: heroPos,
-                opacity: heroReady ? 1 : 0,
-                transition: 'opacity 0.5s ease',
+                opacity: heroOpacity,
+                transition: `opacity ${HERO_FADE_MS}ms ease`,
               }}
             />
             <div className="absolute inset-0" style={{
