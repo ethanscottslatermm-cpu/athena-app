@@ -1,93 +1,128 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import bodyIcon      from '../assets/icons/nav-body.svg'
-import dashboardIcon from '../assets/icons/nav-dashboard.png'
-import cycleIcon     from '../assets/icons/nav-cycle.png'
-import moodIcon      from '../assets/icons/nav-mood.png'
-
-function PngIcon({ src, size = 22, delay = 0 }) {
+// Fine line-art icons drawn to match the frosted-glass nav reference.
+// All strokes use currentColor so the active/inactive colour flows through.
+function LineIcon({ children, size = 34 }) {
   return (
-    <span style={{ position: 'relative', display: 'inline-block', width: `${size}px`, height: `${size}px`, flexShrink: 0 }}>
-      <span style={{
-        display: 'block', width: '100%', height: '100%',
-        WebkitMask: `url(${src}) no-repeat center / contain`,
-        mask: `url(${src}) no-repeat center / contain`,
-        backgroundColor: 'currentColor',
-        transition: 'color 0.3s',
-      }} />
-      <span style={{
-        position: 'absolute', inset: 0,
-        WebkitMask: `url(${src}) no-repeat center / contain`,
-        mask: `url(${src}) no-repeat center / contain`,
-        background: 'linear-gradient(110deg, transparent 25%, rgba(245,240,225,0.5) 50%, transparent 75%)',
-        backgroundSize: '250% 100%',
-        animation: `navShimmer 8s ease-in-out infinite ${delay}s`,
-        mixBlendMode: 'screen',
-        pointerEvents: 'none',
-      }} />
-    </span>
+    <svg
+      viewBox="0 0 32 32" width={size} height={size}
+      fill="none" stroke="currentColor" strokeWidth="1.15"
+      strokeLinecap="round" strokeLinejoin="round"
+      style={{ flexShrink: 0, display: 'block' }}
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
   )
 }
 
-function GridIcon() {
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, flexShrink: 0 }}>
-      <svg viewBox="0 0 18 18" width={17} height={17} fill="currentColor">
-        <rect x="1"    y="1"    width="6.5" height="6.5" rx="1.5" />
-        <rect x="10.5" y="1"    width="6.5" height="6.5" rx="1.5" />
-        <rect x="1"    y="10.5" width="6.5" height="6.5" rx="1.5" />
-        <rect x="10.5" y="10.5" width="6.5" height="6.5" rx="1.5" />
-      </svg>
-    </span>
-  )
-}
+// Ionic column with a sprig
+const HomeIcon = () => (
+  <LineIcon>
+    <path d="M4.5 8h15" />
+    <path d="M6 8c-1.6 0-2.4 1-2.4 2 0 1.1.9 1.8 1.8 1.8.8 0 1.3-.5 1.3-1.2" />
+    <path d="M18 8c1.6 0 2.4 1 2.4 2 0 1.1-.9 1.8-1.8 1.8-.8 0-1.3-.5-1.3-1.2" />
+    <path d="M7 11.2h10" />
+    <path d="M8.5 12.5v12M11 12.5v12M13 12.5v12M15.5 12.5v12" />
+    <path d="M6.5 25.5h11" />
+    <path d="M19.5 27c2-2.6 4.2-5.6 7.5-8.5" />
+    <path d="M22 23.6c-1.8-.4-2.6-1.8-2.4-3.4 1.5.5 2.4 1.7 2.4 3.4z" />
+    <path d="M24.4 21c-1.7-.6-2.3-2-2-3.6 1.4.6 2.2 1.9 2 3.6z" />
+    <path d="M22.6 24.6c1.7.6 3.3.1 4.1-1.3-1.6-.4-3.1.1-4.1 1.3z" />
+    <path d="M25 21.9c1.6.4 3-.2 3.6-1.6-1.5-.3-2.9.3-3.6 1.6z" />
+  </LineIcon>
+)
+
+// Standing figure, arms softly open
+const BodyIcon = () => (
+  <LineIcon>
+    <circle cx="16" cy="5.8" r="2.4" />
+    <path d="M16 9.5v8.5" />
+    <path d="M9 11.5c2.4 1.6 4.6 2.1 7 2.1s4.6-.5 7-2.1" />
+    <path d="M16 18l-3.6 9" />
+    <path d="M16 18l3.6 9" />
+  </LineIcon>
+)
+
+// Crescent moon with a small star
+const CycleIcon = () => (
+  <LineIcon>
+    <path d="M19.5 5.2A11 11 0 1 0 27 20.4 8.6 8.6 0 0 1 19.5 5.2z" />
+    <path d="M24.5 6.5v3M23 8h3" />
+  </LineIcon>
+)
+
+// Lotus
+const MoodIcon = () => (
+  <LineIcon>
+    <path d="M16 7.5c-3 3.8-3 10.2 0 14.5 3-4.3 3-10.7 0-14.5z" />
+    <path d="M16 22c-4.2-.8-7.6-4.6-7.6-10.4 4.2 1 7 4.6 7.6 10.4z" />
+    <path d="M16 22c4.2-.8 7.6-4.6 7.6-10.4-4.2 1-7 4.6-7.6 10.4z" />
+    <path d="M16 22c-5.8 1-10.6-1.6-12.6-5.6 4.2-1 9.2.4 12.6 5.6z" />
+    <path d="M16 22c5.8 1 10.6-1.6 12.6-5.6-4.2-1-9.2.4-12.6 5.6z" />
+  </LineIcon>
+)
+
+// Botanical sprig
+const MoreIcon = () => (
+  <LineIcon>
+    <path d="M8 28.5C12 21 17.5 12.5 24.5 3.5" />
+    <path d="M11.6 23.2c-2.6-1-3.6-3.6-2.8-6.4 1.9 1.6 2.9 3.8 2.8 6.4z" />
+    <path d="M14.6 18.4c-2.6-1-3.6-3.6-2.8-6.4 1.9 1.6 2.9 3.8 2.8 6.4z" />
+    <path d="M18 13.4c-2.2-1.6-2.6-4.3-1.2-6.8 1.4 2 1.8 4.3 1.2 6.8z" />
+    <path d="M12.6 22c2.8.2 5-1.4 5.8-4.2-2.6-.2-4.8 1.4-5.8 4.2z" />
+    <path d="M15.8 17c2.8.2 5-1.4 5.8-4.2-2.6-.2-4.8 1.4-5.8 4.2z" />
+    <path d="M19.4 11.6c2.6-.4 4.4-2.4 4.6-5.2-2.5.4-4.3 2.4-4.6 5.2z" />
+  </LineIcon>
+)
 
 const navItems = [
-  { to: '/',      label: 'Home',  png: dashboardIcon, color: '#8FAF8A' },
-  { to: '/body',  label: 'Body',  png: bodyIcon,      color: '#C4859A' },
-  { to: '/cycle', label: 'Cycle', png: cycleIcon,     color: '#C9A86C' },
-  { to: '/mood',  label: 'Mood',  png: moodIcon,      color: '#E8829A' },
-  { to: '/more',  label: 'More',  png: null,          color: '#8FAF8A' },
+  { to: '/',      label: 'Home',  Icon: HomeIcon },
+  { to: '/body',  label: 'Body',  Icon: BodyIcon },
+  { to: '/cycle', label: 'Cycle', Icon: CycleIcon },
+  { to: '/mood',  label: 'Mood',  Icon: MoodIcon },
+  { to: '/more',  label: 'More',  Icon: MoreIcon },
 ]
 
+const ACTIVE_COLOR   = '#9C5F66'
+const INACTIVE_COLOR = '#7A6A65'
+
+const glassSurface = {
+  background: 'linear-gradient(180deg, rgba(253,246,243,0.78) 0%, rgba(246,234,229,0.72) 100%)',
+  backdropFilter: 'blur(24px) saturate(140%)',
+  WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+  border: '1px solid rgba(255,255,255,0.75)',
+  boxShadow: '0 12px 32px rgba(140,100,92,0.18), 0 2px 6px rgba(140,100,92,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+}
+
+const activePill = {
+  background: 'linear-gradient(180deg, rgba(255,238,233,0.98) 0%, rgba(246,214,207,0.92) 100%)',
+  boxShadow: '0 4px 16px rgba(214,146,136,0.35), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 0 0 1px rgba(255,255,255,0.6)',
+}
+
 export default function BottomNav() {
-  const [isExpanded, setIsExpanded] = useState(false)
+  // Remember which path the bar was opened on, so navigating away collapses it
+  const [expandedOn, setExpandedOn] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
   const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const activeItem = navItems.find(item => {
-    if (item.to === '/') return location.pathname === '/'
-    return location.pathname === item.to || location.pathname.startsWith(item.to + '/')
-  }) || navItems[0]
+  const isActivePath = (to) =>
+    to === '/' ? location.pathname === '/' : (location.pathname === to || location.pathname.startsWith(to + '/'))
 
-  // Auto-collapse when navigating to a new module
-  useEffect(() => {
-    setIsExpanded(false)
-  }, [location.pathname])
+  const isExpanded = expandedOn === location.pathname
 
-  const handleItemClick = (to) => {
-    navigate(to)
-  }
+  const activeItem = navItems.find(item => isActivePath(item.to)) || navItems[0]
+  const ActiveIcon = activeItem.Icon
 
   return (
     <>
       <style>{`
-        @keyframes navShimmer {
-          0%, 42%   { background-position: -250% 0; }
-          78%, 100% { background-position:  250% 0; }
-        }
         @keyframes collapsedGlow {
-          0% {
-            box-shadow: 0 0 0 0 rgba(232, 130, 154, 0.6), inset 0 0 0 2px rgba(232, 130, 154, 0.3);
-          }
-          50% {
-            box-shadow: 0 0 0 8px rgba(232, 130, 154, 0), inset 0 0 0 2px rgba(232, 130, 154, 0.25);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(232, 130, 154, 0), inset 0 0 0 2px rgba(232, 130, 154, 0.3);
-          }
+          0%   { box-shadow: 0 0 0 0 rgba(214,146,136,0.45), 0 8px 24px rgba(140,100,92,0.18); }
+          50%  { box-shadow: 0 0 0 9px rgba(214,146,136,0), 0 8px 24px rgba(140,100,92,0.18); }
+          100% { box-shadow: 0 0 0 0 rgba(214,146,136,0), 0 8px 24px rgba(140,100,92,0.18); }
         }
         @keyframes chevronBounce {
           0%, 100% { transform: translateY(0); opacity: 0.45; }
@@ -95,6 +130,7 @@ export default function BottomNav() {
         }
         .nav-glow { animation: ${prefersReduced ? 'none' : 'collapsedGlow 2.6s ease-in-out infinite'}; }
         .nav-chevron { animation: ${prefersReduced ? 'none' : 'chevronBounce 1.6s ease-in-out infinite'}; }
+        .athena-nav-item:focus-visible { outline: 1.5px solid ${ACTIVE_COLOR}66; outline-offset: 2px; }
         @media (prefers-reduced-motion: reduce) {
           .nav-collapsed-hint { display: none !important; }
         }
@@ -119,88 +155,76 @@ export default function BottomNav() {
 
           {/* Icon Pill */}
           <button
-            onClick={() => setIsExpanded(true)}
-            className="nav-glow"
+            onClick={() => setExpandedOn(location.pathname)}
+            className="nav-glow athena-nav-item"
             style={{
+              ...glassSurface,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 60, height: 60, minWidth: 48, minHeight: 48,
+              width: 62, height: 62,
               borderRadius: '50%',
-              background: 'rgba(242, 237, 232, 0.92)',
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              border: '2px solid #C4859A2A',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              position: 'relative',
               outline: 'none',
-              color: '#3B3330',
+              color: ACTIVE_COLOR,
             }}
             aria-label="Expand navigation"
           >
-            {/* Single stable icon with glow effect */}
-            <div style={{
-              filter: 'drop-shadow(0 0 14px rgba(196, 133, 154, 0.6))',
-              transition: 'filter 0.3s ease',
-            }}>
-              <PngIcon src={activeItem.png} size={32} />
-            </div>
+            <ActiveIcon />
           </button>
         </div>
       )}
 
-      {/* Expanded: Full Nav Bar */}
+      {/* Expanded: Floating frosted-glass bar */}
       <nav style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(243, 240, 237, 0.94)',
-        backdropFilter: 'blur(22px)',
-        WebkitBackdropFilter: 'blur(22px)',
-        borderTop: '1px solid rgba(196, 133, 154, 0.2)',
-        paddingBottom: 'env(safe-area-inset-bottom)',
+        ...glassSurface,
+        position: 'fixed', zIndex: 100,
+        left: 12, right: 12, bottom: 'max(12px, env(safe-area-inset-bottom))',
+        maxWidth: 520, margin: '0 auto',
+        borderRadius: 30,
         display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-        padding: '12px 8px max(10px, env(safe-area-inset-bottom))',
+        padding: '12px 6px 10px',
         opacity: isExpanded ? 1 : 0,
         pointerEvents: isExpanded ? 'auto' : 'none',
-        transform: isExpanded ? 'translateY(0)' : 'translateY(100%)',
-        transition: `opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)`,
+        transform: isExpanded ? 'translateY(0)' : 'translateY(calc(100% + 24px))',
+        transition: 'opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
         willChange: isExpanded ? 'transform, opacity' : 'auto',
       }}>
-        {navItems.map(({ to, label, png, color }, i) => {
-          const isActive = to === '/' ? location.pathname === '/' : (location.pathname === to || location.pathname.startsWith(to + '/'))
-          const navColor = '#C4859A'
+        {navItems.map(({ to, label, Icon }) => {
+          const isActive = isActivePath(to)
           return (
             <button
               key={to}
-              onClick={() => handleItemClick(to)}
+              onClick={() => navigate(to)}
+              className="athena-nav-item"
               style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
                 background: 'none', border: 'none', cursor: 'pointer',
-                opacity: isActive ? 1 : 0.72,
-                transition: 'opacity 0.25s ease, color 0.25s ease',
-                flex: 1, minWidth: 0, padding: '8px 2px 4px',
-                color: isActive ? navColor : '#5A4A45',
+                flex: 1, minWidth: 0, padding: '2px 2px 4px',
+                color: isActive ? ACTIVE_COLOR : INACTIVE_COLOR,
+                transition: 'color 0.25s ease',
                 outline: 'none',
-                borderRadius: '12px',
-                minHeight: '56px',
+                borderRadius: 16,
+                minHeight: 56,
               }}
               aria-current={isActive ? 'page' : undefined}
               aria-label={label}
             >
-              <div style={{
-                filter: isActive ? `drop-shadow(0 0 8px ${navColor}77)` : 'opacity(0.85)',
-                transition: 'filter 0.25s ease, opacity 0.25s ease',
+              <span style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 'min(72px, 100%)', height: 46,
+                borderRadius: 999,
+                transition: 'background 0.3s ease, box-shadow 0.3s ease',
+                ...(isActive ? activePill : { background: 'transparent', boxShadow: 'none' }),
               }}>
-                {png ? <PngIcon src={png} size={26} delay={i * 0.3} /> : <GridIcon />}
-              </div>
+                <Icon />
+              </span>
               <span style={{
                 fontFamily: 'Cormorant Garamond, serif',
-                fontSize: '0.72rem',
-                fontWeight: isActive ? 700 : 500,
-                letterSpacing: '0.06em',
-                textTransform: 'capitalize',
-                transition: 'font-weight 0.25s ease, opacity 0.25s ease',
-                opacity: isActive ? 1 : 0.68,
-                textShadow: isActive ? '0 0 1px rgba(0,0,0,0.2)' : 'none',
+                fontSize: '0.88rem',
+                fontWeight: isActive ? 600 : 500,
+                letterSpacing: '0.02em',
+                lineHeight: 1,
+                whiteSpace: 'nowrap',
               }}>
                 {label}
               </span>
