@@ -37,7 +37,10 @@ const EXERCISE_SLUGS = {
 }
 
 // Explicit per-exercise video paths for clips that live elsewhere on disk.
-// A `video_url` on the exercise row always wins over both of these.
+// These are curated against files that actually exist in /public and therefore
+// take priority over the row's `video_url`, which still holds stale paths like
+// /videos/standing-roll-down.mp4 (the SPA catch-all answers those with
+// index.html and a 200, so the player silently gets HTML instead of a video).
 const EXERCISE_VIDEO_SRC = {
   'Standing Roll Down':       '/images/pilates/dynamic-stretch-and-tone/standing_roll_down.mp4',
   'Lunge Hip Flexor':         '/images/pilates/dynamic-stretch-and-tone/lung_hip_flexor.mp4',
@@ -50,10 +53,10 @@ const EXERCISE_VIDEO_SRC = {
 
 function resolveVideo(ex) {
   if (!ex) return null
-  if (ex.video_url) return ex.video_url
   if (EXERCISE_VIDEO_SRC[ex.name]) return EXERCISE_VIDEO_SRC[ex.name]
   const slug = EXERCISE_SLUGS[ex.name]
-  return slug ? `/videos/Exercises/${slug}.mp4.mp4` : null
+  if (slug) return `/videos/Exercises/${slug}.mp4.mp4`
+  return ex.video_url ?? null
 }
 
 function formatTime(s) {
